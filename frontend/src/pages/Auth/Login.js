@@ -65,7 +65,7 @@ export default function Login() {
   let location = useLocation();
 
   const { userLogin } = useSelector((state) => state.AuthReducer);
-  // console.log("userLogin", userLogin);
+  console.log("userLogin", userLogin);
   // console.log("userLogin", userLogin);
   //kg dùng
   const handleLogin = (user) => {
@@ -78,7 +78,9 @@ export default function Login() {
     // đăng nhập thành công thì quay về trang trước đó
     if (userLogin) {
       //  console.log("userLogin24", userLogin.user.role);
-      if (userLogin.user.role === "moderator" || userLogin.user.role === "admin")
+      if (
+        userLogin.user.idRole.roleName === "admin" 
+      )
         setTimeout(() => {
           history.push("/admin/users");
         }, 2000);
@@ -93,12 +95,11 @@ export default function Login() {
 
   const formik = useFormik({
     initialValues: {
-      email: "vanc@gmail.com",
-      password: "Dat123456",
+      email: "admin@gmail.com",
+      password: "Diep123456",
     },
     validationSchema: LoginSchema,
     onSubmit: (user) => {
-    
       dispatch(adminAccountInfo(user));
     },
   });

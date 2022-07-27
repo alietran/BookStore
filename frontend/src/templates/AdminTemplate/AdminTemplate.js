@@ -26,8 +26,9 @@ const { SubMenu } = Menu;
 const AdminTemplate = (props) => {
   //path, exact, Component
   // const history = useHistory();
-
-  const { Component, ...restProps } = props;
+const { userLogin } = useSelector((state) => state.AuthReducer);
+  // const { Component, ...restProps } = props;
+  console.log("prop.chil", props.children);
   // const { userLogin } = useSelector((state) => state.UserReducer);
   // console.log(userLogin);
   const [collapsed, setCollapsed] = useState(false);
@@ -124,36 +125,40 @@ const AdminTemplate = (props) => {
     </Fragment>
   )
 
-  return (
-    <Route
-      {...restProps}
-      render={(propsRoute) => {
-        //props.location,props.history,props.match
+  // if (userLogin.user.idRole.roleName === "admin"){
+  //  return <>{props.children}</>; 
+  // }
+    return (
+    
 
-        return (
-          <SnackbarProviderCustom
-            maxSnack={3}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Fragment>
-              <Layout style={{ minHeight: "100vh" }}>
-                <Sider
-                  collapsible
-                  collapsed={collapsed}
-                  onCollapse={onCollapse}
-                >
-                  <div className="logo p-4 ">
-                    <img
-                      src="/img/logo_black.png"
-                      className="h-12 w-full"
-                      alt="..."
-                    />
-                  </div>
-                  <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-                    {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Users">
+        
+            <SnackbarProviderCustom
+              maxSnack={3}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <Fragment>
+                <Layout style={{ minHeight: "100vh" }}>
+                  <Sider
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={onCollapse}
+                  >
+                    <div className="logo p-4 ">
+                      <img
+                        src="/img/logo_black.png"
+                        className="h-12 w-full"
+                        alt="..."
+                      />
+                    </div>
+                    <Menu
+                      theme="dark"
+                      defaultSelectedKeys={["1"]}
+                      mode="inline"
+                    >
+                      {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Users">
                     <Menu.Item key="1" icon={<UserOutlined />}>
                       <NavLink to="/admin/users/list">List</NavLink>
                     </Menu.Item>
@@ -164,65 +169,66 @@ const AdminTemplate = (props) => {
                       <NavLink to="/admin/users/new">Add new</NavLink>
                     </Menu.Item>
                   </SubMenu> */}
-                    <Menu.Item key="1" icon={<UserOutlined />}>
-                      <NavLink to="/admin/users">Quản lý người dùng</NavLink>
-                    </Menu.Item>
+                      <Menu.Item key="1" icon={<UserOutlined />}>
+                        <NavLink to="/admin/users">Quản lý người dùng</NavLink>
+                      </Menu.Item>
 
-                    <Menu.Item key="2" icon={<MovieIcon />}>
-                      <NavLink to="/admin/categories"></NavLink>Danh mục sách
-                    </Menu.Item>
+                      <Menu.Item key="2" icon={<MovieIcon />}>
+                        <NavLink to="/admin/categories"></NavLink>Danh mục sách
+                      </Menu.Item>
 
-                    {/* <SubMenu
+                      {/* <SubMenu
                       key="sub2"
                       icon={<FileOutlined />}
                       title="Quản lý rạp"
                     > */}
-                    <Menu.Item key="3" icon={<TheatersIcon />}>
-                      <NavLink to="/admin/subcategories">Danh sách rạp</NavLink>
-                    </Menu.Item>
-                    {/* </SubMenu> */}
-                    <Menu.Item key="4" icon={<ListAltIcon />}>
-                      <NavLink to="/admin/showtime/showtimeList">
-                        Danh sách lịch chiếu
-                      </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="5" icon={<ReceiptIcon />}>
-                      <NavLink to="/admin/ticket/ticketList">
-                        Danh sách vé đã bán
-                      </NavLink>
-                    </Menu.Item>
-                  </Menu>
-                </Sider>
-                <Layout className="site-layout">
-                  <Header
-                    className="bg-white site-layout-background"
-                    style={{ padding: 0, backgroundColor: "white " }}
-                  >
-                    <div className="text-right pr-10 pt-1">{operations}</div>
-                  </Header>
-                  <Content style={{ margin: "20px 16px" }}>
-                    {/* <Breadcrumb style={{ margin: "16px 0" }}>
+                      <Menu.Item key="3" icon={<TheatersIcon />}>
+                        <NavLink to="/admin/subcategories">
+                          Danh sách rạp
+                        </NavLink>
+                      </Menu.Item>
+                      {/* </SubMenu> */}
+                      <Menu.Item key="4" icon={<ListAltIcon />}>
+                        <NavLink to="/admin/showtime/showtimeList">
+                          Danh sách lịch chiếu
+                        </NavLink>
+                      </Menu.Item>
+                      <Menu.Item key="5" icon={<ReceiptIcon />}>
+                        <NavLink to="/admin/ticket/ticketList">
+                          Danh sách vé đã bán
+                        </NavLink>
+                      </Menu.Item>
+                    </Menu>
+                  </Sider>
+                  <Layout className="site-layout">
+                    <Header
+                      className="bg-white site-layout-background"
+                      style={{ padding: 0, backgroundColor: "white " }}
+                    >
+                      <div className="text-right pr-10 pt-1">{operations}</div>
+                    </Header>
+                    <Content style={{ margin: "20px 16px" }}>
+                      {/* <Breadcrumb style={{ margin: "16px 0" }}>
                       <Breadcrumb.Item>User</Breadcrumb.Item>
                       <Breadcrumb.Item>Bill</Breadcrumb.Item>
                     </Breadcrumb> */}
-                    <div
-                      className="site-layout-background"
-                      style={{ padding: 24, minHeight: "85vh" }}
-                    >
-                      <Component {...propsRoute} />
-                    </div>
-                  </Content>
-                  <Footer style={{ textAlign: "center" }}>
-                    Ant Design ©2018 Created by Ant UED
-                  </Footer>
+                      <div
+                        className="site-layout-background"
+                        style={{ padding: 24, minHeight: "85vh" }}
+                      >
+                        {props.children}
+                        {/* <Component {...propsRoute} /> */}
+                      </div>
+                    </Content>
+                    <Footer style={{ textAlign: "center" }}>
+                      Ant Design ©2018 Created by Ant UED
+                    </Footer>
+                  </Layout>
                 </Layout>
-              </Layout>
-            </Fragment>
-          </SnackbarProviderCustom>
-        );
-      }}
-    />
-  );
+              </Fragment>
+            </SnackbarProviderCustom>
+          );
+        
 };
 
 export default AdminTemplate;

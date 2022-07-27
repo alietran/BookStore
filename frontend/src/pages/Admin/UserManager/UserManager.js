@@ -90,7 +90,7 @@ function applySortFilter(array, comparator, query) {
 export default function UserManager() {
         const history = useHistory();
   const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const { usersList, successDelete, errorDelete, successUpdateUser } =
     useSelector((state) => state.AdminReducer);
     console.log("usersList", usersList);
@@ -267,12 +267,14 @@ export default function UserManager() {
                   const {
                     _id,
                     fullName,
-                    role,
+                    idRole: {roleName},
+
                     photo,
                     email,
                     phoneNumber,
                     active,
                   } = row;
+                  console.log("row", row);
                   const isItemSelected = selected.indexOf(fullName) !== -1;
 
                   return (
@@ -300,7 +302,7 @@ export default function UserManager() {
                       </TableCell>
                       <TableCell align="left">{email}</TableCell>
                       <TableCell align="left">{phoneNumber}</TableCell>
-                      <TableCell align="left">{role}</TableCell>
+                      <TableCell align="left">{roleName}</TableCell>
                       <TableCell align="left">
                         <Label
                           variant="ghost"
