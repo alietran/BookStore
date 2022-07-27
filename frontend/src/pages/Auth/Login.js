@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 
 import { adminAccountInfo } from "../../redux/action/adminAction";
+import AuthSocial from "./AuthSocial";
 
 // ----------------------------------------------------------------------
 
@@ -110,8 +111,8 @@ export default function Login() {
         <Typography variant="h3" sx={{ px: 5, mb: 5 }}>
           Hi, Welcome Back
         </Typography>
-      
-        <img style={{height: "600px"}} src="../img/login.jpg" alt="login"  />
+
+        <img style={{ height: "600px" }} src="../img/login.jpg" alt="login" />
       </SectionStyle>
       <Container maxWidth="sm">
         {/* <ContentStyle> */}
@@ -131,6 +132,9 @@ export default function Login() {
             Đăng nhập
           </Typography>
         </Stack>
+
+        <AuthSocial />
+
         <FormikProvider value={formik}>
           <Form>
             <Stack spacing={3}>

@@ -6,6 +6,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const adminRouters = require('./routers/adminRouter');
 const categoryRouters = require('./routers/categoryRouter');
 const subCategoryRouters = require('./routers/subCategoryRouter');
+const roleRouters = require('./routers/roleRouter');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
@@ -36,10 +37,10 @@ app.use((req, res, next) => {
 });
 
 // 3) Router
-app.use('/api/v1/admin', adminRouters);
+app.use('/api/v1/admins', adminRouters);
+app.use('/api/v1/roles', roleRouters);
 app.use('/api/v1/categories', categoryRouters);
 app.use('/api/v1/subCategories', subCategoryRouters);
-
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {

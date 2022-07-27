@@ -47,10 +47,10 @@ const adminSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
-    role: {
-      type: String,
-      enum: ['admin', 'guest', 'customer'],
-      default: 'customer',
+    idRole: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Role',
+      required: 'Admin phải thuộc về 1 quyền',
     },
     password: {
       type: String,
@@ -87,7 +87,6 @@ const adminSchema = new mongoose.Schema(
       // select: false,
     },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
@@ -110,14 +109,12 @@ adminSchema.pre('save', async function (next) {
   next();
 });
 
-
 adminSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
-
 
 adminSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangeAt) {
@@ -132,6 +129,15 @@ adminSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
   return false;
 };
+
+adminSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'idRole',
+    select: 'explain roleName',
+  });
+  next();
+});
+
 
 const Admin = mongoose.model('Admin', adminSchema);
 module.exports = Admin;

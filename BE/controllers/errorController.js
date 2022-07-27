@@ -6,12 +6,14 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  const { phoneNumber, email } = err.keyValue;
+  const { phoneNumber, email, roleName } = err.keyValue;
   const errorPhoneNumber = `Số điện thoại ${phoneNumber} đã tồn tại!`;
   const errorEmail = `Email ${email} đã tồn tại!`;
+  const errorRoleName = `Role ${roleName} đã tồn tại!`;
 
   if (phoneNumber) return new AppError(errorPhoneNumber, 400);
   else if (email) return new AppError(errorEmail, 400);
+  else if (roleName) return new AppError(errorRoleName, 400);
 };
 
 const handleValidationErrorDB = (err) => {
@@ -63,8 +65,7 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     if (err.name === 'CastError') err = handleCastErrorDB(err);
     if (err.code === 11000) err = handleDuplicateFieldsDB(err);
-    if (err.name === 'ValidationError')
-      err = handleValidationErrorDB(err);
+    if (err.name === 'ValidationError') err = handleValidationErrorDB(err);
     if (err.name === 'JsonWebTokenError') err = handleJWTError();
     if (err.name === 'TokenExpiredError') err = handleJWTExpiredError();
 
