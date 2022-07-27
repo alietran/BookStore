@@ -22,6 +22,7 @@ export const AuthReducer = (state = stateDefault, action) => {
         console.log("action.payload", action.payload);
         localStorage.setItem("user", JSON.stringify(data));
         localStorage.setItem("token", token);
+        // console.log("userLogin", userLogin);
         return { ...state, userLogin: data, loaddingLogin: false };
       }
       case "LOGGIN_FAIL": {

@@ -47,7 +47,7 @@ import OptionSubCategory from "./OptionSubCategory/OptionSubCategory";
 
 const TABLE_HEAD = [
   { id: "id", label: "Id", alignRight: false },
-  { id: "name", label: "Tên danh mục", alignRight: false },
+  { id: "name", label: "Tên thể loại", alignRight: false },
   { id: "slug", label: "Bí danh", alignRight: false },
   { id: "action", label: "Thao tác", alignRight: false },
 ];
@@ -186,7 +186,7 @@ export default function SubCategoryManager() {
       color="text.primary"
       sx={{ "&:hover": { color: "#212B36" } }}
     >
-      Người dùng{" "}
+      Thể loại{" "}
     </Link>,
     <Typography key="3" color="inherit">
       Danh sách

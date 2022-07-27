@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import plusFill from "@iconify/icons-eva/plus-fill";
 import { Icon } from "@iconify/react";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
 export default function SubCreateCategory() {
+
   const { loadingCreateCate, successCreateCate } = useSelector(
     (state) => state.CateReducer
   );
@@ -93,7 +94,7 @@ export default function SubCreateCategory() {
         startIcon={<Icon icon={plusFill} />}
         sx={{ "&:hover": { color: "#fff" } }}
       >
-        Thêm danh mục con
+        Thêm Thể Loại
       </Button>
 
       <Dialog
@@ -110,7 +111,7 @@ export default function SubCreateCategory() {
               onClose={handleClose}
             >
               {" "}
-              Tạo danh mục
+              Tạo thể loại
             </ModalDialog>
 
             <DialogContent dividers>
@@ -122,7 +123,7 @@ export default function SubCreateCategory() {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Tên danh mục "
+                  label="Tên thể loại "
                   {...getFieldProps("name")}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}

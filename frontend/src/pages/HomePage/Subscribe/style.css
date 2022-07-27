@@ -1,0 +1,70 @@
+.subscribe {
+  background-image: url('../../../../public/img/2.webp');
+  background-size: cover;
+  height: 500px;
+  background-position: center;
+  position: relative;
+  display: flex;
+  width: 100%;
+  right: 0;
+}
+
+.subcribe__content {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+.subcribe__content-right {
+  margin-bottom: 150px;
+}
+
+.subcribe__content-text {
+  position: absolute;
+  right: 250px;
+
+  line-height: 3;
+  text-align: center;
+}
+.newsletter__box {
+  display: inline-block;
+  margin-top: 5px;
+  max-width: 470px;
+  position: relative;
+  width: 100%;
+}
+.newsletter__box input {
+  background: transparent none repeat scroll 0 0;
+  border-color: currentcolor currentcolor #aaa;
+  border-image: none;
+  border-radius: 0;
+  border-style: none none solid;
+  border-width: 0 0 1px;
+  color: #333;
+  display: inline-block;
+  font-size: 12px;
+  height: 50px;
+  line-height: 30px;
+  outline: medium none;
+  padding: 10px 145px 10px 15px;
+  width: 100%;
+}
+
+.newsletter__box button {
+  background: transparent none repeat scroll 0 0;
+  border: medium none;
+  color: #333;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  height: 50px;
+  letter-spacing: 0.025em;
+  line-height: 36px;
+  padding: 0 15px 0 35px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  text-transform: uppercase;
+  top: 0;
+  font-family: Poppins;
+  transition: all 0.3s ease-in 0s;
+}

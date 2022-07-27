@@ -1,0 +1,11 @@
+/* .swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet, .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{
+    background-color: black;
+} */
+.swiper-pagination > .swiper-pagination-bullet {
+    opacity: 1;
+    border: #999999 solid 1px;
+    background-color: transparent;
+}
+.swiper-pagination > .swiper-pagination-bullet-active {
+    background-color: #999999;
+}

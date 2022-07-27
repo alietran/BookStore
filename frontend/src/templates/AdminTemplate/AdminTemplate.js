@@ -147,8 +147,8 @@ const AdminTemplate = (props) => {
                 >
                   <div className="logo p-4 ">
                     <img
-                      src="/img/logoFooter.png"
-                      className="h-24 w-full"
+                      src="/img/logo_black.png"
+                      className="h-12 w-full"
                       alt="..."
                     />
                   </div>

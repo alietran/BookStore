@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -87,6 +87,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserManager() {
+        const history = useHistory();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { usersList, successDelete, errorDelete, successUpdateUser } =
@@ -226,13 +227,16 @@ export default function UserManager() {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
-
+ 
         <Button
+          onClick={() => {
+            history.push("/admin/users/createUser");
+          }}
           variant="contained"
-          component={RouterLink}
-          to="#"
-          startIcon={<Icon icon={plusFill} />}
-          sx={{ "&:hover": { color: "#fff" } }}
+          // component={RouterLink}
+          // to="#"
+          // startIcon={<Icon icon={plusFill} />}
+          // sx={{ "&:hover": { color: "#fff" } }}
         >
           Thêm Người Dùng
         </Button>
@@ -306,7 +310,7 @@ export default function UserManager() {
                       </TableCell>
 
                       <TableCell align="right">
-                         {/* <UserMoreMenu userId={_id} /> */}
+                        {/* <UserMoreMenu userId={_id} /> */}
                       </TableCell>
                     </TableRow>
                   );

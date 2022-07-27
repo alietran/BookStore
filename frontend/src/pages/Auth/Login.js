@@ -63,7 +63,7 @@ export default function Login() {
   const history = useHistory();
   let location = useLocation();
 
-  // const { userLogin } = useSelector((state) => state.AdminReducer);
+  const { userLogin } = useSelector((state) => state.AuthReducer);
   // console.log("userLogin", userLogin);
   // console.log("userLogin", userLogin);
   //kg dùng
@@ -73,20 +73,22 @@ export default function Login() {
   };
 
   useEffect(() => {
+    
     // đăng nhập thành công thì quay về trang trước đó
-    // if (userLogin) {
-    //   if (userLogin.roles === "moderator" || userLogin.roles === "admin")
-    //     setTimeout(() => {
-    //       history.push("admin/users/account");
-    //     }, 2000);
-    //   else {
-    //     setTimeout(() => {
-    //       history.push("/");
-    //     }, 2000);
-    //   }
-    // }
+    if (userLogin) {
+      //  console.log("userLogin24", userLogin.user.role);
+      if (userLogin.user.role === "moderator" || userLogin.user.role === "admin")
+        setTimeout(() => {
+          history.push("/admin/users");
+        }, 2000);
+      else {
+        // setTimeout(() => {
+        history.push("/");
+        // }, 3000);
+      }
+    }
     // , [userLogin]
-  });
+  }, [userLogin]);
 
   const formik = useFormik({
     initialValues: {
@@ -108,11 +110,8 @@ export default function Login() {
         <Typography variant="h3" sx={{ px: 5, mb: 5 }}>
           Hi, Welcome Back
         </Typography>
-        <img
-          src="https://toplist.vn/images/800px/cum-rap-chieu-phim-duoc-yeu-thich-nhat-tai-tphcm-104306.jpg"
-          alt="login"
-          // className="h-4/6"
-        />
+      
+        <img style={{height: "600px"}} src="../img/login.jpg" alt="login"  />
       </SectionStyle>
       <Container maxWidth="sm">
         {/* <ContentStyle> */}
