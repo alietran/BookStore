@@ -31,6 +31,7 @@ import { getUsersList, resetUserList } from "../../../redux/action/userAction";
 import UserListHead from "../../../components/user/UserListHead";
 import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
+import CreateUser from "./CreateUser";
 
 // import Label from "../../components/Label";
 
@@ -227,8 +228,8 @@ export default function UserManager() {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
- 
-        <Button
+    <CreateUser/>
+        {/* <Button
           onClick={() => {
             history.push("/admin/users/createUser");
           }}
@@ -239,7 +240,7 @@ export default function UserManager() {
           // sx={{ "&:hover": { color: "#fff" } }}
         >
           Thêm Người Dùng
-        </Button>
+        </Button> */}
       </Stack>
       <Card>
         <UserListToolbar
