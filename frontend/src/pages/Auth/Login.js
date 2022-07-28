@@ -24,8 +24,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 
-import { adminAccountInfo } from "../../redux/action/adminAction";
+
 import AuthSocial from "./AuthSocial";
+import { login } from "../../redux/action/authAction";
 
 // ----------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ export default function Login() {
   //kg dùng
   const handleLogin = (user) => {
     console.log(user);
-    dispatch(adminAccountInfo(user));
+    dispatch(login(user));
   };
 
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function Login() {
     },
     validationSchema: LoginSchema,
     onSubmit: (user) => {
-      dispatch(adminAccountInfo(user));
+      dispatch(login(user));
     },
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =

@@ -34,6 +34,9 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import ModalDialog from "../../../components/ModalDialog/DialogTitle";
+import moment from 'moment';
+import { createUser } from '../../../redux/action/authAction';
+
 
 export default function CreateUser() {
   const { loadingCreateCate, successCreateCate } = useSelector(
@@ -50,16 +53,21 @@ export default function CreateUser() {
       setSrcImage(e.target.result);
     };
     // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("images", file);
+    formik.setFieldValue("avatar", file);
   };
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
   const [gender, setGender] = useState("Nam");
   const [role, setRole] = useState("Admin");
-  const [value, setValue] = React.useState();
+  const [valueDate, setValueDate] = useState(null);
+  const [valueStatus, setValueStatus] = useState(false);
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const handleChangeDate = (newValue) => {
+    setValueDate(newValue);
   };
+   const handleChangeStatus = (event, checked) => {
+    setFieldValue("active", checked ? true : false);
+  };
+
   const handleChangeGender = (event) => {
     setGender(event.target.value);
   };
@@ -77,38 +85,41 @@ export default function CreateUser() {
     setOpen(false);
   };
   const Createchema = Yup.object().shape({
-    name: Yup.string().required("*Vui lòng nhập thông tin này"),
+    fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
     password: Yup.string().required("*Vui lòng nhập thông tin này"),
     email: Yup.string().required("*Vui lòng nhập thông tin này"),
-    phone: Yup.string().required("*Vui lòng nhập thông tin này"),
-    status: Yup.string().required("*Vui lòng nhập thông tin này"),
+    phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
+    
     address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: "",
+      fullName: "",
       password: "",
       email: "",
       avatar: "",
-      phone: "",
+      phoneNumber: "",
       gender: "",
-      dob: "",
-      status: "",
+      dateOfBirth: "",
+      active: true,
       address: "",
+      idRole: "62e156700144a220484ee9a4"
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data");
-      if (loadingCreateCate) {
-        return;
-      }
-      // dispatch(createCate(data));
+      console.log("data",data);
+      // if (loadingCreateCate) {
+      //   return;
+      // }
+      dispatch(createUser(data));
 
-      resetForm();
+      // resetForm();
     },
   });
-
+  useEffect(() => {
+    values.dateOfBirth = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
+  }, [valueDate]);
   const {
     errors,
     touched,
@@ -171,14 +182,14 @@ export default function CreateUser() {
                       {" "}
                       <TextField
                         fullWidth
-                        autoComplete="name"
+                        autoComplete="fullName"
                         InputLabelProps={{
                           shrink: true,
                         }}
                         label="Họ tên"
-                        {...getFieldProps("name")}
-                        error={Boolean(touched.name && errors.name)}
-                        helperText={touched.name && errors.name}
+                        {...getFieldProps("fullName")}
+                        error={Boolean(touched.fullName && errors.fullName)}
+                        helperText={touched.fullName && errors.fullName}
                       />
                       <TextField
                         fullWidth
@@ -213,20 +224,23 @@ export default function CreateUser() {
                           shrink: true,
                         }}
                         className="mt-0"
-                        {...getFieldProps("phone")}
-                        error={Boolean(touched.phone && errors.phone)}
-                        helperText={touched.phone && errors.phone}
+                        {...getFieldProps("phoneNumber")}
+                        error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                        helperText={touched.phoneNumber && errors.phoneNumber}
                       />
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
+                      <Box className='flex'>
+                        <FormControl fullWidth>
+                        <InputLabel id="gender">
                           Giới tính
                         </InputLabel>
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          labelId="gender"
+                          id="gender"
                           value={gender}
+                          
                           label="Giới tính"
                           onChange={handleChangeGender}
+                           {...getFieldProps("gender")}
                         >
                           <MenuItem value={`Nam`}>Nam</MenuItem>
                           <MenuItem value={`Nữ`}>Nữ</MenuItem>
@@ -242,19 +256,24 @@ export default function CreateUser() {
                           value={role}
                           label="Quyền"
                           onChange={handleChangeRole}
+                             {...getFieldProps("gender")}
                         >
                           <MenuItem value={`Admin`}>Admin</MenuItem>
                           <MenuItem value={`Staff`}>Nhân viên</MenuItem>
                         </Select>
                       </FormControl>
+                      </Box>
+                      
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Stack spacing={3}>
                           <DesktopDatePicker
                             label="Date desktop"
                             inputFormat="MM/dd/yyyy"
-                            value={value}
-                            onChange={handleChange}
+                            value={valueDate}
+                            onChange={handleChangeDate}
+                        
                             renderInput={(params) => <TextField {...params} />}
+                                 
                           />
                         </Stack>
                       </LocalizationProvider>
@@ -271,7 +290,9 @@ export default function CreateUser() {
                         helperText={touched.address && errors.address}
                       />
                       <FormGroup>
-                        <FormControlLabel label="Trạng Thái" control={<Switch defaultChecked />} />
+                 
+                        <FormControlLabel   label="Trạng Thái" control={<Switch checked={values.active} value={values.active}
+                            onChange={handleChangeStatus} name="active" />}      {...getFieldProps("active")} />
 
                       </FormGroup>
                     </Stack>
@@ -365,12 +386,12 @@ export default function CreateUser() {
                 size="large"
                 type="submit"
                 variant="contained"
-                loading={loadingCreateCate}
+                // loading={loadingCreateCate}
                 onClick={handleCreate}
-                disabled={!isReadyCreateCate}
+                // disabled={!isReadyCreateCate}
                 className={classes.buttonCreate}
               >
-                Chỉnh sửa
+               Tạo
               </LoadingButton>
             </DialogActions>
           </Form>

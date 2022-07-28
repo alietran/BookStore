@@ -6,7 +6,7 @@ const stateDefault = {
  
 };
 
-export const AdminReducer = (state = stateDefault, action) => {
+export const UserReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "GET_USER_LIST_REQUEST": {
       return { ...state, loadingUsersList: true, errorUsersList: null };

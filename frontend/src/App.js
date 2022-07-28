@@ -44,18 +44,41 @@ function App() {
             </MainLayout>
           </Route>
           <Route exact path="/login" component={Login} />
-          <Route exact path={["/admin/users"]}>
-            <AdminTemplate >
+          <Route
+            exact
+            path={[
+              "/admin/users",
+              "/admin/users/createUser",
+              "/admin/categories",
+            ]}
+          >
+            <AdminTemplate>
               <AdminRoute exact path="/admin/users" component={UserManager} />
+              <AdminRoute
+                exact
+                path="/admin/users/createUser"
+                component={CreateUser}
+              />
+              <AdminRoute
+                exact
+                path="/admin/categories"
+                component={CategoryManager}
+              />
+              {/* </AdminTemplate> */}
+              <AdminRoute
+                exact
+                path="/admin/subcategories"
+                component={SubCategoryManager}
+              />
             </AdminTemplate>
           </Route>
           {/* <AdminTemplate exact path="/admin/users" Component={UserManager} /> */}
-          <AdminTemplate
+          {/* <AdminTemplate
             exact
             path="/admin/users/createUser"
             Component={CreateUser}
-          />
-          <AdminTemplate
+          /> */}
+          {/* <AdminTemplate
             exact
             path="/admin/categories"
             Component={CategoryManager}
@@ -64,7 +87,7 @@ function App() {
             exact
             path="/admin/subcategories"
             Component={SubCategoryManager}
-          />
+          /> */}
         </Switch>
       </ThemeProvider>
     </BrowserRouter>

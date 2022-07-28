@@ -59,6 +59,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordChangeAt: req.body.passwordChangeAt,
     role: req.body.role,
     avatar: avatarUrl,
+    address: req.body.address,
   });
   createSendToken(newAdmin, 201, res);
 });

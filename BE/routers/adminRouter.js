@@ -9,7 +9,7 @@ const router = express.Router();
 // const successLoginURL = 'http://localhost:3000';
 // const errorLoginURL = 'http://localhost:3000/login';
 
-router.post('/signup', authController.signup);
+router.post('/createUser', authController.signup);
 router.post('/login', authController.login);
 router
   .route('/')

@@ -92,7 +92,7 @@ export default function UserManager() {
   const dispatch = useDispatch();
   // const { enqueueSnackbar } = useSnackbar();
   const { usersList, successDelete, errorDelete, successUpdateUser } =
-    useSelector((state) => state.AdminReducer);
+    useSelector((state) => state.UserReducer);
     console.log("usersList", usersList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -302,7 +302,7 @@ export default function UserManager() {
                       </TableCell>
                       <TableCell align="left">{email}</TableCell>
                       <TableCell align="left">{phoneNumber}</TableCell>
-                      <TableCell align="left">{roleName}</TableCell>
+                      <TableCell align="left capitalize">{roleName}</TableCell>
                       <TableCell align="left">
                         <Label
                           variant="ghost"
