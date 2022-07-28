@@ -14,5 +14,11 @@ router.post('/login', authController.login);
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
+  // .post(userController.createUser)
+  // .put(userController.updateUser);
+
+
+  
+router.route('/:id').put(userController.updateUser);
+
 module.exports = router;

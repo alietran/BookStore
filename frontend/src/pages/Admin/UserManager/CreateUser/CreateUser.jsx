@@ -32,14 +32,18 @@ import { LoadingButton } from "@mui/lab";
 import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import ModalDialog from "../../../components/ModalDialog/DialogTitle";
+
 import moment from "moment";
-import { createUser } from "../../../redux/action/authAction";
+// import { createUser } from "../../../redux/action/authAction";
+import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
+import { createUser } from "../../../../redux/action/authAction";
+import { getRolesList } from "../../../../redux/action/userAction";
 
 export default function CreateUser() {
-  const { loadingCreateCate, successCreateCate } = useSelector(
-    (state) => state.CateReducer
+  const {  userRoleList } = useSelector(
+    (state) => state.UserReducer
   );
+    console.log("userRoleList",userRoleList)
   const [srcImage, setSrcImage] = useState(null);
   const handleChangeFile = (e) => {
     //doc file base 64
@@ -82,6 +86,8 @@ export default function CreateUser() {
   const handleClose = () => {
     setOpen(false);
   };
+
+
   const Createchema = Yup.object().shape({
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
     password: Yup.string().required("*Vui lòng nhập thông tin này"),
@@ -103,7 +109,7 @@ export default function CreateUser() {
       dateOfBirth: "",
       active: true,
       address: "",
-      idRole: "62e156700144a220484ee9a4",
+      idRole: "",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -112,13 +118,22 @@ export default function CreateUser() {
       //   return;
       // }
       dispatch(createUser(data));
-
-      // resetForm();
+        resetForm();
+      setOpen(false);
+    
     },
   });
   useEffect(() => {
     values.dateOfBirth = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
   }, [valueDate]);
+
+
+  useEffect(() => {
+       dispatch(getRolesList())  
+  },[]);
+
+
+
   const {
     errors,
     touched,
@@ -132,6 +147,9 @@ export default function CreateUser() {
     if (values.name && values.slug) setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
   }, [values.name, values.slug]);
+
+
+
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);
@@ -168,8 +186,8 @@ export default function CreateUser() {
             </ModalDialog>
 
             <DialogContent dividers>
-              <div className="grid grid-cols-5 gap-4">
-                <div className="col-span-3 ">
+              {/* <div className="grid grid-cols-5 gap-4">
+                <div className="col-span-3 "> */}
                   <Card
                     sx={{
                       borderRadius: " 16px",
@@ -205,7 +223,7 @@ export default function CreateUser() {
                       <TextField
                         fullWidth
                         autoComplete="code"
-                        label="Mật khẩu"
+                        label="Xác nhận mật khẩu"
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -261,19 +279,22 @@ export default function CreateUser() {
                           </Select>
                         </FormControl>
                         <FormControl fullWidth>
-                          <InputLabel id="demo-simple-select-label">
+                          <InputLabel id="role">
                             Quyền
                           </InputLabel>
                           <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
+                            labelId="role"
+                            id="role"
                             value={role}
                             label="Quyền"
                             onChange={handleChangeRole}
-                            {...getFieldProps("gender")}
+                            {...getFieldProps("idRole")}
                           >
-                            <MenuItem value={`Admin`}>Admin</MenuItem>
-                            <MenuItem value={`Staff`}>Nhân viên</MenuItem>
+                            {userRoleList?.data.map((role, index)=>{
+                             return <MenuItem value={`${role._id}` } key={index} className="capitalize">{role.roleName}</MenuItem>
+                            })}
+                            
+                            {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
                           </Select>
                         </FormControl>
                       </Box>
@@ -316,8 +337,8 @@ export default function CreateUser() {
                       </FormGroup>
                     </Stack>
                   </Card>
-                </div>
-                <div className="col-span-2">
+                {/* </div> */}
+                {/* <div className="col-span-2">
                   <Card
                     sx={{
                       borderRadius: " 16px",
@@ -373,7 +394,7 @@ export default function CreateUser() {
                         </label>
                       </div>
                     </div>
-                    {/* <span className="overflow-hidden z-50 w-full h-full block">
+                    <span className="overflow-hidden z-50 w-full h-full block">
                       <span className=" w-36 h-36 bg-cover inline-block">
                         <img
                           src={srcImage}
@@ -381,10 +402,10 @@ export default function CreateUser() {
                           className="w-full h-full object-cover"
                         />
                       </span>
-                    </span> */}
+                    </span>
                   </Card>
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>
               <Button

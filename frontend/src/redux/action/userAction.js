@@ -34,3 +34,57 @@ export const resetUserList = () => {
     });
   };
 };
+export const resetUserListUpdate = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "RESET_USER_LIST_UPDATE",
+    });
+  };
+};
+
+
+export const getRolesList = () => {
+  return (dispatch) => {
+   
+    adminAPI
+      .getAllRoles()
+      .then((result) => {
+        console.log("res34", result);
+        dispatch({
+          type: "GET_ROLE_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+};
+
+export const updateUser = (id, data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "UPDATE_USER_REQUEST",
+      });
+      const result = await adminAPI.updateUser(id, data);
+      console.log("result", result);
+      dispatch({
+        type: "UPDATE_USER_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "UPDATE_USER_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
+

@@ -3,7 +3,14 @@ const stateDefault = {
   loadingUsersList: false,
   errorUsersList: null,
 
- 
+  successCreateUser: null,
+
+  userRoleList: null,
+
+  loadingUpdateUser: false,
+  successUpdateUser: null,
+  errorUpdateUser: null,
+
 };
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -25,13 +32,39 @@ export const UserReducer = (state = stateDefault, action) => {
         loadingUsersList: false,
       };
     }
-    case "RESET_USER_LIST": {
+
+    case "GET_ROLE_SUCCESS": {
+      console.log("action", action);
       return {
         ...state,
-        errorUsersList: null,
-      
+        userRoleList: action.payload.data,
       };
     }
+
+    case "UPDATE_USER_REQUEST": {
+      return { ...state, loadingUpdateUser: true, errorUpdateUser: null };
+    }
+    case "UPDATE_USER_SUCCESS": {
+      return {
+        ...state,
+        successUpdateUser: action.payload.data,
+        loadingUpdateUser: false,
+      };
+    }
+    case "UPDATE_USER_FAIL": {
+      return {
+        ...state,
+        errorUpdateUser: action.payload.error,
+        loadingUpdateUser: false,
+      };
+    }
+    case "RESET_USER_LIST_UPDATE": {
+      return {
+        ...state,
+        successUpdateUser: "",
+      };
+    }
+
     default:
       return { ...state };
   }

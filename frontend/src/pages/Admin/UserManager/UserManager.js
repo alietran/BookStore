@@ -25,13 +25,15 @@ import { useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 // import UserListToolbar from "../../components/user";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersList, resetUserList } from "../../../redux/action/userAction";
+import { getUsersList, resetUserList, resetUserListUpdate } from "../../../redux/action/userAction";
 // import UserListToolbar from "../../components/user/UserListToolbar";
 // import UserMoreMenu from "../components/user/UserMoreMenu";
 import UserListHead from "../../../components/user/UserListHead";
 import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
-import CreateUser from "./CreateUser";
+// import CreateUser from "./CreateUser";
+import OptionUser from "./OptionUser/OptionUser";
+import CreateUser from "./CreateUser/CreateUser";
 
 // import Label from "../../components/Label";
 
@@ -89,10 +91,12 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserManager() {
         const history = useHistory();
+         const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   // const { enqueueSnackbar } = useSnackbar();
   const { usersList, successDelete, errorDelete, successUpdateUser } =
     useSelector((state) => state.UserReducer);
+  const { successCreateUser } = useSelector((state) => state.AuthReducer);
     console.log("usersList", usersList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -113,21 +117,37 @@ export default function UserManager() {
     return () => dispatch(resetUserList());
   }, []);
 
-  // useEffect(() => {
-  //   if (successDelete || successUpdateUser || successUpdateUserCurrent) {
-  //     dispatch(getUsersList());
-  //   }
-  // }, [successDelete, successUpdateUser, successUpdateUserCurrent]);
+  useEffect(() => {
+     if (!usersList) {
+       dispatch(getUsersList());
+     }
+     return () => dispatch(resetUserListUpdate());
+  }, []);
 
-  // useEffect(() => {
-  //   if (successDelete) {
-  //     enqueueSnackbar(successDelete, { variant: "success" });
-  //     return;
-  //   }
-  //   if (errorDelete) {
-  //     enqueueSnackbar(errorDelete, { variant: "error" });
-  //   }
-  // }, [successDelete, errorDelete]);
+  useEffect(() => {
+    if (successCreateUser || successUpdateUser) {
+      dispatch(getUsersList());
+    }
+  }, [successCreateUser, successUpdateUser]);
+
+  useEffect(() => {
+    if (successCreateUser) {
+      enqueueSnackbar("Tạo thành công", { variant: "success" });
+      return;
+    }
+    if (successUpdateUser) {
+      enqueueSnackbar("Chỉnh sửa thành công", { variant: "success" });
+      return;
+    }
+    // if (errorDelete) {
+    //   enqueueSnackbar(errorDelete, { variant: "error" });
+    // }
+    // errorDelete;
+  }, [successCreateUser, successUpdateUser]);
+
+    
+
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -313,7 +333,7 @@ export default function UserManager() {
                       </TableCell>
 
                       <TableCell align="right">
-                        {/* <UserMoreMenu userId={_id} /> */}
+                        <OptionUser id={_id} User={row} />
                       </TableCell>
                     </TableRow>
                   );

@@ -9,7 +9,8 @@ const stateDefault = {
   userLogin: userLogin,
   loaddingLogin: false,
   errorLogin: null,
-  // userList: null,
+
+
   // loading: false,
 
   loadingCreateUser: false,
@@ -52,6 +53,13 @@ export const AuthReducer = (state = stateDefault, action) => {
         ...state,
         loadingCreateUser: false,
         errorCreateUser: action.payload.err,
+      };
+    }
+
+    case "RESET_USER_LIST": {
+      return {
+        ...state,
+        successCreateUser: "",
       };
     }
 

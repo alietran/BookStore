@@ -16,8 +16,9 @@ import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryMana
 
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
-import CreateUser from "./pages/Admin/UserManager/CreateUser";
+
 import AdminRoute from "./guards/AdminRoute";
+import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 function App() {
 
     const themeOptions = useMemo(
