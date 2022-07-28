@@ -1,5 +1,4 @@
-
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import {
   Box,
@@ -23,10 +22,10 @@ import React, { useEffect, useState } from "react";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import plusFill from "@iconify/icons-eva/plus-fill";
 import { Icon } from "@iconify/react";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { styled } from "@mui/material/styles";
 import { useStyles } from "./style";
 import { LoadingButton } from "@mui/lab";
@@ -34,9 +33,8 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import ModalDialog from "../../../components/ModalDialog/DialogTitle";
-import moment from 'moment';
-import { createUser } from '../../../redux/action/authAction';
-
+import moment from "moment";
+import { createUser } from "../../../redux/action/authAction";
 
 export default function CreateUser() {
   const { loadingCreateCate, successCreateCate } = useSelector(
@@ -64,7 +62,7 @@ export default function CreateUser() {
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
   };
-   const handleChangeStatus = (event, checked) => {
+  const handleChangeStatus = (event, checked) => {
     setFieldValue("active", checked ? true : false);
   };
 
@@ -89,7 +87,7 @@ export default function CreateUser() {
     password: Yup.string().required("*Vui lòng nhập thông tin này"),
     email: Yup.string().required("*Vui lòng nhập thông tin này"),
     phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-    
+
     address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
@@ -97,6 +95,7 @@ export default function CreateUser() {
     initialValues: {
       fullName: "",
       password: "",
+      passwordConfirm: "",
       email: "",
       avatar: "",
       phoneNumber: "",
@@ -104,11 +103,11 @@ export default function CreateUser() {
       dateOfBirth: "",
       active: true,
       address: "",
-      idRole: "62e156700144a220484ee9a4"
+      idRole: "62e156700144a220484ee9a4",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data",data);
+      console.log("data", data);
       // if (loadingCreateCate) {
       //   return;
       // }
@@ -160,15 +159,15 @@ export default function CreateUser() {
       >
         <Formik value={formik}>
           <Form onSubmit={handleSubmit}>
-            <ModalDialog 
-              sx={{ fontSize: "23px !important", }}
+            <ModalDialog
+              sx={{ fontSize: "23px !important" }}
               onClose={handleClose}
             >
               {" "}
               Tạo người dùng mới
             </ModalDialog>
 
-            <DialogContent dividers >
+            <DialogContent dividers>
               <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-3 ">
                   <Card
@@ -206,6 +205,22 @@ export default function CreateUser() {
                       <TextField
                         fullWidth
                         autoComplete="code"
+                        label="Mật khẩu"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        className="mt-0"
+                        {...getFieldProps("passwordConfirm")}
+                        error={Boolean(
+                          touched.passwordConfirm && errors.passwordConfirm
+                        )}
+                        helperText={
+                          touched.passwordConfirm && errors.passwordConfirm
+                        }
+                      />
+                      <TextField
+                        fullWidth
+                        autoComplete="code"
                         label="Email"
                         InputLabelProps={{
                           shrink: true,
@@ -215,7 +230,6 @@ export default function CreateUser() {
                         error={Boolean(touched.email && errors.email)}
                         helperText={touched.email && errors.email}
                       />
-                     
                       <TextField
                         fullWidth
                         autoComplete="code"
@@ -225,45 +239,44 @@ export default function CreateUser() {
                         }}
                         className="mt-0"
                         {...getFieldProps("phoneNumber")}
-                        error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                        error={Boolean(
+                          touched.phoneNumber && errors.phoneNumber
+                        )}
                         helperText={touched.phoneNumber && errors.phoneNumber}
                       />
-                      <Box className='flex'>
+                      <Box className="flex">
                         <FormControl fullWidth>
-                        <InputLabel id="gender">
-                          Giới tính
-                        </InputLabel>
-                        <Select
-                          labelId="gender"
-                          id="gender"
-                          value={gender}
-                          
-                          label="Giới tính"
-                          onChange={handleChangeGender}
-                           {...getFieldProps("gender")}
-                        >
-                          <MenuItem value={`Nam`}>Nam</MenuItem>
-                          <MenuItem value={`Nữ`}>Nữ</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                          Quyền
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={role}
-                          label="Quyền"
-                          onChange={handleChangeRole}
-                             {...getFieldProps("gender")}
-                        >
-                          <MenuItem value={`Admin`}>Admin</MenuItem>
-                          <MenuItem value={`Staff`}>Nhân viên</MenuItem>
-                        </Select>
-                      </FormControl>
+                          <InputLabel id="gender">Giới tính</InputLabel>
+                          <Select
+                            labelId="gender"
+                            id="gender"
+                            value={gender}
+                            name="gender"
+                            label="Giới tính"
+                            onChange={handleChangeGender}
+                            {...getFieldProps("gender")}
+                          >
+                            <MenuItem value={`Nam`}>Nam</MenuItem>
+                            <MenuItem value={`Nữ`}>Nữ</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <FormControl fullWidth>
+                          <InputLabel id="demo-simple-select-label">
+                            Quyền
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={role}
+                            label="Quyền"
+                            onChange={handleChangeRole}
+                            {...getFieldProps("gender")}
+                          >
+                            <MenuItem value={`Admin`}>Admin</MenuItem>
+                            <MenuItem value={`Staff`}>Nhân viên</MenuItem>
+                          </Select>
+                        </FormControl>
                       </Box>
-                      
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Stack spacing={3}>
                           <DesktopDatePicker
@@ -271,9 +284,7 @@ export default function CreateUser() {
                             inputFormat="MM/dd/yyyy"
                             value={valueDate}
                             onChange={handleChangeDate}
-                        
                             renderInput={(params) => <TextField {...params} />}
-                                 
                           />
                         </Stack>
                       </LocalizationProvider>
@@ -290,14 +301,21 @@ export default function CreateUser() {
                         helperText={touched.address && errors.address}
                       />
                       <FormGroup>
-                 
-                        <FormControlLabel   label="Trạng Thái" control={<Switch checked={values.active} value={values.active}
-                            onChange={handleChangeStatus} name="active" />}      {...getFieldProps("active")} />
-
+                        <FormControlLabel
+                          label="Trạng Thái"
+                          control={
+                            <Switch
+                              checked={values.active}
+                              value={values.active}
+                              onChange={handleChangeStatus}
+                              name="active"
+                            />
+                          }
+                          {...getFieldProps("active")}
+                        />
                       </FormGroup>
                     </Stack>
                   </Card>
-
                 </div>
                 <div className="col-span-2">
                   <Card
@@ -307,7 +325,9 @@ export default function CreateUser() {
                       padding: " 26px 24px",
                     }}
                   >
-                    <div className="mb-3 text-lg font-semibold">Hình đại diện</div>
+                    <div className="mb-3 text-lg font-semibold">
+                      Hình đại diện
+                    </div>
                     <hr />
                     <div className="text-center">
                       <div className="w-full h-full border-2 border-dashed border-gray-200 inline-flex">
@@ -391,12 +411,11 @@ export default function CreateUser() {
                 // disabled={!isReadyCreateCate}
                 className={classes.buttonCreate}
               >
-               Tạo
+                Tạo
               </LoadingButton>
             </DialogActions>
           </Form>
         </Formik>
-
       </Dialog>
     </Box>
   );
