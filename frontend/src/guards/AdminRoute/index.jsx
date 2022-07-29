@@ -15,7 +15,7 @@ export default function AdminRoute(props) {
     <Route {...restProps} render = {(propsRoute)=>{
         if(userLogin){
            
-            if(userLogin.user.idRole.roleName === "admin" ){
+            if(userLogin.user.idRole.roleName === "Admin" ){
                  return <ComponentAdmin {...propsRoute}/>
             }
         }

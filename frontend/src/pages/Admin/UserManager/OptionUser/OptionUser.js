@@ -4,6 +4,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -22,13 +24,14 @@ import { LoadingButton } from "@mui/lab";
 import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateUser/style";
-import { updateUser } from "../../../../redux/action/userAction";
+import { deletelUser, updateUser } from "../../../../redux/action/userAction";
 
 export default function OptionUser({ id, User }) {
   console.log("User", User);
   const [role, setRole] = useState("Admin");
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   // const [isReadyEditUser, setIsReadyEditCate] = useState(false);
   const dispatch = useDispatch();
   const { userRoleList } = useSelector((state) => state.UserReducer);
@@ -39,9 +42,18 @@ export default function OptionUser({ id, User }) {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
+  // handleCancel;
+  const handleCloseConfirm = () => {
+    setOpenConfirm(false);
+    onClickDelete(id)
+  };
 
   const onClickDelete = (id) => {
-    console.log("idDelete", id);
+    dispatch(deletelUser(User._id));
+    console.log("idDelete", User._id);
   };
 
   const handleChangeRole = (event) => {
@@ -51,7 +63,7 @@ export default function OptionUser({ id, User }) {
   const onClickEdit = () => {
     setOpen(true);
     console.log("idEdit", id);
-    console.log("theSubCategory", User);
+    console.log("User", User);
     // dispatch(getDetailCate(id));
   };
 
@@ -89,16 +101,42 @@ export default function OptionUser({ id, User }) {
   const handleUpdate = () => {
      setOpen(false);
   };
+   const handleClickConfirm = () => {
+     setOpenConfirm(true);
+
+   };
 
   return (
     <Box>
       <Option
-        onClickDelete={() => {
-          onClickDelete(id);
-        }}
+        // () => {
+        //         // onClick = { handleClickOpen };
+        //         onClickDelete(id);
+        //       }
+        onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
       ></Option>
-
+      <Dialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Xóa người dùng"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Bạn chắc chắn muốn xóa người dùng này.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel}>Hủy</Button>
+          <Button onClick={handleCloseConfirm} autoFocus >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={open}
         onClose={handleClose}

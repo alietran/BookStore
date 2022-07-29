@@ -62,17 +62,17 @@ const { userLogin } = useSelector((state) => state.AuthReducer);
         <NavLink to="/admin/users/account">Xem thông tin</NavLink>
       </Menu.Item>
 
-      {/* <Menu.Item key="1">
+      <Menu.Item key="1">
         <NavLink
           className="text-decoration-none text-dark"
           to="/admin/users/account"
         >
           Đổi mật khẩu
         </NavLink>
-      </Menu.Item> */}
+      </Menu.Item>
       <Menu.Divider />
 
-      <Menu.Item key="1" className="mr-3">
+      <Menu.Item key="2" className="mr-3">
         {" "}
         <button
           onClick={() => {

@@ -19,6 +19,8 @@ import HomePage from "./pages/HomePage";
 
 import AdminRoute from "./guards/AdminRoute";
 import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
+
+import Account from "./pages/Admin/Account/Acount";
 function App() {
 
     const themeOptions = useMemo(
@@ -51,6 +53,7 @@ function App() {
               "/admin/users",
               "/admin/users/createUser",
               "/admin/categories",
+              "/admin/account",
             ]}
           >
             <AdminTemplate>
@@ -65,6 +68,8 @@ function App() {
                 path="/admin/categories"
                 component={CategoryManager}
               />
+              <AdminRoute exact path="/admin/account" component={Account} />
+
               {/* </AdminTemplate> */}
               <AdminRoute
                 exact
@@ -73,22 +78,6 @@ function App() {
               />
             </AdminTemplate>
           </Route>
-          {/* <AdminTemplate exact path="/admin/users" Component={UserManager} /> */}
-          {/* <AdminTemplate
-            exact
-            path="/admin/users/createUser"
-            Component={CreateUser}
-          /> */}
-          {/* <AdminTemplate
-            exact
-            path="/admin/categories"
-            Component={CategoryManager}
-          />{" "}
-          <AdminTemplate
-            exact
-            path="/admin/subcategories"
-            Component={SubCategoryManager}
-          /> */}
         </Switch>
       </ThemeProvider>
     </BrowserRouter>

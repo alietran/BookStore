@@ -11,6 +11,12 @@ const stateDefault = {
   successUpdateUser: null,
   errorUpdateUser: null,
 
+  loadingDeleteUser: false,
+  successDeleteUser: null,
+  errorDeleteUser: null,
+
+  userDetail: null,
+  errorDetailUser: null,
 };
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -62,6 +68,40 @@ export const UserReducer = (state = stateDefault, action) => {
       return {
         ...state,
         successUpdateUser: "",
+      };
+    }
+    case "DELETE_USER_REQUEST": {
+      return { ...state, loadingDeleteUser: true, errorUpdateUser: null };
+    }
+    case "DELETE_USER_SUCCESS": {
+      return {
+        ...state,
+        successDeleteUser: action.payload.data,
+        loadingDeleteUser: false,
+      };
+    }
+    case "DELETE_USER_FAIL": {
+      return {
+        ...state,
+        errorUpdateUser: action.payload.error,
+        loadingDeleteUser: false,
+      };
+    }
+    case "GET_DETAIL_USER_REQUEST": {
+      return { ...state };
+    }
+    case "GET_DETAIL_USER_SUCCESS": {
+      return {
+        ...state,
+        usersList: action.payload.data,
+        userDetail: false,
+      };
+    }
+    case "GET_DETAIL_USER_FAIL": {
+      return {
+        ...state,
+        errorDetailUser: action.payload.error,
+    
       };
     }
 

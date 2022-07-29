@@ -94,8 +94,13 @@ export default function UserManager() {
          const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   // const { enqueueSnackbar } = useSnackbar();
-  const { usersList, successDelete, errorDelete, successUpdateUser } =
-    useSelector((state) => state.UserReducer);
+  const {
+    usersList,
+    successDelete,
+    errorDelete,
+    successUpdateUser,
+    successDeleteUser,
+  } = useSelector((state) => state.UserReducer);
   const { successCreateUser } = useSelector((state) => state.AuthReducer);
     console.log("usersList", usersList);
   // const { successUpdateUserCurrent } = useSelector(
@@ -125,10 +130,10 @@ export default function UserManager() {
   }, []);
 
   useEffect(() => {
-    if (successCreateUser || successUpdateUser) {
+    if (successCreateUser || successUpdateUser || successDeleteUser) {
       dispatch(getUsersList());
     }
-  }, [successCreateUser, successUpdateUser]);
+  }, [successCreateUser, successUpdateUser, successDeleteUser]);
 
   useEffect(() => {
     if (successCreateUser) {
@@ -139,7 +144,7 @@ export default function UserManager() {
       enqueueSnackbar("Chỉnh sửa thành công", { variant: "success" });
       return;
     }
-    // if (errorDelete) {
+    // if (successDeleteUser) {
     //   enqueueSnackbar(errorDelete, { variant: "error" });
     // }
     // errorDelete;

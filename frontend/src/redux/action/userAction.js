@@ -87,4 +87,58 @@ export const updateUser = (id, data) => {
     }
   };
 };
+export const deletelUser = (id) => {
+  
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "DELETE_USER_REQUEST",
+      });
+      const result = await adminAPI.deleteUser(id);
+      console.log("result", result);
+      dispatch({
+        type: "DELETE_USER_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_USER_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
+
+
+export const getDetailUsers = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_DETAIL_REQUEST",
+    });
+    adminAPI
+      .getAllUser()
+      .then((result) => {
+        console.log("result1234", result);
+        dispatch({
+          type: "GET_DETAIL_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_DETAIL_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
 

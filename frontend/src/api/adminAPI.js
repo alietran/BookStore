@@ -11,11 +11,11 @@ const adminAPI = {
     return axiosClient.get("/v1/admins");
   },
   deleteUser: (id) => {
-    return axiosClient.delete(`auth/deleteUser/${id}`);
+    return axiosClient.delete(`/v1/admins/${id}`);
   },
-//   updateUser: (id) => {
-//     return axiosClient.put(`/v1/admins/updateUser/${id}`);
-//   },
+  //   updateUser: (id) => {
+  //     return axiosClient.put(`/v1/admins/updateUser/${id}`);
+  //   },
   updateUser: (id, data) => {
     const path = `/v1/admins/${id}`;
     return axiosClient.put(path, data);
@@ -25,6 +25,10 @@ const adminAPI = {
   },
   getAllRoles: () => {
     return axiosClient.get("/v1/roles");
+  },
+  getDetailUser: (_id) => {
+    const path = `/v1/admins/${_id}`;
+    return axiosClient.get(path);
   },
 };
 
