@@ -1,6 +1,7 @@
 // material
 import { Stack, Button, Divider, Typography } from "@mui/material";
-// import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import axios from "axios";
+import { useSignInWithGoogle } from "react-firebase-hooks/auth";
 // import { auth } from "../../utils/firebase";
 
 // component
@@ -8,18 +9,60 @@ import { Stack, Button, Divider, Typography } from "@mui/material";
 // ----------------------------------------------------------------------
 
 export default function AuthSocial() {
-    // const [signInWithGoogle, _user, _loading, error] =
-    //   useSignInWithGoogle(auth);
+  // const [signInWithGoogle, _user, _loading, error] =
+  //   useSignInWithGoogle(auth);
 
-    // const signIn = () => {
-    //   //  const googleLoginURL = "http://127.0.0.1:8080/api/v1/users/login/google";
-    //   //  const newWindow = window.open(
-    //   //    googleLoginURL,
-    //   //    "_self",
-    //   //    "width=500,height=600"
-    //   //  );
-    //   signInWithGoogle();
-    // };
+  // const getUser = async () => {
+  //   const response = await axios
+  //     .get("http://localhost:8080/api/v1/admins/login/success", {
+  //       withCredentials: true,
+  //     })
+  //     .catch((err) => {
+  //       console.log("Not properly authenticated");
+  //       // dispatch(setIsAuthenticated(false));
+  //       // dispatch(setAuthUser(null));
+  //       // history.push("/login/error");
+  //     });
+
+  //   if (response && response.data) {
+  //     console.log("User: ", response.data);
+  //     // dispatch(setIsAuthenticated(true));
+  //     // dispatch(setAuthUser(response.data));
+  //     // history.push("/welcome");
+  //   }
+  // };
+
+  // const redirectToGoogleSSO = async () => {
+  //   // let timer: NodeJS.Timeout | null = null;
+  //   const googleLoginURL = "http://127.0.0.1:8080/api/v1/admins/login/google";
+  //   const newWindow = window.open(
+  //     googleLoginURL,
+  //     "_blank",
+  //     "width=500,height=600"
+  //   );
+  //   if (newWindow) {
+  //     if (newWindow.closed) {
+  //       console.log("Yay we're authenticated");
+  //       getUser();
+  //     }
+  //   }
+  // };
+
+  // const signIn = () => {
+  //   //  const googleLoginURL = "http://127.0.0.1:8080/api/v1/users/login/google";
+  //   //  const newWindow = window.open(
+  //   //    googleLoginURL,
+  //   //    "_self",
+  //   //    "width=500,height=600"
+  //   //  );
+  //   signInWithGoogle();
+  // };
+
+
+    const google = () => {
+      window.open("http://localhost:8080/api/v1/admins/google", "_self");
+    };
+
   return (
     <>
       <Stack direction="row" spacing={2}>
@@ -28,7 +71,7 @@ export default function AuthSocial() {
           size="large"
           color="inherit"
           variant="outlined"
-          // onClick={signIn}
+          onClick={google}
         >
           <img
             src="/img/media/social-google.svg"

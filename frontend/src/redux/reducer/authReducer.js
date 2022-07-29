@@ -10,12 +10,15 @@ const stateDefault = {
   loaddingLogin: false,
   errorLogin: null,
 
-
   // loading: false,
 
   loadingCreateUser: false,
   successCreateUser: null,
   errorCreateUser: null,
+
+  currentUser: null,
+  loadingCurrentUser: false,
+  errorCurrentUser: null,
 };
 
 export const AuthReducer = (state = stateDefault, action) => {
@@ -62,7 +65,23 @@ export const AuthReducer = (state = stateDefault, action) => {
         successCreateUser: "",
       };
     }
-
+    case "GET_AUTH_USER_REQUEST": {
+      return { ...state, loadingCurrentUser: true, errorCurrentUser: null };
+    }
+    case "GET_AUTH_USER_SUCCESS": {
+      return {
+        ...state,
+        currentUser: action.payload.data,
+        loadingCurrentUser: false,
+      };
+    }
+    case "GET_AUTH_USER_FAIL": {
+      return {
+        ...state,
+        errorCurrentUser: action.payload.error,
+        loadingCurrentUser: false,
+      };
+    }
     default:
       return { ...state };
   }

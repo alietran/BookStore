@@ -10,6 +10,13 @@ const roleRouters = require('./routers/roleRouter');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+require('dotenv').config();
+const helmet = require('helmet');
+
+require('./controllers/passportGoogle');
 
 // Serving static files
 // const publicPathDirectory = path.join(__dirname, 'public')
@@ -28,8 +35,35 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP. Please try again in an hour!',
 });
 app.use('/api', limiter);
-app.use(cors());
-app.use(express.json());
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+
+// app.use(morgan('dev'));
+// app.use(helmet());
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: ['lama'],
+    maxAge: 24 * 60 * 60 * 100,
+    secret: '123',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
+  })
+);
+
+// app.use(express.json());
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

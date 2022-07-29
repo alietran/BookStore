@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const session = require('express-session');
+const express = require('express');
+const passport = require('passport');
 
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 🧨 Shutting down...');
@@ -9,6 +12,9 @@ process.on('uncaughtException', (err) => {
 
 dotenv.config({ path: './config.env' });
 const app = require('./app');
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',

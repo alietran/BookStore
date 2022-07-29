@@ -58,3 +58,30 @@ export const createUser = (user) => {
       });
   };
 };
+
+export const getAuthUser = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_AUTH_USER_REQUEST",
+    });
+    adminAPI
+      .getAuthUser()
+      .then((result) => {
+        console.log("result1234", result);
+        dispatch({
+          type: "GET_AUTH_USER_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_AUTH_USER_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};

@@ -2,37 +2,38 @@ const mongoose = require('mongoose');
 var validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+var findOrCreate = require('mongoose-findorcreate');
 
 const adminSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, 'Please tell us your fullName'],
+    // required: [true, 'Please tell us your fullName'],
     trim: true,
   },
   phoneNumber: {
     type: String,
-    unique: true,
-    required: [true, 'Please provide your phoneNumber'],
-    validate: {
-      validator: function (number) {
-        return /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/.test(
-          number
-        );
-      },
-      message: (props) => `${props.value} is not a valid phone number!`,
-    },
+    // unique: true,
+    // required: [true, 'Please provide your phoneNumber'],
+    // validate: {
+    //   validator: function (number) {
+    //     return /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/.test(
+    //       number
+    //     );
+    //   },
+    //   message: (props) => `${props.value} is not a valid phone number!`,
+    // },
     allowNull: true,
   },
   gender: {
     type: String,
-    required: [true, 'Please tell us your gender'],
-    enum: ['Nam', 'Nữ'],
+    // required: [true, 'Please tell us your gender'],
+    // enum: ['Nam', 'Nữ'],
     allowNull: true,
   },
   email: {
     type: String,
-    required: [true, 'Please provide your email'],
-    unique: true,
+    // required: [true, 'Please provide your email'],
+    // unique: true,
     // chuyển về chữ thường
     lowercase: true,
     // check email
@@ -40,7 +41,7 @@ const adminSchema = new mongoose.Schema({
   },
   dateOfBirth: {
     type: Date,
-    required: [true, 'Please provide your date of birth'],
+    // required: [true, 'Please provide your date of birth'],
     allowNull: true,
   },
   avatar: {
@@ -49,11 +50,11 @@ const adminSchema = new mongoose.Schema({
   idRole: {
     type: mongoose.Schema.ObjectId,
     ref: 'Role',
-    required: 'Admin phải thuộc về 1 quyền',
+    // required: 'Admin phải thuộc về 1 quyền',
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
+    // required: [true, 'Please provide a password'],
     minlength: 8,
     // Không tự hiện thị
     select: false,
@@ -62,7 +63,7 @@ const adminSchema = new mongoose.Schema({
   passwordConfirm: {
     type: String,
     // allowNull: true,
-    required: [true, 'Please provide a passwordConfirm'],
+    // required: [true, 'Please provide a passwordConfirm'],
     // validate check 2 password equal
     // this only works on CREATE and SAVE!!! ( NOT UPDATE )
     validate: {
@@ -75,7 +76,7 @@ const adminSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, 'Please provide your address'],
+    // required: [true, 'Please provide your address'],
     allowNull: true,
   },
   googleId: {
@@ -95,7 +96,10 @@ const adminSchema = new mongoose.Schema({
     default: true,
     // select: false,
   },
+  accessToken: String,
 });
+
+adminSchema.plugin(findOrCreate);
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 adminSchema.pre('save', async function (next) {

@@ -37,9 +37,6 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-
-
-
 exports.signup = catchAsync(async (req, res, next) => {
   // create avatar default
   const avatarUrl = gravatarUrl.url(req.body.email, {
@@ -60,6 +57,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     avatar: avatarUrl,
     address: req.body.address,
   });
+
   createSendToken(newAdmin, 201, res);
 });
 
@@ -79,7 +77,6 @@ exports.login = catchAsync(async (req, res, next) => {
     ' admin.correctPassword(password, admin.password)',
     await admin.correctPassword(password, admin.password)
   );
-
 
   if (!admin || !(await admin.correctPassword(password, admin.password))) {
     return next(new AppError('Email hoặc mật khẩu không chính xác!', 401));
