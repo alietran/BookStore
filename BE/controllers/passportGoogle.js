@@ -43,39 +43,40 @@ passport.use(
       passReqToCallback: true,
     },
     function (req, res, accessToken, refreshToken, profile, cb) {
-      console.log('profile', profile);
-      cb(null, profile);
-      // Admin.findOne(
-      //   {
-      //     googleId: profile.id,
-      //   },
-      //   function (err, user) {
-      //     if (err) {
-      //       return cb(err);
-      //     }
-      //     //No user was found... so create a new user with values from Facebook (all the profile. stuff)
-      //     if (!user) {
-      //       user = new Admin({
-      //         phoneNumber: '',
-      //         gender: '',
-      //         dateOfBirth: '',
-      //         idRole: '62e29dfcee1d603dfc29894b',
-      //         fullName: profile.displayName,
-      //         email: profile.emails[0].value,
-      //         avatar: profile.photos[0].value,
-      //         googleId: profile.id,
-      //         address: '',
-      //       });
-      //       user.save(function (err) {
-      //         if (err) console.log(err);
-      //         return cb(err, user);
-      //       });
-      //     } else {
-      //       //found user. Return
-      //       return cb(null, user);
-      //     }
-      //   }
-      // );
+      // Admin.findOrCreate({ googleId: profile.id }, function (err, user) {
+      //   return cb(err, user);
+      // });
+      Admin.findOne(
+        {
+          googleId: profile.id,
+        },
+        function (err, user) {
+          if (err) {
+            return cb(err);
+          }
+          //No user was found... so create a new user with values from Facebook (all the profile. stuff)
+          if (!user) {
+            user = new Admin({
+              phoneNumber: '',
+              gender: '',
+              dateOfBirth: '',
+              idRole: '62e29dfcee1d603dfc29894b',
+              fullName: profile.displayName,
+              email: profile.emails[0].value,
+              avatar: profile.photos[0].value,
+              googleId: profile.id,
+              address: '',
+            });
+            user.save(function (err) {
+              if (err) console.log(err);
+              return cb(err, user);
+            });
+          } else {
+            //found user. Return
+            return cb(null, user);
+          }
+        }
+      );
     }
   )
 );

@@ -80,7 +80,7 @@ export default function Login() {
     if (userLogin) {
       //  console.log("userLogin24", userLogin.user.role);
       if (
-        userLogin.user.idRole.roleName === "Admin" 
+        userLogin.user?.idRole.roleName === "Admin" 
       )
         setTimeout(() => {
           history.push("/admin/users");

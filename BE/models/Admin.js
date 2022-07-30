@@ -33,7 +33,7 @@ const adminSchema = new mongoose.Schema({
   email: {
     type: String,
     // required: [true, 'Please provide your email'],
-    // unique: true,
+    unique: true,
     // chuyển về chữ thường
     lowercase: true,
     // check email

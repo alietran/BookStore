@@ -12,11 +12,12 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const passportContent = require('./controllers/passportGoogle');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const helmet = require('helmet');
 
-require('./controllers/passportGoogle');
+
 
 // Serving static files
 // const publicPathDirectory = path.join(__dirname, 'public')
@@ -42,14 +43,7 @@ app.use('/api', limiter);
 // app.use(morgan('dev'));
 // app.use(helmet());
 app.use(
-  cookieSession({
-    name: 'session',
-    keys: ['lama'],
-    maxAge: 24 * 60 * 60 * 100,
-    secret: '123',
-    resave: false,
-    saveUninitialized: true,
-  })
+  cookieSession({ name: 'session', keys: ['lama'], maxAge: 24 * 60 * 60 * 100 })
 );
 
 app.use(passport.initialize());
@@ -58,12 +52,12 @@ app.use(passport.session()); // persistent login sessions
 app.use(
   cors({
     origin: 'http://localhost:3000',
-    methods: 'GET,POST,PUT,DELETE',
+    methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
   })
 );
 
-// app.use(express.json());
+app.use(express.json());
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

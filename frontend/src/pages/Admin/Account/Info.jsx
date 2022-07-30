@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik, Form, FormikProvider } from "formik";
 import { Link as RouterLink, useHistory, useLocation } from "react-router-dom";
 import * as Yup from "yup";
-import moment from "moment"
+import moment from "moment";
 import { LoadingButton } from "@mui/lab";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -12,6 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { updateCurrentUser } from "../../../redux/action/authAction";
 
 import plusFill from "@iconify/icons-eva/plus-fill";
 import { Icon } from "@iconify/react";
@@ -21,16 +22,29 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { styled } from "@mui/material/styles";
 import { useStyles } from "./style";
+import { useSnackbar } from "notistack";
 
-import { Box, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Stack, Switch, TextField } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  FormGroup,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Switch,
+  TextField,
+} from "@mui/material";
+import { resetUserListUpdate } from "../../../redux/action/userAction";
 
 export default function Info() {
-    const { userLogin  }= useSelector((state) => state.AuthReducer);
-    console.log("userLogin",userLogin.user)
-  const { userRoleList } = useSelector(
-    (state) => state.UserReducer
-  );
-  console.log("userRoleList", userRoleList)
+  const { userLogin, successUpdateUserCurrent, errorUpdateUserCurrent } =
+    useSelector((state) => state.AuthReducer);
+
+  console.log("userLogin", userLogin.user);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { userRoleList } = useSelector((state) => state.UserReducer);
   const [srcImage, setSrcImage] = useState(null);
   const handleChangeFile = (e) => {
     //doc file base 64
@@ -44,11 +58,10 @@ export default function Info() {
     // Đem dữ liệu file lưu vào formik
     formik.setFieldValue("avatar", file);
   };
-  const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
+
   const [gender, setGender] = useState("Nam");
   const [role, setRole] = useState("Admin");
   const [valueDate, setValueDate] = useState(null);
-  const [valueStatus, setValueStatus] = useState(false);
 
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
@@ -64,23 +77,12 @@ export default function Info() {
     setRole(event.target.value);
   };
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const classes = useStyles();
-
-  const handleClick = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
 
   const Createchema = Yup.object().shape({
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
-    password: Yup.string().required("*Vui lòng nhập thông tin này"),
-    email: Yup.string().required("*Vui lòng nhập thông tin này"),
     phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-
+    gender: Yup.string().required("*Vui lòng nhập thông tin này"),
+    dateOfBirth: Yup.string().required("*Vui lòng nhập thông tin này"),
     address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
@@ -91,34 +93,30 @@ export default function Info() {
       avatar: userLogin.user.avatar,
       phoneNumber: userLogin.user.phoneNumber,
       gender: userLogin.user.gender,
-      dateOfBirth: moment(userLogin.user.dateOfBirth).format("YYYY-MM-DD"),
-     
+      dateOfBirth:
+        moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
+          ? moment(valueDate).format("YYYY-MM-DD")
+          : moment(userLogin.user.dateOfBirth).format("YYYY-MM-DD"),
+
       active: userLogin.user.active,
       address: userLogin.user.address,
       idRole: userLogin.user.idRole._id,
     },
     validationSchema: Createchema,
-    onSubmit: (data, { resetForm }) => {
+    onSubmit: (data) => {
       console.log("data", data);
       // if (loadingCreateCate) {
       //   return;
       // }
-      // dispatch(createUser(data));
-      resetForm();
-      setOpen(false);
-
+      dispatch(updateCurrentUser(data));
     },
   });
+
   useEffect(() => {
-    values.dateOfBirth = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
+    values.dateOfBirth = moment(userLogin.user.dateOfBirth)?.format(
+      "YYYY-MM-DDTHH:mm:SS"
+    );
   }, [valueDate]);
-
-
-  useEffect(() => {
-    //  dispatch(getRolesList())  
-  }, []);
-
-
 
   const {
     errors,
@@ -130,34 +128,22 @@ export default function Info() {
   } = formik;
 
   useEffect(() => {
-    if (values.name && values.slug) setIsReadyCreateCate(true);
-    else setIsReadyCreateCate(false);
-  }, [values.name, values.slug]);
+    if (successUpdateUserCurrent) {
+      setTimeout(() => {
+        enqueueSnackbar("Cập nhật thành công!", { variant: "success" });
+      }, 100);
+      return;
+    }
+    if (errorUpdateUserCurrent) {
+      enqueueSnackbar(errorUpdateUserCurrent, { variant: "error" });
+    }
+  }, [successUpdateUserCurrent, errorUpdateUserCurrent]);
 
-
-
-
-  const handleCreate = () => {
-    if (isReadyCreateCate) setOpen(false);
-  };
-
-
-  const [value, setValue] = useState(1);
-
-
-  const RegisterSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
-    // password: Yup.string().required("Password is required"),
-    // userName: Yup.string().required("UserName is required"),
-    phoneNumber: Yup.string().required("Phone Number is required"),
-  });
-
-
-
-
-
+  useEffect(() => {
+    return () => {
+      dispatch(resetUserListUpdate());
+    };
+  }, []);
 
   return (
     <FormikProvider value={formik}>
@@ -175,11 +161,11 @@ export default function Info() {
             error={Boolean(touched.fullName && errors.fullName)}
             helperText={touched.fullName && errors.fullName}
           />
-
           <TextField
             fullWidth
             autoComplete="code"
             label="Email"
+            disabled
             InputLabelProps={{
               shrink: true,
             }}
@@ -197,13 +183,11 @@ export default function Info() {
             }}
             className="mt-0"
             {...getFieldProps("phoneNumber")}
-            error={Boolean(
-              touched.phoneNumber && errors.phoneNumber
-            )}
+            error={Boolean(touched.phoneNumber && errors.phoneNumber)}
             helperText={touched.phoneNumber && errors.phoneNumber}
           />
           <Box className="flex">
-            <FormControl fullWidth>
+            <FormControl fullWidth sx={{ marginRight: "25px" }}>
               <InputLabel id="gender">Giới tính</InputLabel>
               <Select
                 labelId="gender"
@@ -219,9 +203,7 @@ export default function Info() {
               </Select>
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel id="role">
-                Quyền
-              </InputLabel>
+              <InputLabel id="role">Quyền</InputLabel>
               <Select
                 labelId="role"
                 id="role"
@@ -231,7 +213,15 @@ export default function Info() {
                 {...getFieldProps("idRole")}
               >
                 {userRoleList?.data.map((role, index) => {
-                  return <MenuItem value={`${role._id}`} key={index} className="capitalize">{role.roleName}</MenuItem>
+                  return (
+                    <MenuItem
+                      value={`${role._id}`}
+                      key={index}
+                      className="capitalize"
+                    >
+                      {role.roleName}
+                    </MenuItem>
+                  );
                 })}
 
                 {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
@@ -241,9 +231,13 @@ export default function Info() {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Stack spacing={3}>
               <DesktopDatePicker
-                label="Date desktop"
+                label="Ngày sinh"
                 inputFormat="MM/dd/yyyy"
-                value={valueDate}
+                value={
+                  valueDate
+                    ? valueDate
+                    : moment(userLogin.user.dateOfBirth).format("YYYY-MM-DD")
+                }
                 onChange={handleChangeDate}
                 renderInput={(params) => <TextField {...params} />}
               />
@@ -285,7 +279,6 @@ export default function Info() {
             Cập nhật
           </LoadingButton>
         </Stack>
-
       </Form>
     </FormikProvider>
   );

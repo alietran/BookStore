@@ -59,27 +59,55 @@ export const createUser = (user) => {
   };
 };
 
-export const getAuthUser = () => {
+
+export const updateCurrentUser = (currentUser) => {
   return (dispatch) => {
     dispatch({
-      type: "GET_AUTH_USER_REQUEST",
+      type: "UPDATE_USER_CURRENT_REQUEST",
     });
     adminAPI
-      .getAuthUser()
+      .updateCurrentUser(currentUser)
       .then((result) => {
-        console.log("result1234", result);
         dispatch({
-          type: "GET_AUTH_USER_SUCCESS",
+          type: "UPDATE_USER_CURRENT_SUCCESS",
           payload: {
+            status: result.data.status,
             data: result.data,
+            token: result.data.token,
           },
         });
       })
       .catch((error) => {
         dispatch({
-          type: "GET_AUTH_USER_FAIL",
+          type: "UPDATE_USER_CURRENT_FAIL",
           payload: {
-            error: error,
+            error: error.response?.data.message,
+          },
+        });
+      });
+  };
+};
+
+export const changePassword = (currentUser) => {
+  return (dispatch) => {
+    dispatch({
+      type: "CHANGE_PASSWORD_REQUEST",
+    });
+    adminAPI
+      .changePassword(currentUser)
+      .then((result) => {
+        dispatch({
+          type: "CHANGE_PASSWORD_SUCCESS",
+          payload: {
+            status: result.data.status,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "CHANGE_PASSWORD_FAIL",
+          payload: {
+            error: error?.response.data.message,
           },
         });
       });

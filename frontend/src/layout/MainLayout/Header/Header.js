@@ -21,6 +21,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { NavLink } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Button, TextField } from "@mui/material";
+import { useDispatch } from "react-redux";
 
 const resources = [
   {
@@ -50,13 +51,18 @@ const resources = [
     href: "#",
     icon: ShieldCheckIcon,
   },
-]
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const logout = () => {
+    window.open("http://localhost:8080/api/v1/admins/logout", "_self");
+    dispatch({ type: "LOGOUT" });
+  };
   return (
     <Popover className="relative bg-white ">
       <div className=" mx-auto px-4 sm:px-6 text-sm">
@@ -197,6 +203,7 @@ export default function Header() {
             <NavLink
               to="#"
               className="ml-8 whitespace-nowrap inline-flex items-center justify-center duration-700  px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:text-white bg-red-500 hover:bg-red-600"
+              onClick={logout}
             >
               Đăng ký
             </NavLink>

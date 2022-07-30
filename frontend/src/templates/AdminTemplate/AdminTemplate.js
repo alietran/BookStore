@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route } from "react-router";
-import {NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "antd/dist/antd.css";
 import style from "./AdminTemplate.module.css";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -26,7 +26,7 @@ const { SubMenu } = Menu;
 const AdminTemplate = (props) => {
   //path, exact, Component
   // const history = useHistory();
-const { userLogin } = useSelector((state) => state.AuthReducer);
+  const { userLogin } = useSelector((state) => state.AuthReducer);
   // const { Component, ...restProps } = props;
   console.log("prop.chil", props.children);
   // const { userLogin } = useSelector((state) => state.UserReducer);
@@ -49,8 +49,8 @@ const { userLogin } = useSelector((state) => state.AuthReducer);
 
   // if (
   //   userLogin.roles !== "admin" &&
-  //   userLogin.roles !== "moderator" 
-   
+  //   userLogin.roles !== "moderator"
+
   // ) {
   //   alert("Bạn không có quyền truy cập vào trang này !");
   //   // return <Redirect to="/" />;
@@ -59,14 +59,11 @@ const { userLogin } = useSelector((state) => state.AuthReducer);
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <NavLink to="/admin/users/account">Xem thông tin</NavLink>
+        <NavLink to="/admin/account">Xem thông tin</NavLink>
       </Menu.Item>
 
       <Menu.Item key="1">
-        <NavLink
-          className="text-decoration-none text-dark"
-          to="/admin/users/account"
-        >
+        <NavLink className="text-decoration-none text-dark" to="/admin/account">
           Đổi mật khẩu
         </NavLink>
       </Menu.Item>
@@ -93,72 +90,60 @@ const { userLogin } = useSelector((state) => state.AuthReducer);
   const operations = (
     <Fragment>
       {/* {!_.isEmpty(userLogin) ? ( */}
-        <Fragment>
-          <div className="flex justify-end">
-            <Dropdown overlay={menu} trigger={["click"]}>
-              <div
-                style={{
-                  width: 50,
-                  height: 50,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                className="text-2xl ml-5 rounded-full bg-red-200 ant-dropdown-link
+      <Fragment>
+        <div className="flex justify-end">
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <div
+              style={{
+                width: 50,
+                height: 50,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              className="text-2xl ml-5 rounded-full bg-red-200 ant-dropdown-link
                 onClick={(e) => e.preventDefault()}"
-              >
-                {/* {userLogin.userName.substr(0, 1)} */}
-                <img
-                  src="/img/avatar-default-icon.png"
-                  alt="avatar"
-                  className="rounded-full"
-                />
-              </div>
-            </Dropdown>
-          </div>
-      
-        </Fragment>
-  
+            >
+              {/* {userLogin.userName.substr(0, 1)} */}
+              <img
+                src={userLogin?.user.avatar}
+                alt="avatar"
+                className="rounded-full"
+              />
+            </div>
+          </Dropdown>
+        </div>
+      </Fragment>
+
       {/* : (
         ""
       )} */}
     </Fragment>
-  )
+  );
 
   // if (userLogin.user.idRole.roleName === "admin"){
-  //  return <>{props.children}</>; 
+  //  return <>{props.children}</>;
   // }
-    return (
-    
-
-        
-            <SnackbarProviderCustom
-              maxSnack={3}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-            >
-              <Fragment>
-                <Layout style={{ minHeight: "100vh" }}>
-                  <Sider
-                    collapsible
-                    collapsed={collapsed}
-                    onCollapse={onCollapse}
-                  >
-                    <div className="logo p-4 ">
-                      <img
-                        src="/img/logo_black.png"
-                        className="h-12 w-full"
-                        alt="..."
-                      />
-                    </div>
-                    <Menu
-                      theme="dark"
-                      defaultSelectedKeys={["1"]}
-                      mode="inline"
-                    >
-                      {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Users">
+  return (
+    <SnackbarProviderCustom
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+    >
+      <Fragment>
+        <Layout style={{ minHeight: "100vh" }}>
+          <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+            <div className="logo p-4 ">
+              <img
+                src="/img/logo_black.png"
+                className="h-12 w-full"
+                alt="..."
+              />
+            </div>
+            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+              {/* <SubMenu key="sub1" icon={<UserOutlined />} title="Users">
                     <Menu.Item key="1" icon={<UserOutlined />}>
                       <NavLink to="/admin/users/list">List</NavLink>
                     </Menu.Item>
@@ -169,66 +154,63 @@ const { userLogin } = useSelector((state) => state.AuthReducer);
                       <NavLink to="/admin/users/new">Add new</NavLink>
                     </Menu.Item>
                   </SubMenu> */}
-                      <Menu.Item key="1" icon={<UserOutlined />}>
-                        <NavLink to="/admin/users">Quản lý người dùng</NavLink>
-                      </Menu.Item>
+              <Menu.Item key="1" icon={<UserOutlined />}>
+                <NavLink to="/admin/users">Quản lý người dùng</NavLink>
+              </Menu.Item>
 
-                      <Menu.Item key="2" icon={<MovieIcon />}>
-                        <NavLink to="/admin/categories"></NavLink>Danh mục sách
-                      </Menu.Item>
+              <Menu.Item key="2" icon={<MovieIcon />}>
+                <NavLink to="/admin/categories"></NavLink>Danh mục sách
+              </Menu.Item>
 
-                      {/* <SubMenu
+              {/* <SubMenu
                       key="sub2"
                       icon={<FileOutlined />}
                       title="Quản lý rạp"
                     > */}
-                      <Menu.Item key="3" icon={<TheatersIcon />}>
-                        <NavLink to="/admin/subcategories">
-                          Danh sách rạp
-                        </NavLink>
-                      </Menu.Item>
-                      {/* </SubMenu> */}
-                      <Menu.Item key="4" icon={<ListAltIcon />}>
-                        <NavLink to="/admin/showtime/showtimeList">
-                          Danh sách lịch chiếu
-                        </NavLink>
-                      </Menu.Item>
-                      <Menu.Item key="5" icon={<ReceiptIcon />}>
-                        <NavLink to="/admin/ticket/ticketList">
-                          Danh sách vé đã bán
-                        </NavLink>
-                      </Menu.Item>
-                    </Menu>
-                  </Sider>
-                  <Layout className="site-layout">
-                    <Header
-                      className="bg-white site-layout-background"
-                      style={{ padding: 0, backgroundColor: "white " }}
-                    >
-                      <div className="text-right pr-10 pt-1">{operations}</div>
-                    </Header>
-                    <Content style={{ margin: "20px 16px" }}>
-                      {/* <Breadcrumb style={{ margin: "16px 0" }}>
+              <Menu.Item key="3" icon={<TheatersIcon />}>
+                <NavLink to="/admin/subcategories">Danh sách rạp</NavLink>
+              </Menu.Item>
+              {/* </SubMenu> */}
+              <Menu.Item key="4" icon={<ListAltIcon />}>
+                <NavLink to="/admin/showtime/showtimeList">
+                  Danh sách lịch chiếu
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item key="5" icon={<ReceiptIcon />}>
+                <NavLink to="/admin/ticket/ticketList">
+                  Danh sách vé đã bán
+                </NavLink>
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Layout className="site-layout">
+            <Header
+              className="bg-white site-layout-background"
+              style={{ padding: 0, backgroundColor: "white " }}
+            >
+              <div className="text-right pr-10 pt-1">{operations}</div>
+            </Header>
+            <Content style={{ margin: "20px 16px" }}>
+              {/* <Breadcrumb style={{ margin: "16px 0" }}>
                       <Breadcrumb.Item>User</Breadcrumb.Item>
                       <Breadcrumb.Item>Bill</Breadcrumb.Item>
                     </Breadcrumb> */}
-                      <div
-                        className="site-layout-background"
-                        style={{ padding: 24, minHeight: "85vh" }}
-                      >
-                        {props.children}
-                        {/* <Component {...propsRoute} /> */}
-                      </div>
-                    </Content>
-                    <Footer style={{ textAlign: "center" }}>
-                      Ant Design ©2018 Created by Ant UED
-                    </Footer>
-                  </Layout>
-                </Layout>
-              </Fragment>
-            </SnackbarProviderCustom>
-          );
-        
+              <div
+                className="site-layout-background"
+                style={{ padding: 24, minHeight: "85vh" }}
+              >
+                {props.children}
+                {/* <Component {...propsRoute} /> */}
+              </div>
+            </Content>
+            <Footer style={{ textAlign: "center" }}>
+              Ant Design ©2018 Created by Ant UED
+            </Footer>
+          </Layout>
+        </Layout>
+      </Fragment>
+    </SnackbarProviderCustom>
+  );
 };
 
 export default AdminTemplate;

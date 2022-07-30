@@ -13,15 +13,21 @@ const adminAPI = {
   deleteUser: (id) => {
     return axiosClient.delete(`/v1/admins/${id}`);
   },
-  //   updateUser: (id) => {
-  //     return axiosClient.put(`/v1/admins/updateUser/${id}`);
-  //   },
   updateUser: (id, data) => {
     const path = `/v1/admins/${id}`;
     return axiosClient.put(path, data);
   },
-  changePass: (user) => {
-    return axiosClient.post("auth/updatePassword", user);
+  updateCurrentUser: (currentUser) => {
+    const path = `/v1/admins/updateMe`;
+    const formData = new FormData();
+    for (const key in currentUser) {
+      formData.append(key, currentUser[key]);
+    }
+    return axiosClient.patch(path, formData);
+  },
+  changePassword: (currentUser) => {
+    const path = `/v1/admins/updateMyPassword`;
+    return axiosClient.patch(path, currentUser);
   },
   getAllRoles: () => {
     return axiosClient.get("/v1/roles");

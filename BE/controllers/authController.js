@@ -84,3 +84,59 @@ exports.login = catchAsync(async (req, res, next) => {
   // 3) If everything ok, send token to client
   createSendToken(admin, 200, res);
 });
+
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // 1) Getting token and check of it's there
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+  console.log('token', token);
+  if (!token) {
+    return next(
+      new AppError('You are not logged in! Please log in to get access', 401)
+    );
+  }
+
+  // 2) Verification token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log('decoded', decoded);
+
+  // 3) Check if user still exists
+  const currentUser = await Admin.findById(decoded.id);
+  console.log('currentUser', currentUser);
+  if (!currentUser) {
+    return next(
+      new AppError('The user belonging to this token does no longer exist', 401)
+    );
+  }
+  // 4) Check if user changed password after the token was issued
+
+  // GRANT ACCESS TO PROTECTED ROUTER
+  req.user = currentUser;
+  next();
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user from collection
+  const user = await Admin.findById(req.user.id).select('+password');
+  // 2) Check if POSTED current password is correct
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(
+      new AppError('Mật khẩu hiện tại của bạn không chính xác.', 401)
+    );
+  }
+
+  // 3) If so, update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate will NOT work as intended!
+
+  // 4) Log user in, send  JWT
+  createSendToken(user, 200, res);
+});

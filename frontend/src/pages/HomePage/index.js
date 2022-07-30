@@ -9,36 +9,31 @@ import axios from "axios";
 
 export default function HomePage() {
   // const { currentUser } = useSelector((state) => state.AuthReducer);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const dispatch = useDispatch();
-  useEffect(() => {
-    const getUser = () => {
-      fetch("http://127.0.0.1:8080/api/v1/admins/login/success", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-        .then((response) => {
-          console.log("response", response);
-          if (response.status === 200) return response.json();
-          throw new Error("authentication has been failed!");
-        })
-        .then((resObject) => {
-          console.log("resObject", resObject);
-          setUser(resObject.user);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-    };
-    getUser();
-  }, []);
+  // useEffect(() => {
+  //   const getUser = () => {
+  //     fetch("http://127.0.0.1:8080/api/v1/admins/login/success", {
+  //       method: "GET",
+  //       credentials: "include",
+  //     })
+  //       .then((response) => {
+  //         console.log("response", response);
+  //         if (response.status === 200) return response.json();
+  //         throw new Error("authentication has been failed!");
+  //       })
+  //       .then((resObject) => {
+  //         console.log("resObject", resObject);
+  //         setUser(resObject.user);
+  //       })
+  //       .catch((err) => {
+  //         console.log("err", err);
+  //       });
+  //   };
+  //   getUser();
+  // }, []);
 
-  console.log("user", user);
+  // console.log("user", user);
   return (
     <div>
       <Carousel />

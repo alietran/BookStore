@@ -42,10 +42,8 @@ export const resetUserListUpdate = () => {
   };
 };
 
-
 export const getRolesList = () => {
   return (dispatch) => {
-   
     adminAPI
       .getAllRoles()
       .then((result) => {
@@ -88,7 +86,6 @@ export const updateUser = (id, data) => {
   };
 };
 export const deletelUser = (id) => {
-  
   return async (dispatch) => {
     try {
       dispatch({
@@ -112,7 +109,6 @@ export const deletelUser = (id) => {
     }
   };
 };
-
 
 export const getDetailUsers = () => {
   return (dispatch) => {
@@ -140,5 +136,3 @@ export const getDetailUsers = () => {
       });
   };
 };
-
-

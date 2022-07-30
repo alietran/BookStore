@@ -25,7 +25,11 @@ import { useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 // import UserListToolbar from "../../components/user";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersList, resetUserList, resetUserListUpdate } from "../../../redux/action/userAction";
+import {
+  getUsersList,
+  resetUserList,
+  resetUserListUpdate,
+} from "../../../redux/action/userAction";
 // import UserListToolbar from "../../components/user/UserListToolbar";
 // import UserMoreMenu from "../components/user/UserMoreMenu";
 import UserListHead from "../../../components/user/UserListHead";
@@ -90,8 +94,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserManager() {
-        const history = useHistory();
-         const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   // const { enqueueSnackbar } = useSnackbar();
   const {
@@ -101,8 +105,10 @@ export default function UserManager() {
     successUpdateUser,
     successDeleteUser,
   } = useSelector((state) => state.UserReducer);
-  const { successCreateUser } = useSelector((state) => state.AuthReducer);
-    console.log("usersList", usersList);
+  const { successCreateUser, successUpdateUserCurrent } = useSelector(
+    (state) => state.AuthReducer
+  );
+  console.log("usersList", usersList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
@@ -123,17 +129,27 @@ export default function UserManager() {
   }, []);
 
   useEffect(() => {
-     if (!usersList) {
-       dispatch(getUsersList());
-     }
-     return () => dispatch(resetUserListUpdate());
+    if (!usersList) {
+      dispatch(getUsersList());
+    }
+    return () => dispatch(resetUserListUpdate());
   }, []);
 
   useEffect(() => {
-    if (successCreateUser || successUpdateUser || successDeleteUser) {
+    if (
+      successCreateUser ||
+      successUpdateUser ||
+      successDeleteUser ||
+      successUpdateUserCurrent
+    ) {
       dispatch(getUsersList());
     }
-  }, [successCreateUser, successUpdateUser, successDeleteUser]);
+  }, [
+    successCreateUser,
+    successUpdateUser,
+    successDeleteUser,
+    successUpdateUserCurrent,
+  ]);
 
   useEffect(() => {
     if (successCreateUser) {
@@ -149,10 +165,6 @@ export default function UserManager() {
     // }
     // errorDelete;
   }, [successCreateUser, successUpdateUser]);
-
-    
-
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -253,7 +265,7 @@ export default function UserManager() {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
-    <CreateUser/>
+        <CreateUser />
         {/* <Button
           onClick={() => {
             history.push("/admin/users/createUser");
@@ -292,9 +304,8 @@ export default function UserManager() {
                   const {
                     _id,
                     fullName,
-                    idRole: {roleName},
-
-                    photo,
+                    idRole: { roleName },
+                    avatar,
                     email,
                     phoneNumber,
                     active,
@@ -319,7 +330,7 @@ export default function UserManager() {
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar alt={fullName} src={photo} />
+                          <Avatar alt={fullName} src={avatar} />
                           <Typography variant="subtitle2" noWrap>
                             {fullName}
                           </Typography>
