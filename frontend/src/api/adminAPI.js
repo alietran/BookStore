@@ -36,9 +36,6 @@ const adminAPI = {
     const path = `/v1/admins/${_id}`;
     return axiosClient.get(path);
   },
-  getAuthUser: () => {
-    return axiosClient.get("/v1/admins/login/success");
-  },
 };
 
 export default adminAPI;

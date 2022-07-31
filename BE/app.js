@@ -7,15 +7,14 @@ const adminRouters = require('./routers/adminRouter');
 const categoryRouters = require('./routers/categoryRouter');
 const subCategoryRouters = require('./routers/subCategoryRouter');
 const roleRouters = require('./routers/roleRouter');
+const userRouters = require('./routers/userRouter');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const passportContent = require('./controllers/passportGoogle');
-const bodyParser = require('body-parser');
 require('dotenv').config();
-const helmet = require('helmet');
 
 
 
@@ -66,6 +65,7 @@ app.use((req, res, next) => {
 
 // 3) Router
 app.use('/api/v1/admins', adminRouters);
+app.use('/api/v1/users', userRouters);
 app.use('/api/v1/roles', roleRouters);
 app.use('/api/v1/categories', categoryRouters);
 app.use('/api/v1/subCategories', subCategoryRouters);

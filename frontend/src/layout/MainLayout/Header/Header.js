@@ -60,7 +60,7 @@ function classNames(...classes) {
 export default function Header() {
   const dispatch = useDispatch();
   const logout = () => {
-    window.open("http://localhost:8080/api/v1/admins/logout", "_self");
+    window.open("http://localhost:8080/api/v1/users/logout", "_self");
     dispatch({ type: "LOGOUT" });
   };
   return (

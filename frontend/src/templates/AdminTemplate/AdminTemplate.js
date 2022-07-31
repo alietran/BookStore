@@ -29,6 +29,7 @@ const AdminTemplate = (props) => {
   const { userLogin } = useSelector((state) => state.AuthReducer);
   // const { Component, ...restProps } = props;
   console.log("prop.chil", props.children);
+  console.log("userLogin", userLogin);
   // const { userLogin } = useSelector((state) => state.UserReducer);
   // console.log(userLogin);
   const [collapsed, setCollapsed] = useState(false);

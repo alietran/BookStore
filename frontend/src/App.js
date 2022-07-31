@@ -39,7 +39,7 @@ function App() {
   const [user, setUser] = useState(null);
   useEffect(() => {
     const getUser = () => {
-      fetch("http://localhost:8080/api/v1/admins/login/success", {
+      fetch("http://localhost:8080/api/v1/users/login/success", {
         method: "GET",
         credentials: "include",
         headers: {
@@ -54,7 +54,7 @@ function App() {
         })
         .then((resObject) => {
           console.log("resObject", resObject);
-          localStorage.setItem("user", JSON.stringify(resObject.user));
+          localStorage.setItem("user", JSON.stringify(resObject));
           localStorage.setItem("token", resObject.token);
           setUser(resObject.user);
         })

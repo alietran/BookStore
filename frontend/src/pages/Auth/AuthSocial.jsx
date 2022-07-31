@@ -60,7 +60,7 @@ export default function AuthSocial() {
 
 
     const google = () => {
-      window.open("http://localhost:8080/api/v1/admins/google", "_self");
+      window.open("http://localhost:8080/api/v1/users/google", "_self");
     };
 
   return (

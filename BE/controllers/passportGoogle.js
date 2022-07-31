@@ -1,5 +1,5 @@
 const passport = require('passport');
-const Admin = require('../models/Admin');
+const User = require('../models/User');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const jwt = require('jsonwebtoken');
 
@@ -9,30 +9,8 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user.id);
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-
-  res.cookie('jwt', token, cookieOptions);
-
-  // Remove password from output
-  user.password = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    user,
-  });
-};
-
 const GOOGLE_CALLBACK_URL =
-  'http://localhost:8080/api/v1/admins/google/callback';
+  'http://localhost:8080/api/v1/users/google/callback';
 
 passport.use(
   new GoogleStrategy(
@@ -46,7 +24,7 @@ passport.use(
       // Admin.findOrCreate({ googleId: profile.id }, function (err, user) {
       //   return cb(err, user);
       // });
-      Admin.findOne(
+      User.findOne(
         {
           googleId: profile.id,
         },
@@ -56,16 +34,14 @@ passport.use(
           }
           //No user was found... so create a new user with values from Facebook (all the profile. stuff)
           if (!user) {
-            user = new Admin({
+            user = new User({
               phoneNumber: '',
               gender: '',
               dateOfBirth: '',
-              idRole: '62e29dfcee1d603dfc29894b',
               fullName: profile.displayName,
               email: profile.emails[0].value,
               avatar: profile.photos[0].value,
               googleId: profile.id,
-              address: '',
             });
             user.save(function (err) {
               if (err) console.log(err);
@@ -88,7 +64,7 @@ passport.serializeUser((user, cb) => {
 
 passport.deserializeUser(async (id, cb) => {
   // cb(null, user);
-  Admin.findById(id, function (err, user) {
+  User.findById(id, function (err, user) {
     cb(err, user);
   });
 });
