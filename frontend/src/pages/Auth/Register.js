@@ -24,8 +24,7 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import { userInfo, userInfoRegis } from "../../redux/actions/userAction";
-// import { Radio } from "antd";
+
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
@@ -72,7 +71,7 @@ export default function Register() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (user) => {
-      dispatch(userInfoRegis(user));
+      // dispatch(userInfoRegis(user));
     },
   });
 

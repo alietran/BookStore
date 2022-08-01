@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    // unique: true,
     allowNull: true,
   },
   gender: {
@@ -26,7 +25,6 @@ const UserSchema = new mongoose.Schema({
     // chuyển về chữ thường
     lowercase: true,
     // check email
-    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   dateOfBirth: {
     type: Date,
@@ -37,11 +35,10 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default:"Khách Hàng"
+    default: 'Khách Hàng',
   },
   address: {
     type: String,
-    // required: [true, 'Please provide your address'],
     allowNull: true,
   },
   googleId: {
@@ -52,7 +49,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     allowNull: true,
   },
-
+  phoneUID: {
+    type: String,
+  },
   passwordChangeAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -63,7 +62,6 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.plugin(findOrCreate);
-
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

@@ -24,7 +24,7 @@ import { LoadingButton } from "@mui/lab";
 import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateUser/style";
-import { deletelUser, updateUser } from "../../../../redux/action/userAction";
+import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
 
 export default function OptionUser({ id, User }) {
   console.log("User", User);
@@ -34,7 +34,7 @@ export default function OptionUser({ id, User }) {
   const [openConfirm, setOpenConfirm] = useState(false);
   // const [isReadyEditUser, setIsReadyEditCate] = useState(false);
   const dispatch = useDispatch();
-  const { userRoleList } = useSelector((state) => state.UserReducer);
+  const { userRoleList } = useSelector((state) => state.AdminReducer);
 
   const handleChangeStatus = (event, checked) => {
     setFieldValue("active", checked ? true : false);

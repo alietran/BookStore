@@ -1,17 +1,19 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { AuthReducer } from "./reducer/authReducer";
-import { UserReducer } from "./reducer/userReducer";
+import { AdminReducer } from "./reducer/adminReducer";
 import { CateReducer } from "./reducer/cateReducer";
 import reduxThunk from "redux-thunk";
 import { SubCateReducer } from "./reducer/subCateReducer";
+import { UserReducer } from "./reducer/userReducer";
 
 // middleWareSaga.run(rootSaga);
 
 const rootReducer = combineReducers({
   AuthReducer,
-  UserReducer,
+  AdminReducer,
   CateReducer,
   SubCateReducer,
+  UserReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

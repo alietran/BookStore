@@ -1,5 +1,4 @@
 const express = require('express');
-const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
@@ -15,6 +14,8 @@ const signToken = (id) => {
   });
 };
 
+router.post('/createUser', userController.createUser);
+router.post('/getUserLoginOtp', userController.getUserLoginOtp);
 
 router.get('/login/failed', (req, res) => {
   res.status(401).json({
@@ -53,7 +54,6 @@ router.get(
   }),
   (req, res) => {}
 );
-
 
 router.get('/logout', (req, res) => {
   req.logout();

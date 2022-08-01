@@ -24,7 +24,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 
-
 import AuthSocial from "./AuthSocial";
 import { login } from "../../redux/action/authAction";
 
@@ -75,21 +74,21 @@ export default function Login() {
   };
 
   useEffect(() => {
-    
     // đăng nhập thành công thì quay về trang trước đó
     if (userLogin) {
       //  console.log("userLogin24", userLogin.user.role);
-      if (
-        userLogin.user?.idRole.roleName === "Admin" 
-      )
-        setTimeout(() => {
-          history.push("/admin/users");
-        }, 2000);
-      else {
-        // setTimeout(() => {
-        history.push("/");
-        // }, 3000);
-      }
+      // if (
+      //   userLogin.user?.idRole.roleName === "Admin"
+      // )
+      //   setTimeout(() => {
+      //     history.push("/admin/users");
+      //   }, 2000);
+      // else {
+      //   // setTimeout(() => {
+      //   history.push("/");
+      //   // }, 3000);
+      // }
+      history.push("/");
     }
     // , [userLogin]
   }, [userLogin]);

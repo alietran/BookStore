@@ -1,15 +1,49 @@
-const Admin = require('../models/Admin');
+const User = require('../models/User');
 const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
+const AppError = require('../utils/appError');
 
-exports.getAllUsers = factory.getAll(Admin);
-exports.createUser = factory.createOne(Admin);
-exports.updateUser = factory.updateOne(Admin);
-exports.deleteUser = factory.deleteOne(Admin);
-exports.getDetailUser = factory.getOne(Admin);
+exports.createUser = catchAsync(async (req, res, next) => {
+  //   const { email, password } = req.body;
 
+  const { user } = req.body;
+  console.log('phoneUID', user.uid);
+
+  //   const { phoneNumber, uid } = req.body;
+  User.findOne(
+    {
+      phoneUID: user.uid,
+    },
+    function (err, userOTP) {
+      if (err) {
+        console.log('err', err);
+      }
+      console.log('userOTP', userOTP);
+      console.log('user', user);
+
+      //No user was found... so create a new user with values from Facebook (all the profile. stuff)
+      if (!userOTP) {
+        newUser = new User({
+          active: true,
+          avatar: '',
+          dateOfBirth: '',
+          email: '',
+          fullName: '',
+          gender: '',
+          phoneUID: user.uid,
+          phoneNumber: user.phoneNumber,
+          role: 'Khách Hàng',
+        });
+        newUser.save();
+      } else {
+        //found user. Return
+        console.log('user123');
+      }
+    }
+  );
+});
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -101,4 +135,20 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
   createSendToken(user, 200, res);
+});
+
+exports.getUserLoginOtp = catchAsync(async (req, res, next) => {
+  const { phoneNumber } = req.body;
+
+  let userNumber = await User.findOne({ phoneNumber });
+  //   const doc = await query;
+  //   console.log('doc', doc);
+
+  if (!userNumber) {
+    return next(
+      new AppError('Số điện thoại không chính xác hoặc không tồn tại!', 401)
+    );
+  }
+
+  createSendToken(userNumber, 200, res);
 });

@@ -8,6 +8,8 @@ import componentsOverride from "./theme/overrides";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import UserManager from "./pages/Admin/UserManager/UserManager";
+import MobileSignIn from "./components/MobileSignIn/MobileSignIn";
+
 import { useEffect, useMemo, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Login from "./pages/Auth/Login";
@@ -20,7 +22,7 @@ import HomePage from "./pages/HomePage";
 import AdminRoute from "./guards/AdminRoute";
 import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 
-import Account from "./pages/Admin/Account/Acount";
+import UserAccount from "./pages/Admin/Account";
 
 function App() {
   const themeOptions = useMemo(
@@ -70,9 +72,10 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/"]}>
+          <Route exact path={["/", "/phone"]}>
             <MainLayout>
               <Route exact path="/" component={HomePage} />
+              <Route exact path="/phone" component={MobileSignIn} />
             </MainLayout>
           </Route>
           <Route exact path="/login" component={Login} />
@@ -97,7 +100,7 @@ function App() {
                 path="/admin/categories"
                 component={CategoryManager}
               />
-              <AdminRoute exact path="/admin/account" component={Account} />
+              <AdminRoute exact path="/admin/account" component={UserAccount} />
 
               {/* </AdminTemplate> */}
               <AdminRoute

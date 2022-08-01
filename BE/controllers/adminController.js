@@ -4,11 +4,11 @@ const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 
-exports.getAllUsers = factory.getAll(Admin);
-exports.createUser = factory.createOne(Admin);
-exports.updateUser = factory.updateOne(Admin);
-exports.deleteUser = factory.deleteOne(Admin);
-exports.getDetailUser = factory.getOne(Admin);
+exports.getAllAdmin = factory.getAll(Admin);
+exports.createAdmin = factory.createOne(Admin);
+exports.updateAdmin = factory.updateOne(Admin);
+exports.deleteAdmin = factory.deleteOne(Admin);
+exports.getDetailAdmin = factory.getOne(Admin);
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {

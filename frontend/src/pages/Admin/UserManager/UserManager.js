@@ -29,7 +29,7 @@ import {
   getUsersList,
   resetUserList,
   resetUserListUpdate,
-} from "../../../redux/action/userAction";
+} from "../../../redux/action/adminAction";
 // import UserListToolbar from "../../components/user/UserListToolbar";
 // import UserMoreMenu from "../components/user/UserMoreMenu";
 import UserListHead from "../../../components/user/UserListHead";
@@ -104,7 +104,7 @@ export default function UserManager() {
     errorDelete,
     successUpdateUser,
     successDeleteUser,
-  } = useSelector((state) => state.UserReducer);
+  } = useSelector((state) => state.AdminReducer);
   const { successCreateUser, successUpdateUserCurrent } = useSelector(
     (state) => state.AuthReducer
   );

@@ -1,126 +1,44 @@
-import adminAPI from "../../api/adminAPI";
+import userAPI from "../../api/userAPI";
 
-export const getUsersList = () => {
-  return (dispatch) => {
+
+export const createUser1 = (user) => {
+  return async (dispatch) => {
     dispatch({
-      type: "GET_USER_LIST_REQUEST",
+      type: "CREATE_USER1_REQUEST",
     });
-    adminAPI
-      .getAllUser()
+    userAPI
+      .createUser(user)
       .then((result) => {
-        console.log("result1234", result);
         dispatch({
-          type: "GET_USER_LIST_SUCCESS",
+          type: "CREATE_USER1_SUCCESS",
           payload: {
             data: result.data,
           },
         });
       })
-      .catch((error) => {
+      .catch((err) => {
+        console.log("err", err.response.data.message);
         dispatch({
-          type: "GET_USER_LIST_FAIL",
+          type: "CREATE_USER1_FAIL",
           payload: {
-            error: error,
+            err: err.response.data.message,
           },
         });
       });
-  };
-};
-
-export const resetUserList = () => {
-  return (dispatch) => {
-    dispatch({
-      type: "RESET_USER_LIST",
-    });
-  };
-};
-export const resetUserListUpdate = () => {
-  return (dispatch) => {
-    dispatch({
-      type: "RESET_USER_LIST_UPDATE",
-    });
-  };
-};
-
-export const getRolesList = () => {
-  return (dispatch) => {
-    adminAPI
-      .getAllRoles()
-      .then((result) => {
-        console.log("res34", result);
-        dispatch({
-          type: "GET_ROLE_SUCCESS",
-          payload: {
-            data: result.data,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
-};
-
-export const updateUser = (id, data) => {
-  return async (dispatch) => {
-    try {
-      dispatch({
-        type: "UPDATE_USER_REQUEST",
-      });
-      const result = await adminAPI.updateUser(id, data);
-      console.log("result", result);
-      dispatch({
-        type: "UPDATE_USER_SUCCESS",
-        payload: {
-          data: result.data,
-        },
-      });
-    } catch (error) {
-      dispatch({
-        type: "UPDATE_USER_FAIL",
-        payload: {
-          error: error.response?.data.message,
-        },
-      });
-    }
-  };
-};
-export const deletelUser = (id) => {
-  return async (dispatch) => {
-    try {
-      dispatch({
-        type: "DELETE_USER_REQUEST",
-      });
-      const result = await adminAPI.deleteUser(id);
-      console.log("result", result);
-      dispatch({
-        type: "DELETE_USER_SUCCESS",
-        payload: {
-          data: result.data,
-        },
-      });
-    } catch (error) {
-      dispatch({
-        type: "DELETE_USER_FAIL",
-        payload: {
-          error: error.response?.data.message,
-        },
-      });
-    }
   };
 };
 
 export const getDetailUsers = () => {
   return (dispatch) => {
     dispatch({
-      type: "GET_DETAIL_REQUEST",
+      type: "GET_DETAIL_USER_REQUEST",
     });
-    adminAPI
-      .getAllUser()
+    userAPI
+      .getDetailUser()
       .then((result) => {
         console.log("result1234", result);
         dispatch({
-          type: "GET_DETAIL_SUCCESS",
+          type: "GET_DETAIL_USER_SUCCESS",
           payload: {
             data: result.data,
           },
@@ -128,7 +46,7 @@ export const getDetailUsers = () => {
       })
       .catch((error) => {
         dispatch({
-          type: "GET_DETAIL_FAIL",
+          type: "GET_DETAIL_USER_FAIL",
           payload: {
             error: error,
           },

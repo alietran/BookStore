@@ -37,12 +37,10 @@ import moment from "moment";
 // import { createUser } from "../../../redux/action/authAction";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { createUser } from "../../../../redux/action/authAction";
-import { getRolesList } from "../../../../redux/action/userAction";
+import { getRolesList } from "../../../../redux/action/adminAction";
 
 export default function CreateUser() {
-  const {  userRoleList } = useSelector(
-    (state) => state.UserReducer
-  );
+  const { userRoleList } = useSelector((state) => state.AdminReducer);
     console.log("userRoleList",userRoleList)
   const [srcImage, setSrcImage] = useState(null);
   const handleChangeFile = (e) => {

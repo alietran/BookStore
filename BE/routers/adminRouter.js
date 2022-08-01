@@ -1,22 +1,22 @@
 const express = require('express');
 
 const authController = require('../controllers/authController');
-const userController = require('../controllers/userController');
+const adminController = require('../controllers/adminController');
 const router = express.Router();
 
 
 router.post('/createUser', authController.signup);
 router.post('/login', authController.login);
-router.route('/').get(userController.getAllUsers);
+router.route('/').get(adminController.getAllAdmin);
 
-// .post(userController.createUser)
-// .put(userController.updateUser);
+// .post(adminController.createAdmin)
+// .put(adminController.updateAdmin);
 
 router
   .route('/:id')
-  // .get(userController.getDetailUser)
-  .put(userController.updateUser)
-  .delete(userController.deleteUser);
+  // .get(adminController.getDetailAdmin)
+  .put(adminController.updateAdmin)
+  .delete(adminController.deleteAdmin);
 
 
 router.post('/createUser', authController.signup);
@@ -25,8 +25,8 @@ router.post('/createUser', authController.signup);
 router.patch(
   '/updateMe',
   authController.protect,
-  userController.uploadUserPhoto,
-  userController.updateMe
+  adminController.uploadUserPhoto,
+  adminController.updateMe
 );
 
 router.patch(

@@ -35,7 +35,7 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
-import { resetUserListUpdate } from "../../../redux/action/userAction";
+import { resetUserListUpdate } from "../../../redux/action/adminAction";
 
 export default function Info() {
   const { userLogin, successUpdateUserCurrent, errorUpdateUserCurrent } =
@@ -44,7 +44,7 @@ export default function Info() {
   console.log("userLogin", userLogin.user);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { userRoleList } = useSelector((state) => state.UserReducer);
+  const { userRoleList } = useSelector((state) => state.AdminReducer);
   const [srcImage, setSrcImage] = useState(null);
   const handleChangeFile = (e) => {
     //doc file base 64
@@ -148,137 +148,157 @@ export default function Info() {
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          {" "}
-          <TextField
-            fullWidth
-            autoComplete="fullName"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            label="Họ tên"
-            {...getFieldProps("fullName")}
-            error={Boolean(touched.fullName && errors.fullName)}
-            helperText={touched.fullName && errors.fullName}
-          />
-          <TextField
-            fullWidth
-            autoComplete="code"
-            label="Email"
-            disabled
-            InputLabelProps={{
-              shrink: true,
-            }}
-            className="mt-0"
-            {...getFieldProps("email")}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-          />
-          <TextField
-            fullWidth
-            autoComplete="code"
-            label="Số điện thoại"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            className="mt-0"
-            {...getFieldProps("phoneNumber")}
-            error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-            helperText={touched.phoneNumber && errors.phoneNumber}
-          />
-          <Box className="flex">
-            <FormControl fullWidth sx={{ marginRight: "25px" }}>
-              <InputLabel id="gender">Giới tính</InputLabel>
-              <Select
-                labelId="gender"
-                id="gender"
-                value={gender}
-                name="gender"
-                label="Giới tính"
-                onChange={handleChangeGender}
-                {...getFieldProps("gender")}
-              >
-                <MenuItem value={`Nam`}>Nam</MenuItem>
-                <MenuItem value={`Nữ`}>Nữ</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
-              <InputLabel id="role">Quyền</InputLabel>
-              <Select
-                labelId="role"
-                id="role"
-                value={role}
-                label="Quyền"
-                onChange={handleChangeRole}
-                {...getFieldProps("idRole")}
-              >
-                {userRoleList?.data.map((role, index) => {
-                  return (
-                    <MenuItem
-                      value={`${role._id}`}
-                      key={index}
-                      className="capitalize"
-                    >
-                      {role.roleName}
-                    </MenuItem>
-                  );
-                })}
-
-                {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
-              </Select>
-            </FormControl>
-          </Box>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <Stack spacing={3}>
-              <DesktopDatePicker
-                label="Ngày sinh"
-                inputFormat="MM/dd/yyyy"
-                value={
-                  valueDate
-                    ? valueDate
-                    : moment(userLogin.user.dateOfBirth).format("YYYY-MM-DD")
-                }
-                onChange={handleChangeDate}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </Stack>
-          </LocalizationProvider>
-          <TextField
-            fullWidth
-            autoComplete="code"
-            label="Địa chỉ"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            className="mt-0"
-            {...getFieldProps("address")}
-            error={Boolean(touched.address && errors.address)}
-            helperText={touched.address && errors.address}
-          />
-          <FormGroup>
-            <FormControlLabel
-              label="Trạng Thái"
-              control={
-                <Switch
-                  checked={values.active}
-                  value={values.active}
-                  onChange={handleChangeStatus}
-                  name="active"
+        <div className="grid grid-cols-5 gap-4">
+          <div className="col-span-2">
+            <div className="text-center z-0 py-9 px-8 mt-20">
+              <div className="w-36 h-36 m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex">
+                <img
+                  src={userLogin?.user.avatar}
+                  alt="avatar"
+                  className="rounded-full"
                 />
-              }
-              {...getFieldProps("active")}
-            />
-          </FormGroup>
-          <LoadingButton
-            fullWidth
-            size="medium"
-            type="submit"
-            variant="contained"
-            // loading={loadingUpdate}
-          >
-            Cập nhật
-          </LoadingButton>
-        </Stack>
+              </div>
+              <div className="mt-4 leading-6 text-xs font-normal text-gray-700 text-center">
+                Cho phép *.jpeg, *.jpg, *.png, *.gif
+              </div>
+            </div>
+          </div>
+          <div className="col-span-3 ">
+            <Stack spacing={3}>
+              {" "}
+              <TextField
+                fullWidth
+                autoComplete="fullName"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                label="Họ tên"
+                {...getFieldProps("fullName")}
+                error={Boolean(touched.fullName && errors.fullName)}
+                helperText={touched.fullName && errors.fullName}
+              />
+              <TextField
+                fullWidth
+                autoComplete="code"
+                label="Email"
+                disabled
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                className="mt-0"
+                {...getFieldProps("email")}
+                error={Boolean(touched.email && errors.email)}
+                helperText={touched.email && errors.email}
+              />
+              <TextField
+                fullWidth
+                autoComplete="code"
+                label="Số điện thoại"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                className="mt-0"
+                {...getFieldProps("phoneNumber")}
+                error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                helperText={touched.phoneNumber && errors.phoneNumber}
+              />
+              <Box className="flex">
+                <FormControl fullWidth sx={{ marginRight: "25px" }}>
+                  <InputLabel id="gender">Giới tính</InputLabel>
+                  <Select
+                    labelId="gender"
+                    id="gender"
+                    value={gender}
+                    name="gender"
+                    label="Giới tính"
+                    onChange={handleChangeGender}
+                    {...getFieldProps("gender")}
+                  >
+                    <MenuItem value={`Nam`}>Nam</MenuItem>
+                    <MenuItem value={`Nữ`}>Nữ</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel id="role">Quyền</InputLabel>
+                  <Select
+                    labelId="role"
+                    id="role"
+                    value={role}
+                    label="Quyền"
+                    onChange={handleChangeRole}
+                    {...getFieldProps("idRole")}
+                  >
+                    {userRoleList?.data.map((role, index) => {
+                      return (
+                        <MenuItem
+                          value={`${role._id}`}
+                          key={index}
+                          className="capitalize"
+                        >
+                          {role.roleName}
+                        </MenuItem>
+                      );
+                    })}
+
+                    {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
+                  </Select>
+                </FormControl>
+              </Box>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <Stack spacing={3}>
+                  <DesktopDatePicker
+                    label="Ngày sinh"
+                    inputFormat="MM/dd/yyyy"
+                    value={
+                      valueDate
+                        ? valueDate
+                        : moment(userLogin.user.dateOfBirth).format(
+                            "YYYY-MM-DD"
+                          )
+                    }
+                    onChange={handleChangeDate}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+              <TextField
+                fullWidth
+                autoComplete="code"
+                label="Địa chỉ"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                className="mt-0"
+                {...getFieldProps("address")}
+                error={Boolean(touched.address && errors.address)}
+                helperText={touched.address && errors.address}
+              />
+              <FormGroup>
+                <FormControlLabel
+                  label="Trạng Thái"
+                  control={
+                    <Switch
+                      checked={values.active}
+                      value={values.active}
+                      onChange={handleChangeStatus}
+                      name="active"
+                    />
+                  }
+                  {...getFieldProps("active")}
+                />
+              </FormGroup>
+              <LoadingButton
+                fullWidth
+                size="medium"
+                type="submit"
+                variant="contained"
+                // loading={loadingUpdate}
+              >
+                Cập nhật
+              </LoadingButton>
+            </Stack>
+          </div>
+        </div>
       </Form>
     </FormikProvider>
   );

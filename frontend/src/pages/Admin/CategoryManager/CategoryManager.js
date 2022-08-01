@@ -25,7 +25,7 @@ import { useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
 // import UserListToolbar from "../../components/user";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsersList, resetUserList } from "../../../redux/action/userAction";
+import { getUsersList, resetUserList } from "../../../redux/action/adminAction";
 // import UserListToolbar from "../../components/user/UserListToolbar";
 // import UserMoreMenu from "../components/user/UserMoreMenu";
 import UserListHead from "../../../components/user/UserListHead";
