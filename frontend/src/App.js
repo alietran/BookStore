@@ -8,11 +8,10 @@ import componentsOverride from "./theme/overrides";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import UserManager from "./pages/Admin/UserManager/UserManager";
-import MobileSignIn from "./components/MobileSignIn/MobileSignIn";
 
 import { useEffect, useMemo, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
-import Login from "./pages/Auth/Login";
+import LoginAdmin from "./pages/Auth/Login";
 import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
 
@@ -23,6 +22,7 @@ import AdminRoute from "./guards/AdminRoute";
 import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 
 import UserAccount from "./pages/Admin/Account";
+import Login from "./pages/Login";
 
 function App() {
   const themeOptions = useMemo(
@@ -72,13 +72,13 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/", "/phone"]}>
+          <Route exact path={["/", "/phone", "/login"]}>
             <MainLayout>
               <Route exact path="/" component={HomePage} />
-              <Route exact path="/phone" component={MobileSignIn} />
+              <Route exact path="/login" component={Login} />
             </MainLayout>
           </Route>
-          <Route exact path="/login" component={Login} />
+          <Route exact path="/admin/login" component={LoginAdmin} />
           <Route
             exact
             path={[
