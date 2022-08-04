@@ -134,7 +134,7 @@ export default function Login() {
           </Typography>
         </Stack>
 
-        <AuthSocial />
+        {/* <AuthSocial /> */}
 
         <FormikProvider value={formik}>
           <Form>

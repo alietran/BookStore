@@ -6,12 +6,7 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 
 exports.createUser = catchAsync(async (req, res, next) => {
-  //   const { email, password } = req.body;
-
   const { user } = req.body;
-  console.log('phoneUID', user.uid);
-
-  //   const { phoneNumber, uid } = req.body;
   User.findOne(
     {
       phoneUID: user.uid,
@@ -23,7 +18,6 @@ exports.createUser = catchAsync(async (req, res, next) => {
       console.log('userOTP', userOTP);
       console.log('user', user);
 
-      //No user was found... so create a new user with values from Facebook (all the profile. stuff)
       if (!userOTP) {
         newUser = new User({
           active: true,
@@ -38,8 +32,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
         });
         newUser.save();
       } else {
-        //found user. Return
-        console.log('user123');
+        console.log('Người dùng đã tồn tại!');
       }
     }
   );
