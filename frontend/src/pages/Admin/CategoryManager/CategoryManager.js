@@ -44,8 +44,8 @@ import CreateCategory from "./CreateCategory/CreateCategory";
 
 const TABLE_HEAD = [
   { id: "id", label: "Id", alignRight: false },
-  { id: "name", label: "Tên danh mục", alignRight: false },
-  { id: "slug", label: "Bí danh", alignRight: false },
+  { id: "name", label: "Tên thể loại", alignRight: false },
+  { id: "parentCateId", label: "Thể loại cha", alignRight: false },
   { id: "action", label: "Thao tác", alignRight: false },
 ];
 
@@ -93,10 +93,9 @@ function applySortFilter(array, comparator, query) {
 export default function CategoryManager() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { cateList, successCreateCate, successUpdateCate } = useSelector(
-    (state) => state.CateReducer
-  );
-  console.log("cateList", cateList);
+  const { cateList, successCreateCate, successUpdateCate, successDeleteCate } =
+    useSelector((state) => state.CateReducer);
+  console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
@@ -115,12 +114,13 @@ export default function CategoryManager() {
     }
     return () => dispatch(resetCateList());
   }, []);
+  
 
   useEffect(() => {
-    if (successCreateCate || successUpdateCate) {
+    if (successCreateCate || successUpdateCate || successDeleteCate) {
       dispatch(getCateList());
     }
-  }, [successCreateCate, successUpdateCate]);
+  }, [successCreateCate, successUpdateCate, successDeleteCate]);
 
   useEffect(() => {
     if (successCreateCate) {
@@ -129,12 +129,13 @@ export default function CategoryManager() {
     }
   }, [successCreateCate]);
 
-    useEffect(() => {
-      if (successUpdateCate) {
-        enqueueSnackbar("Thêm danh mục thành công!", { variant: "success" });
-        return;
-      }
-    }, [successUpdateCate]);
+  useEffect(() => {
+    if (successUpdateCate) {
+      enqueueSnackbar("Thêm danh mục thành công!", { variant: "success" });
+      return;
+    }
+  }, [successUpdateCate]);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -259,7 +260,7 @@ export default function CategoryManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, name, slug } = row;
+                  const { _id, name, parentCateId } = row;
                   const isItemSelected = selected.indexOf(name) !== -1;
 
                   return (
@@ -279,7 +280,28 @@ export default function CategoryManager() {
                       </TableCell>
                       <TableCell align="left">{_id}</TableCell>
                       <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">{slug}</TableCell>
+                      <TableCell align="left">
+                        {parentCateId === "0"
+                          ? "Thư mục cha"
+                          : filteredUsers
+                              .filter((item) => item.id === row.parentCateId)
+                              .map((item) => <span>{item.name}</span>)}
+                      </TableCell>
+
+                      {/* {filteredUsers
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row1) => {
+                    
+                  //  console.log("row1", row1.parentCateId);
+                      return (
+                        <div>
+                          {row1.parentCateId === "0" ? (
+                            <TableCell align="left">Thư mục gốc</TableCell> 
+                          ) : ""
+                }
+                        </div>
+                      );
+                })} */}
 
                       <TableCell align="center">
                         <OptionCategory id={_id} theCategory={row} />

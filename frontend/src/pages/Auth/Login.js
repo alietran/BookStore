@@ -88,7 +88,7 @@ export default function Login() {
       //   history.push("/");
       //   // }, 3000);
       // }
-      history.push("/");
+      history.push("/admin/users");
     }
     // , [userLogin]
   }, [userLogin]);

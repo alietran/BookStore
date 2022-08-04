@@ -7,10 +7,8 @@ const categorySchema = new mongoose.Schema(
       required: [true, 'Please tell us category'],
       trim: true,
     },
-    slug: {
+    parentCateId: {
       type: String,
-      required: [true, 'Please tell us category slug'],
-      trim: true,
     },
   },
   {
@@ -20,10 +18,10 @@ const categorySchema = new mongoose.Schema(
 );
 
 const Category = mongoose.model('Category', categorySchema);
-categorySchema.virtual('subcategorys', {
-  ref: 'SubCategory',
-  foreignField: 'categoryId',
-  localField: '_id',
-});
+// categorySchema.virtual('categorys', {
+//   ref: 'SubCategory',
+//   foreignField: 'categoryId',
+//   localField: '_id',
+// });
 
 module.exports = Category;

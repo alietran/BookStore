@@ -5,6 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   TextField,
 } from "@mui/material";
@@ -22,15 +26,23 @@ import * as Yup from "yup";
 import { createCate } from "../../../../redux/action/categoryAction";
 
 export default function CreateCategory() {
-  const { loadingCreateCate, successCreateCate } = useSelector(
-    (state) => state.CateReducer
-  );
+  // const { loadingCreateCate, successCreateCate } = useSelector(
+  //   (state) => state.CateReducer
+  // );
+   const { cateList, successCreateCate,loadingCreateCate, successUpdateCate } = useSelector(
+     (state) => state.CateReducer
+   );
+   console.log("cateList", cateList)
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
 
   const dispatch = useDispatch();
+  const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
+  const handleChangeCategory = (event) => {
+    setCate(event.target.value);
+  };
   const handleClick = () => {
     setOpen(true);
   };
@@ -39,13 +51,13 @@ export default function CreateCategory() {
   };
   const Createchema = Yup.object().shape({
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
-    slug: Yup.string().required("*Vui lòng nhập thông tin này"),
+   
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: "",
-      slug: "",
+      parentCateId: "",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -69,9 +81,9 @@ export default function CreateCategory() {
   } = formik;
 
   useEffect(() => {
-    if (values.name && values.slug) setIsReadyCreateCate(true);
+    if (values.name && values.parentCateId) setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
-  }, [values.name, values.slug]);
+  }, [values.name, values.parentCateId]);
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);
@@ -87,7 +99,7 @@ export default function CreateCategory() {
         startIcon={<Icon icon={plusFill} />}
         sx={{ "&:hover": { color: "#fff" } }}
       >
-        Thêm danh mục
+        Thêm thể loại
       </Button>
 
       <Dialog
@@ -104,7 +116,7 @@ export default function CreateCategory() {
               onClose={handleClose}
             >
               {" "}
-              Tạo danh mục
+              Tạo thể loại
             </ModalDialog>
 
             <DialogContent dividers>
@@ -116,23 +128,46 @@ export default function CreateCategory() {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Tên danh mục "
+                  label="Tên thể loại "
                   {...getFieldProps("name")}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
-                <TextField
-                  fullWidth
-                  autoComplete="code"
-                  label="Bí danh"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  className="mt-0"
-                  {...getFieldProps("slug")}
-                  error={Boolean(touched.slug && errors.slug)}
-                  helperText={touched.slug && errors.slug}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="gender">Thể loại cha</InputLabel>
+                  {/* {userRoleList?.data.map((role, index) => {
+                    return (
+                      <MenuItem
+                        value={`${role._id}`}
+                        key={index}
+                        className="capitalize"
+                      >
+                        {role.roleName}
+                      </MenuItem>
+                    );
+                  })} */}
+                  <Select
+                    labelId="parentCateId"
+                    id="parentCateId"
+                    value={cate}
+                    name="parentCateId"
+                    label="Thể loại cha"
+                    onChange={handleChangeCategory}
+                    {...getFieldProps("parentCateId")}
+                  >
+                    {/* <MenuItem value={`${cate.id}` === 0}>Thể loại gốc</MenuItem> */}
+                    {cateList?.data.map((cate, index) => {
+                     console.log("cate", cate);
+                     return (
+                       <MenuItem value={`${cate._id}`} key={index}>
+                         {cate.name}
+                       </MenuItem>
+                     );
+                    })}
+
+                    {/* <MenuItem value={`Nữ`}>Nữ</MenuItem> */}
+                  </Select>
+                </FormControl>
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>
@@ -160,7 +195,7 @@ export default function CreateCategory() {
                 disabled={!isReadyCreateCate}
                 className={classes.buttonCreate}
               >
-                Chỉnh sửa
+                Tạo
               </LoadingButton>
             </DialogActions>
           </Form>

@@ -45,7 +45,7 @@ export default function Info() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { userRoleList } = useSelector((state) => state.AdminReducer);
-  const [srcImage, setSrcImage] = useState(null);
+  const [srcImage, setSrcImage] = useState(userLogin?.user.avatar);
   const handleChangeFile = (e) => {
     //doc file base 64
     let file = e.target.files[0];
@@ -147,20 +147,38 @@ export default function Info() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-2">
             <div className="text-center z-0 py-9 px-8 mt-20">
               <div className="w-36 h-36 m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex">
-                <img
-                  src={userLogin?.user.avatar}
-                  alt="avatar"
-                  className="rounded-full"
-                />
+                <label className="w-full h-full outline-none overflow-hidden rounded-full items-center justify-center relative flex cursor-pointer">
+                  <input
+                    accept="image/*"
+                    multiple
+                    id="fileUpload"
+                    type="file"
+                    autoComplete="off"
+                    className="w-full h-full hidden"
+                    onChange={handleChangeFile}
+                  />
+                  <span className="overflow-hidden z-10 w-full h-full block">
+                    <span className=" w-full h-full bg-cover inline-block">
+                      <img
+                        src={srcImage}
+                        alt="avatar"
+                           className="w-full h-full object-cover"
+                      />
+                    </span>
+                  </span>
+                 
+                </label>
+                
               </div>
-              <div className="mt-4 leading-6 text-xs font-normal text-gray-700 text-center">
-                Cho phép *.jpeg, *.jpg, *.png, *.gif
-              </div>
+
+ <div className="mt-4 leading-6 text-xs font-normal text-gray-700 text-center">
+                    Cho phép *.jpeg, *.jpg, *.png, *.gif
+                  </div>
             </div>
           </div>
           <div className="col-span-3 ">
@@ -253,8 +271,8 @@ export default function Info() {
                       valueDate
                         ? valueDate
                         : moment(userLogin.user.dateOfBirth).format(
-                            "YYYY-MM-DD"
-                          )
+                          "YYYY-MM-DD"
+                        )
                     }
                     onChange={handleChangeDate}
                     renderInput={(params) => <TextField {...params} />}
@@ -292,7 +310,7 @@ export default function Info() {
                 size="medium"
                 type="submit"
                 variant="contained"
-                // loading={loadingUpdate}
+              // loading={loadingUpdate}
               >
                 Cập nhật
               </LoadingButton>

@@ -108,3 +108,29 @@ export const resetCateList = () => {
     });
   };
 };
+
+
+export const deleteCate = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "DELETE_CATE_REQUEST",
+      });
+      const result = await cateAPI.deleteCategory(id);
+      console.log("result", result);
+      dispatch({
+        type: "DELETE_CATE_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_CATE_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};

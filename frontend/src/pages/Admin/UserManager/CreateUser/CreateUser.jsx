@@ -262,6 +262,7 @@ export default function CreateUser() {
                       />
                       <Box className="flex">
                         <FormControl fullWidth>
+                          
                           <InputLabel id="gender">Giới tính</InputLabel>
                           <Select
                             labelId="gender"

@@ -14,6 +14,10 @@ const stateDefault = {
   loadingUpdateCate: false,
   successUpdateCate: null,
   errorUpdateCate: null,
+
+  loadingDeleteCate: false,
+  successDeleteCate: null,
+  errorDeleteCate: null,
 };
 
 export const CateReducer = (state = stateDefault, action) => {
@@ -91,6 +95,23 @@ export const CateReducer = (state = stateDefault, action) => {
         ...state,
         errorUpdateCate: action.payload.error,
         loadingUpdateCate: false,
+      };
+    }
+    case "DELETE_CATE_REQUEST": {
+      return { ...state, loadingDeleteCate: true, errorDeleteCate: null };
+    }
+    case "DELETE_CATE_SUCCESS": {
+      return {
+        ...state,
+        successDeleteCate: action.payload.data,
+        loadingDeleteCate: false,
+      };
+    }
+    case "DELETE_CATE_FAIL": {
+      return {
+        ...state,
+        errorDeleteCate: action.payload.error,
+        loadingDeleteCate: false,
       };
     }
 

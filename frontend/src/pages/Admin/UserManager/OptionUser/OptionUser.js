@@ -118,7 +118,7 @@ export default function OptionUser({ id, User }) {
       ></Option>
       <Dialog
         open={openConfirm}
-        onClose={handleCloseConfirm}
+        // onClose={handleCloseCnfirm}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
