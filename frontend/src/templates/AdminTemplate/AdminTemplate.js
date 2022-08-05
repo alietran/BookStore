@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route } from "react-router";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import "antd/dist/antd.css";
 import style from "./AdminTemplate.module.css";
 import ReceiptIcon from "@mui/icons-material/Receipt";
@@ -17,7 +17,9 @@ import {
 } from "@ant-design/icons";
 import MovieIcon from "@mui/icons-material/Movie";
 import _ from "lodash";
+import BusinessIcon from "@mui/icons-material/Business";
 import { SnackbarProvider } from "notistack";
+import CategoryIcon from "@mui/icons-material/Category";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SnackbarProviderCustom from "../../components/Snackbar";
 const { Header, Content, Footer, Sider } = Layout;
@@ -25,7 +27,7 @@ const { SubMenu } = Menu;
 
 const AdminTemplate = (props) => {
   //path, exact, Component
-  // const history = useHistory();
+  const history = useHistory();
   const { userLogin } = useSelector((state) => state.AuthReducer);
   // const { Component, ...restProps } = props;
   console.log("prop.chil", props.children);
@@ -72,7 +74,7 @@ const AdminTemplate = (props) => {
             // // localStorage.removeItem("profile");
             // // localStorage.removeItem("user");
             // // localStorage.removeItem("token");
-            // history.push("/login");
+            history.push("/admin/login");
             dispatch({ type: "LOGOUT" });
           }}
           className="text-blue-800"
@@ -154,8 +156,8 @@ const AdminTemplate = (props) => {
                 <NavLink to="/admin/users">Quản lý người dùng</NavLink>
               </Menu.Item>
 
-              <Menu.Item key="2" icon={<MovieIcon />}>
-                <NavLink to="/admin/categories"></NavLink>Danh mục sách
+              <Menu.Item key="2" icon={<CategoryIcon />}>
+                <NavLink to="/admin/categories"></NavLink>Thể loại
               </Menu.Item>
 
               {/* <SubMenu
@@ -163,8 +165,8 @@ const AdminTemplate = (props) => {
                       icon={<FileOutlined />}
                       title="Quản lý rạp"
                     > */}
-              <Menu.Item key="3" icon={<TheatersIcon />}>
-                <NavLink to="/admin/subcategories">Danh sách rạp</NavLink>
+              <Menu.Item key="3" icon={<BusinessIcon />}>
+                <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
               </Menu.Item>
               {/* </SubMenu> */}
               <Menu.Item key="4" icon={<ListAltIcon />}>

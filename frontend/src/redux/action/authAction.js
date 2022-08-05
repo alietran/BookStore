@@ -28,12 +28,12 @@ export const login = (user) => {
       });
   };
 };
-export const createUser = (user) => {
+export const createAdmin = (user) => {
   return async (dispatch) => {
     console.log("123");
 
     dispatch({
-      type: "CREATE_USER_REQUEST",
+      type: "CREATE_ADMIN_REQUEST",
     });
     adminAPI
       .createUser(user)
@@ -41,7 +41,7 @@ export const createUser = (user) => {
         console.log("result", result);
         console.log("user", user);
         dispatch({
-          type: "CREATE_USER_SUCCESS",
+          type: "CREATE_ADMIN_SUCCESS",
           payload: {
             data: result.data,
           },
@@ -50,7 +50,7 @@ export const createUser = (user) => {
       .catch((err) => {
         console.log("err", err.response.data.message);
         dispatch({
-          type: "CREATE_USER_FAIL",
+          type: "CREATE_ADMIN_FAIL",
           payload: {
             err: err.response.data.message,
           },

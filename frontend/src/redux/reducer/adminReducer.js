@@ -3,7 +3,7 @@ const stateDefault = {
   loadingUsersList: false,
   errorUsersList: null,
 
-  successCreateUser: null,
+  // successCreateAdmin: null,
 
   userRoleList: null,
 

@@ -124,14 +124,14 @@ export default function CategoryManager() {
 
   useEffect(() => {
     if (successCreateCate) {
-      enqueueSnackbar("Thêm danh mục thành công!", { variant: "success" });
+      enqueueSnackbar("Thêm thể loại thành công!", { variant: "success" });
       return;
     }
   }, [successCreateCate]);
 
   useEffect(() => {
     if (successUpdateCate) {
-      enqueueSnackbar("Thêm danh mục thành công!", { variant: "success" });
+      enqueueSnackbar("Chỉnh sửa Thể loại thành công!", { variant: "success" });
       return;
     }
   }, [successUpdateCate]);
@@ -230,7 +230,7 @@ export default function CategoryManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Danh mục sách
+            Thể loại 
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}

@@ -12,9 +12,9 @@ const stateDefault = {
 
   // loading: false,
 
-  loadingCreateUser: false,
-  successCreateUser: null,
-  errorCreateUser: null,
+  loadingCreateAdmin: false,
+  successCreateAdmin: null,
+  errorCreateAdmin: null,
 
   successUpdateUserCurrent: null,
   loadingUpdateUserCurrent: false,
@@ -45,21 +45,21 @@ export const AuthReducer = (state = stateDefault, action) => {
         errorLogin: action.payload.err,
       };
     }
-    case "CREATE_USER_REQUEST": {
-      return { ...state, loadingCreateUser: true, errorCreateUser: null };
+    case "CREATE_ADMIN_REQUEST": {
+      return { ...state, loadingCreateAdmin: true, errorCreateAdmin: null };
     }
-    case "CREATE_USER_SUCCESS": {
+    case "CREATE_ADMIN_SUCCESS": {
       return {
         ...state,
-        loadingCreateUser: false,
-        successCreateUser: action.payload.data,
+        loadingCreateAdmin: false,
+        successCreateAdmin: action.payload.data,
       };
     }
-    case "CREATE_USER_FAIL": {
+    case "CREATE_ADMIN_FAIL": {
       return {
         ...state,
-        loadingCreateUser: false,
-        errorCreateUser: action.payload.err,
+        loadingCreateAdmin: false,
+        errorCreateAdmin: action.payload.err,
       };
     }
     case "UPDATE_USER_CURRENT_REQUEST": {
@@ -127,7 +127,7 @@ export const AuthReducer = (state = stateDefault, action) => {
     case "RESET_USER_LIST": {
       return {
         ...state,
-        successCreateUser: "",
+        successCreateAdmin: "",
         successUpdateUserCurrent: "",
         loadingUpdateUserCurrent: false,
         errorUpdateUserCurrent: null,

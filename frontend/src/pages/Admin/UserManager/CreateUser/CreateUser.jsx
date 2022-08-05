@@ -36,7 +36,7 @@ import * as Yup from "yup";
 import moment from "moment";
 // import { createUser } from "../../../redux/action/authAction";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
-import { createUser } from "../../../../redux/action/authAction";
+import { createAdmin, createUser } from "../../../../redux/action/authAction";
 import { getRolesList } from "../../../../redux/action/adminAction";
 
 export default function CreateUser() {
@@ -115,7 +115,7 @@ export default function CreateUser() {
       // if (loadingCreateCate) {
       //   return;
       // }
-      dispatch(createUser(data));
+      dispatch(createAdmin(data));
         resetForm();
       setOpen(false);
     

@@ -2,15 +2,19 @@ import { Button, TextField, Box } from "@mui/material";
 import { Form, Formik, useFormik } from "formik";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import SendIcon from "@mui/icons-material/Send";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { authentication } from "../../firebaseConfig";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createUser1 } from "../../redux/action/userAction";
+import { createUser } from "../../redux/action/userAction";
 
 export default function Login() {
+
+   const { errorLogin } = useSelector(
+    (state) => state.AuthReducer
+  );
   const google = () => {
     window.open("http://localhost:8080/api/v1/users/google", "_self");
   };
@@ -23,6 +27,15 @@ export default function Login() {
   };
   const history = useHistory();
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (
+     errorLogin
+    ) {
+     alert("Lỗi đăng nhập")
+    }
+  }, [
+   errorLogin
+  ]);
 
   const [OTP, setOTP] = useState("");
 
@@ -74,7 +87,7 @@ export default function Login() {
           console.log("result", result);
           const user = result.user;
           const userObj = { user };
-          dispatch(createUser1(userObj));
+          dispatch(createUser(userObj));
 
           setTimeout(() => {
             const getUser = async () => {

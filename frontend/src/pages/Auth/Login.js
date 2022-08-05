@@ -201,12 +201,7 @@ export default function Login() {
             >
               Đăng nhập
             </LoadingButton>
-            <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-              Chưa có tài khoản?&nbsp;
-              <Link variant="subtitle2" component={RouterLink} to="/register">
-                Đăng ký
-              </Link>
-            </Typography>
+           
           </Form>
         </FormikProvider>
         {/* </ContentStyle> */}

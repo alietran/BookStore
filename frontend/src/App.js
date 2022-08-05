@@ -23,6 +23,7 @@ import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 
 import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
+import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
 
 function App() {
   const themeOptions = useMemo(
@@ -86,6 +87,7 @@ function App() {
               "/admin/users/createUser",
               "/admin/categories",
               "/admin/account",
+              "/admin/suppliers",
             ]}
           >
             <AdminTemplate>
@@ -105,8 +107,8 @@ function App() {
               {/* </AdminTemplate> */}
               <AdminRoute
                 exact
-                path="/admin/subcategories"
-                component={SubCategoryManager}
+                path="/admin/suppliers"
+                component={SupplierManager}
               />
             </AdminTemplate>
           </Route>

@@ -105,9 +105,10 @@ export default function UserManager() {
     successUpdateUser,
     successDeleteUser,
   } = useSelector((state) => state.AdminReducer);
-  const { successCreateUser, successUpdateUserCurrent } = useSelector(
+  const { successCreateAdmin, successUpdateUserCurrent } = useSelector(
     (state) => state.AuthReducer
   );
+  console.log("successCreateAdmin", successCreateAdmin);
   console.log("usersList", usersList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -137,7 +138,7 @@ export default function UserManager() {
 
   useEffect(() => {
     if (
-      successCreateUser ||
+      successCreateAdmin ||
       successUpdateUser ||
       successDeleteUser ||
       successUpdateUserCurrent
@@ -145,14 +146,14 @@ export default function UserManager() {
       dispatch(getUsersList());
     }
   }, [
-    successCreateUser,
+    successCreateAdmin,
     successUpdateUser,
     successDeleteUser,
     successUpdateUserCurrent,
   ]);
 
   useEffect(() => {
-    if (successCreateUser) {
+    if (successCreateAdmin) {
       enqueueSnackbar("Tạo thành công", { variant: "success" });
       return;
     }
@@ -164,7 +165,7 @@ export default function UserManager() {
     //   enqueueSnackbar(errorDelete, { variant: "error" });
     // }
     // errorDelete;
-  }, [successCreateUser, successUpdateUser]);
+  }, [successCreateAdmin, successUpdateUser]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

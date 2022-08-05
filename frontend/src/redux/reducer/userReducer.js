@@ -7,29 +7,29 @@ const userLogin = localStorage.getItem("user")
 
 const stateDefault = {
 
-  loadingCreateUser1: false,
-  successCreateUser1: null,
-  errorCreateUser1: null,
+  loadingCreateUser: false,
+  successCreateUser: null,
+  errorCreateUser: null,
 
 };
 
 export const UserReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "CREATE_USER1_REQUEST": {
-      return { ...state, loadingCreateUser1: true, errorCreateUser1: null };
+      return { ...state, loadingCreateUser: true, errorCreateUser: null };
     }
     case "CREATE_USER1_SUCCESS": {
       return {
         ...state,
-        loadingCreateUser1: false,
-        successCreateUser1: action.payload.data,
+        loadingCreateUser: false,
+        successCreateUser: action.payload.data,
       };
     }
     case "CREATE_USER1_FAIL": {
       return {
         ...state,
-        loadingCreateUser1: false,
-        errorCreateUser1: action.payload.err,
+        loadingCreateUser: false,
+        errorCreateUser: action.payload.err,
       };
     }
 

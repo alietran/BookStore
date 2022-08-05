@@ -1,7 +1,7 @@
 import userAPI from "../../api/userAPI";
 
 
-export const createUser1 = (user) => {
+export const createUser = (user) => {
   return async (dispatch) => {
     dispatch({
       type: "CREATE_USER1_REQUEST",
