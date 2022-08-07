@@ -6,6 +6,7 @@ import reduxThunk from "redux-thunk";
 import { SubCateReducer } from "./reducer/subCateReducer";
 import { UserReducer } from "./reducer/userReducer";
 import { SupplierReducer } from "./reducer/supplierReducer";
+import { ShipperReducer } from "./reducer/shipperReducer";
 
 // middleWareSaga.run(rootSaga);
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   SubCateReducer,
   UserReducer,
   SupplierReducer,
+  ShipperReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

@@ -24,6 +24,7 @@ import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
 import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
+import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
 
 function App() {
   const themeOptions = useMemo(
@@ -88,6 +89,7 @@ function App() {
               "/admin/categories",
               "/admin/account",
               "/admin/suppliers",
+              "/admin/shippers",
             ]}
           >
             <AdminTemplate>
@@ -109,6 +111,11 @@ function App() {
                 exact
                 path="/admin/suppliers"
                 component={SupplierManager}
+              />
+              <AdminRoute
+                exact
+                path="/admin/shippers"
+                component={ShipperManager}
               />
             </AdminTemplate>
           </Route>

@@ -22,7 +22,9 @@ import { SnackbarProvider } from "notistack";
 import CategoryIcon from "@mui/icons-material/Category";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SnackbarProviderCustom from "../../components/Snackbar";
+import HailIcon from "@mui/icons-material/Hail";
 const { Header, Content, Footer, Sider } = Layout;
+
 const { SubMenu } = Menu;
 
 const AdminTemplate = (props) => {
@@ -169,10 +171,8 @@ const AdminTemplate = (props) => {
                 <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
               </Menu.Item>
               {/* </SubMenu> */}
-              <Menu.Item key="4" icon={<ListAltIcon />}>
-                <NavLink to="/admin/showtime/showtimeList">
-                  Danh sách lịch chiếu
-                </NavLink>
+              <Menu.Item key="4" icon={<HailIcon />}>
+                <NavLink to="/admin/shippers">Shipper</NavLink>
               </Menu.Item>
               <Menu.Item key="5" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/ticket/ticketList">

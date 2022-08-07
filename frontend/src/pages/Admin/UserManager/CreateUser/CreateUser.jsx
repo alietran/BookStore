@@ -300,7 +300,7 @@ export default function CreateUser() {
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Stack spacing={3}>
                           <DesktopDatePicker
-                            label="Date desktop"
+                            label="Ngày sinh"
                             inputFormat="MM/dd/yyyy"
                             value={valueDate}
                             onChange={handleChangeDate}
