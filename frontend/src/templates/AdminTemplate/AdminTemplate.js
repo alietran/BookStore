@@ -175,9 +175,10 @@ const AdminTemplate = (props) => {
                 <NavLink to="/admin/shippers">Shipper</NavLink>
               </Menu.Item>
               <Menu.Item key="5" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/ticket/ticketList">
-                  Danh sách vé đã bán
-                </NavLink>
+                <NavLink to="/admin/authors">Tác giả</NavLink>
+              </Menu.Item>
+              <Menu.Item key="6" icon={<ReceiptIcon />}>
+                <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
               </Menu.Item>
             </Menu>
           </Sider>

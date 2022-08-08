@@ -14,6 +14,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import LoginAdmin from "./pages/Auth/Login";
 import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
+import AuthorManager from "./pages/Admin/AuthorManager/AuthorManager";
+
 
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
@@ -25,6 +27,7 @@ import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
 import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
 import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
+import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
 
 function App() {
   const themeOptions = useMemo(
@@ -90,6 +93,8 @@ function App() {
               "/admin/account",
               "/admin/suppliers",
               "/admin/shippers",
+              "/admin/authors",
+              "/admin/promotions",
             ]}
           >
             <AdminTemplate>
@@ -116,6 +121,16 @@ function App() {
                 exact
                 path="/admin/shippers"
                 component={ShipperManager}
+              />
+              <AdminRoute
+                exact
+                path="/admin/authors"
+                component={AuthorManager}
+              />
+              <AdminRoute
+                exact
+                path="/admin/promotions"
+                component={PromotionManager}
               />
             </AdminTemplate>
           </Route>

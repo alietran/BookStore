@@ -23,16 +23,31 @@ import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
 import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
-import { useStyles } from "../CreateAuthor/style";
+import { useStyles } from "../CreatePromotion/style";
 import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
-import { deleteShipper, getDetailShipper, updateShipper } from "../../../../redux/action/shipperAction";
-import { deleteAuthor, getDetailAuthor, updateAuthor, updateAUTHOR } from "../../../../redux/action/authorAction";
+import {
+  deleteShipper,
+  getDetailShipper,
+  updateShipper,
+} from "../../../../redux/action/shipperAction";
+import {
+ 
+  getDetailAuthor,
+  updateAuthor,
+  updateAUTHOR,
+} from "../../../../redux/action/authorAction";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import moment from "moment";
+import { deletePromotion, getDetailPromotion, updatePromotion } from "../../../../redux/action/promotionAction";
 
-export default function OptionAuthor({ id, author }) {
-  console.log("shipper", author);
+
+export default function OptionPromotion({ id, promotion }) {
+  console.log("shipper", promotion);
   const [role, setRole] = useState("Admin");
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [valueDate, setValueDate] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   // const [isReadyEditshipper, setIsReadyEditCate] = useState(false);
   const dispatch = useDispatch();
@@ -54,8 +69,8 @@ export default function OptionAuthor({ id, author }) {
   };
 
   const onClickDelete = (id) => {
-    dispatch(deleteAuthor(author._id));
-    console.log("idDelete", author._id);
+    dispatch(deletePromotion(promotion._id));
+    console.log("idDelete", promotion._id);
   };
 
   const handleChangeRole = (event) => {
@@ -65,14 +80,19 @@ export default function OptionAuthor({ id, author }) {
   const onClickEdit = () => {
     setOpen(true);
     console.log("idEdit", id);
-    console.log("author", author);
-    dispatch(getDetailAuthor(id));
+    console.log("promotion", promotion);
+    dispatch(getDetailPromotion(id));
   };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: author.name,
+      name: promotion.name,
+      percent_discount: promotion.percent_discount,
+      price_discount: promotion.price_discount,
+      desc: promotion.desc,
+      endDate: promotion.endDate,
+      code: promotion.code,
     },
 
     onSubmit: (data, { resetForm }) => {
@@ -80,7 +100,7 @@ export default function OptionAuthor({ id, author }) {
       if (loadingUpdateShipper) {
         return;
       }
-      dispatch(updateAuthor(author._id, data));
+      dispatch(updatePromotion(promotion._id, data));
 
       resetForm();
     },
@@ -98,12 +118,17 @@ export default function OptionAuthor({ id, author }) {
   //   if (values.name && values.slug) setIsReadyEditCate(true);
   //   else setIsReadyEditCate(false);
   // }, [values.name, values.slug]);
-
+  useEffect(() => {
+    values.endDate = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
+  }, [valueDate]);
   const handleUpdate = () => {
     setOpen(false);
   };
   const handleClickConfirm = () => {
     setOpenConfirm(true);
+  };
+  const handleChangeDate = (newValue) => {
+    setValueDate(newValue);
   };
 
   return (
@@ -149,7 +174,7 @@ export default function OptionAuthor({ id, author }) {
               onClose={handleClose}
             >
               {" "}
-              Chỉnh sửa tác giả
+              Chỉnh sửa khuyến mãi
             </ModalDialog>
 
             <DialogContent dividers>
@@ -161,12 +186,72 @@ export default function OptionAuthor({ id, author }) {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Tên tác giả "
+                  label="Tên khuyến mãi "
                   {...getFieldProps("name")}
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
-               
+                <TextField
+                  fullWidth
+                  autoComplete="percent_discount"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label="Phần trăm giảm "
+                  {...getFieldProps("percent_discount")}
+                  error={Boolean(
+                    touched.percent_discount && errors.percent_discount
+                  )}
+                  helperText={
+                    touched.percent_discount && errors.percent_discount
+                  }
+                />
+                <TextField
+                  fullWidth
+                  autoComplete="price_discount"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label="Giá giảm"
+                  {...getFieldProps("price_discount")}
+                  error={Boolean(
+                    touched.price_discount && errors.price_discount
+                  )}
+                  helperText={touched.price_discount && errors.price_discount}
+                />
+                <TextField
+                  fullWidth
+                  autoComplete="desc"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label="Mô tả"
+                  {...getFieldProps("desc")}
+                  error={Boolean(touched.desc && errors.desc)}
+                  helperText={touched.desc && errors.desc}
+                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Stack spacing={3}>
+                    <DesktopDatePicker
+                      label="Ngày hết hạn"
+                      inputFormat="MM/dd/yyyy"
+                      value={valueDate}
+                      onChange={handleChangeDate}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+                <TextField
+                  fullWidth
+                  autoComplete="code"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label="Mã giảm giá"
+                  {...getFieldProps("code")}
+                  error={Boolean(touched.code && errors.code)}
+                  helperText={touched.code && errors.code}
+                />
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>

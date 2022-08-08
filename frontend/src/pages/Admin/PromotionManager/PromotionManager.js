@@ -34,9 +34,12 @@ import Label from "../../../components/Label";
 
 
 import { getShipperList, resetShipperList } from "../../../redux/action/shipperAction";
-import CreateAuthor from "./CreateAuthor/CreateAuthor";
-import OptionAuthor from "./OptionAuthor/OptionAuthor";
+
 import { getAuthorList, resetAuthorList } from "../../../redux/action/authorAction";
+import CreatePromotion from "./CreatePromotion/CreatePromotion";
+import OptionPromotion from "./OptionPromotion/OptionPromotion";
+import { getPromotionList } from "../../../redux/action/promotionAction";
+import moment from "moment";
 
 
 // import Label from "../../components/Label";
@@ -44,9 +47,12 @@ import { getAuthorList, resetAuthorList } from "../../../redux/action/authorActi
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "id", label: "id", alignRight: false },
-  { id: "name", label: "Họ tên", alignRight: false },
- 
+  { id: "name", label: "Tên chương trình KM", alignRight: false },
+  { id: "percent_discount", label: "Phần trăm giảm", alignRight: false },
+  { id: "price_discount", label: "Giá giảm", alignRight: false },
+  { id: "endDate", label: "Ngày hết hạn", alignRight: false },
+  { id: "code", label: "Mã giảm giá", alignRight: false },
+
   { id: "" },
 ];
 
@@ -91,15 +97,15 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis?.map((el) => el[0]);
 }
 
-export default function AuthorManager() {
+export default function PromotionManager() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const {
-    authorList,
-    successCreateAuthor,
-    successUpdateAuthor,
-    successDeleteAuthor,
-  } = useSelector((state) => state.AuthorReducer);
+    promotionList,
+    successCreatePromotion,
+    successUpdatePromotion,
+    successDeletePromotion,
+  } = useSelector((state) => state.PromotionReducer);
   // console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -114,32 +120,36 @@ export default function AuthorManager() {
 
   useEffect(() => {
     // get list user lần đầu
-    if (!authorList) {
-      dispatch(getAuthorList());
+    if (!promotionList) {
+      dispatch(getPromotionList());
     }
     return () => dispatch(resetAuthorList());
   }, []);
   
 
   useEffect(() => {
-    if (successCreateAuthor || successUpdateAuthor || successDeleteAuthor) {
-      dispatch(getAuthorList());
+    if (
+      successCreatePromotion ||
+      successUpdatePromotion ||
+      successDeletePromotion
+    ) {
+      dispatch(getPromotionList());
     }
-  }, [successCreateAuthor, successUpdateAuthor, successDeleteAuthor]);
+  }, [successCreatePromotion, successUpdatePromotion, successDeletePromotion]);
 
   useEffect(() => {
-    if (successCreateAuthor) {
-      enqueueSnackbar("Thêm tác giả thành công!", { variant: "success" });
+    if (successCreatePromotion) {
+      enqueueSnackbar("Thêm chương trình KM thành công!", { variant: "success" });
       return;
     }
-  }, [successCreateAuthor]);
+  }, [successCreatePromotion]);
 
   useEffect(() => {
-    if (successUpdateAuthor) {
-      enqueueSnackbar("Chỉnh sửa tác giả thành công!", { variant: "success" });
+    if (successUpdatePromotion) {
+      enqueueSnackbar("Chỉnh sửa khuyến mãi thành công!", { variant: "success" });
       return;
     }
-  }, [successUpdateAuthor]);
+  }, [successUpdatePromotion]);
 
 
   const handleRequestSort = (event, property) => {
@@ -150,7 +160,7 @@ export default function AuthorManager() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = authorList?.data.map((n) => n.fullName);
+      const newSelecteds = promotionList?.data.map((n) => n.fullName);
       setSelected(newSelecteds);
       return;
     }
@@ -189,15 +199,15 @@ export default function AuthorManager() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - authorList?.result) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - promotionList?.result) : 0;
 
   const filteredUsers = applySortFilter(
-    authorList?.data,
+    promotionList?.data,
     getComparator(order, orderBy),
     filterName
   );
 
-  const isUserNotFound = authorList?.result === 0;
+  const isUserNotFound = promotionList?.result === 0;
 
   const breadcrumbs = [
     <Link
@@ -241,7 +251,7 @@ export default function AuthorManager() {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
-        <CreateAuthor />
+        <CreatePromotion />
       </Stack>
       <Card>
         <UserListToolbar
@@ -256,7 +266,7 @@ export default function AuthorManager() {
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={authorList?.result}
+              rowCount={promotionList?.result}
               numSelected={selected.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
@@ -265,7 +275,7 @@ export default function AuthorManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, name, phoneNumber, email, active } = row;
+                  const { _id, name, code, endDate, percent_discount, price_discount } = row;
                   const isItemSelected = selected.indexOf(name) !== -1;
 
                   return (
@@ -284,12 +294,15 @@ export default function AuthorManager() {
                         />
                       </TableCell>
 
-                      <TableCell align="left">{_id}</TableCell>
+   
                       <TableCell align="left">{name}</TableCell>
-                    
+                      <TableCell align="left">{percent_discount}</TableCell>
+                      <TableCell align="left">{price_discount}</TableCell>
+                      <TableCell align="left">{ moment(endDate)?.format("YYYY-MM-DD")}</TableCell>
+                      <TableCell align="left">{code}</TableCell>
 
                       <TableCell align="center">
-                        <OptionAuthor id={_id} author={row} />
+                        <OptionPromotion id={_id} promotion={row} />
                       </TableCell>
                     </TableRow>
                   );
@@ -315,7 +328,7 @@ export default function AuthorManager() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={authorList?.result}
+          count={promotionList?.result}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
@@ -58,6 +58,15 @@ function classNames(...classes) {
 }
 
 export default function Header() {
+  // const {userLogin, setUserLogin}
+    const [userLogin, setUserLogin] = useState(
+      JSON.parse(localStorage.getItem("user"))
+    );
+const handleChangeUserogin = (newValue) => {
+  setUserLogin(newValue);
+};
+  // const userLogin = JSON.parse(localStorage.getItem("user"))
+  console.log("userLogin", userLogin?.user.fullName);
   const dispatch = useDispatch();
   const logout = () => {
     window.open("http://localhost:8080/api/v1/users/logout", "_self");
@@ -193,20 +202,30 @@ export default function Header() {
             >
               <ShoppingCartOutlinedIcon />
             </NavLink>
-
-            <NavLink
-              to="/login"
-              className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
-            >
-              Đăng nhập
-            </NavLink>
-            <NavLink
-              to="#"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center duration-700  px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:text-white bg-red-500 hover:bg-red-600"
-              onClick={logout}
-            >
-              Đăng ký
-            </NavLink>
+            {userLogin ? (
+              <NavLink
+                to="/info"
+                className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
+              >
+                {(userLogin?.user.fullName)}
+              </NavLink>
+            ) : (
+              <Box>
+                <NavLink
+                  to="/login"
+                  className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
+                >
+                  Đăng nhập
+                </NavLink>
+                <NavLink
+                  to="#"
+                  className="ml-8 whitespace-nowrap inline-flex items-center justify-center duration-700  px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:text-white bg-red-500 hover:bg-red-600"
+                  onClick={logout}
+                >
+                  Đăng ký
+                </NavLink>
+              </Box>
+            )}
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { SubCateReducer } from "./reducer/subCateReducer";
 import { UserReducer } from "./reducer/userReducer";
 import { SupplierReducer } from "./reducer/supplierReducer";
 import { ShipperReducer } from "./reducer/shipperReducer";
+import { AuthorReducer } from "./reducer/authorReducer";
+import { PromotionReducer } from "./reducer/promotionReducer";
 
 // middleWareSaga.run(rootSaga);
 
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
   UserReducer,
   SupplierReducer,
   ShipperReducer,
+  AuthorReducer,
+  PromotionReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

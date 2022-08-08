@@ -37,9 +37,10 @@ import moment from "moment";
 
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { createShipper } from "../../../../redux/action/shipperAction";
+import { createAuthor } from "../../../../redux/action/authorAction";
 
 export default function CreateAuthor() {
-  const { loadingCreateShipper } = useSelector((state) => state.ShipperReducer);
+  const { loadingCreateAuthor } = useSelector((state) => state.AuthorReducer);
   // console.log("userRoleList", userRoleList);
   const [srcImage, setSrcImage] = useState(null);
   const handleChangeFile = (e) => {
@@ -84,33 +85,21 @@ export default function CreateAuthor() {
 
   const Createchema = Yup.object().shape({
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
-    password: Yup.string().required("*Vui lòng nhập thông tin này"),
-    email: Yup.string().required("*Vui lòng nhập thông tin này"),
-    phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-    address: Yup.string().required("*Vui lòng nhập thông tin này"),
-    license_plates: Yup.string().required("*Vui lòng nhập thông tin này"),
+  
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: "",
-      password: "",
-      passwordConfirm: "",
-      email: "",
-      phoneNumber: "",
-      gender: "",
-      dateOfBirth: "",
-      active: true,
-      address: "",
-      license_plates: "",
+      
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
       console.log("data", data);
-      if (loadingCreateShipper) {
+      if (loadingCreateAuthor) {
         return;
       }
-      dispatch(createShipper(data));
+      dispatch(createAuthor(data));
       resetForm();
       setOpen(false);
     },
@@ -135,24 +124,14 @@ export default function CreateAuthor() {
 
   useEffect(() => {
     if (
-      values.name &&
-      values.password &&
-      values.passwordConfirm &&
-      values.email &&
-      values.phoneNumber &&
-      values.address &&
-      values.license_plates
+      values.name 
+     
     )
       setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
   }, [
     values.name,
-    values.password,
-    values.passwordConfirm,
-    values.email,
-    values.phoneNumber,
-    values.address,
-    values.license_plates,
+   
   ]);
 
   const handleCreate = () => {
@@ -169,7 +148,7 @@ export default function CreateAuthor() {
         startIcon={<Icon icon={plusFill} />}
         sx={{ "&:hover": { color: "#fff" } }}
       >
-        Thêm Shipper
+        Thêm tác giả
       </Button>
 
       <Dialog
@@ -186,7 +165,7 @@ export default function CreateAuthor() {
               onClose={handleClose}
             >
               {" "}
-              Tạo shipper mới
+              Tạo tác giả mới
             </ModalDialog>
 
             <DialogContent dividers>
@@ -212,126 +191,6 @@ export default function CreateAuthor() {
                     error={Boolean(touched.name && errors.name)}
                     helperText={touched.name && errors.name}
                   />
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Mật khẩu"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("password")}
-                    error={Boolean(touched.password && errors.password)}
-                    helperText={touched.password && errors.password}
-                  />
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Xác nhận mật khẩu"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("passwordConfirm")}
-                    error={Boolean(
-                      touched.passwordConfirm && errors.passwordConfirm
-                    )}
-                    helperText={
-                      touched.passwordConfirm && errors.passwordConfirm
-                    }
-                  />
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Email"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("email")}
-                    error={Boolean(touched.email && errors.email)}
-                    helperText={touched.email && errors.email}
-                  />
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Số điện thoại"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("phoneNumber")}
-                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
-                  />
-                  <Box className="flex">
-                    <FormControl fullWidth>
-                      <InputLabel id="gender">Giới tính</InputLabel>
-                      <Select
-                        labelId="gender"
-                        id="gender"
-                        value={gender}
-                        name="gender"
-                        label="Giới tính"
-                        onChange={handleChangeGender}
-                        {...getFieldProps("gender")}
-                      >
-                        <MenuItem value={`Nam`}>Nam</MenuItem>
-                        <MenuItem value={`Nữ`}>Nữ</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Stack spacing={3}>
-                      <DesktopDatePicker
-                        label="Ngày sinh"
-                        inputFormat="MM/dd/yyyy"
-                        value={valueDate}
-                        onChange={handleChangeDate}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Địa chỉ"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("address")}
-                    error={Boolean(touched.address && errors.address)}
-                    helperText={touched.address && errors.address}
-                  />
-                  <TextField
-                    fullWidth
-                    autoComplete="code"
-                    label="Biển số xe"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    className="mt-0"
-                    {...getFieldProps("license_plates")}
-                    error={Boolean(
-                      touched.license_plates && errors.license_plates
-                    )}
-                    helperText={touched.license_plates && errors.license_plates}
-                  />
-                  <FormGroup>
-                    <FormControlLabel
-                      label="Trạng Thái"
-                      control={
-                        <Switch
-                          checked={values.active}
-                          value={values.active}
-                          onChange={handleChangeStatus}
-                          name="active"
-                        />
-                      }
-                      {...getFieldProps("active")}
-                    />
-                  </FormGroup>
                 </Stack>
               </Card>
             </DialogContent>
@@ -355,7 +214,7 @@ export default function CreateAuthor() {
                 size="large"
                 type="submit"
                 variant="contained"
-                // loading={loadingCreateCate}
+                loading={loadingCreateAuthor}
                 onClick={handleCreate}
                 // disabled={!isReadyCreateCate}
                 className={classes.buttonCreate}

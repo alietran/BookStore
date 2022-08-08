@@ -10,6 +10,10 @@ const roleRouters = require('./routers/roleRouter');
 const userRouters = require('./routers/userRouter');
 const supplierRouters = require('./routers/supplierRouter');
 const shipperRouters = require('./routers/shipperRouter');
+const authorRouters = require('./routers/authorRouter');
+const promotionRouters = require('./routers/promotionRouter');
+
+
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
@@ -73,6 +77,8 @@ app.use('/api/v1/categories', categoryRouters);
 app.use('/api/v1/subCategories', subCategoryRouters);
 app.use('/api/v1/suppliers', supplierRouters);
 app.use('/api/v1/shippers', shipperRouters);
+app.use('/api/v1/authors', authorRouters);
+app.use('/api/v1/promotions', promotionRouters);
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {
