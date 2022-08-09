@@ -28,6 +28,7 @@ import Login from "./pages/Login";
 import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
 import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
 import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
+import BookManager from "./pages/Admin/Book/BookManager";
 
 function App() {
   const themeOptions = useMemo(
@@ -95,6 +96,7 @@ function App() {
               "/admin/shippers",
               "/admin/authors",
               "/admin/promotions",
+              "/admin/books",
             ]}
           >
             <AdminTemplate>
@@ -132,6 +134,7 @@ function App() {
                 path="/admin/promotions"
                 component={PromotionManager}
               />
+              <AdminRoute exact path="/admin/books" component={BookManager} />
             </AdminTemplate>
           </Route>
         </Switch>

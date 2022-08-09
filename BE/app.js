@@ -12,7 +12,7 @@ const supplierRouters = require('./routers/supplierRouter');
 const shipperRouters = require('./routers/shipperRouter');
 const authorRouters = require('./routers/authorRouter');
 const promotionRouters = require('./routers/promotionRouter');
-
+const bookRouters = require('./routers/bookRouter');
 
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -79,6 +79,7 @@ app.use('/api/v1/suppliers', supplierRouters);
 app.use('/api/v1/shippers', shipperRouters);
 app.use('/api/v1/authors', authorRouters);
 app.use('/api/v1/promotions', promotionRouters);
+app.use('/api/v1/books', bookRouters);
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {
