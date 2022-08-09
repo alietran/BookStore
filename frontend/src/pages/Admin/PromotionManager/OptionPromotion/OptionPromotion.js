@@ -31,7 +31,6 @@ import {
   updateShipper,
 } from "../../../../redux/action/shipperAction";
 import {
- 
   getDetailAuthor,
   updateAuthor,
   updateAUTHOR,
@@ -39,20 +38,26 @@ import {
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import moment from "moment";
-import { deletePromotion, getDetailPromotion, updatePromotion } from "../../../../redux/action/promotionAction";
-
+import {
+  deletePromotion,
+  getDetailPromotion,
+  updatePromotion,
+} from "../../../../redux/action/promotionAction";
 
 export default function OptionPromotion({ id, promotion }) {
   console.log("shipper", promotion);
   const [role, setRole] = useState("Admin");
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+    const [valueDateStart, setValueDateStart] = useState(null);
   const [valueDate, setValueDate] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   // const [isReadyEditshipper, setIsReadyEditCate] = useState(false);
   const dispatch = useDispatch();
-  const { loadingUpdateShipper } = useSelector((state) => state.ShipperReducer);
-
+  const { loadingUpdatePromotion } = useSelector((state) => state.PromotionReducer);
+  const handleChangeDateStart = (newValue) => {
+    setValueDateStart(newValue);
+  };
   const handleChangeStatus = (event, checked) => {
     setFieldValue("active", checked ? true : false);
   };
@@ -65,12 +70,16 @@ export default function OptionPromotion({ id, promotion }) {
   // handleCancel;
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
-    onClickDelete(id);
+    const promotions = {
+      activeCode: "Kết thúc",
+    };
+    console.log("promotions", promotions);
+    dispatch(updatePromotion(promotion._id, promotions));
+    // onClickDelete(id);
   };
 
-  const onClickDelete = (id) => {
-    dispatch(deletePromotion(promotion._id));
-    console.log("idDelete", promotion._id);
+  const onClickEnd = () => {
+    setOpenConfirm(true);
   };
 
   const handleChangeRole = (event) => {
@@ -79,25 +88,30 @@ export default function OptionPromotion({ id, promotion }) {
 
   const onClickEdit = () => {
     setOpen(true);
-    console.log("idEdit", id);
-    console.log("promotion", promotion);
+    // console.log("idEdit", id);
+    // console.log("promotion", promotion);
     dispatch(getDetailPromotion(id));
   };
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: promotion.name,
-      percent_discount: promotion.percent_discount,
-      price_discount: promotion.price_discount,
-      desc: promotion.desc,
-      endDate: promotion.endDate,
-      code: promotion.code,
+      title: promotion.title,
+      price:promotion.price,
+      miniPrice: promotion.miniPrice,
+      startDate:
+        moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
+          ? moment(valueDate).format("YYYY-MM-DD")
+          : moment(promotion.startDate).format("YYYY-MM-DD"),
+      expiryDate:
+        moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
+          ? moment(valueDate).format("YYYY-MM-DD")
+          : moment(promotion.expiryDate).format("YYYY-MM-DD"),
     },
 
     onSubmit: (data, { resetForm }) => {
       console.log("data", data);
-      if (loadingUpdateShipper) {
+      if (loadingUpdatePromotion) {
         return;
       }
       dispatch(updatePromotion(promotion._id, data));
@@ -105,6 +119,16 @@ export default function OptionPromotion({ id, promotion }) {
       resetForm();
     },
   });
+  useEffect(() => {
+    values.startDate = moment(promotion.startDate)?.format(
+      "YYYY-MM-DDTHH:mm:SS"
+    );
+  }, [valueDate]);
+  useEffect(() => {
+    values.expiryDate = moment(promotion.expiryDate)?.format(
+      "YYYY-MM-DDTHH:mm:SS"
+    );
+  }, [valueDate]);
 
   const {
     errors,
@@ -133,14 +157,32 @@ export default function OptionPromotion({ id, promotion }) {
 
   return (
     <Box>
-      <Option
+      {/* <Option
         // () => {
         //         // onClick = { handleClickOpen };
         //         onClickDelete(id);
         //       }
         onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
-      ></Option>
+      ></Option> */}
+      {promotion.activeCode !== "Kết thúc" ? (
+        <Box>
+          <Button
+            variant="contained"
+            sx={{ margin: "10px" }}
+            onClick={onClickEdit}
+          >
+            Chỉnh sửa{" "}
+          </Button>
+          <br />
+          <Button variant="outlined" color="error" onClick={onClickEnd}>
+            Kết thúc
+          </Button>
+        </Box>
+      ) : (
+        ""
+      )}
+
       <Dialog
         open={openConfirm}
         // onClose={handleCloseCnfirm}
@@ -182,76 +224,116 @@ export default function OptionPromotion({ id, promotion }) {
                 {" "}
                 <TextField
                   fullWidth
-                  autoComplete="name"
+                  autoComplete="title"
                   InputLabelProps={{
                     shrink: true,
                   }}
                   label="Tên khuyến mãi "
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
+                  {...getFieldProps("title")}
+                  error={Boolean(touched.title && errors.title)}
+                  helperText={touched.title && errors.title}
                 />
-                <TextField
-                  fullWidth
-                  autoComplete="percent_discount"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Phần trăm giảm "
-                  {...getFieldProps("percent_discount")}
-                  error={Boolean(
-                    touched.percent_discount && errors.percent_discount
-                  )}
-                  helperText={
-                    touched.percent_discount && errors.percent_discount
-                  }
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="price_discount"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Giá giảm"
-                  {...getFieldProps("price_discount")}
-                  error={Boolean(
-                    touched.price_discount && errors.price_discount
-                  )}
-                  helperText={touched.price_discount && errors.price_discount}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="desc"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Mô tả"
-                  {...getFieldProps("desc")}
-                  error={Boolean(touched.desc && errors.desc)}
-                  helperText={touched.desc && errors.desc}
-                />
+                {promotion.activeCode !== "Đang diễn ra" ? (
+                  <>
+                    {" "}
+                    <TextField
+                      fullWidth
+                      autoComplete="price"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      label="Giảm giá"
+                      {...getFieldProps("price")}
+                      error={Boolean(touched.price && errors.price)}
+                      helperText={touched.price && errors.price}
+                    />
+                    <TextField
+                      fullWidth
+                      autoComplete="miniPrice"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      label="Điều kiện"
+                      {...getFieldProps("miniPrice")}
+                      error={Boolean(touched.miniPrice && errors.miniPrice)}
+                      helperText={touched.miniPrice && errors.miniPrice}
+                    />
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <Stack spacing={3}>
+                        <DesktopDatePicker
+                          label="Ngày bắt đầu"
+                          inputFormat="MM/dd/yyyy"
+                          value={
+                            valueDateStart
+                              ? valueDateStart
+                              : moment(promotion.startDate).format("YYYY-MM-DD")
+                          }
+                          onChange={handleChangeDateStart}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </>
+                ) : (
+                  <>
+                    <TextField
+                      fullWidth
+                      autoComplete="price"
+                      disabled
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      label="Giảm giá"
+                      {...getFieldProps("price")}
+                      error={Boolean(touched.price && errors.price)}
+                      helperText={touched.price && errors.price}
+                    />
+                    <TextField
+                    disabled
+                      fullWidth
+                      autoComplete="miniPrice"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      label="Điều kiện"
+                      {...getFieldProps("miniPrice")}
+                      error={Boolean(touched.miniPrice && errors.miniPrice)}
+                      helperText={touched.miniPrice && errors.miniPrice}
+                    />
+                    
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <Stack spacing={3}>
+                        <DesktopDatePicker
+                          label="Ngày bắt đầu"
+                          inputFormat="MM/dd/yyyy"
+                          disabled
+                          value={
+                            valueDateStart
+                              ? valueDateStart
+                              : moment(promotion.startDate).format("YYYY-MM-DD")
+                          }
+                          onChange={handleChangeDateStart}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </Stack>
+                    </LocalizationProvider>
+                  </>
+                )}
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       label="Ngày hết hạn"
                       inputFormat="MM/dd/yyyy"
-                      value={valueDate}
+                      value={
+                        valueDate
+                          ? valueDate
+                          : moment(promotion.expiryDate).format("YYYY-MM-DD")
+                      }
                       onChange={handleChangeDate}
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </Stack>
                 </LocalizationProvider>
-                <TextField
-                  fullWidth
-                  autoComplete="code"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Mã giảm giá"
-                  {...getFieldProps("code")}
-                  error={Boolean(touched.code && errors.code)}
-                  helperText={touched.code && errors.code}
-                />
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>
@@ -274,7 +356,7 @@ export default function OptionPromotion({ id, promotion }) {
                 size="large"
                 type="submit"
                 variant="contained"
-                loading={loadingUpdateShipper}
+                loading={loadingUpdatePromotion}
                 onClick={handleUpdate}
                 // disabled={!isReadyEditCate}
                 className={classes.buttonCreate}

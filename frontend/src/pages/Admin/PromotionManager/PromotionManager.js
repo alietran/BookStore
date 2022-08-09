@@ -17,7 +17,7 @@ import {
   Link,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-
+import Chip from "@mui/material/Chip";
 import { Link as RouterLink } from "react-router-dom";
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
@@ -56,6 +56,7 @@ const TABLE_HEAD = [
   { id: "startDate", label: "Ngày bắt đầu", alignRight: false },
   { id: "endDate", label: "Ngày hết hạn", alignRight: false },
   { id: "code", label: "Mã giảm giá", alignRight: false },
+  { id: "activeCode", label: "Trạng thái", alignRight: false },
   { id: "Thao tác" },
 ];
 
@@ -70,13 +71,15 @@ function descendingComparator(a, b, orderBy) {
   }
   return 0;
 }
-function changeActive(active) {
-  if (active) {
-    return "Active";
-  } else {
-    return "Banned";
-  }
-}
+// function changeActive(activeCode) {
+//   if (activeCode) {
+//     return "Sắp diễn ra";
+//   } else {
+//     return "Đang diễn ra";
+//   } else {
+//     return "Kết thúc";
+//   }
+// }
 function getComparator(order, orderBy) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -168,7 +171,23 @@ export default function PromotionManager() {
     setSelected([]);
   };
 
-
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    setSelected(newSelected);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -232,7 +251,7 @@ export default function PromotionManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại
+            Khuyến mãi
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -269,12 +288,33 @@ export default function PromotionManager() {
                     price,
                     miniPrice,
                     startDate,
-                    expiryDate
+                    expiryDate,
+                    activeCode,
                   } = row;
+                  const isItemSelected = selected.indexOf(title) !== -1;
                   return (
                     <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          onChange={(event) => handleClick(event, title)}
+                        />
+                      </TableCell>
+
                       <TableCell align="left">{title}</TableCell>
-                      <TableCell align="left">{title}</TableCell>
+
+                      <TableCell align="left">
+                        {(price * 1).toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}{" "}
+                        /{" "}
+                        {(miniPrice * 1).toLocaleString("it-IT", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                        
+                      </TableCell>
                       {/* <TableCell align="left">{price_discount}</TableCell> */}
                       <TableCell align="left">
                         {moment(startDate)?.format("YYYY-MM-DD")}
@@ -283,7 +323,16 @@ export default function PromotionManager() {
                         {moment(expiryDate)?.format("YYYY-MM-DD")}
                       </TableCell>
                       <TableCell align="left">{code}</TableCell>
-
+                      {/* <TableCell align="left">{activeCode}</TableCell> */}
+                      <TableCell align="left">
+                        {activeCode === "Sắp diễn ra" ? (
+                          <Chip label="Sắp diễn ra" color="warning" />
+                        ) : activeCode === "Đang diễn ra" ? (
+                          <Chip label="Đang diễn ra" color="success" />
+                        ) : (
+                          <Chip label="Kết thúc" color="error" />
+                        )}
+                      </TableCell>
                       <TableCell align="center">
                         <OptionPromotion id={_id} promotion={row} />
                       </TableCell>

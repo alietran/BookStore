@@ -6,10 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   InputLabel,
   MenuItem,
   Select,
   Stack,
+  Switch,
   TextField,
 } from "@mui/material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -25,7 +28,6 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 
-
 import { createPromotion } from "../../../../redux/action/promotionAction";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import moment from "moment";
@@ -40,14 +42,19 @@ export default function CreatePromotion() {
   // console.log("cateList", cateList);
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
   const [valueDate, setValueDate] = useState(null);
+  const [valueDateStart, setValueDateStart] = useState(null);
   const dispatch = useDispatch();
   const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
   const classes = useStyles();
+ 
 
-    const handleChangeDate = (newValue) => {
-      setValueDate(newValue);
-    };
+  const handleChangeDate = (newValue) => {
+    setValueDate(newValue);
+  };
+  const handleChangeDateStart = (newValue) => {
+    setValueDateStart(newValue);
+  };
   const handleClick = () => {
     setOpen(true);
   };
@@ -55,24 +62,26 @@ export default function CreatePromotion() {
     setOpen(false);
   };
   const Createchema = Yup.object().shape({
-    name: Yup.string().required("*Vui lòng nhập thông tin này"),
-    desc: Yup.string().required("*Vui lòng nhập thông tin này"),
+    title: Yup.string().required("*Vui lòng nhập thông tin này"),
+
     code: Yup.string().required("*Vui lòng nhập thông tin này"),
-   
+    price: Yup.string().required("*Vui lòng nhập thông tin này"),
+    miniPrice: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      name: "",
-      percent_discount: "",
-      price_discount: "",
-      desc: "",
-      endDate: "",
+      title: "",
+      price: "",
+      miniPrice: "",
       code: "",
+      startDate: "",
+      expiryDate: "",
+ 
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data",data);
+      console.log("data", data);
       if (loadingCreatePromotion) {
         return;
       }
@@ -91,14 +100,18 @@ export default function CreatePromotion() {
     setFieldValue,
   } = formik;
 
-        useEffect(() => {
-          values.endDate = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
-        }, [valueDate]);
+  useEffect(() => {
+    values.expiryDate = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
+  }, [valueDate]);
+  useEffect(() => {
+    values.startDate = moment(valueDateStart)?.format("YYYY-MM-DDTHH:mm:SS");
+  }, [valueDateStart]);
 
-  // useEffect(() => {
-  //   if (values.name && values.parentCateId) setIsReadyCreateCate(true);
-  //   else setIsReadyCreateCate(false);
-  // }, [values.name, values.parentCateId]);
+  useEffect(() => {
+    if (values.title && values.price && values.miniPrice && values.code)
+      setIsReadyCreateCate(true);
+    else setIsReadyCreateCate(false);
+  }, [values.title , values.price , values.miniPrice , values.code]);
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);
@@ -139,54 +152,59 @@ export default function CreatePromotion() {
                 {" "}
                 <TextField
                   fullWidth
-                  autoComplete="name"
+                  autoComplete="title"
                   InputLabelProps={{
                     shrink: true,
                   }}
                   label="Tên khuyến mãi "
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
+                  {...getFieldProps("title")}
+                  error={Boolean(touched.title && errors.title)}
+                  helperText={touched.title && errors.title}
                 />
                 <TextField
                   fullWidth
-                  autoComplete="percent_discount"
+                  autoComplete="price"
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Phần trăm giảm "
-                  {...getFieldProps("percent_discount")}
-                  error={Boolean(
-                    touched.percent_discount && errors.percent_discount
-                  )}
-                  helperText={
-                    touched.percent_discount && errors.percent_discount
-                  }
+                  label="Giảm giá"
+                  {...getFieldProps("price")}
+                  error={Boolean(touched.price && errors.price)}
+                  helperText={touched.price && errors.price}
                 />
                 <TextField
                   fullWidth
-                  autoComplete="price_discount"
+                  autoComplete="miniPrice"
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Giá giảm"
-                  {...getFieldProps("price_discount")}
-                  error={Boolean(
-                    touched.price_discount && errors.price_discount
-                  )}
-                  helperText={touched.price_discount && errors.price_discount}
+                  label="Điều kiện"
+                  {...getFieldProps("miniPrice")}
+                  error={Boolean(touched.miniPrice && errors.miniPrice)}
+                  helperText={touched.miniPrice && errors.miniPrice}
                 />
                 <TextField
                   fullWidth
-                  autoComplete="desc"
+                  autoComplete="code"
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  label="Mô tả"
-                  {...getFieldProps("desc")}
-                  error={Boolean(touched.desc && errors.desc)}
-                  helperText={touched.desc && errors.desc}
+                  label="Mã giảm"
+                  {...getFieldProps("code")}
+                  error={Boolean(touched.code && errors.code)}
+                  helperText={touched.code && errors.code}
                 />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <Stack spacing={3}>
+                    <DesktopDatePicker
+                      label="Ngày bắt đầu"
+                      inputFormat="MM/dd/yyyy"
+                      value={valueDateStart}
+                      onChange={handleChangeDateStart}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Stack spacing={3}>
                     <DesktopDatePicker
@@ -198,17 +216,8 @@ export default function CreatePromotion() {
                     />
                   </Stack>
                 </LocalizationProvider>
-                <TextField
-                  fullWidth
-                  autoComplete="code"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Mã giảm giá"
-                  {...getFieldProps("code")}
-                  error={Boolean(touched.code && errors.code)}
-                  helperText={touched.code && errors.code}
-                />
+               
+              
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>

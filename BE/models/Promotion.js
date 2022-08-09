@@ -12,7 +12,7 @@ const promotionSchema = new mongoose.Schema(
     },
     miniPrice: {
       type: String,
-    },
+    }, 
     code: {
       type: String,
       required: [true, 'A discount must have a code'],
@@ -27,10 +27,7 @@ const promotionSchema = new mongoose.Schema(
       required: [true, 'A discount must have a expiryDate'],
       trim: true,
     },
-    activePublic: {
-      type: Boolean,
-      default: false,
-    },
+  
     activeCode: {
       type: String,
     },

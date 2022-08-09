@@ -8,6 +8,7 @@ exports.getAllPromotion = catchAsync(async (req, res, next) => {
   try {
     let query = Promotion.find();
     let result = await query;
+    // console.log('result', result);
     let currentDay = moment().format('YYYY-MM-DDTHH:mm:SS');
     result.map(async (day) => {
       if (
