@@ -2,41 +2,45 @@ const mongoose = require('mongoose');
 
 const promotionSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
-      required: [true, 'Please tell us promotion name'],
-      trim: true,
+      required: [true, 'A discount must have a title'],
     },
-    percent_discount: {
+    price: {
       type: String,
+      required: [true, 'A discount must have a price'],
     },
-    price_discount: {
+    miniPrice: {
       type: String,
-    },
-    desc: {
-      type: String,
-    },
-    endDate: {
-      type: Date,
-      required: [true, 'Please tell us end date'],
     },
     code: {
       type: String,
-      required: [true, 'Please tell us code'],
+      required: [true, 'A discount must have a code'],
+    },
+    startDate: {
+      type: Date,
+      required: [true, 'A discount must have a startDate'],
       trim: true,
+    },
+    expiryDate: {
+      type: Date,
+      required: [true, 'A discount must have a expiryDate'],
+      trim: true,
+    },
+    activePublic: {
+      type: Boolean,
+      default: false,
+    },
+    activeCode: {
+      type: String,
     },
   },
   {
-    toJSON: { virtuals: true }, 
+    toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
 
 const Promotion = mongoose.model('Promotion', promotionSchema);
-// categorySchema.virtual('categorys', {
-//   ref: 'SubCategory',
-//   foreignField: 'categoryId',
-//   localField: '_id',
-// });
 
 module.exports = Promotion;

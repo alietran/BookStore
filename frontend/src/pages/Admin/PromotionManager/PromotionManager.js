@@ -32,28 +32,31 @@ import UserListHead from "../../../components/user/UserListHead";
 import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
 
+import {
+  getShipperList,
+  resetShipperList,
+} from "../../../redux/action/shipperAction";
 
-import { getShipperList, resetShipperList } from "../../../redux/action/shipperAction";
-
-import { getAuthorList, resetAuthorList } from "../../../redux/action/authorAction";
+import {
+  getAuthorList,
+  resetAuthorList,
+} from "../../../redux/action/authorAction";
 import CreatePromotion from "./CreatePromotion/CreatePromotion";
 import OptionPromotion from "./OptionPromotion/OptionPromotion";
 import { getPromotionList } from "../../../redux/action/promotionAction";
 import moment from "moment";
-
 
 // import Label from "../../components/Label";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Tên chương trình KM", alignRight: false },
-  { id: "percent_discount", label: "Phần trăm giảm", alignRight: false },
-  { id: "price_discount", label: "Giá giảm", alignRight: false },
+  { id: "title", label: "Tên chương trình KM", alignRight: false },
+  { id: "price", label: "Giá giảm", alignRight: false },
+  { id: "startDate", label: "Ngày bắt đầu", alignRight: false },
   { id: "endDate", label: "Ngày hết hạn", alignRight: false },
   { id: "code", label: "Mã giảm giá", alignRight: false },
-
-  { id: "" },
+  { id: "Thao tác" },
 ];
 
 // ----------------------------------------------------------------------
@@ -106,10 +109,6 @@ export default function PromotionManager() {
     successUpdatePromotion,
     successDeletePromotion,
   } = useSelector((state) => state.PromotionReducer);
-  // console.log("successDeleteCate", successDeleteCate);
-  // const { successUpdateUserCurrent } = useSelector(
-  //   (state) => state.AuthReducer
-  // );
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -125,7 +124,6 @@ export default function PromotionManager() {
     }
     return () => dispatch(resetAuthorList());
   }, []);
-  
 
   useEffect(() => {
     if (
@@ -139,18 +137,21 @@ export default function PromotionManager() {
 
   useEffect(() => {
     if (successCreatePromotion) {
-      enqueueSnackbar("Thêm chương trình KM thành công!", { variant: "success" });
+      enqueueSnackbar("Thêm chương trình KM thành công!", {
+        variant: "success",
+      });
       return;
     }
   }, [successCreatePromotion]);
 
   useEffect(() => {
     if (successUpdatePromotion) {
-      enqueueSnackbar("Chỉnh sửa khuyến mãi thành công!", { variant: "success" });
+      enqueueSnackbar("Chỉnh sửa khuyến mãi thành công!", {
+        variant: "success",
+      });
       return;
     }
   }, [successUpdatePromotion]);
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -167,23 +168,7 @@ export default function PromotionManager() {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -199,7 +184,9 @@ export default function PromotionManager() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - promotionList?.result) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - promotionList?.result)
+      : 0;
 
   const filteredUsers = applySortFilter(
     promotionList?.data,
@@ -245,7 +232,7 @@ export default function PromotionManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại 
+            Thể loại
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -267,7 +254,7 @@ export default function PromotionManager() {
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
               rowCount={promotionList?.result}
-              numSelected={selected.length}
+              // numSelected={selected.length}
               onRequestSort={handleRequestSort}
               onSelectAllClick={handleSelectAllClick}
             />
@@ -275,30 +262,26 @@ export default function PromotionManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, name, code, endDate, percent_discount, price_discount } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
-
+                  const {
+                    _id,
+                    title,
+                    code,
+                    price,
+                    miniPrice,
+                    startDate,
+                    expiryDate
+                  } = row;
                   return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
+                    <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
+                      <TableCell align="left">{title}</TableCell>
+                      <TableCell align="left">{title}</TableCell>
+                      {/* <TableCell align="left">{price_discount}</TableCell> */}
+                      <TableCell align="left">
+                        {moment(startDate)?.format("YYYY-MM-DD")}
                       </TableCell>
-
-   
-                      <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">{percent_discount}</TableCell>
-                      <TableCell align="left">{price_discount}</TableCell>
-                      <TableCell align="left">{ moment(endDate)?.format("YYYY-MM-DD")}</TableCell>
+                      <TableCell align="left">
+                        {moment(expiryDate)?.format("YYYY-MM-DD")}
+                      </TableCell>
                       <TableCell align="left">{code}</TableCell>
 
                       <TableCell align="center">
