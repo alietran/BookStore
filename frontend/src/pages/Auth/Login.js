@@ -20,6 +20,7 @@ import {
   Link,
   Grid,
   Box,
+  Alert,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
@@ -64,7 +65,7 @@ export default function Login() {
   const history = useHistory();
   let location = useLocation();
 
-  const { userLogin } = useSelector((state) => state.AuthReducer);
+  const { userLogin, errorLogin } = useSelector((state) => state.AuthReducer);
   console.log("userLogin", userLogin);
   // console.log("userLogin", userLogin);
   //kg dùng
@@ -139,6 +140,8 @@ export default function Login() {
         <FormikProvider value={formik}>
           <Form>
             <Stack spacing={3}>
+              {errorLogin ? <Alert severity="error">{errorLogin}</Alert> : ""}
+
               <TextField
                 fullWidth
                 autoComplete="email"
@@ -201,7 +204,6 @@ export default function Login() {
             >
               Đăng nhập
             </LoadingButton>
-           
           </Form>
         </FormikProvider>
         {/* </ContentStyle> */}
