@@ -47,6 +47,12 @@ const bookSchema = new mongoose.Schema(
       required: [true, 'Please tell us size'],
       trim: true,
     },
+    image: {
+      type: String,
+    },
+    gallery: {
+      type: Array,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -55,6 +61,5 @@ const bookSchema = new mongoose.Schema(
 );
 
 const Book = mongoose.model('Book', bookSchema);
-
 
 module.exports = Book;

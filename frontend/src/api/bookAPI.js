@@ -6,8 +6,18 @@ const cateAPI = {
   },
   postCreateBook: (data) => {
     const path = `/v1/books`;
-    return axiosClient.post(path, data);
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
+      if (key === "gallery") {
+        for (let i = 0; i < data[key].length; i++) {
+          formData.append(key, data[key][i]);
+        }
+      }
+    }
+    return axiosClient.post(path, formData);
   },
+
   getDetailBook: (id) => {
     const path = `/v1/books/${id}`;
     return axiosClient.get(path);

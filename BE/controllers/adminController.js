@@ -3,12 +3,15 @@ const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
+const mkdirp = require('mkdirp');
 
 exports.getAllAdmin = factory.getAll(Admin);
 exports.createAdmin = factory.createOne(Admin);
 exports.updateAdmin = factory.updateOne(Admin);
 exports.deleteAdmin = factory.deleteOne(Admin);
 exports.getDetailAdmin = factory.getOne(Admin);
+
+const made = mkdirp.sync('./public/img/users');
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {

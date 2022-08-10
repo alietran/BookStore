@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(bookController.createBook)
+  .post(bookController.uploadBookPhoto, bookController.createBook)
   .get(bookController.getAllBook);
 
 router

@@ -31,7 +31,7 @@ export default function CreateBook() {
   // const { loadingCreateCate, successCreateCate } = useSelector(
   //   (state) => state.CateReducer
   // );
-   const { loadingCreateBook } = useSelector((state) => state.BookReducer);
+  const { loadingCreateBook } = useSelector((state) => state.BookReducer);
   //  console.log("cateList", cateList)
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
 
@@ -49,16 +49,83 @@ export default function CreateBook() {
   const handleClose = () => {
     setOpen(false);
   };
+  const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
+  const [srcImage, setSrcImage] = useState(null);
+  const [images, setImages] = useState([]);
+  const handleChangeFileImage = (e) => {
+    let file = e.target.files[0];
+
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function (e) {
+      // sau khi thực hiên xong lênh trên thì set giá trị có được
+      setSrcImage(e.target.result);
+    };
+    // Đem dữ liệu file lưu vào formik
+    formik.setFieldValue("image", file);
+  };
+
+  const [imageFiles, setImageFiles] = useState([]);
+
+  const handleChangeFileGallery = (e) => {
+    let files = e.target.files;
+    const validImageFiles = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.match(imageTypeRegex)) {
+        validImageFiles.push(file);
+      }
+    }
+    if (validImageFiles.length) {
+      setImageFiles(validImageFiles);
+      console.log("values.gallery", values.gallery);
+
+      values.gallery = e.target.files;
+      return;
+    }
+  };
+
+  useEffect(() => {
+    const images = [],
+      fileReaders = [];
+    let isCancel = false;
+    if (imageFiles.length) {
+      imageFiles.forEach((file) => {
+        const fileReader = new FileReader();
+        fileReaders.push(fileReader);
+        fileReader.onload = (e) => {
+          const { result } = e.target;
+          if (result) {
+            images.push(result);
+          }
+          if (images.length === imageFiles.length && !isCancel) {
+            setImages(images);
+          }
+        };
+        fileReader.readAsDataURL(file);
+      });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [imageFiles]);
+  console.log("images", images);
+  console.log("images", images.length);
   const Createchema = Yup.object().shape({
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
-    desc:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    price:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    quantity:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    bookCover:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    totalPage:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    publisher:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    issuer:  Yup.string().required("*Vui lòng nhập thông tin này"),
-    size:  Yup.string().required("*Vui lòng nhập thông tin này"),
+    desc: Yup.string().required("*Vui lòng nhập thông tin này"),
+    price: Yup.string().required("*Vui lòng nhập thông tin này"),
+    quantity: Yup.string().required("*Vui lòng nhập thông tin này"),
+    bookCover: Yup.string().required("*Vui lòng nhập thông tin này"),
+    totalPage: Yup.string().required("*Vui lòng nhập thông tin này"),
+    publisher: Yup.string().required("*Vui lòng nhập thông tin này"),
+    issuer: Yup.string().required("*Vui lòng nhập thông tin này"),
+    size: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -71,17 +138,19 @@ export default function CreateBook() {
       totalPage: "",
       publisher: "",
       issuer: "",
-      size:"",
+      size: "",
+      image: "",
+      gallery: "",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data",data);
+      console.log("data", data);
       if (loadingCreateBook) {
         return;
       }
       dispatch(createBook(data));
 
-      resetForm();
+      // resetForm();
     },
   });
 
@@ -102,17 +171,17 @@ export default function CreateBook() {
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);
   };
-const editorRef = useRef(null);
-const log = () => {
-  if (editorRef.current) {
-    console.log(editorRef.current.getContent());
-  }
-};
-const handleEditorChange = ((content, editor)=>{
-  console.log("content", content);
-  console.log("editor", editor);
-  setFieldValue('desc',content);
-})
+  const editorRef = useRef(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
+  const handleEditorChange = (content, editor) => {
+    console.log("content", content);
+    console.log("editor", editor);
+    setFieldValue("desc", content);
+  };
   return (
     <Box>
       <Button
@@ -134,7 +203,7 @@ const handleEditorChange = ((content, editor)=>{
         maxWidth="md"
       >
         <Formik value={formik}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} encType="multipart/form-data">
             <ModalDialog
               sx={{ fontSize: "23px !important" }}
               onClose={handleClose}
@@ -285,6 +354,59 @@ const handleEditorChange = ((content, editor)=>{
                   error={Boolean(touched.size && errors.size)}
                   helperText={touched.size && errors.size}
                 />
+                {/* <Stack spacing={2}> */}
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ width: "15%" }}
+                >
+                  Thư viện ảnh
+                  <input
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={handleChangeFileGallery}
+                  />
+                </Button>
+                <div className="flex">
+                  {images &&
+                    images.map((image) => (
+                      <img
+                        accept="image/*"
+                        multiple
+                        src={image}
+                        alt="avatar"
+                        className="w-24 h-auto rounded-2xl mr-3"
+                      />
+                    ))}
+                </div>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ width: "15%" }}
+                >
+                  Hình ảnh
+                  <input
+                    hidden
+                    accept="image/*"
+                    id="fileUpload"
+                    type="file"
+                    onChange={handleChangeFileImage}
+                  />
+                </Button>
+                <div className="flex">
+                  {srcImage && (
+                    <img
+                      accept="image/*"
+                      multiple
+                      src={srcImage}
+                      alt="avatar"
+                      className="w-24 h-auto rounded-2xl mr-3"
+                    />
+                  )}
+                </div>
+                {/* </Stack> */}
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>
