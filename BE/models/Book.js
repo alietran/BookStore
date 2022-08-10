@@ -37,6 +37,11 @@ const bookSchema = new mongoose.Schema(
       required: [true, 'Please tell us publisher'],
       trim: true,
     },
+    idCate: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+    
+    },
     issuer: {
       type: String,
       required: [true, 'Please tell us issuer'],
@@ -60,6 +65,13 @@ const bookSchema = new mongoose.Schema(
   }
 );
 
-const Book = mongoose.model('Book', bookSchema);
+bookSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'idCate',
+  });
+  next();
+});
 
+const Book = mongoose.model('Book', bookSchema);
+ 
 module.exports = Book;
