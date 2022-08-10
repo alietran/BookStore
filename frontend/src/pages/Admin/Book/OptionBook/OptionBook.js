@@ -30,8 +30,6 @@ import { getDetailBook, updateBook } from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
 
 export default function OptionBook({ id, book }) {
-  console.log("book", book);
- 
   const {
    
     loadingUpdateBook,
@@ -56,8 +54,6 @@ export default function OptionBook({ id, book }) {
 
   const onClickEdit = () => {
     setOpen(true);
-    console.log("idEdit", id);
-    console.log("book33353", book);
     dispatch(getDetailBook(id));
   };
   const Createchema = Yup.object().shape({

@@ -311,7 +311,6 @@ export default function UserManager() {
                     phoneNumber,
                     active,
                   } = row;
-                  console.log("row", row);
                   const isItemSelected = selected.indexOf(fullName) !== -1;
 
                   return (

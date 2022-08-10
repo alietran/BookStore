@@ -102,7 +102,6 @@ export default function BookManager() {
   const { enqueueSnackbar } = useSnackbar();
   const { successDeleteBook, bookList, successCreateBook, successUpdateBook } =
     useSelector((state) => state.BookReducer);
-    console.log("bookList", bookList);
   // console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -281,7 +280,6 @@ export default function BookManager() {
                     issuer,
                     size
                   } = row;
-                  console.log("row", row);
                   const isItemSelected = selected.indexOf(name) !== -1;
 
                   return (
