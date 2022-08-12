@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <div>
       <footer className={`${style.footer}`}>
-        <Container>
+        <Container maxWidth="xl">
           {" "}
           <div className="container flex flex-col justify-end py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
             <div className="lg:w-1/3">

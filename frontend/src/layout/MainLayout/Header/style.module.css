@@ -1,0 +1,112 @@
+.header__navigationBar-wrapper a:hover {
+  text-decoration: none;
+}
+.header__navigationBar-wrapper .header__navigationBar-search {
+  display: flex;
+  background-color: rgb(245, 245, 245);
+  padding: 1px;
+  border-radius: 8px;
+  border: 1px solid rgb(234, 234, 234);
+}
+.header__navigationBar-wrapper
+  .header__navigationBar-search
+  .header__navigationBar-text {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+  padding: 0.4rem 0.7rem;
+  min-height: 16px;
+  border: 0px;
+  background-color: transparent;
+  flex: 1 1 0%;
+}
+.header__navigationBar-wrapper
+  .header__navigationBar-search
+  .header__navigationBar-button {
+  overflow: hidden;
+  line-height: 1rem;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(20, 53, 195);
+  color: rgb(255, 255, 255);
+  user-select: none;
+  text-decoration: none;
+  flex-direction: row;
+  position: relative;
+  height: 38px;
+  width: 38px;
+  border-radius: 8px;
+  padding: 0px;
+  -webkit-box-pack: center;
+  justify-content: center;
+  border: 0px;
+}
+/* .cate_name:hover .mega__menu-cate{
+  display: block;
+} */
+.mega-menu{
+  width: 500px !important
+}
+.mega__nav{
+    left: 0px;
+    z-index: 98;
+    right: auto;
+    border-radius: 4px;
+    padding: 0.5rem 0px;
+    transform-origin: center top;
+    box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px !important;
+    position: absolute;
+    transition: all 250ms ease-in-out 0s;
+    transform: scaleY(1);
+    background-color: rgb(255,255, 255);
+    top: calc(100% + 0.7rem);
+}
+.mega__menu-cate {
+  display: block;
+  background-color: #fff;
+  color: #2b3445;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  box-shadow: 0px 4px 16px rgb(43 52 69 / 10%);
+  overflow: hidden;
+  border-radius: 8px;
+  margin-left: 1rem;
+  min-width: 760px;
+}
+.mega__menu-cate {
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+
+  -webkit-box-align: unset;
+
+  align-items: unset;
+}
+
+.mega_grid {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-top: -32px;
+  width: calc(100% + 32px);
+  margin-left: -32px;
+}
+.mega_grid-name {
+  flex-basis: 25%;
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+  max-width: 25%;
+}
+.mega_grid-link {
+  color: inherit;
+  font-weight: 600;
+  display: block;
+  padding: 0.5rem 0px;
+  position: relative;
+
+  transition: color 150ms ease-in-out;
+}

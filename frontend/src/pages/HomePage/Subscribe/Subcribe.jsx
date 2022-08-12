@@ -7,7 +7,7 @@ export default function Subcribe() {
       {/* <div>
         <img src="../img/2.webp" alt="" />
       </div> */}
-      <Container className='subcribe__content '>
+      <Container className='subcribe__content ' maxWidth="xl">
         <div>
 
         </div>
