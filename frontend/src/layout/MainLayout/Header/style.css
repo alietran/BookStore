@@ -1,4 +1,4 @@
-.header__navigationBar-wrapper a:hover {
+/* .header__navigationBar-wrapper a:hover {
   text-decoration: none;
 }
 .header__navigationBar-wrapper .header__navigationBar-search {
@@ -46,9 +46,15 @@
 /* .cate_name:hover .mega__menu-cate{
   display: block;
 } */
-.mega-menu{
+/* .mega-menu{
   width: 500px !important
+}  */
+
+.ant-dropdown-menu-submenu-popup ul  {
+  border-radius: 10px !important;
+
 }
+/* 
 .mega__nav{
     left: 0px;
     z-index: 98;
@@ -109,4 +115,4 @@
   position: relative;
 
   transition: color 150ms ease-in-out;
-}
+} */

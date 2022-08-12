@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Fragment } from "react";
+import "antd/dist/antd.css";
 import { Popover, Transition } from "@headlessui/react";
 import { DownOutlined } from "@ant-design/icons";
 import {
@@ -17,7 +18,7 @@ import {
   ViewGridIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import "./style.module.css";
+import "./style.css";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { NavLink } from "react-router-dom";
 import { Box, Container, maxWidth } from "@mui/system";
@@ -130,8 +131,11 @@ export default function Header() {
           cateListFilter.push({
             parentCateId: item2.parentCateId,
             label: (
-              <Box sx={{ width: "250px" }}>
-                <a href="https://www.antgroup.com" style={{ width: 250 }}>
+              <Box sx={{ width: "250px", borderRadius: 50, cursor: "pointer" }}>
+                <a
+                  href="https://www.antgroup.com"
+                  style={{ width: 248, color: "black", cursor: "pointer" }}
+                >
                   {item2.name}
                 </a>
               </Box>
@@ -197,7 +201,16 @@ export default function Header() {
       // }
     });
   console.log("array", array);
-  const menu = <Menu style={{ width: 180 }} items={array} />;
+  const menu = (
+    <Menu
+      style={{
+        width: 180,
+        borderRadius: "10px",
+        "& .ant-dropdown-menu-submenu-popup ul": { borderRadius: 50 },
+      }}
+      items={array}
+    />
+  );
   console.log("cateList", cateList);
   return (
     <div className="bg-white">
@@ -217,7 +230,7 @@ export default function Header() {
                   <Dropdown
                     overlay={menu}
                     trigger={["click"]}
-                    
+                    style={{ borderRadius: 50 }}
                   >
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
