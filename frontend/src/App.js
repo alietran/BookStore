@@ -29,6 +29,7 @@ import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
 import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
 import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
 import BookManager from "./pages/Admin/Book/BookManager";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const themeOptions = useMemo(
@@ -78,10 +79,11 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/", "/phone", "/login"]}>
+          <Route exact path={["/", "/phone", "/login", "/checkout"]}>
             <MainLayout>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/checkout" component={Checkout} />
             </MainLayout>
           </Route>
           <Route exact path="/admin/login" component={LoginAdmin} />
