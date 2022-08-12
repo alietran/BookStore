@@ -13,7 +13,7 @@ const shipperRouters = require('./routers/shipperRouter');
 const authorRouters = require('./routers/authorRouter');
 const promotionRouters = require('./routers/promotionRouter');
 const bookRouters = require('./routers/bookRouter');
-
+const addressRouters = require('./routers/addressRouter');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
@@ -21,8 +21,6 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const passportContent = require('./controllers/passportGoogle');
 require('dotenv').config();
-
-
 
 // Serving static files
 // const publicPathDirectory = path.join(__dirname, 'public')
@@ -80,6 +78,7 @@ app.use('/api/v1/shippers', shipperRouters);
 app.use('/api/v1/authors', authorRouters);
 app.use('/api/v1/promotions', promotionRouters);
 app.use('/api/v1/books', bookRouters);
+app.use('/api/v1/address', addressRouters);
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {

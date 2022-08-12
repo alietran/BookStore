@@ -20,10 +20,14 @@ import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { styled } from "@mui/material/styles";
 import { useStyles } from "./style";
 import { LoadingButton } from "@mui/lab";
-import { Form, Formik, useFormik } from "formik";
+import { ErrorMessage, Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { createCate } from "../../../../redux/action/categoryAction";
+import {
+  createCate,
+  getCateList,
+  resetCateList,
+} from "../../../../redux/action/categoryAction";
 import { createBook } from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
 
@@ -34,15 +38,13 @@ export default function CreateBook() {
   const { loadingCreateBook } = useSelector((state) => state.BookReducer);
   //  console.log("cateList", cateList)
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
-
+  const { cateList } = useSelector((state) => state.CateReducer);
+  console.log("cateList", cateList);
   const dispatch = useDispatch();
   const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
-  const handleChangeCategory = (event) => {
-    setCate(event.target.value);
-  };
   const handleClick = () => {
     setOpen(true);
   };
@@ -52,6 +54,19 @@ export default function CreateBook() {
   const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
   const [srcImage, setSrcImage] = useState(null);
   const [images, setImages] = useState([]);
+
+  const [childrenCate, setChildrencate] = useState(10);
+  const handleChangeChildrenCate = (event) => {
+    setChildrencate(event.target.value);
+  };
+  useEffect(() => {
+    // get list user lần đầu
+    if (!cateList) {
+      dispatch(getCateList());
+    }
+    return () => dispatch(resetCateList());
+  }, []);
+
   const handleChangeFileImage = (e) => {
     let file = e.target.files[0];
 
@@ -126,6 +141,7 @@ export default function CreateBook() {
     publisher: Yup.string().required("*Vui lòng nhập thông tin này"),
     issuer: Yup.string().required("*Vui lòng nhập thông tin này"),
     size: Yup.string().required("*Vui lòng nhập thông tin này"),
+    idCate: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -141,6 +157,7 @@ export default function CreateBook() {
       size: "",
       image: "",
       gallery: "",
+      idCate: "",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -215,17 +232,45 @@ export default function CreateBook() {
             <DialogContent dividers>
               <Stack spacing={3}>
                 {" "}
-                <TextField
-                  fullWidth
-                  autoComplete="name"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Tên sách"
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
-                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    autoComplete="name"
+                    label="Tên sách"
+                    {...getFieldProps("name")}
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name && errors.name}
+                  />
+                  <FormControl
+                    fullWidth
+                    error={Boolean(touched.idCate && errors.idCate)}
+                  >
+                    <InputLabel id="select">Chọn thể loại</InputLabel>
+                    <Select
+                      value={childrenCate}
+                      label="childrenCate"
+                      onChange={handleChangeChildrenCate}
+                      {...getFieldProps("idCate")}
+                    >
+                      {cateList?.data?.map((cate) => (
+                        <MenuItem
+                          value={cate._id} // giá trị sẽ được đẩy lên
+                          key={cate._id}
+                        >
+                          {cate.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage
+                      name="idCate"
+                      render={(msg) => (
+                        <span className="text-red-600 text-xs mt-1 ml-3">
+                          {msg}
+                        </span>
+                      )}
+                    />
+                  </FormControl>
+                </Stack>
                 {/* <TextField
                   fullWidth
                   autoComplete="desc"
@@ -247,7 +292,7 @@ export default function CreateBook() {
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   initialValue=""
                   init={{
-                    height: 500,
+                    height: 300,
                     menubar: false,
                     plugins: [
                       "advlist",
@@ -277,88 +322,73 @@ export default function CreateBook() {
                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
                 />
-                <TextField
-                  fullWidth
-                  autoComplete="price"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Giá"
-                  {...getFieldProps("price")}
-                  error={Boolean(touched.price && errors.price)}
-                  helperText={touched.price && errors.price}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="quantity"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Số lượng"
-                  {...getFieldProps("quantity")}
-                  error={Boolean(touched.quantity && errors.quantity)}
-                  helperText={touched.quantity && errors.quantity}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="bookCover"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Bìa sách"
-                  {...getFieldProps("bookCover")}
-                  error={Boolean(touched.bookCover && errors.bookCover)}
-                  helperText={touched.bookCover && errors.bookCover}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="totalPage"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Số trang"
-                  {...getFieldProps("totalPage")}
-                  error={Boolean(touched.totalPage && errors.totalPage)}
-                  helperText={touched.totalPage && errors.totalPage}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="publisher"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Nhà xuất bản"
-                  {...getFieldProps("publisher")}
-                  error={Boolean(touched.publisher && errors.publisher)}
-                  helperText={touched.publisher && errors.publisher}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="issuer"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Nhà phát hành"
-                  {...getFieldProps("issuer")}
-                  error={Boolean(touched.issuer && errors.issuer)}
-                  helperText={touched.issuer && errors.issuer}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="size"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Kích thước"
-                  {...getFieldProps("size")}
-                  error={Boolean(touched.size && errors.size)}
-                  helperText={touched.size && errors.size}
-                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    autoComplete="price"
+                    label="Giá"
+                    {...getFieldProps("price")}
+                    error={Boolean(touched.price && errors.price)}
+                    helperText={touched.price && errors.price}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="quantity"
+                    label="Số lượng"
+                    {...getFieldProps("quantity")}
+                    error={Boolean(touched.quantity && errors.quantity)}
+                    helperText={touched.quantity && errors.quantity}
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
+                  <TextField
+                    fullWidth
+                    autoComplete="bookCover"
+                    label="Bìa sách"
+                    {...getFieldProps("bookCover")}
+                    error={Boolean(touched.bookCover && errors.bookCover)}
+                    helperText={touched.bookCover && errors.bookCover}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="totalPage"
+                    label="Số trang"
+                    {...getFieldProps("totalPage")}
+                    error={Boolean(touched.totalPage && errors.totalPage)}
+                    helperText={touched.totalPage && errors.totalPage}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="size"
+                    label="Kích thước"
+                    {...getFieldProps("size")}
+                    error={Boolean(touched.size && errors.size)}
+                    helperText={touched.size && errors.size}
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    autoComplete="publisher"
+                    label="Nhà xuất bản"
+                    {...getFieldProps("publisher")}
+                    error={Boolean(touched.publisher && errors.publisher)}
+                    helperText={touched.publisher && errors.publisher}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="issuer"
+                    label="Nhà phát hành"
+                    {...getFieldProps("issuer")}
+                    error={Boolean(touched.issuer && errors.issuer)}
+                    helperText={touched.issuer && errors.issuer}
+                  />
+                </Stack>
                 {/* <Stack spacing={2}> */}
                 <Button
                   variant="contained"
                   component="label"
-                  sx={{ width: "15%" }}
+                  sx={{ width: "15%", textTransform: "none !important" }}
                 >
                   Thư viện ảnh
                   <input
@@ -384,7 +414,7 @@ export default function CreateBook() {
                 <Button
                   variant="contained"
                   component="label"
-                  sx={{ width: "15%" }}
+                  sx={{ width: "15%", textTransform: "none !important" }}
                 >
                   Hình ảnh
                   <input

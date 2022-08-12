@@ -44,7 +44,6 @@ import { getBookList, resetBookList } from "../../../redux/action/bookAction";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  
   { id: "name", label: "Tên sách", alignRight: false },
   { id: "price", label: "Giá", alignRight: false },
   { id: "desc", label: "Mô tả", alignRight: false },
@@ -121,7 +120,6 @@ export default function BookManager() {
     }
     return () => dispatch(resetBookList());
   }, []);
-  
 
   useEffect(() => {
     if (successCreateBook || successUpdateBook || successDeleteBook) {
@@ -142,7 +140,6 @@ export default function BookManager() {
       return;
     }
   }, [successUpdateBook]);
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -189,7 +186,6 @@ export default function BookManager() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - bookList?.result) : 0;
@@ -238,8 +234,9 @@ export default function BookManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Sách 
+            Sách
           </Typography>
+
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
           </Breadcrumbs>
@@ -278,7 +275,7 @@ export default function BookManager() {
                     totalPage,
                     publisher,
                     issuer,
-                    size
+                    size,
                   } = row;
                   const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -300,7 +297,10 @@ export default function BookManager() {
 
                       <TableCell align="left">{name}</TableCell>
                       <TableCell align="left">{price}</TableCell>
-                      <TableCell align="left" dangerouslySetInnerHTML={{__html: desc}}></TableCell>
+                      <TableCell
+                        align="left"
+                        dangerouslySetInnerHTML={{ __html: desc }}
+                      ></TableCell>
 
                       <TableCell align="left">{quantity}</TableCell>
 

@@ -17,6 +17,13 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
+categorySchema.virtual('bookList', {
+  ref: 'Book',
+  foreignField: 'idCate',
+  localField: '_id',
+});
+
+
 const Category = mongoose.model('Category', categorySchema);
 // categorySchema.virtual('categorys', {
 //   ref: 'SubCategory',
