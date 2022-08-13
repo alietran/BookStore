@@ -16,7 +16,6 @@ import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
 import AuthorManager from "./pages/Admin/AuthorManager/AuthorManager";
 
-
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
 
@@ -30,6 +29,8 @@ import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
 import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
 import BookManager from "./pages/Admin/Book/BookManager";
 import Checkout from "./pages/Checkout";
+import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
+import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 
 function App() {
   const themeOptions = useMemo(
@@ -91,6 +92,8 @@ function App() {
             exact
             path={[
               "/admin/users",
+              "/admin/receipts/list",
+              "/admin/receipts/create",
               "/admin/users/createUser",
               "/admin/categories",
               "/admin/account",
@@ -103,6 +106,16 @@ function App() {
           >
             <AdminTemplate>
               <AdminRoute exact path="/admin/users" component={UserManager} />
+              <AdminRoute
+                exact
+                path="/admin/receipts/list"
+                component={ReceiptManager}
+              />
+              <AdminRoute
+                exact
+                path="/admin/receipts/create"
+                component={CreateReceipt}
+              />
               <AdminRoute
                 exact
                 path="/admin/users/createUser"

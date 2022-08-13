@@ -67,8 +67,6 @@ const AdminTemplate = (props) => {
         <NavLink to="/admin/account">Xem thông tin</NavLink>
       </Menu.Item>
 
-   
-
       <Menu.Item key="2" className="mr-3">
         {" "}
         <button
@@ -143,9 +141,12 @@ const AdminTemplate = (props) => {
               />
             </div>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-
               <Menu.Item key="1" icon={<UserOutlined />}>
                 <NavLink to="/admin/users">Quản lý người dùng</NavLink>
+              </Menu.Item>
+
+              <Menu.Item key="8" icon={<UserOutlined />}>
+                <NavLink to="/admin/receipts/list">Quản lý phiếu nhập</NavLink>
               </Menu.Item>
 
               <Menu.Item key="2" icon={<CategoryIcon />}>
