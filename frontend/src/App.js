@@ -29,7 +29,8 @@ import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
 import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
 import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
 import BookManager from "./pages/Admin/Book/BookManager";
-import Checkout from "./pages/Checkout";
+import Checkout from "./pages/HomePage/Checkout";
+
 
 function App() {
   const themeOptions = useMemo(

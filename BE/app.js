@@ -14,6 +14,7 @@ const authorRouters = require('./routers/authorRouter');
 const promotionRouters = require('./routers/promotionRouter');
 const bookRouters = require('./routers/bookRouter');
 const addressRouters = require('./routers/addressRouter');
+const receiptRouters = require('./routers/receiptRouter');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const app = express();
@@ -79,6 +80,7 @@ app.use('/api/v1/authors', authorRouters);
 app.use('/api/v1/promotions', promotionRouters);
 app.use('/api/v1/books', bookRouters);
 app.use('/api/v1/address', addressRouters);
+app.use('/api/v1/receipts', receiptRouters);
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {
