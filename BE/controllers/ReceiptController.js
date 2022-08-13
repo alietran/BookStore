@@ -15,23 +15,27 @@ exports.getAllReceipt = factory.getAll(Receipt);
 
 exports.createReceipt = catchAsync(async (req, res, next) => {
   req.body.adminId = req.user.id;
-  console.log('req.user', req.user);
   const objReceipt = filterObj(
     req.body,
     'totalPriceReceipt',
     'supplierId',
     'adminId'
   );
+
+  const receipt = await Receipt.create(objReceipt);
+  req.body.receiptId = receipt.id;
+
   const objReceiptDetail = filterObj(
     req.body,
     'amount',
     'price',
     'totalPriceReceiptDetail',
-    'receiptId',
-    'bookId'
+    'bookId',
+    'receiptId'
   );
-  const receipt = await Receipt.create(objReceipt);
-  const ReceiptDetail = await ReceiptDetail.create(objReceiptDetail);
+  if (receipt.id) {
+    await ReceiptDetail.create(objReceiptDetail);
+  }
 
   res.status(201).json({
     status: 'success',

@@ -30,6 +30,10 @@ import {
 } from "../../../../redux/action/categoryAction";
 import { createBook } from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
+import {
+  getAuthorList,
+  resetAuthorList,
+} from "../../../../redux/action/authorAction";
 
 export default function CreateBook() {
   // const { loadingCreateCate, successCreateCate } = useSelector(
@@ -39,6 +43,7 @@ export default function CreateBook() {
   //  console.log("cateList", cateList)
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
   const { cateList } = useSelector((state) => state.CateReducer);
+  const { authorList } = useSelector((state) => state.AuthorReducer);
   console.log("cateList", cateList);
   const dispatch = useDispatch();
   const [cate, setCate] = useState("");
@@ -56,6 +61,10 @@ export default function CreateBook() {
   const [images, setImages] = useState([]);
 
   const [childrenCate, setChildrencate] = useState(10);
+  const [author, setAuthor] = useState(10);
+  const handleChangeAuthor = (event) => {
+    setAuthor(event.target.value);
+  };
   const handleChangeChildrenCate = (event) => {
     setChildrencate(event.target.value);
   };
@@ -65,6 +74,14 @@ export default function CreateBook() {
       dispatch(getCateList());
     }
     return () => dispatch(resetCateList());
+  }, []);
+
+  useEffect(() => {
+    // get list user lần đầu
+    if (!authorList) {
+      dispatch(getAuthorList());
+    }
+    return () => dispatch(resetAuthorList());
   }, []);
 
   const handleChangeFileImage = (e) => {
@@ -158,10 +175,10 @@ export default function CreateBook() {
       image: "",
       gallery: "",
       idCate: "",
+      authorId: "",
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data", data);
       if (loadingCreateBook) {
         return;
       }
@@ -366,7 +383,7 @@ export default function CreateBook() {
                     helperText={touched.size && errors.size}
                   />
                 </Stack>
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
                   <TextField
                     fullWidth
                     autoComplete="publisher"
@@ -383,6 +400,35 @@ export default function CreateBook() {
                     error={Boolean(touched.issuer && errors.issuer)}
                     helperText={touched.issuer && errors.issuer}
                   />
+                  <FormControl
+                    fullWidth
+                    error={Boolean(touched.authorId && errors.authorId)}
+                  >
+                    <InputLabel id="select">Chọn tác giả</InputLabel>
+                    <Select
+                      value={author}
+                      label="Chọn tác giả"
+                      onChange={handleChangeAuthor}
+                      {...getFieldProps("authorId")}
+                    >
+                      {authorList?.data?.map((author) => (
+                        <MenuItem
+                          value={author._id} // giá trị sẽ được đẩy lên
+                          key={author._id}
+                        >
+                          {author.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage
+                      name="authorId"
+                      render={(msg) => (
+                        <span className="text-red-600 text-xs mt-1 ml-3">
+                          {msg}
+                        </span>
+                      )}
+                    />
+                  </FormControl>
                 </Stack>
                 {/* <Stack spacing={2}> */}
                 <Button

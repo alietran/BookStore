@@ -40,8 +40,9 @@ const bookSchema = new mongoose.Schema(
     idCate: {
       type: mongoose.Schema.ObjectId,
       ref: 'Category',
-    
     },
+    authorId: { type: mongoose.Schema.ObjectId, ref: 'Author' },
+
     issuer: {
       type: String,
       required: [true, 'Please tell us issuer'],
@@ -68,10 +69,12 @@ const bookSchema = new mongoose.Schema(
 bookSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'idCate',
+  }).populate({
+    path: 'authorId',
   });
   next();
 });
 
 const Book = mongoose.model('Book', bookSchema);
- 
+
 module.exports = Book;

@@ -7,6 +7,11 @@ const receiptSchema = new mongoose.Schema({
   },
   adminId: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
   supplierId: { type: mongoose.Schema.ObjectId, ref: 'Supplier' },
+
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 receiptSchema.pre(/^find/, function (next) {

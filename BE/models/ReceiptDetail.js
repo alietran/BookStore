@@ -15,8 +15,21 @@ const receiptDetailSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Book',
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
+receiptDetailSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'bookId',
+  }).populate({
+    path: 'receiptId',
+  });
+
+  next();
+});
 const ReceiptDetail = mongoose.model('ReceiptDetail', receiptDetailSchema);
 
 module.exports = ReceiptDetail;
