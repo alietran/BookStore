@@ -25,17 +25,23 @@ import StepLabel from "@mui/material/StepLabel";
 import BookList from "./BookList";
 import { getSupplierList } from "../../../../redux/action/supplierAction";
 import { useSelector } from "react-redux";
+import BookInfo from "./BookInfo";
 
 const steps = [
   "Select campaign settings",
   "Create an ad group",
-  "Create an ad",
+  // "Create an ad",
 ];
 export default function CreateReceipt() {
-    const { supplierSelected } = useSelector((state) => state.RecieptReducer);
+    const { supplierSelected ,selectedBook} = useSelector((state) => state.RecieptReducer);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const dispatch = useDispatch();
+
+
+
+    // console.log("selectedBook",selectedBook)
+    console.log("supplierSelected",supplierSelected)
   const isStepOptional = (step) => {
     return step === 1;
   };
@@ -60,7 +66,10 @@ export default function CreateReceipt() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  useEffect(() => {
+const handleSubmitReceipt = () => {
+  // distpatch()
+}
+   useEffect(() => {
     dispatch(getSupplierList());
   }, []);
 
@@ -82,8 +91,8 @@ export default function CreateReceipt() {
           </Typography>
         </Stack>
       </Stack>
-      <Box sx={{ width: "100%" }}>
-        <Stepper activeStep={activeStep}>
+      <Box sx={{ width: "100%" }} >
+        <Stepper  activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
@@ -92,8 +101,8 @@ export default function CreateReceipt() {
               stepProps.completed = false;
             }
             return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
+              <Step key={label} {...stepProps} >
+                <StepLabel {...labelProps} >{label}</StepLabel>
               </Step>
             );
           })}
@@ -111,8 +120,8 @@ export default function CreateReceipt() {
           <React.Fragment>
             {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
             {activeStep === 0 && <BookList />}
-            {activeStep === 1 && <div>{supplierSelected}</div>}
-            {activeStep === 2 && <div>2</div>}
+            {activeStep === 1 && <BookInfo />}
+            {activeStep === 2 && <div></div>}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
                 color="inherit"
@@ -124,8 +133,11 @@ export default function CreateReceipt() {
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
 
+              <Button onClick={handleSubmitReceipt}>
+                {activeStep === steps.length - 1 && "Finish" }
+              </Button>
               <Button onClick={handleNext}>
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                {activeStep !== steps.length - 1 && "Next"}
               </Button>
             </Box>
           </React.Fragment>
