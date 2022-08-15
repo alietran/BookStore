@@ -322,12 +322,12 @@ export default function UserManager() {
                       selected={isItemSelected}
                       aria-checked={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
                           onChange={(event) => handleClick(event, fullName)}
                         />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell component="th" scope="row" padding="none">
                         <Stack direction="row" alignItems="center" spacing={2}>
                           <Avatar alt={fullName} src={avatar} />

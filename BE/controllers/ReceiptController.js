@@ -1,4 +1,5 @@
 const Receipt = require('../models/Receipt');
+const Book = require('../models/Book');
 const ReceiptDetail = require('../models/ReceiptDetail');
 const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
@@ -36,6 +37,10 @@ exports.createReceipt = catchAsync(async (req, res, next) => {
   if (receipt.id) {
     await ReceiptDetail.create(objReceiptDetail);
   }
+  let query = Book.findById(req.body.bookId);
+  let book = await query;
+  book.quantity = book.quantity + req.body.amount;
+  await book.save();
 
   res.status(201).json({
     status: 'success',
