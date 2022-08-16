@@ -34,6 +34,7 @@ import Checkout from "./pages/HomePage/Checkout";
 
 import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
+import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
 
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/checkout" component={Checkout} />
+              <Route exact path="/productDetail/1" component={ProductDetail} />
             </MainLayout>
           </Route>
           <Route exact path="/admin/login" component={LoginAdmin} />

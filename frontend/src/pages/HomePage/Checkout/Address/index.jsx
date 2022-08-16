@@ -27,10 +27,10 @@ export default function Address() {
    const handleClose = () => {
     setOpen(false);
   };
-  // const handleChangeCity = (event) => {
-  //   console.log("124",event.target.value)
-  //   setCity(event.target.value);
-  // };
+  const handleChangeCity = (event) => {
+    console.log("124",event.target.value)
+    setCity(event.target.value);
+  };
   // const handleChangeDistrict = (event) => {
   //   setCity(event.target.value);
   // };
@@ -238,8 +238,8 @@ console.log("listCity", listCity)
                     value={city}
                     name="city"
                     label="Tỉnh / Thành phố"
-                    // onChange={handleChangeCity}
-                    {...getFieldProps("city")}
+                    onChange={handleChangeCity}
+                    // {...getFieldProps("city")}
                   >
                   {listCity && listCity?.map((item, index)=>{
                     return  <MenuItem value={`${item.idProvince}`}  key={index}>{item.name}</MenuItem>
