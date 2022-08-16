@@ -5,6 +5,8 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 
+exports.getAllUser = factory.getAll(User);
+
 exports.createUser = catchAsync(async (req, res, next) => {
   const { user } = req.body;
   User.findOne(
@@ -17,7 +19,8 @@ exports.createUser = catchAsync(async (req, res, next) => {
       }
       console.log('userOTP', userOTP);
       console.log('user', user);
-
+      let customPhoneNumber = '0' + user.phoneNumber.slice(3);
+      console.log('customPhoneNumber', customPhoneNumber);
       if (!userOTP) {
         newUser = new User({
           active: true,
@@ -27,7 +30,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
           fullName: '',
           gender: '',
           phoneUID: user.uid,
-          phoneNumber: user.phoneNumber,
+          phoneNumber: customPhoneNumber,
           role: 'Khách Hàng',
         });
         newUser.save();
@@ -99,6 +102,9 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
+exports.updateUser= factory.updateOne(User);
+
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -132,11 +138,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
 exports.getUserLoginOtp = catchAsync(async (req, res, next) => {
   const { phoneNumber } = req.body;
-
-  let userNumber = await User.findOne({ phoneNumber });
-  //   const doc = await query;
-  //   console.log('doc', doc);
-
+  let customPhoneNumber = 0 + phoneNumber.slice(3);
+  let userNumber = await User.findOne({ phoneNumber: customPhoneNumber });
   if (!userNumber) {
     return next(
       new AppError('Số điện thoại không chính xác hoặc không tồn tại!', 401)

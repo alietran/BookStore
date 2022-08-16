@@ -8,6 +8,10 @@ const userAPI = {
     const path = "/v1/users/getUserLoginOtp";
     return axiosClient.get(path, phoneNumber);
   },
+  updateUser: (id, data) => {
+    const path = `/v1/users/${id}`;
+    return axiosClient.put(path, data);
+  },
 };
 
 export default userAPI;

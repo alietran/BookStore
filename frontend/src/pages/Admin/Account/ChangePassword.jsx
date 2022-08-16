@@ -79,7 +79,7 @@ export default function ChangePassword() {
           <Stack spacing={2}>
             <TextField
               fullWidth
-              type="password"
+              type="password"F
               label="Mật khẩu cũ"
               {...getFieldProps("passwordCurrent")}
               error={Boolean(touched.passwordCurrent && errors.passwordCurrent)}

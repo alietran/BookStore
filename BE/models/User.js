@@ -33,9 +33,11 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String,
   },
-  role: {
-    type: String,
-    default: 'Khách Hàng',
+  idRole: {
+    roleName: {
+      type: String,
+      default: 'Khách Hàng',
+    },
   },
   address: {
     type: String,

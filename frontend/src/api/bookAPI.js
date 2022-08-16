@@ -1,6 +1,6 @@
 const { default: axiosClient } = require("./axiosClient");
 
-const cateAPI = {
+const bookAPI = {
   getAllBook: () => {
     return axiosClient.get("v1/books");
   },
@@ -32,4 +32,4 @@ const cateAPI = {
   },
 };
 
-export default cateAPI;
+export default bookAPI;

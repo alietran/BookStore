@@ -24,7 +24,8 @@ import { LoadingButton } from "@mui/lab";
 import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateUser/style";
-import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
+import { deletelUser, updateAdmin } from "../../../../redux/action/adminAction";
+import { updateUser } from "../../../../redux/action/userAction";
 
 export default function OptionUser({ id, User }) {
   console.log("User", User);
@@ -48,7 +49,7 @@ export default function OptionUser({ id, User }) {
   // handleCancel;
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
-    onClickDelete(id)
+    onClickDelete(id);
   };
 
   const onClickDelete = (id) => {
@@ -63,7 +64,7 @@ export default function OptionUser({ id, User }) {
   const onClickEdit = () => {
     setOpen(true);
     console.log("idEdit", id);
-    console.log("User", User);
+    console.log("User123456", User);
     // dispatch(getDetailCate(id));
   };
 
@@ -76,10 +77,12 @@ export default function OptionUser({ id, User }) {
 
     onSubmit: (data, { resetForm }) => {
       console.log("data", data);
-      //   if (loadingUpdateCate) {
-      //     return;
-      //   }
-        dispatch(updateUser(User._id, data));
+      let dataUser = {
+        active: data.active,
+      };
+      if (User.googleId || User.phoneUID)
+        dispatch(updateUser(User._id, dataUser));
+      else dispatch(updateAdmin(User._id, data));
 
       resetForm();
     },
@@ -99,12 +102,11 @@ export default function OptionUser({ id, User }) {
   // }, [values.name, values.slug]);
 
   const handleUpdate = () => {
-     setOpen(false);
+    setOpen(false);
   };
-   const handleClickConfirm = () => {
-     setOpenConfirm(true);
-
-   };
+  const handleClickConfirm = () => {
+    setOpenConfirm(true);
+  };
 
   return (
     <Box>
@@ -122,9 +124,7 @@ export default function OptionUser({ id, User }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Xóa người dùng"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Xóa người dùng"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Bạn chắc chắn muốn xóa người dùng này.
@@ -132,7 +132,7 @@ export default function OptionUser({ id, User }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Hủy</Button>
-          <Button onClick={handleCloseConfirm} autoFocus >
+          <Button onClick={handleCloseConfirm} autoFocus>
             Đồng ý
           </Button>
         </DialogActions>
@@ -157,31 +157,33 @@ export default function OptionUser({ id, User }) {
             <DialogContent dividers>
               <Stack spacing={3}>
                 {" "}
-                <FormControl fullWidth>
-                  <InputLabel id="role">Quyền</InputLabel>
-                  <Select
-                    labelId="role"
-                    id="role"
-                    value={role}
-                    label="Quyền"
-                    onChange={handleChangeRole}
-                    {...getFieldProps("idRole")}
-                  >
-                    {userRoleList?.data.map((role, index) => {
-                      return (
-                        <MenuItem
-                          value={`${role._id}`}
-                          key={index}
-                          className="capitalize"
-                        >
-                          {role.roleName}
-                        </MenuItem>
-                      );
-                    })}
+                {User.idRole._id && (
+                  <FormControl fullWidth>
+                    <InputLabel id="role">Quyền</InputLabel>
+                    <Select
+                      labelId="role"
+                      id="role"
+                      value={role}
+                      label="Quyền"
+                      onChange={handleChangeRole}
+                      {...getFieldProps("idRole")}
+                    >
+                      {userRoleList?.data.map((role, index) => {
+                        return (
+                          <MenuItem
+                            value={`${role._id}`}
+                            key={index}
+                            className="capitalize"
+                          >
+                            {role.roleName}
+                          </MenuItem>
+                        );
+                      })}
 
-                    {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
-                  </Select>
-                </FormControl>
+                      {/* <MenuItem value={`Staff`}>Nhân viên</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                )}
                 <FormGroup>
                   <FormControlLabel
                     label="Trạng Thái"

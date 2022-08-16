@@ -3,13 +3,16 @@ const stateDefault = {
   loadingUsersList: false,
   errorUsersList: null,
 
+  accountList: null,
+  loadingAccountList: false,
+  errorAccountList: null,
   // successCreateAdmin: null,
 
   userRoleList: null,
 
-  loadingUpdateUser: false,
-  successUpdateUser: null,
-  errorUpdateUser: null,
+  loadingUpdateAdmin: false,
+  successUpdateAdmin: null,
+  errorUpdateAdmin: null,
 
   loadingDeleteUser: false,
   successDeleteUser: null,
@@ -39,6 +42,24 @@ export const AdminReducer = (state = stateDefault, action) => {
       };
     }
 
+    case "GET_ALL_ACCOUNT_REQUEST": {
+      return { ...state, loadingAccountList: true, errorAccountList: null };
+    }
+    case "GET_ALL_ACCOUNT_SUCCESS": {
+      return {
+        ...state,
+        accountList: action.payload.data,
+        loadingAccountList: false,
+      };
+    }
+    case "GET_ALL_ACCOUNT_FAIL": {
+      return {
+        ...state,
+        errorAccountList: action.payload.error,
+        loadingAccountList: false,
+      };
+    }
+
     case "GET_ROLE_SUCCESS": {
       console.log("action", action);
       return {
@@ -47,31 +68,31 @@ export const AdminReducer = (state = stateDefault, action) => {
       };
     }
 
-    case "UPDATE_USER_REQUEST": {
-      return { ...state, loadingUpdateUser: true, errorUpdateUser: null };
+    case "UPDATE_ADMIN_REQUEST": {
+      return { ...state, loadingUpdateAdmin: true, errorUpdateAdmin: null };
     }
-    case "UPDATE_USER_SUCCESS": {
+    case "UPDATE_ADMIN_SUCCESS": {
       return {
         ...state,
-        successUpdateUser: action.payload.data,
-        loadingUpdateUser: false,
+        successUpdateAdmin: action.payload.data,
+        loadingUpdateAdmin: false,
       };
     }
-    case "UPDATE_USER_FAIL": {
+    case "UPDATE_ADMIN_FAIL": {
       return {
         ...state,
-        errorUpdateUser: action.payload.error,
-        loadingUpdateUser: false,
+        errorUpdateAdmin: action.payload.error,
+        loadingUpdateAdmin: false,
       };
     }
     case "RESET_USER_LIST_UPDATE": {
       return {
         ...state,
-        successUpdateUser: "",
+        successUpdateAdmin: "",
       };
     }
     case "DELETE_USER_REQUEST": {
-      return { ...state, loadingDeleteUser: true, errorUpdateUser: null };
+      return { ...state, loadingDeleteUser: true, errorUpdateAdmin: null };
     }
     case "DELETE_USER_SUCCESS": {
       return {
@@ -83,7 +104,7 @@ export const AdminReducer = (state = stateDefault, action) => {
     case "DELETE_USER_FAIL": {
       return {
         ...state,
-        errorUpdateUser: action.payload.error,
+        errorUpdateAdmin: action.payload.error,
         loadingDeleteUser: false,
       };
     }
@@ -101,7 +122,6 @@ export const AdminReducer = (state = stateDefault, action) => {
       return {
         ...state,
         errorDetailUser: action.payload.error,
-    
       };
     }
 

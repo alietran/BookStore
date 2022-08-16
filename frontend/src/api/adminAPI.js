@@ -10,10 +10,13 @@ const adminAPI = {
   getAllUser: () => {
     return axiosClient.get("/v1/admins");
   },
+  getAllAccount: () => {
+    return axiosClient.get("/v1/admins/getAllAccount");
+  },
   deleteUser: (id) => {
     return axiosClient.delete(`/v1/admins/${id}`);
   },
-  updateUser: (id, data) => {
+  updateAdmin: (id, data) => {
     const path = `/v1/admins/${id}`;
     return axiosClient.put(path, data);
   },

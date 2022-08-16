@@ -32,12 +32,16 @@ import UserListHead from "../../../components/user/UserListHead";
 import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
 
-
-import { getShipperList, resetShipperList } from "../../../redux/action/shipperAction";
+import {
+  getShipperList,
+  resetShipperList,
+} from "../../../redux/action/shipperAction";
 import CreateAuthor from "./CreateAuthor/CreateAuthor";
 import OptionAuthor from "./OptionAuthor/OptionAuthor";
-import { getAuthorList, resetAuthorList } from "../../../redux/action/authorAction";
-
+import {
+  getAuthorList,
+  resetAuthorList,
+} from "../../../redux/action/authorAction";
 
 // import Label from "../../components/Label";
 
@@ -46,7 +50,7 @@ import { getAuthorList, resetAuthorList } from "../../../redux/action/authorActi
 const TABLE_HEAD = [
   { id: "id", label: "id", alignRight: false },
   { id: "name", label: "Họ tên", alignRight: false },
- 
+
   { id: "" },
 ];
 
@@ -119,7 +123,6 @@ export default function AuthorManager() {
     }
     return () => dispatch(resetAuthorList());
   }, []);
-  
 
   useEffect(() => {
     if (successCreateAuthor || successUpdateAuthor || successDeleteAuthor) {
@@ -140,7 +143,6 @@ export default function AuthorManager() {
       return;
     }
   }, [successUpdateAuthor]);
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -235,7 +237,7 @@ export default function AuthorManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại 
+            Tác giả
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -248,6 +250,7 @@ export default function AuthorManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          searchName={"Tìm tác giả"}
         />
 
         <TableContainer sx={{ minWidth: 800 }}>
@@ -286,7 +289,6 @@ export default function AuthorManager() {
 
                       <TableCell align="left">{_id}</TableCell>
                       <TableCell align="left">{name}</TableCell>
-                    
 
                       <TableCell align="center">
                         <OptionAuthor id={_id} author={row} />

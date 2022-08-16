@@ -2,19 +2,16 @@ import { Button, TextField, Box } from "@mui/material";
 import { Form, Formik, useFormik } from "formik";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import SendIcon from "@mui/icons-material/Send";
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { authentication } from "../../firebaseConfig";
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createUser } from "../../redux/action/userAction";
 
 export default function Login() {
-
-   const { errorLogin } = useSelector(
-    (state) => state.AuthReducer
-  );
+  const { errorLogin } = useSelector((state) => state.AuthReducer);
   const google = () => {
     window.open("http://localhost:8080/api/v1/users/google", "_self");
   };
@@ -28,14 +25,10 @@ export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
   useEffect(() => {
-    if (
-     errorLogin
-    ) {
-     alert("Lỗi đăng nhập")
+    if (errorLogin) {
+      alert("Lỗi đăng nhập");
     }
-  }, [
-   errorLogin
-  ]);
+  }, [errorLogin]);
 
   const [OTP, setOTP] = useState("");
 
@@ -87,6 +80,7 @@ export default function Login() {
           console.log("result", result);
           const user = result.user;
           const userObj = { user };
+          console.log("userObj", userObj);
           dispatch(createUser(userObj));
 
           setTimeout(() => {
@@ -107,6 +101,7 @@ export default function Login() {
                 }
               )
                 .then((response) => {
+                  console.log("response", response);
                   if (response.status === 200) return response.json();
                   throw new Error("authentication has been failed!");
                 })
@@ -269,7 +264,7 @@ export default function Login() {
                 {openFormPhone && expandForm && (
                   <>
                     <div className="mb-5 text-sm">
-                      Vui lòng nhập số OTP đã được gửi về số điện thoại 0
+                      Vui lòng nhập số OTP đã được gửi về số điện thoại {""}
                       {phoneNumber.slice(3)} để thực hiện đăng nhập
                     </div>
                     <TextField

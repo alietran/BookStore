@@ -27,6 +27,32 @@ export const getUsersList = () => {
   };
 };
 
+export const getAllAccount = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ALL_ACCOUNT_REQUEST",
+    });
+    adminAPI
+      .getAllAccount()
+      .then((result) => {
+        dispatch({
+          type: "GET_ALL_ACCOUNT_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_ALL_ACCOUNT_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
 export const resetUserList = () => {
   return (dispatch) => {
     dispatch({
@@ -61,23 +87,23 @@ export const getRolesList = () => {
   };
 };
 
-export const updateUser = (id, data) => {
+export const updateAdmin = (id, data) => {
   return async (dispatch) => {
     try {
       dispatch({
-        type: "UPDATE_USER_REQUEST",
+        type: "UPDATE_ADMIN_REQUEST",
       });
-      const result = await adminAPI.updateUser(id, data);
+      const result = await adminAPI.updateAdmin(id, data);
       console.log("result", result);
       dispatch({
-        type: "UPDATE_USER_SUCCESS",
+        type: "UPDATE_ADMIN_SUCCESS",
         payload: {
           data: result.data,
         },
       });
     } catch (error) {
       dispatch({
-        type: "UPDATE_USER_FAIL",
+        type: "UPDATE_ADMIN_FAIL",
         payload: {
           error: error.response?.data.message,
         },

@@ -4,10 +4,12 @@ const authController = require('../controllers/authController');
 const adminController = require('../controllers/adminController');
 const router = express.Router();
 
-
 router.post('/createUser', authController.signup);
 router.post('/login', authController.login);
+
 router.route('/').get(adminController.getAllAdmin);
+
+router.route('/getAllAccount').get(adminController.getAllAccount);
 
 // .post(adminController.createAdmin)
 // .put(adminController.updateAdmin);
@@ -18,9 +20,7 @@ router
   .put(adminController.updateAdmin)
   .delete(adminController.deleteAdmin);
 
-
 router.post('/createUser', authController.signup);
-
 
 router.patch(
   '/updateMe',

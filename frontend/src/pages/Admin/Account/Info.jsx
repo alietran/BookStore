@@ -75,6 +75,7 @@ export default function Info() {
     setGender(event.target.value);
   };
   const handleChangeRole = (event) => {
+    console.log("event.target.value", event.target.value);
     setRole(event.target.value);
   };
   const dispatch = useDispatch();
@@ -148,7 +149,12 @@ export default function Info() {
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit} enctype="multipart/form-data">
+      <Form
+        autoComplete="off"
+        noValidate
+        onSubmit={handleSubmit}
+        enctype="multipart/form-data"
+      >
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-2">
             <div className="text-center z-0 py-9 px-8 mt-20">
@@ -168,18 +174,16 @@ export default function Info() {
                       <img
                         src={srcImage}
                         alt="avatar"
-                           className="w-full h-full object-cover"
+                        className="w-full h-full object-cover"
                       />
                     </span>
                   </span>
-                 
                 </label>
-                
               </div>
 
- <div className="mt-4 leading-6 text-xs font-normal text-gray-700 text-center">
-                    Cho phép *.jpeg, *.jpg, *.png, *.gif
-                  </div>
+              <div className="mt-4 leading-6 text-xs font-normal text-gray-700 text-center">
+                Cho phép *.jpeg, *.jpg, *.png, *.gif
+              </div>
             </div>
           </div>
           <div className="col-span-3 ">
@@ -242,9 +246,7 @@ export default function Info() {
                   <Select
                     labelId="role"
                     id="role"
-                    value={role}
                     label="Quyền"
-                    onChange={handleChangeRole}
                     {...getFieldProps("idRole")}
                   >
                     {userRoleList?.data.map((role, index) => {
@@ -272,8 +274,8 @@ export default function Info() {
                       valueDate
                         ? valueDate
                         : moment(userLogin.user.dateOfBirth).format(
-                          "YYYY-MM-DD"
-                        )
+                            "YYYY-MM-DD"
+                          )
                     }
                     onChange={handleChangeDate}
                     renderInput={(params) => <TextField {...params} />}
@@ -311,7 +313,7 @@ export default function Info() {
                 size="medium"
                 type="submit"
                 variant="contained"
-              // loading={loadingUpdate}
+                // loading={loadingUpdate}
               >
                 Cập nhật
               </LoadingButton>

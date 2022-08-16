@@ -1,4 +1,5 @@
 const Admin = require('../models/Admin');
+const User = require('../models/User');
 const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
@@ -15,7 +16,7 @@ const made = mkdirp.sync('./public/img/users');
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './public/img/users'); 
+    cb(null, './public/img/users');
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
@@ -103,4 +104,22 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
   createSendToken(user, 200, res);
+});
+
+exports.getAllAccount = catchAsync(async (req, res, next) => {
+  let queryAdmin = Admin.find(req.query).populate('idRole');
+  const admin = await queryAdmin;
+
+  let queryUser = User.find(req.query);
+  const resultUser = await queryUser;
+
+  resultUser.map((item) => {
+    admin.push(item);
+  });
+
+  res.status(200).json({
+    status: 'success',
+    result: admin.length,
+    data: admin,
+  });
 });

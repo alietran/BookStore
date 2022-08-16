@@ -6,11 +6,13 @@ const userLogin = localStorage.getItem("user")
   : null;
 
 const stateDefault = {
-
   loadingCreateUser: false,
   successCreateUser: null,
   errorCreateUser: null,
 
+  loadingUpdateUser: false,
+  successUpdateUser: null,
+  errorUpdateUser: null,
 };
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -33,6 +35,23 @@ export const UserReducer = (state = stateDefault, action) => {
       };
     }
 
+    case "UPDATE_USER_REQUEST": {
+      return { ...state, loadingUpdateUser: true, errorUpdateUser: null };
+    }
+    case "UPDATE_USER_SUCCESS": {
+      return {
+        ...state,
+        successUpdateUser: action.payload.data,
+        loadingUpdateUser: false,
+      };
+    }
+    case "UPDATE_USER_FAIL": {
+      return {
+        ...state,
+        errorUpdateUser: action.payload.error,
+        loadingUpdateUser: false,
+      };
+    }
     default:
       return { ...state };
   }

@@ -1,6 +1,5 @@
 import userAPI from "../../api/userAPI";
 
-
 export const createUser = (user) => {
   return async (dispatch) => {
     dispatch({
@@ -52,5 +51,30 @@ export const getDetailUsers = () => {
           },
         });
       });
+  };
+};
+
+export const updateUser = (id, data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "UPDATE_USER_REQUEST",
+      });
+      const result = await userAPI.updateUser(id, data);
+      console.log("result", result);
+      dispatch({
+        type: "UPDATE_USER_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "UPDATE_USER_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
   };
 };

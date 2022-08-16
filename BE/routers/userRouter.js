@@ -8,6 +8,8 @@ const passport = require('passport');
 const successLoginURL = 'http://localhost:3000';
 const errorLoginURL = 'http://localhost:3000/login/failed"';
 
+router.route('/').get(userController.getAllUser);
+
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -59,5 +61,10 @@ router.get('/logout', (req, res) => {
   req.logout();
   res.redirect(successLoginURL);
 });
+
+
+router
+  .route('/:id')
+  .put(userController.updateUser)
 
 module.exports = router;

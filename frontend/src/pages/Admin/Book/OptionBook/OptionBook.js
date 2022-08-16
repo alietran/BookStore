@@ -16,17 +16,10 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import Option from "../../../../components/Option/Option";
-import {
-  deleteCate,
-  deletelCate,
-  getCateList,
-  getDetailCate,
-  updateCate,
-} from "../../../../redux/action/categoryAction";
 import { LoadingButton } from "@mui/lab";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateBook/style";
-import { getDetailBook, updateBook } from "../../../../redux/action/bookAction";
+import { deleteBook, getDetailBook, updateBook } from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
 
 export default function OptionBook({ id, book }) {
@@ -121,8 +114,7 @@ export default function OptionBook({ id, book }) {
   };
 
     const onClickDelete = (id) => {
-      dispatch(deleteCate(book._id));
-      console.log("idDelete", book._id);
+      dispatch(deleteBook(book._id));
     };
   return (
     <Box>
