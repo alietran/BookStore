@@ -25,7 +25,56 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     height: "120px",
   },
+  menu__item: {
+    width: "100% !important",
+    minHeight: "auto !important",
+    display: "block",
+    padding: "3px 20px !important",
+    fontSize: "14px !important",
+    color: "#333 !important",
+    backgroundColor: "transparent !important",
+    "& li ~ li": {
+      fontSize: 11,
+      color: "#aaa !important",
+    },
+    // màu nền và chữ khi hover
+    "&:hover": {
+      backgroundColor: "#00AB55 !important",
+      color: "#fff !important",
+      "& li ~ li": {
+        color: "#fff !important",
+      },
+    },
+  },
+  menu__item__li: {
+    width: "100% !important",
+    minHeight: "auto !important",
+    display: "block !important",
+    padding: "3px 20px !important",
+    fontSize: "14px !important",
+    color: "#333 !important",
+    backgroundColor: "transparent !important",
+    "& li ~ li": {
+      fontSize: 11,
+      color: "#aaa !important",
+    },
+    // màu nền và chữ khi hover
+    "&:hover": {
+      backgroundColor: "#00AB55 !important",
+      color: "#fff !important",
+      "& li ~ li": {
+        color: "#fff !important",
+      },
+    },
+  },
+  "menu__item--selected": {
+    backgroundColor: "#00AB55 !important",
 
+    color: "#fff !important",
+    "& li ~ li": {
+      color: "#fff !important",
+    },
+  },
   address__option: {
     display: "flex",
   },
