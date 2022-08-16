@@ -75,7 +75,7 @@ const dispatch = useDispatch()
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
- const handleClick = (event, name, row) => {
+ const handleClick = (event, _id, row) => {
 
   dispatch({
       type: "SELECT_BOOK",
@@ -83,10 +83,10 @@ const dispatch = useDispatch()
           bookSelected:[row] ,
       }
     });
-    const selectedIndex = selected.indexOf(name);
+    const selectedIndex = selected.indexOf(_id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, _id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -215,7 +215,7 @@ function getComparator(order, orderBy) {
                     image,
                     authorId
                   } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                  const isItemSelected = selected.indexOf(_id) !== -1;
 
                   return (
                     <TableRow
@@ -239,7 +239,7 @@ function getComparator(order, orderBy) {
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name, row)}
+                          onChange={(event) => handleClick(event, _id, row)}
                         />
                       </TableCell>
 

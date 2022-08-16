@@ -10,7 +10,10 @@ import { ShipperReducer } from "./reducer/shipperReducer";
 import { AuthorReducer } from "./reducer/authorReducer";
 import { PromotionReducer } from "./reducer/promotionReducer";
 import { BookReducer } from "./reducer/bookReducer";
-import { RecieptReducer } from "./reducer/recieptReducer";
+import { ReceiptReducer } from "./reducer/receiptReducer";
+import { AddressReducer } from "./reducer/addressReducer";
+
+
 
 // middleWareSaga.run(rootSaga);
 
@@ -25,7 +28,8 @@ const rootReducer = combineReducers({
   AuthorReducer,
   PromotionReducer,
   BookReducer,
-  RecieptReducer,
+  ReceiptReducer,
+  AddressReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

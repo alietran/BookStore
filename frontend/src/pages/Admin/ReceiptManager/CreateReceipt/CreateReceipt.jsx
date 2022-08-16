@@ -26,6 +26,7 @@ import BookList from "./BookList";
 import { getSupplierList } from "../../../../redux/action/supplierAction";
 import { useSelector } from "react-redux";
 import BookInfo from "./BookInfo";
+import { createReceipt } from "../../../../redux/action/receiptAction";
 
 const steps = [
   "Select campaign settings",
@@ -33,7 +34,7 @@ const steps = [
   // "Create an ad",
 ];
 export default function CreateReceipt() {
-    const { supplierSelected ,selectedBook} = useSelector((state) => state.RecieptReducer);
+    const { supplierSelected ,selectedBook,receipForm} = useSelector((state) => state.ReceiptReducer);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ export default function CreateReceipt() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 const handleSubmitReceipt = () => {
-  // distpatch()
+  dispatch(createReceipt(receipForm))
 }
    useEffect(() => {
     dispatch(getSupplierList());

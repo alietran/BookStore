@@ -1,23 +1,23 @@
 const { default: axiosClient } = require("./axiosClient");
 
 const receiptAPI = {
-  getAllShipper: () => {
-    return axiosClient.get("v1/receipt");
+  getAllReceipt: () => {
+    return axiosClient.get("v1/receipts");
   },
-  createShipper: (data) => {
-    const path = `/v1/receipt`;
+  createReceipt: (data) => {
+    const path = `/v1/receipts`;
     return axiosClient.post(path, data);
   },
-  getDetailShipper: (id) => {
-    const path = `/v1/receipt/${id}`;
+  getDetailReceipt: (id) => {
+    const path = `/v1/receipts/${id}`;
     return axiosClient.get(path);
   },
-  deleteShipper: (id) => {
-    const path = `/v1/receipt/${id}`;
+  deleteReceipt: (id) => {
+    const path = `/v1/receipts/${id}`;
     return axiosClient.delete(path);
   },
-  updateShipper: (id, data) => {
-    const path = `/v1/receipt/${id}`;
+  updateReceipt: (id, data) => {
+    const path = `/v1/receipts/${id}`;
     return axiosClient.patch(path, data);
   },
 };

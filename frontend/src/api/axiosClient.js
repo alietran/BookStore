@@ -1,10 +1,12 @@
 import axios from 'axios';
 export const DOMAIN = 'http://localhost:8080/api';
+// export const DOMAINADDRESS = "https://provinces.open-api.vn";
 export const TOKEN = 'token';
 
 const axiosClient = axios.create({
     baseURL: DOMAIN
 });
+
 
 // export const get = async(path, (options = () => {
 //     const response = await axiosClient.get(path, options);

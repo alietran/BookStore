@@ -37,8 +37,8 @@ export default function BookInfo() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [quantity, setQuantity] = useState();
   const [price, setPrice] = useState();
-  
-  const { supplierSelected ,selectedBook} = useSelector((state) => state.RecieptReducer);
+
+  const { supplierSelected ,selectedBook} = useSelector((state) => state.ReceiptReducer);
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState("");
 
@@ -130,13 +130,14 @@ function getComparator(order, orderBy) {
     setPage(0);
   };
 const hanldeQuantity = (e) => {
-    console.log("price", e.target.value);
-    setQuantity(e.target.value)
+    console.log("quantity", e.target.value);
+      // console.log("quantity",quantity)
+    setQuantity(Number(e.target.value))
 }
-
+console.log("quantity", quantity);
 const hanldePrice = (e) => {
     console.log("price", e.target.value);
-    setPrice(e.target.value)
+    setPrice(Number(e.target.value))
 }
 
 
@@ -193,21 +194,22 @@ const hanldePrice = (e) => {
                         </TableCell>
                       <TableCell align="left">{name}</TableCell>
                        <TableCell align="left"><TextField
-          required
+          
           id="outlined-required"
-          // label="0"
-          defaultValue=""
-          onChange={hanldeQuantity}
-          value={quantity}
-        /></TableCell>
-                      <TableCell align="left"><TextField
-          required
-          id="outlined-required"
-          // label="0"
-          defaultValue=""
+          label=" "
+   
           onChange={hanldePrice}
           value={price}
           
+        /></TableCell>
+                     
+                       <TableCell align="left"><TextField
+         
+          id="outlined-required"
+          label=" "
+     
+          onChange={hanldeQuantity}
+          value={quantity}
         /></TableCell>
                      
                    
@@ -236,7 +238,7 @@ const hanldePrice = (e) => {
         <Box className='p-3 float-right flex'>
           <p className='font-bold'>Tổng tiền: </p>
           <span>&nbsp;
-             { (quantity * price) === "NaN" ? "0" : (quantity * price)} 
+             { isNaN(quantity * price )  ? "0" : ((quantity * price).toLocaleString() )}  VND
               </span>
         </Box>
       </Card>

@@ -45,6 +45,7 @@ export default function Info() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { userRoleList } = useSelector((state) => state.AdminReducer);
+  console.log("userRoleList",userRoleList)
   const [srcImage, setSrcImage] = useState(userLogin?.user.avatar);
   const handleChangeFile = (e) => {
     //doc file base 64
