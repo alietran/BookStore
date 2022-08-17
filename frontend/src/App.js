@@ -85,7 +85,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/", "/phone", "/login", "/checkout"]}>
+          <Route exact path={["/", "/phone", "/login", "/checkout","/productDetail/1"]}>
             <MainLayout>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />

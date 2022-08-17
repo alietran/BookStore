@@ -12,6 +12,11 @@ const addressSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    email:{
+      type: String,
+      required: true,
+      trim: true,
+    },
     address: {
       type: String,
       required: true,
@@ -38,7 +43,7 @@ const addressSchema = new mongoose.Schema(
     },
     userId: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Admin',
+      ref: 'User',
     },
   },
   {

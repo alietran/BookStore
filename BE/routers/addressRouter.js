@@ -9,10 +9,10 @@ router
   //   .post(addressController.createAddress)
   .get(addressController.getAllAddress);
 
-router.post('/', authController.protect, addressController.createAddress);
+router.post('/', authController.protectUser, addressController.createAddress);
 router.get(
   '/getMeAddress',
-  authController.protect,
+  authController.protectUser,
   addressController.getMeAddress
 );
 

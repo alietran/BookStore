@@ -1,26 +1,29 @@
-// const { default: axiosClient } = require("./axiosClient");
-const { default: axiosClientAddress } = require("./axiosClient");
+const { default: axiosClient } = require("./axiosClient");
+// const { default: axiosClientAddress } = require("./axiosClient");
 
 const addressAPI = {
-  getListProvinces: () => {
-    return axiosClientAddress.get("/api/p/");
+  createAddress: (data) => {
+    const path = `/v1/address`;
+    return axiosClient.post(path, data);
   },
-//   createReceipt: (data) => {
-//     const path = `/v1/receipts`;
-//     return axiosClient.post(path, data);
-//   },
-//   getDetailReceipt: (id) => {
-//     const path = `/v1/receipts/${id}`;
-//     return axiosClient.get(path);
-//   },
-//   deleteReceipt: (id) => {
-//     const path = `/v1/receipts/${id}`;
-//     return axiosClient.delete(path);
-//   },
-//   updateReceipt: (id, data) => {
-//     const path = `/v1/receipts/${id}`;
-//     return axiosClient.patch(path, data);
-//   },
+  getAllAddress: () => {
+    return axiosClient.get("/v1/address/getMeAddress");
+  },
+  getDetailAddress: (id) => {
+    return axiosClient.get(`/v1/address/${id}`);
+  },
+  //   getDetailReceipt: (id) => {
+  //     const path = `/v1/receipts/${id}`;
+  //     return axiosClient.get(path);
+  //   },
+  //   deleteReceipt: (id) => {
+  //     const path = `/v1/receipts/${id}`;
+  //     return axiosClient.delete(path);
+  //   },
+  updateAddress: (id, data) => {
+    const path = `/v1/address/${id}`;
+    return axiosClient.patch(path, data);
+  },
 };
 
 export default addressAPI;
