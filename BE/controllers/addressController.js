@@ -2,7 +2,7 @@ const factory = require('../controllers/handlerFactory');
 const Address = require('../models/Address');
 const catchAsync = require('../utils/catchAsync');
 
-// exports.getDetailAddress = factory.getOne(Address);
+exports.getDetailAddress = factory.getOne(Address);
 exports.updateAddress = factory.updateOne(Address);
 exports.deleteAddress = factory.deleteOne(Address);
 exports.createAddress = factory.createOne(Address);
@@ -20,7 +20,7 @@ exports.createAddress = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getDetailAddress = catchAsync(async (req, res, next) => {
+exports.getMeAddress = catchAsync(async (req, res, next) => {
   let query = Address.find(req.query).populate('userId');
   const doc = await query;
   let fillterDoc = doc.filter((item) => item.userId.id === req.user.id);

@@ -11,14 +11,14 @@ router
 
 router.post('/', authController.protect, addressController.createAddress);
 router.get(
-  '/getDetall',
+  '/getMeAddress',
   authController.protect,
-  addressController.getDetailAddress
+  addressController.getMeAddress
 );
 
 router
   .route('/:id')
   .delete(addressController.deleteAddress)
-//   .get(addressController.getDetailAddress)
+  .get(addressController.getDetailAddress)
   .patch(addressController.updateAddress);
 module.exports = router;
