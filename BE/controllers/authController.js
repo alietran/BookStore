@@ -96,7 +96,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  console.log('token', token);
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access', 401)
@@ -105,7 +104,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log('decoded', decoded);
 
   // 3) Check if user still exists
   const currentUser = await Admin.findById(decoded.id);
@@ -130,7 +128,6 @@ exports.protectUser = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  console.log('token', token);
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access', 401)
@@ -139,7 +136,6 @@ exports.protectUser = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log('decoded', decoded);
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
