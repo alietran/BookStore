@@ -313,7 +313,6 @@ export default function PromotionManager() {
                           style: "currency",
                           currency: "VND",
                         })}
-                        
                       </TableCell>
                       {/* <TableCell align="left">{price_discount}</TableCell> */}
                       <TableCell align="left">

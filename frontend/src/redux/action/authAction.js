@@ -19,7 +19,7 @@ export const login = (user) => {
         });
       })
       .catch((err) => {
-        console.log("error",err);
+        console.log("error", err);
         dispatch({
           type: "LOGGIN_FAIL",
           payload: {
@@ -59,7 +59,6 @@ export const createAdmin = (user) => {
       });
   };
 };
-
 
 export const updateCurrentUser = (currentUser) => {
   return (dispatch) => {

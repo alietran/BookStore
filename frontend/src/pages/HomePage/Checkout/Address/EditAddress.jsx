@@ -1,19 +1,38 @@
-import { LoadingButton } from '@mui/lab'
-import { Button, Card, Dialog, DialogActions, DialogContent, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
-import { Form, Formik, useFormik } from 'formik'
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { LoadingButton } from "@mui/lab";
+import {
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Form, Formik, useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-import ModalDialog from '../../../../components/ModalDialog/DialogTitle'
-import { updateAddress } from '../../../../redux/action/addressAction';
-import useStyles from './style';
+import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
+import { updateAddress } from "../../../../redux/action/addressAction";
+import useStyles from "./style";
 
-export default function EditAddress({setOpenEdit,handleClickOpenEdit, successDetailAddress,openEdit,listCity}) {
-       const classes = useStyles();
-  console.log("successDetailAddress24",successDetailAddress)
-  console.log("listCity",listCity)
+export default function EditAddress({
+  setOpenEdit,
+  handleClickOpenEdit,
+  successDetailAddress,
+  openEdit,
+  listCity,
+}) {
+  const classes = useStyles();
+  console.log("successDetailAddress24", successDetailAddress);
+  console.log("listCity", listCity);
 
-    const [data, setData] = useState({
+  const [data, setData] = useState({
     setCity: "",
     cityName: "",
     districtRender: [],
@@ -33,31 +52,38 @@ export default function EditAddress({setOpenEdit,handleClickOpenEdit, successDet
     openCtr: { city: false, district: false, ward: false },
   });
   const [fullName, setFullName] = useState(successDetailAddress?.data.fullName);
-  console.log("successDetailAddress?.data.fullName",successDetailAddress?.data.fullName)
-  console.log("fullName",fullName)
-const dispatch = useDispatch();
-const [phoneNumber, setPhoneNumber] = useState(successDetailAddress?.data.phoneNumber);
-const [email, setEmail] = useState(successDetailAddress?.data.email);
+  console.log(
+    "successDetailAddress?.data.fullName",
+    successDetailAddress?.data.fullName
+  );
+  console.log("fullName", fullName);
+  const dispatch = useDispatch();
+  const [phoneNumber, setPhoneNumber] = useState(
+    successDetailAddress?.data.phoneNumber
+  );
+  const [email, setEmail] = useState(successDetailAddress?.data.email);
   const [address, setAddress] = useState(successDetailAddress?.data.address);
-    const handleUpdate = () => {
+  const handleUpdate = () => {
     setOpenEdit(false);
   };
-    const Createchema = Yup.object().shape({
+  const Createchema = Yup.object().shape({
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
-  email:  Yup.string().required("*Vui lòng nhập thông tin này"),
+    email: Yup.string().required("*Vui lòng nhập thông tin này"),
     phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-  address: Yup.string().required("*Vui lòng nhập thông tin này"),
+    address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
-    const formik = useFormik({
+  const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       fullName: fullName ? fullName : successDetailAddress?.data.fullName,
-      phoneNumber :phoneNumber ? phoneNumber : successDetailAddress?.data.phoneNumber,
-      email :email ? email : successDetailAddress?.data.email,
-      city: data.cityName, 
+      phoneNumber: phoneNumber
+        ? phoneNumber
+        : successDetailAddress?.data.phoneNumber,
+      email: email ? email : successDetailAddress?.data.email,
+      city: data.cityName,
       district: data.districtName,
       ward: data.wardName,
-      address:address ? address : successDetailAddress?.data.address
+      address: address ? address : successDetailAddress?.data.address,
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -65,26 +91,24 @@ const [email, setEmail] = useState(successDetailAddress?.data.email);
       // if (loadingCreateAuthor) {
       //   return;
       // }
-      dispatch(updateAddress(successDetailAddress.data.id,data));
-      
+      dispatch(updateAddress(successDetailAddress.data.id, data));
+
       resetForm({
-        values:
-        {
-          fullName:"",
-      phoneNumber:"",
-      email:"",
-      city:"",
-      district:"",
-      ward: "",
-      address:""
-        }
-          
+        values: {
+          fullName: "",
+          phoneNumber: "",
+          email: "",
+          city: "",
+          district: "",
+          ward: "",
+          address: "",
+        },
       });
-     
+
       // setOpen(false);
     },
   });
-    const {
+  const {
     errors,
     touched,
     handleSubmit,
@@ -92,12 +116,12 @@ const [email, setEmail] = useState(successDetailAddress?.data.email);
     values,
     setFieldValue,
   } = formik;
-  console.log("fullName",values.fullName)
+  console.log("fullName", values.fullName);
 
-    const handleChangeFullName = (e) => {
+  const handleChangeFullName = (e) => {
     setFullName(e.target.value);
   };
-   const handleChangePhoneNumber = (e) => {
+  const handleChangePhoneNumber = (e) => {
     setPhoneNumber(e.target.value);
   };
   const handleChangeEmail = (e) => {
@@ -106,10 +130,10 @@ const [email, setEmail] = useState(successDetailAddress?.data.email);
   const handleChangeAddress = (e) => {
     setAddress(e.target.value);
   };
-  const handleClose = ()=>{
-     setOpenEdit(false);
-  }
-  
+  const handleClose = () => {
+    setOpenEdit(false);
+  };
+
   const handleChangeCity = (e) => {
     setData((data) => ({
       ...data,
@@ -183,20 +207,20 @@ const [email, setEmail] = useState(successDetailAddress?.data.email);
     }));
   };
 
-    const handleCloseDistrict = () => {
+  const handleCloseDistrict = () => {
     setData((data) => ({
       ...data,
       openCtr: { ...data.openCtr, district: false },
     }));
   };
 
-     const handleCloseWard = () => {
+  const handleCloseWard = () => {
     setData((data) => ({
       ...data,
       openCtr: { ...data.openCtr, ward: false },
     }));
   };
-const handleOpenWard = () => {
+  const handleOpenWard = () => {
     setData((data) => ({
       ...data,
       openCtr: { ...data.openCtr, ward: true },
@@ -218,13 +242,13 @@ const handleOpenWard = () => {
 
     const districtName = data.districtRender[indexSelectName].name;
     console.log("districtName", districtName);
-   
+
     setData((data) => ({
       ...data,
       districtName,
     }));
     console.log("data", data);
-  
+
     const getListWard = () => {
       fetch(
         `https://sheltered-anchorage-60344.herokuapp.com/commune?idDistrict=${e.target.value}`,
@@ -285,191 +309,194 @@ const handleOpenWard = () => {
     }));
     console.log("data", data);
   };
- 
+
   return (
-    <div> 
-         <Dialog
-          open={openEdit}
-          onClose={handleClose}
-          className="text-center"
-          fullWidth={true}
-          maxWidth="sm"
-        >
-          <Formik value={formik}>
-            <Form onSubmit={handleSubmit}>
-              <ModalDialog
-                sx={{ fontSize: "23px !important" }}
-                onClose={handleClose}
-              >
-                {" "}
-               Chỉnh sửa thông tin người nhận
-              </ModalDialog>
+    <div>
+      <Dialog
+        open={openEdit}
+        onClose={handleClose}
+        className="text-center"
+        fullWidth={true}
+        maxWidth="sm"
+      >
+        <Formik value={formik}>
+          <Form onSubmit={handleSubmit}>
+            <ModalDialog
+              sx={{ fontSize: "23px !important" }}
+              onClose={handleClose}
+            >
+              {" "}
+              Chỉnh sửa thông tin người nhận
+            </ModalDialog>
 
-              <DialogContent dividers>
-                {/* <div className="grid grid-cols-5 gap-4">
+            <DialogContent dividers>
+              {/* <div className="grid grid-cols-5 gap-4">
                 <div className="col-span-3 "> */}
-                <Card
-                  sx={{
-                    borderRadius: " 16px",
-                    zIndex: 0,
-                    padding: " 20px 24px",
-                  }}
-                >
-                  <Stack spacing={3}>
-                    {" "}
-                    <TextField
-                      fullWidth
-                      autoComplete="fullName"
-                      InputLabelProps={{
-                        shrink: true,
+              <Card
+                sx={{
+                  borderRadius: " 16px",
+                  zIndex: 0,
+                  padding: " 20px 24px",
+                }}
+              >
+                <Stack spacing={3}>
+                  {" "}
+                  <TextField
+                    fullWidth
+                    autoComplete="fullName"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Họ tên"
+                    // {...getFieldProps("fullName")}
+                    value={
+                      fullName ? fullName : successDetailAddress?.data.fullName
+                    }
+                    onChange={handleChangeFullName}
+                    error={Boolean(touched.fullName && errors.fullName)}
+                    helperText={touched.fullName && errors.fullName}
+                  />
+                </Stack>
+                <Stack direction="row" spacing={3} mt={2} mb={3}>
+                  {" "}
+                  <TextField
+                    fullWidth
+                    autoComplete="phoneNumber"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Số điện thoại"
+                    value={
+                      phoneNumber
+                        ? phoneNumber
+                        : successDetailAddress?.data.phoneNumber
+                    }
+                    onChange={handleChangePhoneNumber}
+                    // {...getFieldProps("phoneNumber")}
+                    error={Boolean(touched.phoneNumber && errors.phoneNumber)}
+                    helperText={touched.phoneNumber && errors.phoneNumber}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="email"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Email"
+                    value={email ? email : successDetailAddress?.data.email}
+                    onChange={handleChangeEmail}
+                    error={Boolean(touched.email && errors.email)}
+                    helperText={touched.email && errors.email}
+                  />
+                </Stack>
+                <hr />
+                <Typography m={2} sx={{ fontSize: "20px", fontWeight: "bold" }}>
+                  Địa chỉ nhận hàng
+                </Typography>
+                <Stack spacing={3} direction="row">
+                  {" "}
+                  <FormControl fullWidth sx={{ marginBottom: "10px" }}>
+                    <InputLabel id="city">Tỉnh / Thành phố</InputLabel>
+                    <Select
+                      labelId="city"
+                      id="demo-simple-select"
+                      value={data.setCity ? data.setCity : null}
+                      name="city"
+                      displayEmpty
+                      label="Tỉnh / Thành phố"
+                      onChange={handleChangeCity}
+                    >
+                      {listCity &&
+                        listCity?.map((item, index) => {
+                          return (
+                            <MenuItem
+                              classes={{
+                                root: classes.menu__item,
+                                selected: classes["menu__item--selected"],
+                              }}
+                              value={`${item.idProvince}`}
+                              key={index}
+                            >
+                              {item.name}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth sx={{ marginBottom: "10px" }}>
+                    <InputLabel id="district">Quận / Huyện</InputLabel>
+                    <Select
+                      value={data.setDistrict}
+                      open={data.openCtr.district}
+                      onOpen={handleOpenDistrict}
+                      onClose={handleCloseDistrict}
+                      onChange={handleSelectDistrict}
+                      labelId="district"
+                      id="district-id"
+                      displayEmpty
+                      name="district"
+                      label="Quận / Huyện"
+                      sx={{
+                        "&.Mui-disabled": {
+                          backgroundColor: "whitesmoke",
+                        },
                       }}
-                      label="Họ tên"
-                      // {...getFieldProps("fullName")}
-                      value = { fullName ? fullName : successDetailAddress?.data.fullName}
-                      onChange={handleChangeFullName}
-                      error={Boolean(touched.fullName && errors.fullName)}
-                      helperText={touched.fullName && errors.fullName}
-                    />
-                  </Stack>
-                  <Stack direction="row" spacing={3} mt={2} mb={3}>
-                    {" "}
-                    <TextField
-                      fullWidth
-                      autoComplete="phoneNumber"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      label="Số điện thoại"
-                      value = {phoneNumber ? phoneNumber : successDetailAddress?.data.phoneNumber}
-                      onChange={handleChangePhoneNumber}
-                      // {...getFieldProps("phoneNumber")}
-                      error={Boolean(touched.phoneNumber && errors.phoneNumber)}
-                      helperText={touched.phoneNumber && errors.phoneNumber}
-                    />
-                    <TextField
-                      fullWidth
-                      autoComplete="email"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      label="Email"
-                      value = {email ? email : successDetailAddress?.data.email}
-                      onChange={handleChangeEmail}
-                      error={Boolean(touched.email && errors.email)}
-                      helperText={touched.email && errors.email}
-                    />
-                  </Stack>
-                  <hr />
-                  <Typography
-                    m={2}
-                    sx={{ fontSize: "20px", fontWeight: "bold" }}
-                  >
-                    Địa chỉ nhận hàng
-                  </Typography>
-                  <Stack spacing={3} direction="row">
-                    {" "}
-                    <FormControl fullWidth sx={{ marginBottom: "10px" }}>
-                      <InputLabel id="city">Tỉnh / Thành phố</InputLabel>
-                      <Select
-                        labelId="city"
-                        id="demo-simple-select"
-                        value={data.setCity ? data.setCity : null}
-                        name="city"
-                        displayEmpty
-                        label="Tỉnh / Thành phố"
-                        onChange={handleChangeCity}
-                      >
-                        {listCity &&
-                          listCity?.map((item, index) => {
-                            return (
-                              <MenuItem
-                                classes={{
-                                  root: classes.menu__item,
-                                  selected: classes["menu__item--selected"],
-                                }}
-                                value={`${item.idProvince}`}
-                                key={index}
-                              >
-                                {item.name}
-                              </MenuItem>
-                            );
-                          })}
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth sx={{ marginBottom: "10px" }}>
-                      <InputLabel id="district">Quận / Huyện</InputLabel>
-                      <Select
-                        value={data.setDistrict}
-                        open={data.openCtr.district}
-                        onOpen={handleOpenDistrict}
-                        onClose={handleCloseDistrict}
-                        onChange={handleSelectDistrict}
-                        labelId="district"
-                        id="district-id"
-                        displayEmpty
-                        name="district"
-                        label="Quận / Huyện"
-                        sx={{
-                          "&.Mui-disabled": {
-                            backgroundColor: "whitesmoke",
-                          },
-                        }}
-                        disabled={data.disabledDistrict}
+                      disabled={data.disabledDistrict}
 
-                        // onChange={handleChangeDistrict}
-                      >
-                        {data.districtRender.map((item, index) => (
-                          <MenuItem
-                            value={`${item.idDistrict}`}
-                            key={index}
-                            classes={{
-                              root: classes.menu__item,
-                              selected: classes["menu__item--selected"],
-                            }}
-                          >
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Stack>
-                  <Stack spacing={3} direction="row">
-                    {" "}
-                    <FormControl fullWidth sx={{ marginBottom: "10px" }}>
-                      <InputLabel id="ward">Phường / Xã</InputLabel>
-                      <Select
-                        open={data.openCtr.ward}
-                        onOpen={handleOpenWard}
-                        onClose={handleCloseWard}
-                        onChange={handleSelectWard}
-                        labelId="ward"
-                        id="ward-id"
-                        displayEmpty
-                        value={data.setWard}
-                        name="ward"
-                        label="Phường / Xã"
-                        sx={{
-                          "&.Mui-disabled": {
-                            backgroundColor: "whitesmoke",
-                          },
-                        }}
-                        disabled={data.disabledWard}
-                      >
-                        {data.wardRender.map((item, index) => (
-                          <MenuItem
-                            value={`${item.idCommune}`}
-                            key={index}
-                            classes={{
-                              root: classes.menu__item,
-                              selected: classes["menu__item--selected"],
-                            }}
-                          >
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                   <TextField
+                      // onChange={handleChangeDistrict}
+                    >
+                      {data.districtRender.map((item, index) => (
+                        <MenuItem
+                          value={`${item.idDistrict}`}
+                          key={index}
+                          classes={{
+                            root: classes.menu__item,
+                            selected: classes["menu__item--selected"],
+                          }}
+                        >
+                          {item.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Stack>
+                <Stack spacing={3} direction="row">
+                  {" "}
+                  <FormControl fullWidth sx={{ marginBottom: "10px" }}>
+                    <InputLabel id="ward">Phường / Xã</InputLabel>
+                    <Select
+                      open={data.openCtr.ward}
+                      onOpen={handleOpenWard}
+                      onClose={handleCloseWard}
+                      onChange={handleSelectWard}
+                      labelId="ward"
+                      id="ward-id"
+                      displayEmpty
+                      value={data.setWard}
+                      name="ward"
+                      label="Phường / Xã"
+                      sx={{
+                        "&.Mui-disabled": {
+                          backgroundColor: "whitesmoke",
+                        },
+                      }}
+                      disabled={data.disabledWard}
+                    >
+                      {data.wardRender.map((item, index) => (
+                        <MenuItem
+                          value={`${item.idCommune}`}
+                          key={index}
+                          classes={{
+                            root: classes.menu__item,
+                            selected: classes["menu__item--selected"],
+                          }}
+                        >
+                          {item.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <TextField
                     fullWidth
                     autoComplete="address"
                     InputLabelProps={{
@@ -477,44 +504,47 @@ const handleOpenWard = () => {
                     }}
                     label="Số nhà"
                     // {...getFieldProps("address")}
-                     value = {address ? address : successDetailAddress?.data.address}
-                      onChange={handleChangeAddress}
+                    value={
+                      address ? address : successDetailAddress?.data.address
+                    }
+                    onChange={handleChangeAddress}
                     error={Boolean(touched.address && errors.address)}
                     helperText={touched.address && errors.address}
                   />
-                  </Stack>
-                </Card>
-              </DialogContent>
-              <DialogActions sx={{ margin: "0 16px !important" }}>
-                <Button
-                  sx={{
-                    color: "gray",
-                    borderColor: "gray ",
-                    "&:hover": { color: "primary.main" },
-                    width: "100%",
-                    height: "33px !important",
-                  }}
-                  variant="outlined"
-                  onClick={handleClose}
-                  className={classes.buttonCreate}
-                >
-                  Huỷ
-                </Button>
-                <LoadingButton
-                  sx={{ width: "100%", height: "33px !important" }}
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  // loading={loadingCreateAuthor}
-                  onClick={handleUpdate}
-                  // disabled={!isReadyCreateCate}
-                  className={classes.buttonCreate}
-                >
-                  Chỉnh Sửa
-                </LoadingButton>
-              </DialogActions>
-            </Form>
-          </Formik>
-        </Dialog></div>
-  )
+                </Stack>
+              </Card>
+            </DialogContent>
+            <DialogActions sx={{ margin: "0 16px !important" }}>
+              <Button
+                sx={{
+                  color: "gray",
+                  borderColor: "gray ",
+                  "&:hover": { color: "primary.main" },
+                  width: "100%",
+                  height: "33px !important",
+                }}
+                variant="outlined"
+                onClick={handleClose}
+                className={classes.buttonCreate}
+              >
+                Huỷ
+              </Button>
+              <LoadingButton
+                sx={{ width: "100%", height: "33px !important" }}
+                size="large"
+                type="submit"
+                variant="contained"
+                // loading={loadingCreateAuthor}
+                onClick={handleUpdate}
+                // disabled={!isReadyCreateCate}
+                className={classes.buttonCreate}
+              >
+                Chỉnh Sửa
+              </LoadingButton>
+            </DialogActions>
+          </Form>
+        </Formik>
+      </Dialog>
+    </div>
+  );
 }

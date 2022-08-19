@@ -38,12 +38,10 @@ export const createSupplier = (data) => {
       console.log("create supplier", result);
       dispatch({
         type: "CREATE_SUPPLIER_SUCCESS",
-        
+
         payload: {
           data: result.data,
-          
         },
-        
       });
     } catch (error) {
       dispatch({
@@ -81,7 +79,7 @@ export const createSupplier = (data) => {
 //   };
 // };
 
-export const updateSupplier= (id, data) => {
+export const updateSupplier = (id, data) => {
   return async (dispatch) => {
     try {
       dispatch({

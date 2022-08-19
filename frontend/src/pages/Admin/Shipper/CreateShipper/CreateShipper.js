@@ -59,7 +59,6 @@ export default function CreateShipper() {
 
   const [valueDate, setValueDate] = useState(null);
 
-
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
   };
@@ -116,13 +115,9 @@ export default function CreateShipper() {
     },
   });
 
-
-
   useEffect(() => {
     values.dateOfBirth = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
   }, [valueDate]);
-
-
 
   const {
     errors,

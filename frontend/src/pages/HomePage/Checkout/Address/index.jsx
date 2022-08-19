@@ -23,22 +23,33 @@ import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 
 import { LoadingButton } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
-import { createAddress, getAddressList, getDetailAddress, getListProvinces } from "../../../../redux/action/addressAction";
+import {
+  createAddress,
+  getAddressList,
+  getDetailAddress,
+  getListProvinces,
+} from "../../../../redux/action/addressAction";
 import EditAddress from "./EditAddress";
 
 export default function Address() {
-  const { addressProvincesList,successCreateAddress,addressList,successDetailAddress,successUpdateAddress } = useSelector((state) => state.AddressReducer);
-  console.log("successCreateAddress",successCreateAddress)
-  console.log("addressList",addressList)
-  console.log("successDetailAddress",successDetailAddress)
+  const {
+    addressProvincesList,
+    successCreateAddress,
+    addressList,
+    successDetailAddress,
+    successUpdateAddress,
+  } = useSelector((state) => state.AddressReducer);
+  console.log("successCreateAddress", successCreateAddress);
+  console.log("addressList", addressList);
+  console.log("successDetailAddress", successDetailAddress);
   const classes = useStyles();
   const dispatch = useDispatch();
-   const [openEdit, setOpenEdit] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [listCity, setListCity] = useState("");
   const [open, setOpen] = useState(false);
-const [fullName, setFullName] = useState("");
-const [phoneNumber, setPhoneNumber] = useState("");
-const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const handleChangeFullName = (e) => {
     setFullName(e.target.value);
@@ -57,23 +68,15 @@ const [email, setEmail] = useState("");
   // const [ward, setWard] = useState("");
 
   useEffect(() => {
-    if (
-      successCreateAddress || successUpdateAddress 
-    ) {
+    if (successCreateAddress || successUpdateAddress) {
       dispatch(getAddressList());
     }
-  }, [
-    successCreateAddress,successUpdateAddress    
-  ]);
+  }, [successCreateAddress, successUpdateAddress]);
   useEffect(() => {
-    if (
-      !addressList 
-    ) {
+    if (!addressList) {
       dispatch(getAddressList());
     }
-  }, [
-    addressList    
-  ]);
+  }, [addressList]);
 
   const [data, setData] = useState({
     setCity: "",
@@ -272,7 +275,7 @@ const [email, setEmail] = useState("");
     }));
     console.log("data", data);
   };
- 
+
   useEffect(() => {
     const getListProvinces = () => {
       fetch("https://sheltered-anchorage-60344.herokuapp.com/province", {
@@ -301,9 +304,9 @@ const [email, setEmail] = useState("");
 
   const Createchema = Yup.object().shape({
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
-  email:  Yup.string().required("*Vui lòng nhập thông tin này"),
+    email: Yup.string().required("*Vui lòng nhập thông tin này"),
     phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-  address: Yup.string().required("*Vui lòng nhập thông tin này"),
+    address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const handleClickOpen = () => {
     setOpen(true);
@@ -321,7 +324,7 @@ const [email, setEmail] = useState("");
       city: data.cityName,
       district: data.districtName,
       ward: data.wardName,
-      address
+      address,
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -330,11 +333,11 @@ const [email, setEmail] = useState("");
       //   return;
       // }
       dispatch(createAddress(data));
-  //  fullName:"";
+      //  fullName:"";
       // resetForm(
-        
+
       //    {
-       
+
       //   {
       //     fullName:"",
       // phoneNumber:"",
@@ -344,9 +347,9 @@ const [email, setEmail] = useState("");
       // ward: "",
       // address:""
       //   }
-          
+
       // });
-     
+
       setOpen(false);
     },
   });
@@ -359,7 +362,7 @@ const [email, setEmail] = useState("");
     setFieldValue,
   } = formik;
 
-    const onClickEdit = (id) => {
+  const onClickEdit = (id) => {
     setOpenEdit(true);
     console.log("idEdit", id);
     // console.log("author", author);
@@ -367,56 +370,89 @@ const [email, setEmail] = useState("");
   };
   return (
     <div>
-      <Typography component="div" variant="subtitle1" sx={{marginBottom:"10px"}}>
+      <Typography
+        component="div"
+        variant="subtitle1"
+        sx={{ marginBottom: "10px" }}
+      >
         Thông tin nhận hàng
       </Typography>
-         <EditAddress openEdit={openEdit} setOpenEdit={setOpenEdit} listCity={listCity}  successDetailAddress={successDetailAddress}/>
-      <div className={classes.address}>
-        {addressList?.data.map((item, index)=>{
-          return  <div className={classes.address__detail}>
-          <div className={classes.address__option}>
-            <p className={classes.address__detailName}>{item.fullName}</p>
-            {/* Có xử lý truyền id thì sd arrow func kh thì chỉ cần gọi handle */}
+      {addressList?.data.length >= 4 ? (
+        <Typography sx={{ color: "red", paddingBottom: "10px" }}>
+          Khách hàng được thêm tối đa 4 địa chỉ nhận hàng
+        </Typography>
+      ) : (
+        ""
+      )}
 
-            <div  onClick={(e)=>{onClickEdit(item._id)}}>
-              <img 
-                className={classes.address__img}
-                src="./img/icon-edit.svg"
-                alt="icon-edit"
-              />
-            
+      <EditAddress
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+        listCity={listCity}
+        successDetailAddress={successDetailAddress}
+      />
+      <div className={classes.address}>
+        {addressList?.data.map((item, index) => {
+          return (
+            <div className={classes.address__detail}>
+              <div className={classes.address__option}>
+                <p className={classes.address__detailName}>{item.fullName}</p>
+                {/* Có xử lý truyền id thì sd arrow func kh thì chỉ cần gọi handle */}
+
+                <div
+                  onClick={(e) => {
+                    onClickEdit(item._id);
+                  }}
+                >
+                  <img
+                    className={classes.address__img}
+                    src="./img/icon-edit.svg"
+                    alt="icon-edit"
+                  />
+                </div>
+
+                <div>
+                  <i
+                    className="fa-solid fa-trash-can"
+                    style={{ color: "#3498DB", padding: " 0 10px" }}
+                  ></i>
+                </div>
+              </div>
+              <p style={{ color: "#999999", margin: 0 }}>
+                {item.address +
+                  ", " +
+                  item.ward +
+                  ", " +
+                  item.district +
+                  ", " +
+                  item.city}
+              </p>
+              <p>{item.phoneNumber}</p>
+              <div>
+                <div className={classes.border__checked}></div>
+                <span className={classes.checked}>
+                  <img
+                    className={classes.address__img}
+                    src="./img/icon-check.svg"
+                    alt="icon-check"
+                  />
+                </span>
+              </div>
             </div>
-           
-            <div>
-              <i
-                className="fa-solid fa-trash-can"
-                style={{ color: "#3498DB", padding: " 0 10px" }}
-              ></i>
-            </div>
-          </div>
-          <p style={{ color: "#999999",margin: 0 }}>{item.address + ", " + item.ward + 
-          ", " + item.district + ", " + item.city}</p>
-          <p>{item.phoneNumber}</p>
-          <div>
-            <div className={classes.border__checked}></div>
-            <span className={classes.checked}>
-              <img
-                className={classes.address__img}
-                src="./img/icon-check.svg"
-                alt="icon-check"
-              />
-            </span>
-          </div>
-        </div>
+          );
         })}
-       
-        
-        <div className={classes.address__detail} onClick={handleClickOpen}>
-          <div className={classes.address__detailAdd}>
-            <AddIcon />
-            <p style={{ color: "#999999" }}>Add address</p>
+
+        {addressList?.data.length >= 4 ? (
+          ""
+        ) : (
+          <div className={classes.address__detail} onClick={handleClickOpen}>
+            <div className={classes.address__detailAdd}>
+              <AddIcon />
+              <p style={{ color: "#999999" }}>Thêm địa chỉ</p>
+            </div>
           </div>
-        </div>
+        )}
+
         <Dialog
           open={open}
           onClose={handleClose}
@@ -454,7 +490,7 @@ const [email, setEmail] = useState("");
                       }}
                       label="Họ tên"
                       // {...getFieldProps("fullName")}
-                      value = {fullName}
+                      value={fullName}
                       onChange={handleChangeFullName}
                       error={Boolean(touched.fullName && errors.fullName)}
                       helperText={touched.fullName && errors.fullName}
@@ -469,7 +505,7 @@ const [email, setEmail] = useState("");
                         shrink: true,
                       }}
                       label="Số điện thoại"
-                      value = {phoneNumber}
+                      value={phoneNumber}
                       onChange={handleChangePhoneNumber}
                       // {...getFieldProps("phoneNumber")}
                       error={Boolean(touched.phoneNumber && errors.phoneNumber)}
@@ -482,7 +518,7 @@ const [email, setEmail] = useState("");
                         shrink: true,
                       }}
                       label="Email"
-                      value = {email}
+                      value={email}
                       onChange={handleChangeEmail}
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
@@ -598,19 +634,19 @@ const [email, setEmail] = useState("");
                         ))}
                       </Select>
                     </FormControl>
-                   <TextField
-                    fullWidth
-                    autoComplete="address"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    label="Số nhà"
-                    // {...getFieldProps("address")}
-                     value = {address}
+                    <TextField
+                      fullWidth
+                      autoComplete="address"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      label="Số nhà"
+                      // {...getFieldProps("address")}
+                      value={address}
                       onChange={handleChangeAddress}
-                    error={Boolean(touched.address && errors.address)}
-                    helperText={touched.address && errors.address}
-                  />
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                    />
                   </Stack>
                 </Card>
               </DialogContent>

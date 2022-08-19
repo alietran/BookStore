@@ -26,7 +26,6 @@ import * as Yup from "yup";
 import { createCate } from "../../../../redux/action/categoryAction";
 import { createSupplier } from "../../../../redux/action/supplierAction";
 
-
 export default function CreateSupplier() {
   // const { loadingCreateCate, successCreateCate } = useSelector(
   //   (state) => state.CateReducer
@@ -88,7 +87,7 @@ export default function CreateSupplier() {
     if (values.name && values.address && values.phoneNumber)
       setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
-  }, [values.name, values.address , values.phoneNumber]);
+  }, [values.name, values.address, values.phoneNumber]);
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);

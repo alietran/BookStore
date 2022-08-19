@@ -34,15 +34,15 @@ const steps = [
   // "Create an ad",
 ];
 export default function CreateReceipt() {
-    const { supplierSelected ,selectedBook,receipForm} = useSelector((state) => state.ReceiptReducer);
+  const { supplierSelected, selectedBook, receipForm } = useSelector(
+    (state) => state.ReceiptReducer
+  );
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const dispatch = useDispatch();
 
-
-
-    // console.log("selectedBook",selectedBook)
-    console.log("supplierSelected",supplierSelected)
+  // console.log("selectedBook",selectedBook)
+  console.log("supplierSelected", supplierSelected);
   const isStepOptional = (step) => {
     return step === 1;
   };
@@ -51,8 +51,6 @@ export default function CreateReceipt() {
     return skipped.has(step);
   };
 
-
-  
   const handleNext = () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -67,10 +65,10 @@ export default function CreateReceipt() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-const handleSubmitReceipt = () => {
-  dispatch(createReceipt(receipForm))
-}
-   useEffect(() => {
+  const handleSubmitReceipt = () => {
+    dispatch(createReceipt(receipForm));
+  };
+  useEffect(() => {
     dispatch(getSupplierList());
   }, []);
 
@@ -92,8 +90,8 @@ const handleSubmitReceipt = () => {
           </Typography>
         </Stack>
       </Stack>
-      <Box sx={{ width: "100%" }} >
-        <Stepper  activeStep={activeStep}>
+      <Box sx={{ width: "100%" }}>
+        <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
@@ -102,8 +100,8 @@ const handleSubmitReceipt = () => {
               stepProps.completed = false;
             }
             return (
-              <Step key={label} {...stepProps} >
-                <StepLabel {...labelProps} >{label}</StepLabel>
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
               </Step>
             );
           })}
@@ -135,7 +133,7 @@ const handleSubmitReceipt = () => {
               <Box sx={{ flex: "1 1 auto" }} />
 
               <Button onClick={handleSubmitReceipt}>
-                {activeStep === steps.length - 1 && "Finish" }
+                {activeStep === steps.length - 1 && "Finish"}
               </Button>
               <Button onClick={handleNext}>
                 {activeStep !== steps.length - 1 && "Next"}

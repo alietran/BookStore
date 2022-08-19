@@ -60,7 +60,6 @@ export default function CreateAuthor() {
 
   const [valueDate, setValueDate] = useState(null);
 
-
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
   };
@@ -85,13 +84,11 @@ export default function CreateAuthor() {
 
   const Createchema = Yup.object().shape({
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
-  
   });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       name: "",
-      
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -105,13 +102,9 @@ export default function CreateAuthor() {
     },
   });
 
-
-
   useEffect(() => {
     values.dateOfBirth = moment(valueDate)?.format("YYYY-MM-DDTHH:mm:SS");
   }, [valueDate]);
-
-
 
   const {
     errors,
@@ -123,16 +116,9 @@ export default function CreateAuthor() {
   } = formik;
 
   useEffect(() => {
-    if (
-      values.name 
-     
-    )
-      setIsReadyCreateCate(true);
+    if (values.name) setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
-  }, [
-    values.name,
-   
-  ]);
+  }, [values.name]);
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);

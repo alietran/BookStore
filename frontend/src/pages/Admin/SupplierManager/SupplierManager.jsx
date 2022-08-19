@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import {
   Card,
@@ -33,7 +32,10 @@ import UserListHead from "../../../components/user/UserListHead";
 import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
 
-import { getSupplierList, resetSupplierList } from "../../../redux/action/supplierAction";
+import {
+  getSupplierList,
+  resetSupplierList,
+} from "../../../redux/action/supplierAction";
 import OptionSupplier from "./OptionSupplier/OptionSupplier";
 import CreateSupplier from "./CreateSupplier/CreateSupplier";
 // import OptionCategory from "./OptionCategory/OptionCategory";
@@ -95,10 +97,14 @@ function applySortFilter(array, comparator, query) {
 export default function SupplierManager() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { supplierList,successUpdateSupplier ,successDeleteSupplier,successCreateSupplier} =
-    useSelector((state) => state.SupplierReducer);
+  const {
+    supplierList,
+    successUpdateSupplier,
+    successDeleteSupplier,
+    successCreateSupplier,
+  } = useSelector((state) => state.SupplierReducer);
 
-console.log("successCreateSupplier",successCreateSupplier)
+  console.log("successCreateSupplier", successCreateSupplier);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
@@ -113,14 +119,16 @@ console.log("successCreateSupplier",successCreateSupplier)
     }
     return () => dispatch(resetSupplierList());
   }, []);
-  
 
   useEffect(() => {
-    if (successUpdateSupplier || successDeleteSupplier || successCreateSupplier) {
+    if (
+      successUpdateSupplier ||
+      successDeleteSupplier ||
+      successCreateSupplier
+    ) {
       dispatch(getSupplierList());
     }
-  }, [successUpdateSupplier,successDeleteSupplier, successCreateSupplier]);
-
+  }, [successUpdateSupplier, successDeleteSupplier, successCreateSupplier]);
 
   useEffect(() => {
     if (successCreateSupplier) {
@@ -138,8 +146,7 @@ console.log("successCreateSupplier",successCreateSupplier)
       enqueueSnackbar("Chỉnh sửa NCC thành công!", { variant: "success" });
       return;
     }
-  }, [successUpdateSupplier,successCreateSupplier]);
-
+  }, [successUpdateSupplier, successCreateSupplier]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -264,7 +271,7 @@ console.log("successCreateSupplier",successCreateSupplier)
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, name,phoneNumber ,address } = row;
+                  const { _id, name, phoneNumber, address } = row;
                   const isItemSelected = selected.indexOf(name) !== -1;
 
                   return (
@@ -284,12 +291,8 @@ console.log("successCreateSupplier",successCreateSupplier)
                       </TableCell>
                       <TableCell align="left">{_id}</TableCell>
                       <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">
-                        {phoneNumber}
-                      </TableCell>
-                      <TableCell align="left">
-                        {address}
-                      </TableCell>
+                      <TableCell align="left">{phoneNumber}</TableCell>
+                      <TableCell align="left">{address}</TableCell>
 
                       {/* {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

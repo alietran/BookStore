@@ -80,7 +80,6 @@ export const createAddress = (data) => {
   };
 };
 
-
 export const getDetailAddress = (id) => {
   return async (dispatch) => {
     try {
@@ -105,7 +104,6 @@ export const getDetailAddress = (id) => {
     }
   };
 };
-
 
 export const updateAddress = (id, data) => {
   return async (dispatch) => {

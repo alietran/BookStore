@@ -26,7 +26,10 @@ import {
 import { LoadingButton } from "@mui/lab";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateSupplier/style";
-import { deleteSupplier, updateSupplier } from "../../../../redux/action/supplierAction";
+import {
+  deleteSupplier,
+  updateSupplier,
+} from "../../../../redux/action/supplierAction";
 
 export default function OptionSupplier({ id, supplier }) {
   console.log("supplier", supplier);

@@ -16,10 +16,7 @@ const addressAPI = {
   //     const path = `/v1/receipts/${id}`;
   //     return axiosClient.get(path);
   //   },
-  //   deleteReceipt: (id) => {
-  //     const path = `/v1/receipts/${id}`;
-  //     return axiosClient.delete(path);
-  //   },
+
   updateAddress: (id, data) => {
     const path = `/v1/address/${id}`;
     return axiosClient.patch(path, data);

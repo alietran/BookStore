@@ -47,7 +47,6 @@ export default function CreatePromotion() {
   const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
   const classes = useStyles();
- 
 
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
@@ -77,7 +76,6 @@ export default function CreatePromotion() {
       code: "",
       startDate: "",
       expiryDate: "",
- 
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -111,7 +109,7 @@ export default function CreatePromotion() {
     if (values.title && values.price && values.miniPrice && values.code)
       setIsReadyCreateCate(true);
     else setIsReadyCreateCate(false);
-  }, [values.title , values.price , values.miniPrice , values.code]);
+  }, [values.title, values.price, values.miniPrice, values.code]);
 
   const handleCreate = () => {
     if (isReadyCreateCate) setOpen(false);
@@ -216,8 +214,6 @@ export default function CreatePromotion() {
                     />
                   </Stack>
                 </LocalizationProvider>
-               
-              
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>

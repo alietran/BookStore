@@ -114,7 +114,6 @@ export default function CategoryManager() {
     }
     return () => dispatch(resetCateList());
   }, []);
-  
 
   useEffect(() => {
     if (successCreateCate || successUpdateCate || successDeleteCate) {
@@ -135,7 +134,6 @@ export default function CategoryManager() {
       return;
     }
   }, [successUpdateCate]);
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -230,7 +228,7 @@ export default function CategoryManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại 
+            Thể loại
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}

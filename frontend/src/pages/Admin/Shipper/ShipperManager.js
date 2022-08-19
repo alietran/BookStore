@@ -33,7 +33,10 @@ import UserListToolbar from "../../../components/user/UserListToolbar";
 import Label from "../../../components/Label";
 
 import CreateShipper from "./CreateShipper/CreateShipper";
-import { getShipperList, resetShipperList } from "../../../redux/action/shipperAction";
+import {
+  getShipperList,
+  resetShipperList,
+} from "../../../redux/action/shipperAction";
 import OptionShipper from "./OptionShipper/OptionShipper";
 // import OptionCategory from "./OptionCategory/OptionCategory";
 
@@ -118,7 +121,6 @@ export default function ShipperManager() {
     }
     return () => dispatch(resetShipperList());
   }, []);
-  
 
   useEffect(() => {
     if (successCreateShipper || successUpdateShipper || errorUpdateShipper) {
@@ -139,7 +141,6 @@ export default function ShipperManager() {
       return;
     }
   }, [successUpdateShipper]);
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -234,7 +235,7 @@ export default function ShipperManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại 
+            Thể loại
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}

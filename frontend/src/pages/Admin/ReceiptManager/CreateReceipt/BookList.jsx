@@ -23,7 +23,7 @@ import OptionBook from "../../Book/OptionBook/OptionBook";
 import { filter } from "lodash";
 import { getBookList } from "../../../../redux/action/bookAction";
 
- const TABLE_HEAD = [
+const TABLE_HEAD = [
   { id: "image", label: "Hình ảnh", alignRight: false },
   { id: "name", label: "Tên sản phẩm", alignRight: false },
   { id: "author", label: "Tác giả", alignRight: false },
@@ -31,9 +31,8 @@ import { getBookList } from "../../../../redux/action/bookAction";
 ];
 
 export default function BookList() {
-  const {  bookList } =
-    useSelector((state) => state.BookReducer);
-const dispatch = useDispatch()
+  const { bookList } = useSelector((state) => state.BookReducer);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -47,14 +46,12 @@ const dispatch = useDispatch()
   console.log(supplier);
   const handleChange = (event) => {
     setSupplier(event.target.value);
-   
   };
-  useEffect(()=>{
-    dispatch(getBookList())
-  },[])
+  useEffect(() => {
+    dispatch(getBookList());
+  }, []);
 
-
-    const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
@@ -62,7 +59,7 @@ const dispatch = useDispatch()
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-    const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = bookList?.data.map((n) => n.fullName);
       setSelected(newSelecteds);
@@ -75,13 +72,12 @@ const dispatch = useDispatch()
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
- const handleClick = (event, _id, row) => {
-
-  dispatch({
+  const handleClick = (event, _id, row) => {
+    dispatch({
       type: "SELECT_BOOK",
       payload: {
-          bookSelected:[row] ,
-      }
+        bookSelected: [row],
+      },
     });
     const selectedIndex = selected.indexOf(_id);
     let newSelected = [];
@@ -100,59 +96,56 @@ const dispatch = useDispatch()
     setSelected(newSelected);
   };
 
-
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
 
-    
   const handleSubmit = () => {
     dispatch({
       type: "SELECT_SUPPLIER",
       payload: {
-          supplierSelected: supplier,
-      }
+        supplierSelected: supplier,
+      },
     });
   };
 
-
   function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
   }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
+  function getComparator(order, orderBy) {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
   }
-  return 0;
-}
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
 
-    const filteredUsers = applySortFilter(
+  const filteredUsers = applySortFilter(
     bookList?.data,
     getComparator(order, orderBy),
     filterName
   );
 
   function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array?.map((el, index) => [el, index]);
-  stabilizedThis?.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(
-      array,
-      (_user) =>
-        _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
+    const stabilizedThis = array?.map((el, index) => [el, index]);
+    stabilizedThis?.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) =>
+          _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis?.map((el) => el[0]);
   }
-  return stabilizedThis?.map((el) => el[0]);
-}
 
   return (
     <Box>
@@ -174,7 +167,9 @@ function getComparator(order, orderBy) {
               onChange={handleChange}
             >
               {supplierList?.data.map((item, index) => (
-                <MenuItem value={item._id} key={index}>{item.name}</MenuItem>
+                <MenuItem value={item._id} key={index}>
+                  {item.name}
+                </MenuItem>
               ))}
               {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
@@ -184,10 +179,12 @@ function getComparator(order, orderBy) {
         </Grid>
         <Grid item xs={9} className="flex items-center">
           {" "}
-          <Button variant="contained" onClick={handleSubmit}>Gửi</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Gửi
+          </Button>
         </Grid>
       </Grid>
-        <Card>
+      <Card>
         {/* <UserListToolbar
           numSelected={selected.length}
           filterName={filterName}
@@ -209,12 +206,7 @@ function getComparator(order, orderBy) {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const {
-                    _id,
-                    name,
-                    image,
-                    authorId
-                  } = row;
+                  const { _id, name, image, authorId } = row;
                   const isItemSelected = selected.indexOf(_id) !== -1;
 
                   return (
@@ -226,24 +218,24 @@ function getComparator(order, orderBy) {
                       selected={isItemSelected}
                       aria-checked={isItemSelected}
                     >
-                         <TableCell align="left"></TableCell>
-                      <TableCell >
-                        <img src={image} alt="" style={{width: "80px",height:"100px"}}/>
-                       
-                        </TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell>
+                        <img
+                          src={image}
+                          alt=""
+                          style={{ width: "80px", height: "100px" }}
+                        />
+                      </TableCell>
                       <TableCell align="left">{name}</TableCell>
-                     
 
                       <TableCell align="left">{authorId.name}</TableCell>
-                     
+
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}
                           onChange={(event) => handleClick(event, _id, row)}
                         />
                       </TableCell>
-
-
                     </TableRow>
                   );
                 })}

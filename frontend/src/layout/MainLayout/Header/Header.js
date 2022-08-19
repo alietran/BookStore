@@ -30,6 +30,7 @@ import {
   MenuItem,
   Paper,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "./style";
@@ -43,6 +44,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { Dropdown, Menu, Space } from "antd";
 import _ from "lodash";
+
+// import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 const resources = [
   {
     name: "Help Center",
@@ -305,12 +308,14 @@ export default function Header() {
                   <ShoppingCartOutlinedIcon />
                 </NavLink>
                 {userLogin ? (
+                      // {userLogin?.user.fullName}
                   <NavLink
                     to="/info"
                     className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
                   >
                     {userLogin?.user.fullName}
                   </NavLink>
+
                 ) : (
                   <Box>
                     <NavLink

@@ -1,7 +1,5 @@
 import authorAPI from "../../api/authorAPI";
 
-
-
 export const getAuthorList = () => {
   return (dispatch) => {
     dispatch({

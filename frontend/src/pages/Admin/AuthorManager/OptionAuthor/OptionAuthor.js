@@ -25,8 +25,17 @@ import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateAuthor/style";
 import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
-import { deleteShipper, getDetailShipper, updateShipper } from "../../../../redux/action/shipperAction";
-import { deleteAuthor, getDetailAuthor, updateAuthor, updateAUTHOR } from "../../../../redux/action/authorAction";
+import {
+  deleteShipper,
+  getDetailShipper,
+  updateShipper,
+} from "../../../../redux/action/shipperAction";
+import {
+  deleteAuthor,
+  getDetailAuthor,
+  updateAuthor,
+  updateAUTHOR,
+} from "../../../../redux/action/authorAction";
 
 export default function OptionAuthor({ id, author }) {
   console.log("shipper", author);
@@ -166,7 +175,6 @@ export default function OptionAuthor({ id, author }) {
                   error={Boolean(touched.name && errors.name)}
                   helperText={touched.name && errors.name}
                 />
-               
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>
