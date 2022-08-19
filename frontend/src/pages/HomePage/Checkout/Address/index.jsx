@@ -28,6 +28,8 @@ import {
   getAddressList,
   getDetailAddress,
   getListProvinces,
+
+  updateAddress,
 } from "../../../../redux/action/addressAction";
 import EditAddress from "./EditAddress";
 
@@ -51,6 +53,7 @@ export default function Address() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  let [addressIsChoose, setAddressIsChoose] = React.useState("");
   const handleChangeFullName = (e) => {
     setFullName(e.target.value);
   };
@@ -78,6 +81,16 @@ export default function Address() {
     }
   }, [addressList]);
 
+  const handleAddress = (item, index) => {
+    let addressIsDefault = addressList?.data.filter((item) => item.isDefault);
+    addressIsDefault[0].isDefault = false;
+    dispatch(updateAddress(addressIsDefault[0].id, addressIsDefault[0]));
+
+    setTimeout(async () => {
+      item.isDefault = true;
+     await dispatch(updateAddress(item.id, item));
+    }, 100);
+  };
   const [data, setData] = useState({
     setCity: "",
     cityName: "",
@@ -377,6 +390,7 @@ export default function Address() {
       >
         Thông tin nhận hàng
       </Typography>
+
       {addressList?.data.length >= 4 ? (
         <Typography sx={{ color: "red", paddingBottom: "10px" }}>
           Khách hàng được thêm tối đa 4 địa chỉ nhận hàng
@@ -384,6 +398,7 @@ export default function Address() {
       ) : (
         ""
       )}
+
 
       <EditAddress
         openEdit={openEdit}
@@ -394,7 +409,10 @@ export default function Address() {
       <div className={classes.address}>
         {addressList?.data.map((item, index) => {
           return (
-            <div className={classes.address__detail}>
+            <div
+              className={classes.address__detail}
+              onClick={(e) => handleAddress(item, index)}
+            >
               <div className={classes.address__option}>
                 <p className={classes.address__detailName}>{item.fullName}</p>
                 {/* Có xử lý truyền id thì sd arrow func kh thì chỉ cần gọi handle */}
@@ -428,6 +446,7 @@ export default function Address() {
                   item.city}
               </p>
               <p>{item.phoneNumber}</p>
+
               <div>
                 <div className={classes.border__checked}></div>
                 <span className={classes.checked}>
@@ -438,10 +457,26 @@ export default function Address() {
                   />
                 </span>
               </div>
+
+              {item.isDefault && (
+                <div>
+                  <div className={classes.border__checked}></div>
+                  <span className={classes.checked}>
+                    <img
+                      className={classes.address__img}
+                      src="./img/icon-check.svg"
+                      alt="icon-check"
+                    />
+                  </span>
+                </div>
+              )}
+
             </div>
           );
         })}
-
+</div>
+<div>
+ 
         {addressList?.data.length >= 4 ? (
           ""
         ) : (
@@ -450,6 +485,7 @@ export default function Address() {
               <AddIcon />
               <p style={{ color: "#999999" }}>Thêm địa chỉ</p>
             </div>
+
           </div>
         )}
 
