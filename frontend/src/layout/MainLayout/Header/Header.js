@@ -97,14 +97,20 @@ export default function Header() {
     window.open("http://localhost:8080/api/v1/users/logout", "_self");
     dispatch({ type: "LOGOUT" });
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+ const [anchorEl, setAnchorEl] = React.useState(null);
+ const [dashboard, setDashboard] = React.useState(null);
+ const open = Boolean(anchorEl);
+ const handleClickOption = (event) => {
+   setDashboard(event.currentTarget);
+ };
+ const handleClick = (event) => {
+   setAnchorEl(event.currentTarget);
+ };
+ const handleClose = () => {
+   setAnchorEl(null);
+ };
+
+  
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -222,7 +228,7 @@ export default function Header() {
           <div className=" mx-auto px-4 sm:px-6 text-sm">
             <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
               <div className="flex justify-start lg:w-0 lg:flex-1">
-                <NavLink to="#">
+                <NavLink to="/">
                   <img
                     className="h-full w-auto sm:h-10"
                     src="../img/logo_white.png"
@@ -306,16 +312,40 @@ export default function Header() {
                   className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600 "
                 >
                   <ShoppingCartOutlinedIcon />
+                  {/* <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={dashboard}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                  </Menu> */}
                 </NavLink>
                 {userLogin ? (
-                      // {userLogin?.user.fullName}
-                  <NavLink
-                    to="/info"
-                    className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
-                  >
-                    {userLogin?.user.fullName}
-                  </NavLink>
+                  // {userLogin?.user.fullName}
+                  // <NavLink
+                  //   to="/info"
+                  //   className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
+                  // >
+                  //     {userLogin?.user.fullName}
 
+                  // </NavLink>
+                  <div>
+                    <Button
+                      id="basic-button"
+                      aria-controls={dashboard ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={dashboard ? "true" : undefined}
+                      onClick={handleClickOption}
+                    >
+                      {userLogin?.user.fullName}
+                    </Button>
+                  </div>
                 ) : (
                   <Box>
                     <NavLink

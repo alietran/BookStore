@@ -30,6 +30,7 @@ import {
   getListProvinces,
 
   updateAddress,
+
 } from "../../../../redux/action/addressAction";
 import EditAddress from "./EditAddress";
 
@@ -399,7 +400,6 @@ export default function Address() {
         ""
       )}
 
-
       <EditAddress
         openEdit={openEdit}
         setOpenEdit={setOpenEdit}
@@ -409,10 +409,7 @@ export default function Address() {
       <div className={classes.address}>
         {addressList?.data.map((item, index) => {
           return (
-            <div
-              className={classes.address__detail}
-              onClick={(e) => handleAddress(item, index)}
-            >
+            <div className={classes.address__detail}>
               <div className={classes.address__option}>
                 <p className={classes.address__detailName}>{item.fullName}</p>
                 {/* Có xử lý truyền id thì sd arrow func kh thì chỉ cần gọi handle */}
@@ -445,7 +442,6 @@ export default function Address() {
                   ", " +
                   item.city}
               </p>
-              <p>{item.phoneNumber}</p>
 
               <div>
                 <div className={classes.border__checked}></div>
@@ -474,9 +470,7 @@ export default function Address() {
             </div>
           );
         })}
-</div>
-<div>
- 
+
         {addressList?.data.length >= 4 ? (
           ""
         ) : (

@@ -35,6 +35,8 @@ import Checkout from "./pages/HomePage/Checkout";
 import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
+import Cart from "./pages/HomePage/Order/Cart";
+
 
 
 function App() {
@@ -85,12 +87,23 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/", "/phone", "/login", "/checkout","/productDetail/1"]}>
+          <Route
+            exact
+            path={[
+              "/",
+              "/phone",
+              "/login",
+              "/checkout",
+              "/productDetail/1",
+              "/cart",
+            ]}
+          >
             <MainLayout>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/checkout" component={Checkout} />
               <Route exact path="/productDetail/1" component={ProductDetail} />
+              <Route exact path="/cart" component={Cart} />
             </MainLayout>
           </Route>
           <Route exact path="/admin/login" component={LoginAdmin} />

@@ -458,12 +458,12 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 !important",
     padding: "0 !important",
   },
-  closeButton: {
-    position: "absolute !important",
-    right: `${theme.spacing(1)} !important`,
-    top: `${theme.spacing(1)} !important`,
-    color: `${theme.palette.grey[500]} !important`,
-  },
+  // closeButton: {
+  //   position: "absolute !important",
+  //   right: `${theme.spacing(1)} !important`,
+  //   top: `${theme.spacing(1)} !important`,
+  //   color: `${theme.palette.grey[500]} !important`,
+  // },
 
   moreMovie: {
     margin: "30px auto",

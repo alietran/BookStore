@@ -112,7 +112,7 @@ export default function ProductDetail() {
                 <HomeIcon />
                 {/* <img src="https://www.w3schools.com/w3css/w3css_images.asp" alt=""/> */}
               </Link>
-              <span className="css-rhmj3t px-1"> &gt; </span>
+              <span className="css-rhmj3t pl-2"> &gt; </span>
             </div>
             <div className={classes.breadcrumbsName}>
               <Link to="" className={classes.breadcrumbsLink}>
