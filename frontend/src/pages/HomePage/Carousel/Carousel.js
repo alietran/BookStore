@@ -5,8 +5,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "./style.css"
-import { Autoplay, Pagination, Navigation } from "swiper";
 
+import { Navigation, Pagination,Autoplay } from 'swiper';
 
 export default function Carousel() {
   return (

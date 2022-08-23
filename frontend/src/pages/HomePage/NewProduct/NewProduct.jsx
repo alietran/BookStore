@@ -1,15 +1,87 @@
 import { Box, Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
 import ProductItem from "../../../components/ProductItem/ProductItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+import Slider from "react-slick";
+// Import css files
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import useStyles from "./style";
+import { useSelector } from "react-redux";
+
+
+
 export default function NewProduct() {
+  const classes = useStyles();
+   const { bookList } = useSelector((state) => state.BookReducer);
+ 
+ 
+
+  function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "#b7b6b4",paddingTop:"3px", width: "20px", height: "22px" }}
+      onClick={onClick}
+    />
+  );
+  }
+  function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "#b7b6b4",paddingTop:"3px", width: "20px", height: "22px" }}
+      onClick={onClick}
+    />
+  );
+}
+
+  var settings = {
+    // dots: true,
+    nextArrow: <SampleNextArrow />,
+      prevArrow: <SamplePrevArrow />,
+
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+    autoplay: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: true,
+          centerMode: true,
+          centerPadding: "40px",
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          arrows: true,
+          centerMode: true,
+          centerPadding: "40px",
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
   return (
     <Container className="py-12" maxWidth="lg">
       <Box className="bg-white  rounded-md">
@@ -20,28 +92,22 @@ export default function NewProduct() {
         >
           Sách mới phát hành
         </Typography>
+        {/* grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-7 */}
 
-        <Box className=" border-t-2 mt-3 px-5 pb-5 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-7">
-          {/* <Swiper
-            spaceBetween={10}
-            slidesPerView={3}
-            navigation
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
-          >
-            <SwiperSlide>Slide 1</SwiperSlide>
-            <SwiperSlide>Slide 2</SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
-            <SwiperSlide>Slide 4</SwiperSlide>
-            <SwiperSlide>Slide 5</SwiperSlide>
-            <SwiperSlide>Slide 6</SwiperSlide>
-            <SwiperSlide>Slide 7</SwiperSlide>
-          </Swiper> */}
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
-          <ProductItem/>
+        <Box className=" border-t-2 mt-3 px-5 pb-5 ">
+          <Slider {...settings}>
+            {bookList?.data.map((product, index) => (
+              <div>
+                <p className={classes.productNew}>New</p>
+
+                <ProductItem
+                  className={classes.productItem}
+                  product={product}
+                />
+              </div>
+            ))}
+       
+          </Slider>
         </Box>
       </Box>
     </Container>

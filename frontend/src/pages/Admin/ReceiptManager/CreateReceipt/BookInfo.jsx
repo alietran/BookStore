@@ -233,7 +233,7 @@ export default function BookInfo() {
             {isNaN(quantity * price)
               ? "0"
               : (quantity * price).toLocaleString()}{" "}
-            VND
+            ₫
           </span>
         </Box>
       </Card>

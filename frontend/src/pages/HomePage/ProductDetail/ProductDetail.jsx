@@ -15,7 +15,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 
 import Tab from "@mui/material/Tab";
@@ -28,6 +28,8 @@ import useStyles from "./style";
 import StarIcon from "@mui/icons-material/Star";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetailBook } from "../../../redux/action/bookAction";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -70,15 +72,28 @@ const rows = [
 //    setwarningtext(false);
 //  };
 
-export default function ProductDetail() {
-    const [openComment, setOpenComment] = useState(false);
-    const [warningtext, setwarningtext] = useState(false);
-    const [value, setValue] = React.useState("1");
+export default function ProductDetail(props) {
+  const { id } = props.match.params;
+  const dispatch = useDispatch();
+  const [openComment, setOpenComment] = useState(false);
+  const [warningtext, setwarningtext] = useState(false);
+  const [value, setValue] = React.useState("1");
+  const { successDetailBook } = useSelector((state) => state.BookReducer);
+  
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
+  useEffect(() => {
+    dispatch(getDetailBook(id));
+  },[]);
+
+  console.log("successDetailBook", successDetailBook);
+  const bookDetail = successDetailBook?.data
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const classes = useStyles();
+
   const breadcrumbs = [
     <Link
       underline="hover"
@@ -116,7 +131,8 @@ export default function ProductDetail() {
             </div>
             <div className={classes.breadcrumbsName}>
               <Link to="" className={classes.breadcrumbsLink}>
-                name
+                {/* name */}
+                {bookDetail?.name}
               </Link>
             </div>
           </div>
@@ -148,7 +164,7 @@ export default function ProductDetail() {
                   </div>
                   <div className={classes["box__content-right"]}>
                     <div className="content__title">
-                      <h1>Name</h1>
+                      <h1>{bookDetail?.name}</h1>
                       <div className="content__trademark">
                         <StarIcon sx={{ color: "gold" }} />
                         <StarIcon sx={{ color: "gold" }} />
@@ -160,7 +176,9 @@ export default function ProductDetail() {
                     </div>
 
                     <div className="content__price">
-                      <div className="content__price--title ">Giá</div>
+                      <div className="content__price--title text-red-500 text-2xl font-medium">
+                        {bookDetail?.price.toLocaleString()} ₫
+                      </div>
                     </div>
 
                     <div className={classes.content__line}>
@@ -199,12 +217,13 @@ export default function ProductDetail() {
                         variant="contained"
                         className={`${classes["content__button--buy"]} ${classes.buttonAction}`}
                       >
-                        BUY NOW
+                        Mua Ngay
                       </Button>
                       <button
+                      
                         className={`${classes["content__button--add"]} ${classes.buttonAction}   `}
                       >
-                        ADD TO CART
+                        Thêm vào giỏ
                       </button>
                     </div>
                     <div className="content__line">
@@ -228,38 +247,32 @@ export default function ProductDetail() {
                   </div>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
-                      <img src=".../../../../img/svgexport-17.svg" alt="" />
+                      <img
+                        style={{
+                          filter:
+                            "invert(38%) sepia(90%) saturate(1644%) hue-rotate(126deg) brightness(94%) contrast(103%)",
+                        }}
+                        src=".../../../../img/svgexport-17.svg"
+                        alt=""
+                      />
                     </div>
                     <div className="ship-text ml-2">100% genuine guarantee</div>
                   </div>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
-                      <img src="../../../../img/svgexport-18.svg" alt="" />
+                      <img
+                        style={{
+                          filter:
+                            "invert(38%) sepia(90%) saturate(1644%) hue-rotate(126deg) brightness(94%) contrast(103%)",
+                        }}
+                        src="../../../../img/svgexport-18.svg"
+                        alt=""
+                      />
                     </div>
                     <div className="ship-text ml-2">Return within 10 days</div>
                   </div>
                 </div>
-                {/* <div className="info-service">
-              <h4>Dịch vụ khác</h4>
-              <div className="info-policy--ship">
-                <div className="ship-img">
-                  <img src="../../../../assets/img/setting-icon.svg" alt="" />
-                </div>
-                <div className="ship-text">Repair of the same price $6AUD </div>
-              </div>
-              <div className="info-policy--ship">
-                <div className="ship-img">
-                  <img src="../ ../../../../../assets/img/computer-icon.svg" alt=""/>
-                </div>
-                <div className="ship-text">Computer and laptop cleaning.</div>
-              </div>
-              <div className="info-policy--ship">
-                <div className="ship-img">
-                  <img src="../../../../assets/img/shield-icon.svg" alt=""/>
-                </div>
-                <div className="ship-text">Home warranty.</div>
-              </div>
-            </div> */}
+
                 <Link>See details</Link>
               </div>
             </div>
@@ -367,60 +380,6 @@ export default function ProductDetail() {
                         </span>
                       </div>
                     </div>
-                    {/* {commentListDisplay.comment?.map((comment, index) => (
-                      <div
-                        key={`${comment?.createAt}`}
-                        className={classes.itemDis}
-                        id={`idComment${comment?.createAt}`}
-                      >
-                        <div className={classes.infoUser}>
-                          <div className={classes.left}>
-                            <span className={classes.avatar}>
-                              <img
-                                src={`https://i.pravatar.cc/150?u=${comment?._id}`}
-                                alt="avatar"
-                                className={classes.avatarImg}
-                              />
-                            </span>
-                            <span className={classes.liveUser}>
-                              <p className={classes.userName}>
-                                {comment.userId?.userName}
-                              </p>
-                              <p className={classes.timePost}>
-                                {moment(comment?.createAt).fromNow()}
-                              </p>
-                            </span>
-                          </div>
-                          <div className={classes.right}>
-                            <p className="text-success">{comment.rating}</p>
-                            <Rating
-                              value={comment.rating}
-                              precision={0.5}
-                              readOnly
-                            />
-                          </div>
-                          <div className="clearfix"></div>
-                        </div>
-                        <div className="py-3 mb-3 border-bottom">
-                          {comment.content}
-                        </div>
-                        <span
-                          className="d-inline-block"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <span className="mr-2">
-                            <ThumbUpIcon
-                              style={{
-                                color: "#73757673",
-                              }}
-                            />
-                          </span>
-                          <span style={{ color: "#737576" }}>
-                            <span>0</span> Thích
-                          </span>
-                        </span>
-                      </div>
-                    ))} */}
 
                     <div className={classes.moreMovie}>
                       <Button
@@ -434,98 +393,6 @@ export default function ProductDetail() {
                   </TabPanel>
                 </TabContext>
               </Box>
-              {/* <Grid container spacing={2}>
-                <Grid item xs={8}>
-                  <div className="desc__left">
-                    <h5>Description</h5>
-                    <div>
-                      Giới thiệu Chuột máy tính Asus TUF Gaming M3 Asus TUF
-                      Gaming M3 là một con chuột chơi game nhỏ gọn mang đến sự
-                      thoải mái, hiệu suất và độ tin cậy mà các game thủ yêu
-                      cầu. Chuột tiện dụng và nhẹ cho các trò chơi kéo dài, với
-                      cảm biến quang có độ chính xác cao mang lại cho bạn lợi
-                      thế trong trận chiến. Được hỗ trợ bởi các công tắc 20
-                      triệu lần nhấp và lớp phủ chuyên dụng cho độ bền đặc biệt.
-                      Nó cũng có tính năng chiếu sáng Aura Sync RGB tùy biến để
-                      bạn có thể tùy chỉnh trong phong cách cá nhân hóa. THIẾT
-                      KẾ ERGONOMIC & LIGHTWEIGHT TUF Gaming M3 có một thiết kế
-                      nhỏ gọn và nhẹ được tối ưu hóa để chơi trò chơi FPS nhanh
-                      bằng cách sử dụng vuốt hoặc nắm ngón tay. Thiết kế công
-                      thái học và nhẹ, thoải mái cho nhiều giờ chơi, với hình
-                      dạng được tối ưu hóa giúp tăng cường cả xử lý và kiểm
-                      soát.
-                    </div>
-                  </div>
-                </Grid>
-                <Grid item xs={4}>
-                  <div className="desc__right">
-                    <h5>Thông tin chi tiết</h5>
-                    <div>
-                      {/* <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer> */}
-              {/* <table
-                        className={classes.infoDetail}
-                        style={{
-                          width: "100%",
-                        }}
-                      >
-                        <tr>
-                          <td>Nhà cung cấp</td>
-                          <td>Contact</td>
-                        </tr>
-                        <tr>
-                          <td>Tác giả</td>
-                          <td>Maria Anders</td>
-                        </tr>
-                        <tr>
-                          <td>NXB</td>
-                          <td>Francisco Chang</td>
-                        </tr>
-                        <tr>
-                          <td>Kích thước</td>
-                          <td>Roland Mendel</td>
-                        </tr>
-                        <tr>
-                          <td>Bìa</td>
-                          <td>Helen Bennett</td>
-                        </tr>
-                        <tr>
-                          <td>Số trang</td>
-                          <td>Yoshi Tannamuri</td>
-                        </tr>
-                        <tr>
-                          <td>Nhà phát hành</td>
-                          <td>Giovanni Rovelli</td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                </Grid>
-              </Grid> */}
             </div>
           </div>
         </div>

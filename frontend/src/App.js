@@ -81,7 +81,7 @@ function App() {
     };
     getUser();
   }, []);
-  console.log("user123456", user);
+  // console.log("user123456", user);
 
   return (
     <BrowserRouter>
@@ -94,7 +94,7 @@ function App() {
               "/phone",
               "/login",
               "/checkout",
-              "/productDetail/1",
+              "/productDetail/:id",
               "/cart",
             ]}
           >
@@ -102,7 +102,7 @@ function App() {
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/checkout" component={Checkout} />
-              <Route exact path="/productDetail/1" component={ProductDetail} />
+              <Route exact path="/productDetail/:id" component={ProductDetail} />
               <Route exact path="/cart" component={Cart} />
             </MainLayout>
           </Route>

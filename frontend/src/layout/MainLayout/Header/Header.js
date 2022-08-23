@@ -20,7 +20,7 @@ import {
 } from "@heroicons/react/outline";
 import "./style.css";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { Box, Container, maxWidth } from "@mui/system";
 import {
   Button,
@@ -98,16 +98,10 @@ export default function Header() {
     dispatch({ type: "LOGOUT" });
   };
  const [anchorEl, setAnchorEl] = React.useState(null);
- const [dashboard, setDashboard] = React.useState(null);
  const open = Boolean(anchorEl);
- const handleClickOption = (event) => {
-   setDashboard(event.currentTarget);
- };
+
  const handleClick = (event) => {
    setAnchorEl(event.currentTarget);
- };
- const handleClose = () => {
-   setAnchorEl(null);
  };
 
   
@@ -126,7 +120,7 @@ export default function Header() {
 
     return () => dispatch(resetCateList());
   }, []);
-
+  const history = useHistory();
   const array = [];
   const children = [];
   const cateListFilter = [];
@@ -210,6 +204,29 @@ export default function Header() {
       // }
     });
   console.log("array", array);
+    const menuDashboard = (
+      <Menu>
+        <Menu.Item key="0">
+          <NavLink to="/admin/account">Xem thông tin</NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="2" className="mr-3">
+          {" "}
+          <button
+            onClick={() => {
+              // // localStorage.removeItem("profile");
+              // // localStorage.removeItem("user");
+              // // localStorage.removeItem("token");
+              history.push("");
+              dispatch(logout());
+            }}
+            className="text-blue-800"
+          >
+            Đăng xuất
+          </button>{" "}
+        </Menu.Item>
+      </Menu>
+    );
   const menu = (
     <Menu
       style={{
@@ -268,7 +285,7 @@ export default function Header() {
                   padding: "5px",
                   display: "flex",
                   flex: "1 1 0",
-                  maxWidth: "670px",
+                  maxWidth: "680px",
                   marginLeft: "auto",
                   marginRight: "auto",
                 }}
@@ -289,10 +306,11 @@ export default function Header() {
                   sx={{
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "4px",
+                    padding: "4px 0",
                     background:
                       "linear-gradient(107.23deg,#00AB55 ,  #049e51 100%)",
                     color: "white",
+                    marginLeft: "10px",
                   }}
                   className="header__navigationBar-button"
                 >
@@ -312,39 +330,29 @@ export default function Header() {
                   className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600 "
                 >
                   <ShoppingCartOutlinedIcon />
-                  {/* <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={dashboard}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
-                  </Menu> */}
                 </NavLink>
                 {userLogin ? (
-                  // {userLogin?.user.fullName}
-                  // <NavLink
-                  //   to="/info"
-                  //   className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
-                  // >
-                  //     {userLogin?.user.fullName}
-
-                  // </NavLink>
                   <div>
-                    <Button
-                      id="basic-button"
-                      aria-controls={dashboard ? "basic-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={dashboard ? "true" : undefined}
-                      onClick={handleClickOption}
-                    >
-                      {userLogin?.user.fullName}
-                    </Button>
+                    <Dropdown overlay={menuDashboard} trigger={["click"]}>
+                      <div
+                        style={{
+                          width: 50,
+                          height: 50,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        className="text-2xl ml-5 rounded-full bg-red-200 ant-dropdown-link
+                onClick={(e) => e.preventDefault()}"
+                      >
+                        {/* {userLogin.userName.substr(0, 1)} */}
+                        <img
+                          src={userLogin?.user.avatar}
+                          alt="avatar"
+                          className="rounded-full"
+                        />
+                      </div>
+                    </Dropdown>
                   </div>
                 ) : (
                   <Box>
@@ -354,13 +362,13 @@ export default function Header() {
                     >
                       Đăng nhập
                     </NavLink>
-                    <NavLink
+                    {/* <NavLink
                       to="#"
                       className="ml-8 whitespace-nowrap inline-flex items-center justify-center duration-700  px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:text-white bg-red-500 hover:bg-red-600"
                       onClick={logout}
                     >
                       Đăng ký
-                    </NavLink>
+                    </NavLink> */}
                   </Box>
                 )}
               </div>

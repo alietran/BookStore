@@ -261,6 +261,7 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid seagreen",
     color: "seagreen",
     fontWeight: 600,
+  
   },
   "productDetail__wrapper-content--right--right": {
     boxSizing: "border-box",
@@ -309,7 +310,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#fafafa",
     },
   },
-    danhGia: {
+  danhGia: {
     marginBottom: 15,
   },
   inputRoot: {
@@ -487,7 +488,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "transparent",
       },
     },
-  }
+  },
 }));
 
 export default useStyles;
