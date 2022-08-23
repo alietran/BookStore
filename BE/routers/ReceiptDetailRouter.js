@@ -8,4 +8,6 @@ router
   .get(receiptDetailController.getAllReceiptDetail)
   .post(receiptDetailController.createReceiptDetail);
 
+router.route('/:id').get(receiptDetailController.getDetailReceiptDetail);
+
 module.exports = router;

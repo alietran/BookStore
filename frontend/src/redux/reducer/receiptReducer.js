@@ -1,15 +1,44 @@
 const stateDefault = {
+  receiptList: null,
+  loadingReceiptList: false,
+  errorReceiptList: null,
+
   supplierSelected: null,
   selectedBook: null,
-  receipForm: null,
+  receiptForm: null,
 
   loadingCreateReceipt: false,
   successCreateReceipt: null,
   errorCreateReceipt: null,
+
+  loadingUpdateReceipt: false,
+  successUpdateReceipt: null,
+  errorUpdateReceipt: null,
 };
 
 export const ReceiptReducer = (state = stateDefault, action) => {
   switch (action.type) {
+    case "GET_ALL_RECEIPT_REQUEST": {
+      return {
+        ...state,
+        loadingReceiptList: true,
+        errorReceiptList: null,
+      };
+    }
+    case "GET_ALL_RECEIPT_SUCCESS": {
+      return {
+        ...state,
+        receiptList: action.payload.data,
+        loadingReceiptList: false,
+      };
+    }
+    case "GET_ALL_RECEIPT_FAIL": {
+      return {
+        ...state,
+        errorReceiptList: action.payload.error,
+        loadingReceiptList: false,
+      };
+    }
     case "SELECT_SUPPLIER": {
       return {
         ...state,
@@ -20,7 +49,7 @@ export const ReceiptReducer = (state = stateDefault, action) => {
       return { ...state, selectedBook: action.payload.bookSelected };
     }
     case "SUBMIT_RECEIPT": {
-      return { ...state, receipForm: action.payload.receipt };
+      return { ...state, receiptForm: action.payload.receipt };
     }
     case "CREATE_RECEIPT_REQUEST": {
       return {
@@ -41,6 +70,39 @@ export const ReceiptReducer = (state = stateDefault, action) => {
         ...state,
         errorCreateReceipt: action.payload.error,
         loadingCreateReceipt: false,
+      };
+    }
+
+    case "UPDATE_RECEIPT_REQUEST": {
+      return { ...state, loadingUpdateReceipt: true, errorUpdateReceipt: null };
+    }
+    case "UPDATE_RECEIPT_SUCCESS": {
+      return {
+        ...state,
+        successUpdateReceipt: action.payload.data,
+        loadingUpdateReceipt: false,
+      };
+    }
+    case "UPDATE_RECEIPT_FAIL": {
+      return {
+        ...state,
+        errorUpdateReceipt: action.payload.error,
+        loadingUpdateReceipt: false,
+      };
+    }
+
+    case "RESET_RECEIPT": {
+      return {
+        ...state,
+        errorReceiptList: null,
+
+        loadingCreateReceipt: "",
+        successCreateReceipt: "",
+        errorCreateReceipt: null,
+
+        loadingUpdateReceipt: false,
+        successUpdateReceipt: "",
+        errorUpdateReceipt: null,
       };
     }
     default:

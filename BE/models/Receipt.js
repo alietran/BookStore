@@ -1,17 +1,34 @@
 const mongoose = require('mongoose');
 
-const receiptSchema = new mongoose.Schema({
-  totalPriceReceipt: {
-    type: Number,
-    required: true,
-  },
-  adminId: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
-  supplierId: { type: mongoose.Schema.ObjectId, ref: 'Supplier' },
+const receiptSchema = new mongoose.Schema(
+  {
+    totalPriceReceipt: {
+      type: Number,
+      required: true,
+    },
+    adminId: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
+    supplierId: { type: mongoose.Schema.ObjectId, ref: 'Supplier' },
 
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+
+    inventoryStatus: {
+      type: Boolean,
+      default: false,
+    },
   },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+receiptSchema.virtual('receiptdetail', {
+  ref: 'ReceiptDetail',
+  foreignField: 'receiptId',
+  localField: '_id',
 });
 
 receiptSchema.pre(/^find/, function (next) {

@@ -31,13 +31,13 @@ import BookManager from "./pages/Admin/Book/BookManager";
 
 import Checkout from "./pages/HomePage/Checkout";
 
-
 import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
+
 import Cart from "./pages/HomePage/Order/Cart";
 
-
+import DetailReceipt from "./pages/Admin/ReceiptManager/DetailReceipt/DetailReceipt";
 
 function App() {
   const themeOptions = useMemo(
@@ -112,6 +112,8 @@ function App() {
             path={[
               "/admin/users",
               "/admin/receipts/list",
+              "/admin/receipts/detail/:receiptId",
+
               "/admin/receipts/create",
               "/admin/users/createUser",
               "/admin/categories",
@@ -130,10 +132,16 @@ function App() {
                 path="/admin/receipts/list"
                 component={ReceiptManager}
               />
+
               <AdminRoute
                 exact
                 path="/admin/receipts/create"
                 component={CreateReceipt}
+              />
+              <AdminRoute
+                exact
+                path="/admin/receipts/detail/:receiptId"
+                component={DetailReceipt}
               />
               <AdminRoute
                 exact

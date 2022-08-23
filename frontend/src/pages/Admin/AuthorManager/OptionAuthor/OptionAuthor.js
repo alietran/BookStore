@@ -21,7 +21,7 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
-import Option from "../../../../components/Option/Option";
+import Option from "../../../../components/OptionEdit&Delete/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateAuthor/style";
 import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
@@ -118,10 +118,6 @@ export default function OptionAuthor({ id, author }) {
   return (
     <Box>
       <Option
-        // () => {
-        //         // onClick = { handleClickOpen };
-        //         onClickDelete(id);
-        //       }
         onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
       ></Option>

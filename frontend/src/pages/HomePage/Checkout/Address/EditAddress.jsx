@@ -31,7 +31,7 @@ export default function EditAddress({
   const classes = useStyles();
   console.log("successDetailAddress24", successDetailAddress);
   console.log("listCity", listCity);
-
+  const [indexProvince, setIndexProvince] = useState("");
   const [data, setData] = useState({
     setCity: "",
     cityName: "",
@@ -51,12 +51,131 @@ export default function EditAddress({
     setWard: "",
     openCtr: { city: false, district: false, ward: false },
   });
+
+  useEffect(() => {
+    if (listCity && successDetailAddress) {
+      let indexCity = listCity?.findIndex(
+        (item) => item.name === successDetailAddress?.data.city
+      );
+
+      setData((data) => ({
+        ...data,
+        setCity: listCity[indexCity].idProvince,
+      }));
+
+      const getListProvinces = () => {
+        fetch(
+          `https://sheltered-anchorage-60344.herokuapp.com/district?idProvince=${listCity[indexCity].idProvince}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => {
+            if (response.status === 200) return response.json();
+            throw new Error("get list provinces  has been failed!");
+          })
+          .then((result) => {
+            let index = result?.filter(
+              (item) => item.name === successDetailAddress?.data.district
+            );
+            setIndexProvince(index[0].idDistrict);
+            setData((data) => ({
+              ...data,
+              setDistrict: index[0].idDistrict,
+            }));
+
+            const districtRender = result.reduce((colect, item) => {
+              return [...colect, item];
+            }, []);
+            // const districtRender = districtData.map((item) => item.idDistrict);
+            // console.log("districtRender", districtRender);
+
+            // const districtRender = result.map((item) => item.name);
+            setData((data) => ({
+              ...data,
+              districtRender,
+            }));
+          })
+          .catch(function (error) {
+            if (error.response) {
+              setData((data) => ({
+                ...data,
+                errorCallApi: error.response.data,
+              }));
+            } else if (error.request) {
+              setData((data) => ({
+                ...data,
+                errorCallApi: error.message,
+              }));
+            }
+          });
+      };
+      getListProvinces();
+
+      console.log("indexProvince", indexProvince);
+
+      const getListWard = () => {
+        fetch(
+          `https://sheltered-anchorage-60344.herokuapp.com/commune?idDistrict=${indexProvince}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => {
+            if (response.status === 200) return response.json();
+            throw new Error("get list provinces  has been failed!");
+          })
+          .then((result) => {
+            console.log("result123", result);
+            if (result.length > 0) {
+              let index = result?.filter(
+                (item) => item.name === successDetailAddress?.data.ward
+              );
+
+              console.log("index", index);
+              console.log(
+                "successDetailAddress?.data.ward",
+                successDetailAddress?.data.ward
+              );
+
+              setData((data) => ({
+                ...data,
+                setWard: index[0]?.idCommune,
+              }));
+
+              const wardRender = result.reduce((colect, item) => {
+                return [...colect, item];
+              }, []);
+              // const districtRender = districtData.map((item) => item.idDistrict);
+              // console.log("districtRender", districtRender);
+
+              // const districtRender = result.map((item) => item.name);
+              setData((data) => ({
+                ...data,
+                wardRender,
+              }));
+              console.log("wardRender", wardRender);
+            }
+          })
+          .catch(function (error) {
+            if (error.response) {
+              setData((data) => ({
+                ...data,
+                errorCallApi: error.response.data,
+              }));
+            } else if (error.request) {
+              setData((data) => ({ ...data, errorCallApi: error.message }));
+            }
+          });
+      };
+      getListWard();
+    }
+  }, [listCity, successDetailAddress]);
+
+  console.log("dataZ", data);
+
   const [fullName, setFullName] = useState(successDetailAddress?.data.fullName);
-  console.log(
-    "successDetailAddress?.data.fullName",
-    successDetailAddress?.data.fullName
-  );
-  console.log("fullName", fullName);
+
   const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState(
     successDetailAddress?.data.phoneNumber
@@ -396,7 +515,9 @@ export default function EditAddress({
                 <Stack spacing={3} direction="row">
                   {" "}
                   <FormControl fullWidth sx={{ marginBottom: "10px" }}>
-                    <InputLabel id="city">Tỉnh / Thành phố</InputLabel>
+                    <InputLabel shrink={true} id="city">
+                      Tỉnh / Thành phố
+                    </InputLabel>
                     <Select
                       labelId="city"
                       id="demo-simple-select"
@@ -436,12 +557,7 @@ export default function EditAddress({
                       displayEmpty
                       name="district"
                       label="Quận / Huyện"
-                      sx={{
-                        "&.Mui-disabled": {
-                          backgroundColor: "whitesmoke",
-                        },
-                      }}
-                      disabled={data.disabledDistrict}
+
 
                       // onChange={handleChangeDistrict}
                     >
@@ -475,12 +591,6 @@ export default function EditAddress({
                       value={data.setWard}
                       name="ward"
                       label="Phường / Xã"
-                      sx={{
-                        "&.Mui-disabled": {
-                          backgroundColor: "whitesmoke",
-                        },
-                      }}
-                      disabled={data.disabledWard}
                     >
                       {data.wardRender.map((item, index) => (
                         <MenuItem

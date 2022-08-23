@@ -15,7 +15,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import Option from "../../../../components/Option/Option";
+
 import {
   deleteCate,
   deletelCate,
@@ -26,6 +26,7 @@ import {
 import { LoadingButton } from "@mui/lab";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateCategory/style";
+import Option from "../../../../components/OptionEdit&Delete/Option";
 
 export default function OptionCategory({ id, theCategory }) {
   console.log("theCategory", theCategory);

@@ -12,9 +12,10 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
-import Option from "../../../../components/Option/Option";
+
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../SubCreateCategory/style";
+import Option from "../../../../components/OptionEdit&Delete/Option";
 
 export default function OptionSubCategory({ id, theSubCategory }) {
   const {

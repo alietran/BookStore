@@ -12,6 +12,7 @@ import { PromotionReducer } from "./reducer/promotionReducer";
 import { BookReducer } from "./reducer/bookReducer";
 import { ReceiptReducer } from "./reducer/receiptReducer";
 import { AddressReducer } from "./reducer/addressReducer";
+import { ReceiptDetailReducer } from "./reducer/receiptDetailReducer";
 
 
 
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   BookReducer,
   ReceiptReducer,
   AddressReducer,
+  ReceiptDetailReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

@@ -21,11 +21,11 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
-import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateUser/style";
 import { deletelUser, updateAdmin } from "../../../../redux/action/adminAction";
 import { updateUser } from "../../../../redux/action/userAction";
+import Option from "../../../../components/OptionEdit&Delete/Option";
 
 export default function OptionUser({ id, User }) {
   console.log("User", User);

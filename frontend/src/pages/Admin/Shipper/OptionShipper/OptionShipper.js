@@ -21,11 +21,11 @@ import { Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
-import Option from "../../../../components/Option/Option";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateShipper/style";
 import { deletelUser, updateUser } from "../../../../redux/action/adminAction";
 import { deleteShipper, getDetailShipper, updateShipper } from "../../../../redux/action/shipperAction";
+import Option from "../../../../components/OptionEdit&Delete/Option";
 
 export default function OptionUser({ id, shipper }) {
   console.log("shipper", shipper);
@@ -40,9 +40,11 @@ export default function OptionUser({ id, shipper }) {
   const handleChangeStatus = (event, checked) => {
     setFieldValue("active", checked ? true : false);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleCancel = () => {
     setOpenConfirm(false);
   };
@@ -54,7 +56,6 @@ export default function OptionUser({ id, shipper }) {
 
   const onClickDelete = (id) => {
     dispatch(deleteShipper(shipper._id));
-    console.log("idDelete", shipper._id);
   };
 
   const handleChangeRole = (event) => {
@@ -63,8 +64,6 @@ export default function OptionUser({ id, shipper }) {
 
   const onClickEdit = () => {
     setOpen(true);
-    console.log("idEdit", id);
-    console.log("shipper", shipper);
     dispatch(getDetailShipper(id));
   };
 
@@ -76,7 +75,6 @@ export default function OptionUser({ id, shipper }) {
     },
 
     onSubmit: (data, { resetForm }) => {
-      console.log("data", data);
         if (loadingUpdateShipper) {
           return;
         }
@@ -87,17 +85,11 @@ export default function OptionUser({ id, shipper }) {
   });
 
   const {
-    errors,
-    touched,
     handleSubmit,
     getFieldProps,
     values,
     setFieldValue,
   } = formik;
-  // useEffect(() => {
-  //   if (values.name && values.slug) setIsReadyEditCate(true);
-  //   else setIsReadyEditCate(false);
-  // }, [values.name, values.slug]);
 
   const handleUpdate = () => {
     setOpen(false);
@@ -109,10 +101,6 @@ export default function OptionUser({ id, shipper }) {
   return (
     <Box>
       <Option
-        // () => {
-        //         // onClick = { handleClickOpen };
-        //         onClickDelete(id);
-        //       }
         onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
       ></Option>
@@ -154,32 +142,6 @@ export default function OptionUser({ id, shipper }) {
 
             <DialogContent dividers>
               <Stack spacing={3}>
-                {" "}
-                {/* <FormControl fullWidth>
-                  <InputLabel id="role">Quyền</InputLabel>
-                  <Select
-                    labelId="role"
-                    id="role"
-                    value={role}
-                    label="Quyền"
-                    onChange={handleChangeRole}
-                    {...getFieldProps("idRole")}
-                  >
-                    {shipperRoleList?.data.map((role, index) => {
-                      return (
-                        <MenuItem
-                          value={`${role._id}`}
-                          key={index}
-                          className="capitalize"
-                        >
-                          {role.roleName}
-                        </MenuItem>
-                      );
-                    })}
-
-                  
-                  </Select>
-                </FormControl> */}
                 <FormGroup>
                   <FormControlLabel
                     label="Trạng Thái"
@@ -218,7 +180,6 @@ export default function OptionUser({ id, shipper }) {
                 variant="contained"
                 loading={loadingUpdateShipper}
                 onClick={handleUpdate}
-                // disabled={!isReadyEditCate}
                 className={classes.buttonCreate}
               >
                 Chỉnh sửa

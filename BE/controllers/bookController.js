@@ -3,6 +3,7 @@ const Book = require('../models/Book');
 const catchAsync = require('../utils/catchAsync');
 const mkdirp = require('mkdirp');
 const multer = require('multer');
+const AppError = require('../utils/appError');
 
 const made = mkdirp.sync('./public/img/books');
 
@@ -39,9 +40,6 @@ exports.updateBook = factory.updateOne(Book);
 
 exports.createBook = catchAsync(async (req, res, next) => {
   const { gallery, image } = req.files;
-  console.log(' req.files', req.files);
-  console.log('gallery', gallery);
-  console.log('image', image);
   let newArray = [];
   gallery?.map((files) => {
     const path = files.path.replace(/\\/g, '/').substring('public'.length);

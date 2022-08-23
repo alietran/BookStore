@@ -29,12 +29,12 @@ import BookInfo from "./BookInfo";
 import { createReceipt } from "../../../../redux/action/receiptAction";
 
 const steps = [
-  "Select campaign settings",
-  "Create an ad group",
+  "Chọn nhà cung cấp và chọn sách",
+  "Tạo phiếu nhập",
   // "Create an ad",
 ];
 export default function CreateReceipt() {
-  const { supplierSelected, selectedBook, receipForm } = useSelector(
+  const { supplierSelected, selectedBook, receiptForm } = useSelector(
     (state) => state.ReceiptReducer
   );
   const [activeStep, setActiveStep] = React.useState(0);
@@ -66,7 +66,8 @@ export default function CreateReceipt() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   const handleSubmitReceipt = () => {
-    dispatch(createReceipt(receipForm));
+    dispatch(createReceipt(receiptForm));
+    history.push("/admin/receipts/list");
   };
   useEffect(() => {
     dispatch(getSupplierList());
@@ -122,22 +123,30 @@ export default function CreateReceipt() {
             {activeStep === 1 && <BookInfo />}
             {activeStep === 2 && <div></div>}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
+              {activeStep !== 0 && (
+                <Button
+                  color="inherit"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: 1 }}
+                >
+                  Back
+                </Button>
+              )}
 
-              <Button onClick={handleSubmitReceipt}>
-                {activeStep === steps.length - 1 && "Finish"}
-              </Button>
-              <Button onClick={handleNext}>
-                {activeStep !== steps.length - 1 && "Next"}
-              </Button>
+              <Box sx={{ flex: "1 1 auto" }} />
+              {activeStep !== steps.length - 1 ? (
+                <Button
+                  onClick={handleNext}
+                  disabled={selectedBook ? false : true}
+                >
+                  {activeStep !== steps.length - 1 && "Next"}
+                </Button>
+              ) : (
+                <Button onClick={handleSubmitReceipt}>
+                  {activeStep === steps.length - 1 && "Finish"}
+                </Button>
+              )}
             </Box>
           </React.Fragment>
         )}

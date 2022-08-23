@@ -18,8 +18,11 @@ const bookSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
-      required: [true, 'Please tell us quantity'],
-      trim: true,
+      default: 0,
+    },
+    quantitySold: {
+      type: Number,
+      default: 0,
     },
     bookCover: {
       type: String,
@@ -58,6 +61,10 @@ const bookSchema = new mongoose.Schema(
     },
     gallery: {
       type: Array,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
     },
   },
   {

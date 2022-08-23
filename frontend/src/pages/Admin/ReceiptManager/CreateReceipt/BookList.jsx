@@ -38,12 +38,14 @@ export default function BookList() {
   const [orderBy, setOrderBy] = useState("name");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { supplierList } = useSelector((state) => state.SupplierReducer);
-
+  const [chooseSupplier, setChooseSupplier] = useState(false);
+  const [isReadyChooseSupplier, setIsReadyChooseSupplier] = useState(false);
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState("");
   console.log("bookList", bookList);
   const [supplier, setSupplier] = React.useState("");
   console.log(supplier);
+
   const handleChange = (event) => {
     setSupplier(event.target.value);
   };
@@ -96,11 +98,10 @@ export default function BookList() {
     setSelected(newSelected);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
-
   const handleSubmit = () => {
+    setChooseSupplier(true);
+    setIsReadyChooseSupplier(false);
+
     dispatch({
       type: "SELECT_SUPPLIER",
       payload: {
@@ -108,6 +109,11 @@ export default function BookList() {
       },
     });
   };
+
+  useEffect(() => {
+    if (supplier) setIsReadyChooseSupplier(true);
+    else setIsReadyChooseSupplier(false);
+  }, [supplier]);
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -179,18 +185,16 @@ export default function BookList() {
         </Grid>
         <Grid item xs={9} className="flex items-center">
           {" "}
-          <Button variant="contained" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!isReadyChooseSupplier}
+          >
             Gửi
           </Button>
         </Grid>
       </Grid>
       <Card>
-        {/* <UserListToolbar
-          numSelected={selected.length}
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-        /> */}
-
         <TableContainer sx={{ minWidth: 800 }}>
           <Table>
             <UserListHead
@@ -239,21 +243,7 @@ export default function BookList() {
                     </TableRow>
                   );
                 })}
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
             </TableBody>
-            {/* {isUserNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                   
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )} */}
           </Table>
         </TableContainer>
 
