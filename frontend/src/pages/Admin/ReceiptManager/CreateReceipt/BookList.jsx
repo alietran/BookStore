@@ -41,6 +41,7 @@ export default function BookList() {
   const [chooseSupplier, setChooseSupplier] = useState(false);
   const [isReadyChooseSupplier, setIsReadyChooseSupplier] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [selectedBookList, setSelectedBookList] = useState([]);
   const [filterName, setFilterName] = useState("");
   console.log("bookList", bookList);
   const [supplier, setSupplier] = React.useState("");
@@ -52,6 +53,9 @@ export default function BookList() {
   useEffect(() => {
     dispatch(getBookList());
   }, []);
+
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -75,27 +79,62 @@ export default function BookList() {
     setOrderBy(property);
   };
   const handleClick = (event, _id, row) => {
-    dispatch({
-      type: "SELECT_BOOK",
-      payload: {
-        bookSelected: [row],
-      },
-    });
+
+  const allowed = ["name", "image", "_id"];
+  const filteredRow = Object.keys(row)
+    .filter((key) => allowed.includes(key))
+    .reduce((obj, key) => {
+      return {
+        ...obj,
+        [key]: row[key],
+        price:"",
+        amount:"",
+        totalPriceReceiptDetail: "",
+        supplierId:"",
+        bookId:""
+      };
+    }, {});
+    
+    console.log("row", row);
+    console.log("event.target.value", event.target.value);
+  
     const selectedIndex = selected.indexOf(_id);
+  
+    console.log("selected", selected);
+    console.log("selectedIndex", selectedIndex);
     let newSelected = [];
+    let newSelectedRow = [];
     if (selectedIndex === -1) {
+      // newSelected = newSelected.concat(selected, _id);
       newSelected = newSelected.concat(selected, _id);
+      newSelectedRow = newSelectedRow.concat(selectedBookList, filteredRow);
+     
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      newSelectedRow = newSelectedRow.concat(selectedBookList.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelectedRow = newSelectedRow.concat(selectedBookList.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
+      newSelectedRow = newSelectedRow.concat(
+        selectedBookList.slice(0, selectedIndex),
+        selectedBookList.slice(selectedIndex + 1)
+      );
     }
+    console.log("newSelected", newSelected);
+    setSelectedBookList(newSelectedRow);
     setSelected(newSelected);
+
+      dispatch({
+        type: "SELECT_BOOK",
+        payload: {
+          bookSelected: newSelectedRow,
+        },
+      });
   };
 
   const handleSubmit = () => {
@@ -153,6 +192,8 @@ export default function BookList() {
     return stabilizedThis?.map((el) => el[0]);
   }
 
+
+
   return (
     <Box>
       <Grid
@@ -194,69 +235,73 @@ export default function BookList() {
           </Button>
         </Grid>
       </Grid>
-      <Card>
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={bookList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, image, authorId } = row;
-                  const isItemSelected = selected.indexOf(_id) !== -1;
+      {chooseSupplier ? (
+        <Card>
+          <TableContainer sx={{ minWidth: 800 }}>
+            <Table>
+              <UserListHead
+                order={order}
+                orderBy={orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={bookList?.result}
+                numSelected={selected.length}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={handleSelectAllClick}
+              />
+              <TableBody>
+                {filteredUsers
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    const { _id, name, image, authorId } = row;
+                    const isItemSelected = selected.indexOf(_id) !== -1;
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell align="left"></TableCell>
-                      <TableCell>
-                        <img
-                          src={image}
-                          alt=""
-                          style={{ width: "80px", height: "100px" }}
-                        />
-                      </TableCell>
-                      <TableCell align="left">{name}</TableCell>
+                    return (
+                      <TableRow
+                        hover
+                        key={_id}
+                        tabIndex={-1}
+                        _id="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        <TableCell align="left"></TableCell>
+                        <TableCell>
+                          <img
+                            src={image}
+                            alt=""
+                            style={{ width: "80px", height: "100px" }}
+                          />
+                        </TableCell>
+                        <TableCell align="left">{name}</TableCell>
 
-                      <TableCell align="left">{authorId.name}</TableCell>
+                        <TableCell align="left">{authorId.name}</TableCell>
 
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, _id, row)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isItemSelected}
+                            onChange={(event) => handleClick(event, _id, row)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={bookList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={bookList?.result}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+      ) : (
+        ""
+      )}
     </Box>
   );
 }

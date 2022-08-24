@@ -49,8 +49,8 @@ export default function NewProduct() {
 
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToShow: 5,
+    slidesToScroll: 5,
     autoplay: true,
     responsive: [
       {

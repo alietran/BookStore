@@ -35,15 +35,18 @@ export default function BookInfo() {
   const [orderBy, setOrderBy] = useState("name");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [quantity, setQuantity] = useState();
-  const [price, setPrice] = useState();
+  const [priceFlag, setPriceFlag] = useState(false);
+  const [amountFlag, setAmountFlag] = useState(false);
 
   const { supplierSelected, selectedBook } = useSelector(
     (state) => state.ReceiptReducer
   );
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState("");
-
+  console.log("selected", selected);
   const [supplier, setSupplier] = React.useState("");
+  const [newBookList, setNewBookList] = React.useState(selectedBook);
+
   console.log("supplierSelected", supplierSelected);
   const handleChange = (event) => {
     setSupplier(event.target.value);
@@ -64,28 +67,40 @@ export default function BookInfo() {
   };
 
   useEffect(() => {
-    // const bookId = selectedBook.map((item,index)=>{
-    //   return item.id
-    // })
-    // const handelSubmitReciept = () => {
-    console.log("selectedBook124", selectedBook.id);
-    const recieptForm = {
-      totalPriceReceipt: quantity * price,
-      supplierId: supplierSelected,
-      amount: quantity,
-      price,
-      totalPriceReceiptDetail: quantity * price,
-      bookId: selectedBook[0].id,
-    };
-    console.log("recieptForm", recieptForm);
-    // }
+    let receiptForm = newBookList.map((item, index) => {
+      const allowed = [
+        "amount",
+        "price",
+        "bookId",
+        "supplierId",
+        "totalPriceReceiptDetail",
+      ];
+      const filteredRow = Object.keys(item)
+        .filter((key) => allowed.includes(key))
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: item[key],
+          };
+        }, {});
+      console.log("filteredRow", filteredRow);
+
+      return {
+        ...filteredRow,
+        supplierId: supplierSelected,
+        bookId: item._id,
+        totalPriceReceiptDetail: filteredRow.price * filteredRow.amount,
+      };
+    });
+    console.log("receiptForm", receiptForm);
+
     dispatch({
       type: "SUBMIT_RECEIPT",
       payload: {
-        receipt: recieptForm,
+        receipt: receiptForm,
       },
     });
-  }, [quantity, price]);
+  }, [priceFlag, amountFlag]);
 
   function applySortFilter(array, comparator, query) {
     const stabilizedThis = array?.map((el, index) => [el, index]);
@@ -119,7 +134,7 @@ export default function BookInfo() {
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
   const filteredUsers = applySortFilter(
-    selectedBook,
+    newBookList,
     getComparator(order, orderBy),
     filterName
   );
@@ -127,15 +142,37 @@ export default function BookInfo() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const hanldeQuantity = (e) => {
-    console.log("quantity", e.target.value);
-    // console.log("quantity",quantity)
-    setQuantity(Number(e.target.value));
+  const hanldeQuantity = (e, index) => {
+    const { value, name } = e.target;
+    console.log("name", name);
+    console.log("value", value);
+    const newQuantityReceipt = [...newBookList];
+
+    newQuantityReceipt[index] = {
+      ...newQuantityReceipt[index],
+      [name]: Number(value),
+    };
+    setNewBookList(newQuantityReceipt);
+    setAmountFlag(!amountFlag);
   };
+
   console.log("quantity", quantity);
-  const hanldePrice = (e) => {
-    console.log("price", e.target.value);
-    setPrice(Number(e.target.value));
+  console.log("newBookList", newBookList);
+
+  const hanldePrice = (e, index) => {
+    const { value, name } = e.target;
+    console.log("name", name);
+
+    const newPriceReceipt = [...newBookList];
+
+    newPriceReceipt[index] = {
+      ...newPriceReceipt[index],
+      [name]: Number(value),
+    };
+
+    setNewBookList(newPriceReceipt);
+    setPriceFlag(!priceFlag);
+    //  console.log("newPriceReceipt[index].value", newPriceReceipt[index].value);
   };
 
   const handleRequestSort = (event, property) => {
@@ -158,16 +195,17 @@ export default function BookInfo() {
               order={order}
               orderBy={orderBy}
               headLabel={TABLE_HEAD}
-              rowCount={selectedBook?.result}
+              rowCount={newBookList?.result}
               numSelected={selected.length}
               onRequestSort={handleRequestSort}
+
               //   onSelectAllClick={handleSelectAllClick}
             />
             <TableBody>
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, image, authorId } = row;
+                .map((row, index) => {
+                  const { _id, name, image, price, quantity } = row;
                   const isItemSelected = selected.indexOf(name) !== -1;
 
                   return (
@@ -192,8 +230,9 @@ export default function BookInfo() {
                         <TextField
                           id="outlined-required"
                           label=" "
-                          onChange={hanldePrice}
+                          onChange={(event) => hanldePrice(event, index)}
                           value={price}
+                          name="price"
                         />
                       </TableCell>
 
@@ -201,41 +240,38 @@ export default function BookInfo() {
                         <TextField
                           id="outlined-required"
                           label=" "
-                          onChange={hanldeQuantity}
+                          onChange={(event) => hanldeQuantity(event, index)}
                           value={quantity}
+                          name="amount"
                         />
                       </TableCell>
                     </TableRow>
                   );
                 })}
-              {/* {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
+              <TableRow>
+                <TableCell rowSpan={1} />
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell>Tổng cộng </TableCell>
+                <TableCell>
+                  {" "}
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .reduce((total, row) => {
+                      return (total += row.price * row.amount);
+                    }, 0)
+                    .toLocaleString("it-IT", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
+                </TableCell>
+              </TableRow>
             </TableBody>
-            {/* {isUserNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                   
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )} */}
           </Table>
         </TableContainer>
-
-        <Box className="p-3 float-right flex">
-          <p className="font-bold">Tổng tiền: </p>
-          <span>
-            &nbsp;
-            {isNaN(quantity * price)
-              ? "0"
-              : (quantity * price).toLocaleString()}{" "}
-            ₫
-          </span>
-        </Box>
       </Card>
     </div>
   );

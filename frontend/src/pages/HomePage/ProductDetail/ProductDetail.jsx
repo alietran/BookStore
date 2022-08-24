@@ -145,7 +145,7 @@ export default function ProductDetail(props) {
                     <div className="box__content-left--img">
                       <div className={classes.img__box}>
                         <div className={classes.img__content}>
-                          <img src="../../../../img/2.webp" />
+                          <img src={bookDetail?.image} />
                         </div>
                       </div>
                       <div className="img__library">
@@ -153,6 +153,9 @@ export default function ProductDetail(props) {
                           <div
                             className={classes["img__library-content--item"]}
                           >
+                            {/* {bookDetail?.gallery.map((image,index)=>(
+
+                            ))} */}
                             <img src="../../../../img/phone.webp" />
                           </div>
                         </div>
@@ -220,7 +223,6 @@ export default function ProductDetail(props) {
                         Mua Ngay
                       </Button>
                       <button
-                      
                         className={`${classes["content__button--add"]} ${classes.buttonAction}   `}
                       >
                         Thêm vào giỏ
@@ -294,23 +296,7 @@ export default function ProductDetail(props) {
                   </Box>
                   <TabPanel value="1">
                     <div className="desc__left">
-                      <div>
-                        Giới thiệu Chuột máy tính Asus TUF Gaming M3 Asus TUF
-                        Gaming M3 là một con chuột chơi game nhỏ gọn mang đến sự
-                        thoải mái, hiệu suất và độ tin cậy mà các game thủ yêu
-                        cầu. Chuột tiện dụng và nhẹ cho các trò chơi kéo dài,
-                        với cảm biến quang có độ chính xác cao mang lại cho bạn
-                        lợi thế trong trận chiến. Được hỗ trợ bởi các công tắc
-                        20 triệu lần nhấp và lớp phủ chuyên dụng cho độ bền đặc
-                        biệt. Nó cũng có tính năng chiếu sáng Aura Sync RGB tùy
-                        biến để bạn có thể tùy chỉnh trong phong cách cá nhân
-                        hóa. THIẾT KẾ ERGONOMIC & LIGHTWEIGHT TUF Gaming M3 có
-                        một thiết kế nhỏ gọn và nhẹ được tối ưu hóa để chơi trò
-                        chơi FPS nhanh bằng cách sử dụng vuốt hoặc nắm ngón tay.
-                        Thiết kế công thái học và nhẹ, thoải mái cho nhiều giờ
-                        chơi, với hình dạng được tối ưu hóa giúp tăng cường cả
-                        xử lý và kiểm soát.
-                      </div>
+                      <div>{bookDetail?.desc}</div>
                     </div>
                   </TabPanel>
                   <TabPanel value="2">

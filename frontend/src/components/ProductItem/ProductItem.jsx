@@ -6,6 +6,10 @@ export default function ProductItem({ product }) {
     <div className="group relative shadow hover:shadow-2xl duration-500 px-3 py-4 mt-6 mx-4 mb-5">
       <div className="  w-full relative">
         <img
+        style={{
+          height:"200px",
+          width:"200px"
+        }}
           src={product?.image}
           alt="Front of men&#039;s Basic Tee in black."
           className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
