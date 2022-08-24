@@ -36,7 +36,40 @@ exports.uploadBookPhoto = upload.fields([
 
 // exports.uploadBookPhoto = upload.single('image');
 exports.getDetailBook = factory.getOne(Book);
-exports.updateBook = factory.updateOne(Book);
+exports.updateBook = catchAsync(async (req, res, next) => {
+  const { gallery, image } = req.files;
+  let newArray = [];
+  gallery?.map((files) => {
+    const path = files.path.replace(/\\/g, '/').substring('public'.length);
+    const urlGallery = `http://localhost:8080${path}`;
+    newArray.push(urlGallery);
+  });
+
+  if (req.files.gallery) req.body.gallery = newArray;
+  if (image !== undefined) {
+    const path = image[0]?.path.replace(/\\/g, '/').substring('public'.length);
+    const urlImage = `http://localhost:8080${path}`;
+
+    if (req.files.image) req.body.image = urlImage;
+  }
+
+  const _id = req.params.id;
+
+  const doc = await Book.findByIdAndUpdate(_id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!doc) {
+    return next(new AppError('No document found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    result: doc.length,
+    data: doc,
+  });
+});
 
 exports.createBook = catchAsync(async (req, res, next) => {
   const { gallery, image } = req.files;

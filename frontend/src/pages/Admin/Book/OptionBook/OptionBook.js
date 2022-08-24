@@ -19,31 +19,31 @@ import Option from "../../../../components/OptionEdit&Delete/Option";
 import { LoadingButton } from "@mui/lab";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateBook/style";
-import { deleteBook, getDetailBook, updateBook } from "../../../../redux/action/bookAction";
+import {
+  deleteBook,
+  getDetailBook,
+  updateBook,
+} from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
 
 export default function OptionBook({ id, book }) {
-  const {
-   
-    loadingUpdateBook,
-
-  } = useSelector((state) => state.BookReducer);
+  const { loadingUpdateBook } = useSelector((state) => state.BookReducer);
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-     const [cate, setCate] = useState("");
+  const [cate, setCate] = useState("");
   const [isReadyEditCate, setIsReadyEditCate] = useState(false);
   const dispatch = useDispatch();
   const handleClose = () => {
     setOpen(false);
-  };  
+  };
   const editorRef = useRef(null);
-   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const handleChangeCategory = (event) => {
     setCate(event.target.value);
   };
-
-
-
+  const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
+  const [srcImage, setSrcImage] = useState(book?.image);
+  const [images, setImages] = useState(book?.gallery);
 
   const onClickEdit = () => {
     setOpen(true);
@@ -54,10 +54,74 @@ export default function OptionBook({ id, book }) {
     // parentCateId: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const handleEditorChange = (content, editor) => {
-    console.log("content", content);
-    console.log("editor", editor);
     setFieldValue("desc", content);
   };
+
+  const handleChangeFileImage = (e) => {
+    let file = e.target.files[0];
+
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function (e) {
+      // sau khi thực hiên xong lênh trên thì set giá trị có được
+      setSrcImage(e.target.result);
+    };
+    // Đem dữ liệu file lưu vào formik
+    formik.setFieldValue("image", file);
+  };
+
+  const [imageFiles, setImageFiles] = useState([]);
+
+  const handleChangeFileGallery = (e) => {
+    let files = e.target.files;
+
+    const validImageFiles = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (file.type.match(imageTypeRegex)) {
+        validImageFiles.push(file);
+      }
+    }
+
+    if (validImageFiles.length) {
+      setImageFiles(validImageFiles);
+      formik.setFieldValue("gallery", e.target.files);
+
+      // values.gallery = e.target.files;
+      return;
+    }
+  };
+
+  useEffect(() => {
+    const images = [],
+      fileReaders = [];
+    let isCancel = false;
+    if (imageFiles.length) {
+      imageFiles.forEach((file) => {
+        const fileReader = new FileReader();
+        fileReaders.push(fileReader);
+        fileReader.onload = (e) => {
+          const { result } = e.target;
+          if (result) {
+            images.push(result);
+          }
+          if (images.length === imageFiles.length && !isCancel) {
+            setImages(images);
+          }
+        };
+        fileReader.readAsDataURL(file);
+      });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          fileReader.abort();
+        }
+      });
+    };
+  }, [imageFiles]);
+
   // editorRef.current.getContent("desc");
   const formik = useFormik({
     enableReinitialize: true,
@@ -74,7 +138,6 @@ export default function OptionBook({ id, book }) {
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
-      console.log("data", data);
       if (loadingUpdateBook) {
         return;
       }
@@ -97,13 +160,12 @@ export default function OptionBook({ id, book }) {
   //   else setIsReadyEditCate(false);
   // }, [values.name, values.parentCateId]);
 
-  
   const handleUpdate = () => {
     if (isReadyEditCate) setOpen(false);
   };
-      const handleClickConfirm = () => {
-        setOpenConfirm(true);
-      };
+  const handleClickConfirm = () => {
+    setOpenConfirm(true);
+  };
   const handleCancel = () => {
     setOpenConfirm(false);
   };
@@ -113,9 +175,9 @@ export default function OptionBook({ id, book }) {
     onClickDelete(id);
   };
 
-    const onClickDelete = (id) => {
-      dispatch(deleteBook(book._id));
-    };
+  const onClickDelete = (id) => {
+    dispatch(deleteBook(book._id));
+  };
   return (
     <Box>
       <Option
@@ -191,7 +253,6 @@ export default function OptionBook({ id, book }) {
                   tinymceScriptSrc={
                     "https://cdn.tiny.cloud/1/i2cpflyq3xn1h4uemftejor2d8p292ct4ckywqat4tvbp7iq/tinymce/6/tinymce.min.js"
                   }
-              
                   onEditorChange={handleEditorChange}
                   onInit={(evt, editor) => (editorRef.current = editor)}
                   initialValue={book.desc}
@@ -303,6 +364,57 @@ export default function OptionBook({ id, book }) {
                   error={Boolean(touched.size && errors.size)}
                   helperText={touched.size && errors.size}
                 />
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ width: "15%", textTransform: "none !important" }}
+                >
+                  Thư viện ảnh
+                  <input
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={handleChangeFileGallery}
+                  />
+                </Button>
+                <div className="flex">
+                  {images &&
+                    images.map((image) => (
+                      <img
+                        accept="image/*"
+                        multiple
+                        src={image}
+                        alt="avatar"
+                        className="w-24 h-auto rounded-2xl mr-3"
+                      />
+                    ))}
+                </div>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{ width: "15%", textTransform: "none !important" }}
+                >
+                  Hình ảnh
+                  <input
+                    hidden
+                    accept="image/*"
+                    id="fileUpload"
+                    type="file"
+                    onChange={handleChangeFileImage}
+                  />
+                </Button>
+                <div className="flex">
+                  {srcImage && (
+                    <img
+                      accept="image/*"
+                      multiple
+                      src={srcImage}
+                      alt="avatar"
+                      className="w-24 h-auto rounded-2xl mr-3"
+                    />
+                  )}
+                </div>
               </Stack>
             </DialogContent>
             <DialogActions sx={{ margin: "0 16px !important" }}>

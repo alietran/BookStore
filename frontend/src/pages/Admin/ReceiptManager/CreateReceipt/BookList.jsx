@@ -54,9 +54,6 @@ export default function BookList() {
     dispatch(getBookList());
   }, []);
 
-
-
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -79,27 +76,26 @@ export default function BookList() {
     setOrderBy(property);
   };
   const handleClick = (event, _id, row) => {
+    const allowed = ["name", "image", "_id"];
+    const filteredRow = Object.keys(row)
+      .filter((key) => allowed.includes(key))
+      .reduce((obj, key) => {
+        return {
+          ...obj,
+          [key]: row[key],
+          price: "",
+          amount: "",
+          totalPriceReceiptDetail: "",
+          supplierId: "",
+          bookId: "",
+        };
+      }, {});
 
-  const allowed = ["name", "image", "_id"];
-  const filteredRow = Object.keys(row)
-    .filter((key) => allowed.includes(key))
-    .reduce((obj, key) => {
-      return {
-        ...obj,
-        [key]: row[key],
-        price:"",
-        amount:"",
-        totalPriceReceiptDetail: "",
-        supplierId:"",
-        bookId:""
-      };
-    }, {});
-    
     console.log("row", row);
     console.log("event.target.value", event.target.value);
-  
+
     const selectedIndex = selected.indexOf(_id);
-  
+
     console.log("selected", selected);
     console.log("selectedIndex", selectedIndex);
     let newSelected = [];
@@ -108,7 +104,6 @@ export default function BookList() {
       // newSelected = newSelected.concat(selected, _id);
       newSelected = newSelected.concat(selected, _id);
       newSelectedRow = newSelectedRow.concat(selectedBookList, filteredRow);
-     
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
       newSelectedRow = newSelectedRow.concat(selectedBookList.slice(1));
@@ -129,12 +124,12 @@ export default function BookList() {
     setSelectedBookList(newSelectedRow);
     setSelected(newSelected);
 
-      dispatch({
-        type: "SELECT_BOOK",
-        payload: {
-          bookSelected: newSelectedRow,
-        },
-      });
+    dispatch({
+      type: "SELECT_BOOK",
+      payload: {
+        bookSelected: newSelectedRow,
+      },
+    });
   };
 
   const handleSubmit = () => {
@@ -191,8 +186,6 @@ export default function BookList() {
     }
     return stabilizedThis?.map((el) => el[0]);
   }
-
-
 
   return (
     <Box>

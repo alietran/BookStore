@@ -92,6 +92,7 @@ export const updateBook = (id, data) => {
         },
       });
     } catch (error) {
+      console.log("error", error.response?.data.message);
       dispatch({
         type: "UPDATE_BOOK_FAIL",
         payload: {

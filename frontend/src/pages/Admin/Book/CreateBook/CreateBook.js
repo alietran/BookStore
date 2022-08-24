@@ -44,7 +44,6 @@ export default function CreateBook() {
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
   const { cateList } = useSelector((state) => state.CateReducer);
   const { authorList } = useSelector((state) => state.AuthorReducer);
-  console.log("cateList", cateList);
   const dispatch = useDispatch();
   const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
@@ -110,7 +109,6 @@ export default function CreateBook() {
     }
     if (validImageFiles.length) {
       setImageFiles(validImageFiles);
-      console.log("values.gallery", values.gallery);
 
       values.gallery = e.target.files;
       return;
@@ -146,8 +144,6 @@ export default function CreateBook() {
       });
     };
   }, [imageFiles]);
-  console.log("images", images);
-  console.log("images", images.length);
   const Createchema = Yup.object().shape({
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
     desc: Yup.string().required("*Vui lòng nhập thông tin này"),
@@ -212,8 +208,6 @@ export default function CreateBook() {
     }
   };
   const handleEditorChange = (content, editor) => {
-    console.log("content", content);
-    console.log("editor", editor);
     setFieldValue("desc", content);
   };
   return (
