@@ -6,13 +6,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
   Stack,
   TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { Form, Formik, useFormik } from "formik";
+import { ErrorMessage, Form, Formik, useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import Option from "../../../../components/OptionEdit&Delete/Option";
@@ -27,11 +29,16 @@ import {
 import { Editor } from "@tinymce/tinymce-react";
 
 export default function OptionBook({ id, book }) {
+  console.log("book", book);
+   const { authorList } = useSelector((state) => state.AuthorReducer);
   const { loadingUpdateBook } = useSelector((state) => state.BookReducer);
+  const { cateList } = useSelector((state) => state.CateReducer);
   const classes = useStyles();
+  const [author, setAuthor] = useState(10);
   const [open, setOpen] = useState(false);
   const [cate, setCate] = useState("");
   const [isReadyEditCate, setIsReadyEditCate] = useState(false);
+  const [childrenCate, setChildrencate] = useState(10);
   const dispatch = useDispatch();
   const handleClose = () => {
     setOpen(false);
@@ -127,6 +134,7 @@ export default function OptionBook({ id, book }) {
     enableReinitialize: true,
     initialValues: {
       name: book.name,
+      idCate: book.idCate._id,
       desc: book.desc,
       price: book.price,
       quantity: book.quantity,
@@ -135,6 +143,7 @@ export default function OptionBook({ id, book }) {
       publisher: book.publisher,
       issuer: book.issuer,
       size: book.size,
+      authorId: book.authorId._id,
     },
     validationSchema: Createchema,
     onSubmit: (data, { resetForm }) => {
@@ -160,9 +169,16 @@ export default function OptionBook({ id, book }) {
   //   else setIsReadyEditCate(false);
   // }, [values.name, values.parentCateId]);
 
+  const handleChangeChildrenCate = (event) => {
+    setChildrencate(event.target.value);
+  };
   const handleUpdate = () => {
     if (isReadyEditCate) setOpen(false);
   };
+
+  const handleChangeAuthor = (event) =>{
+    setAuthor(event.target.value);
+  }
   const handleClickConfirm = () => {
     setOpenConfirm(true);
   };
@@ -221,23 +237,54 @@ export default function OptionBook({ id, book }) {
               onClose={handleClose}
             >
               {" "}
-              Chỉnh sửa thể loại
+              Chỉnh sửa sách
             </ModalDialog>
 
             <DialogContent dividers>
               <Stack spacing={3}>
                 {" "}
-                <TextField
-                  fullWidth
-                  autoComplete="name"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Tên sách"
-                  {...getFieldProps("name")}
-                  error={Boolean(touched.name && errors.name)}
-                  helperText={touched.name && errors.name}
-                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    autoComplete="name"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Tên sách"
+                    {...getFieldProps("name")}
+                    error={Boolean(touched.name && errors.name)}
+                    helperText={touched.name && errors.name}
+                  />
+                  <FormControl
+                    fullWidth
+                    error={Boolean(touched.idCate && errors.idCate)}
+                  >
+                    <InputLabel id="select">Chọn thể loại</InputLabel>
+                    <Select
+                      value={childrenCate}
+                      label="childrenCate"
+                      onChange={handleChangeChildrenCate}
+                      {...getFieldProps("idCate")}
+                    >
+                      {cateList?.data?.map((cate, index) => (
+                        <MenuItem
+                          value={`${cate._id}`} // giá trị sẽ được đẩy lên
+                          key={index}
+                        >
+                          {cate.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage
+                      name="idCate"
+                      render={(msg) => (
+                        <span className="text-red-600 text-xs mt-1 ml-3">
+                          {msg}
+                        </span>
+                      )}
+                    />
+                  </FormControl>
+                </Stack>
                 {/* <TextField
                   fullWidth
                   autoComplete="desc"
@@ -287,83 +334,118 @@ export default function OptionBook({ id, book }) {
                       "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                   }}
                 />
-                <TextField
-                  fullWidth
-                  autoComplete="price"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Giá"
-                  {...getFieldProps("price")}
-                  error={Boolean(touched.price && errors.price)}
-                  helperText={touched.price && errors.price}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="quantity"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Số lượng"
-                  {...getFieldProps("quantity")}
-                  error={Boolean(touched.quantity && errors.quantity)}
-                  helperText={touched.quantity && errors.quantity}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="bookCover"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Bìa sách"
-                  {...getFieldProps("bookCover")}
-                  error={Boolean(touched.bookCover && errors.bookCover)}
-                  helperText={touched.bookCover && errors.bookCover}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="totalPage"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Số trang"
-                  {...getFieldProps("totalPage")}
-                  error={Boolean(touched.totalPage && errors.totalPage)}
-                  helperText={touched.totalPage && errors.totalPage}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="publisher"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Nhà xuất bản"
-                  {...getFieldProps("publisher")}
-                  error={Boolean(touched.publisher && errors.publisher)}
-                  helperText={touched.publisher && errors.publisher}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="issuer"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Nhà phát hành"
-                  {...getFieldProps("issuer")}
-                  error={Boolean(touched.issuer && errors.issuer)}
-                  helperText={touched.issuer && errors.issuer}
-                />
-                <TextField
-                  fullWidth
-                  autoComplete="size"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  label="Kích thước"
-                  {...getFieldProps("size")}
-                  error={Boolean(touched.size && errors.size)}
-                  helperText={touched.size && errors.size}
-                />
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                  <TextField
+                    fullWidth
+                    autoComplete="price"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Giá"
+                    {...getFieldProps("price")}
+                    error={Boolean(touched.price && errors.price)}
+                    helperText={touched.price && errors.price}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="quantity"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Số lượng"
+                    {...getFieldProps("quantity")}
+                    error={Boolean(touched.quantity && errors.quantity)}
+                    helperText={touched.quantity && errors.quantity}
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
+                  <TextField
+                    fullWidth
+                    autoComplete="bookCover"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Bìa sách"
+                    {...getFieldProps("bookCover")}
+                    error={Boolean(touched.bookCover && errors.bookCover)}
+                    helperText={touched.bookCover && errors.bookCover}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="totalPage"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Số trang"
+                    {...getFieldProps("totalPage")}
+                    error={Boolean(touched.totalPage && errors.totalPage)}
+                    helperText={touched.totalPage && errors.totalPage}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="size"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Kích thước"
+                    {...getFieldProps("size")}
+                    error={Boolean(touched.size && errors.size)}
+                    helperText={touched.size && errors.size}
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
+                  <TextField
+                    fullWidth
+                    autoComplete="publisher"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Nhà xuất bản"
+                    {...getFieldProps("publisher")}
+                    error={Boolean(touched.publisher && errors.publisher)}
+                    helperText={touched.publisher && errors.publisher}
+                  />
+                  <TextField
+                    fullWidth
+                    autoComplete="issuer"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    label="Nhà phát hành"
+                    {...getFieldProps("issuer")}
+                    error={Boolean(touched.issuer && errors.issuer)}
+                    helperText={touched.issuer && errors.issuer}
+                  />
+                  <FormControl
+                    fullWidth
+                    error={Boolean(touched.authorId && errors.authorId)}
+                  >
+                    <InputLabel id="select">Chọn tác giả</InputLabel>
+                    <Select
+                      value={author}
+                      label="Chọn tác giả"
+                      onChange={handleChangeAuthor}
+                      {...getFieldProps("authorId")}
+                    >
+                      {authorList?.data?.map((author) => (
+                        <MenuItem
+                          value={author._id} // giá trị sẽ được đẩy lên
+                          key={author._id}
+                        >
+                          {author.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage
+                      name="authorId"
+                      render={(msg) => (
+                        <span className="text-red-600 text-xs mt-1 ml-3">
+                          {msg}
+                        </span>
+                      )}
+                    />
+                  </FormControl>
+                </Stack>
                 <Button
                   variant="contained"
                   component="label"

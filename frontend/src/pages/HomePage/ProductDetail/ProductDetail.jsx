@@ -30,6 +30,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailBook } from "../../../redux/action/bookAction";
+import { useSnackbar } from "notistack";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -55,6 +56,8 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
+
+
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
@@ -79,7 +82,7 @@ export default function ProductDetail(props) {
   const [warningtext, setwarningtext] = useState(false);
   const [value, setValue] = React.useState("1");
   const { successDetailBook } = useSelector((state) => state.BookReducer);
-  
+    const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getDetailBook(id));
@@ -87,6 +90,31 @@ export default function ProductDetail(props) {
 
   console.log("successDetailBook", successDetailBook);
   const bookDetail = successDetailBook?.data
+
+
+const handleAddToCart = () => { 
+  console.log("bookDetail", bookDetail);
+  const cart = {
+    name: bookDetail.name,
+    price: bookDetail.price,
+    image: bookDetail.image,
+    id: bookDetail.id,
+    quantity: 1,
+  };
+  console.log("cart", cart);
+  dispatch({
+    type: "ADD_TO_CART",
+    payload: {
+      data: cart,
+    },
+  }); 
+     enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+       variant: "success",
+     });
+};
+
+  // const { cartList } = useSelector((state) => state.CartReducer);
+  // console.log("cartList", cartList);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -187,7 +215,7 @@ export default function ProductDetail(props) {
                     <div className={classes.content__line}>
                       <div className={classes.line}></div>
                     </div>
-
+                    <div>Kho: {bookDetail?.quantity}</div>
                     <div className="content__title-discount">
                       Choose one of the following promotions
                     </div>
@@ -223,6 +251,7 @@ export default function ProductDetail(props) {
                         Mua Ngay
                       </Button>
                       <button
+                        onClick={handleAddToCart}
                         className={`${classes["content__button--add"]} ${classes.buttonAction}   `}
                       >
                         Thêm vào giỏ
@@ -296,7 +325,9 @@ export default function ProductDetail(props) {
                   </Box>
                   <TabPanel value="1">
                     <div className="desc__left">
-                      <div>{bookDetail?.desc}</div>
+                      <div
+                        dangerouslySetInnerHTML={{ __html: bookDetail?.desc }}
+                      ></div>
                     </div>
                   </TabPanel>
                   <TabPanel value="2">

@@ -326,7 +326,7 @@ export default function Header() {
 
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                 <NavLink
-                  to="#"
+                  to="/cart"
                   className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600 "
                 >
                   <ShoppingCartOutlinedIcon />

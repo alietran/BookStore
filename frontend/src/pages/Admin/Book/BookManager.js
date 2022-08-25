@@ -129,14 +129,14 @@ export default function BookManager() {
 
   useEffect(() => {
     if (successCreateBook) {
-      enqueueSnackbar("Thêm thể loại thành công!", { variant: "success" });
+      enqueueSnackbar("Thêm sáchthành công!", { variant: "success" });
       return;
     }
   }, [successCreateBook]);
 
   useEffect(() => {
     if (successUpdateBook) {
-      enqueueSnackbar("Chỉnh sửa Thể loại thành công!", { variant: "success" });
+      enqueueSnackbar("Chỉnh sửa sách thành công!", { variant: "success" });
       return;
     }
   }, [successUpdateBook]);

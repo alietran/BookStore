@@ -35,9 +35,9 @@ import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
 
-import Cart from "./pages/HomePage/Order/Cart";
 
 import DetailReceipt from "./pages/Admin/ReceiptManager/DetailReceipt/DetailReceipt";
+import Cart from "./pages/HomePage/Cart/Cart";
 
 function App() {
   const themeOptions = useMemo(
