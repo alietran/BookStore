@@ -40,8 +40,6 @@ export default function CreateReceipt() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
-
-
   const dispatch = useDispatch();
 
   // console.log("selectedBook",selectedBook)
@@ -95,7 +93,7 @@ export default function CreateReceipt() {
         </Stack>
       </Stack>
       <Box sx={{ width: "100%" }}>
-        <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep} sx={{ margin: "0px 85px" }}>
           {steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};

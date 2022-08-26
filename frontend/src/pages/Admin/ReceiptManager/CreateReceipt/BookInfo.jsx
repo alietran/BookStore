@@ -252,7 +252,7 @@ export default function BookInfo() {
                 <TableCell rowSpan={1} />
                 <TableCell></TableCell>
                 <TableCell></TableCell>
-                <TableCell>Tổng cộng </TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Tổng cộng </TableCell>
                 <TableCell>
                   {" "}
                   {filteredUsers

@@ -120,17 +120,18 @@ export default function BookList() {
         selectedBookList.slice(selectedIndex + 1)
       );
     }
-    console.log("newSelected", newSelected);
     setSelectedBookList(newSelectedRow);
     setSelected(newSelected);
-
+  };
+  useEffect(() => {
     dispatch({
       type: "SELECT_BOOK",
       payload: {
-        bookSelected: newSelectedRow,
+        bookSelected: selectedBookList,
       },
     });
-  };
+  }, [selectedBookList]);
+
 
   const handleSubmit = () => {
     setChooseSupplier(true);
@@ -188,7 +189,7 @@ export default function BookList() {
   }
 
   return (
-    <Box>
+    <Box sx={{ marginTop: 4 }}>
       <Grid
         container
         rowSpacing={1}

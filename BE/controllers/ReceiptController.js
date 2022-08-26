@@ -52,8 +52,6 @@ exports.createReceipt = catchAsync(async (req, res, next) => {
 
 exports.updateReceipt = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
-  console.log('_id', _id);
-  console.log('req.body', req.body);
 
   let doc = await Receipt.findByIdAndUpdate(_id, req.body, {
     new: true,
