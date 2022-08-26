@@ -182,9 +182,12 @@ const handleAddToCart = () => {
                             className={classes["img__library-content--item"]}
                           >
                             {/* {bookDetail?.gallery.map((image,index)=>(
-
+                              
                             ))} */}
-                            <img src="../../../../img/phone.webp" />
+                            {bookDetail?.gallery.map((item, index) => {
+                              // console.log("index", item[index]);
+                              return   <img src={item} key={index} />;
+                            })}
                           </div>
                         </div>
                       </div>
@@ -217,7 +220,7 @@ const handleAddToCart = () => {
                     </div>
                     <div>Kho: {bookDetail?.quantity}</div>
                     <div className="content__title-discount">
-                      Choose one of the following promotions
+                      Chọn mã giảm giá
                     </div>
 
                     <div className={classes.content__discount}>
@@ -230,15 +233,14 @@ const handleAddToCart = () => {
                       </div>
                       <div className={classes["content__discount-box"]}>
                         <div className={classes["box-title"]}>
-                          <span className="box-title-price">GIas giamr</span>{" "}
-                          off
+                          <span className="box-title-price">Giảm giá</span> off
                         </div>
                         <div className={classes["box-expiryDay"]}>
                           <div className="box-expiryDay-day">
-                            Expiry Date: 27/7/2022
+                            Ngày hết hạn: 27/7/2022
                           </div>
                           <div className={classes["box-expiryDay-apply"]}>
-                            Apply
+                            Áp dụng
                           </div>
                         </div>
                       </div>
@@ -267,14 +269,12 @@ const handleAddToCart = () => {
             <div className={classes["productDetail__wrapper-content--right"]}>
               <div className={classes["productDetail__wrapper-content--info"]}>
                 <div className={classes["info-policy"]}>
-                  <h4>Sales policy</h4>
+                  <h4>Chính sách kinh doanh</h4>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
                       <img src="../../../../img/svgexport-25.svg" alt="" />
                     </div>
-                    <div className="ship-text ml-2">
-                      Free delivery for orders from $50AUD{" "}
-                    </div>
+                    <div className="ship-text ml-2">Miễn phí vận chuyển </div>
                   </div>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
@@ -287,7 +287,9 @@ const handleAddToCart = () => {
                         alt=""
                       />
                     </div>
-                    <div className="ship-text ml-2">100% genuine guarantee</div>
+                    <div className="ship-text ml-2">
+                      Cam kết chính hãng 100%
+                    </div>
                   </div>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
@@ -300,11 +302,11 @@ const handleAddToCart = () => {
                         alt=""
                       />
                     </div>
-                    <div className="ship-text ml-2">Return within 10 days</div>
+                    <div className="ship-text ml-2">Đổi trả trong 7 ngày</div>
                   </div>
                 </div>
 
-                <Link>See details</Link>
+                <Link>Xem chi tiết</Link>
               </div>
             </div>
           </div>

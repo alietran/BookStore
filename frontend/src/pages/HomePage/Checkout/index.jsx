@@ -8,16 +8,24 @@ import {
   Tab,
   Stack,
   Grid,
+  TextField,
+  Button,
 } from "@mui/material";
 import React from "react";
 import { Icon } from "@iconify/react";
 import Address from "./Address";
+import PaymentMethod from "./PaymentMethod/PaymentMethod";
+import { NavLink } from "react-router-dom";
+import useStyles from "./style";
 
 export default function Checkout() {
+  const classes = useStyles();
   const [value, setValue] = React.useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  let cart = JSON.parse(localStorage.getItem("cart"));
+  const handleSubmit = () => {};
   return (
     <Box className="m-5">
       <Container maxWidth="lg">
@@ -52,11 +60,150 @@ export default function Checkout() {
                 </TabPanel>
               </TabContext>
             </Box>
+            <Box
+              sx={{
+                width: "100%",
+                typography: "body1",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                marginTop: "20px",
+                padding: "10px",
+              }}
+            >
+              <h3>Ghi chú cho đơn hàng</h3>
+              <TextField
+                fullWidth
+                notched="true"
+                autoFocus="false"
+                size="small"
+                type="text"
+                label="Nhập thông tin ghi chú cho nhà bán hàng"
+                className="header__navigationBar-text "
+                sx={{
+                  backgroundColor: "transparent",
+                  outline: "none !important",
+                  border: "none !important",
+                  "&:hover": {
+                    border: "none",
+                    outline: "none",
+                  },
+                }}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                typography: "body1",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                marginTop: "20px",
+              }}
+            >
+              <PaymentMethod />
+            </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              {" "}
-              Thông tin đơn hàng
+            <Box
+              sx={{
+                width: "100%",
+                typography: "body1",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+              }}
+            >
+              <div class="cart__wrapper-content--right">
+                <div
+                  class="cart__wrapper-content--info"
+                  style={{ padding: "10px 0" }}
+                >
+                  <Typography
+                    component="div"
+                    variant="subtitle1"
+                    sx={{ marginBottom: "10px", padding: "0 20px 0 20px" }}
+                  >
+                    Thông tin đơn hàng
+                  </Typography>
+                  {cart.map((item, index) => (
+                    <div class="info-voucher flex px-4">
+                      <div class={classes["info-text"]}>
+                        <img src={item.image} alt="" />
+                      </div>
+                      <div class={classes["info-product"]}>
+                        <p>{item.name}</p>
+                        <p>Số lượng: {item.quantity}</p>
+                        <p className="text-red-500">
+                          {item.price.toLocaleString()} ₫
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Box>
+            <Box
+              sx={{
+                width: "100%",
+                typography: "body1",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                padding: "10px",
+                marginTop: "20px",
+              }}
+            >
+              <div className={classes["cart__wrapper-content--payment"]}>
+                <div className={classes["cart__wrapper-content--info"]}>
+                  <h4 className="text-xl">Thanh toán</h4>
+                  <div className={classes["info-payment"]}>
+                    <table className={classes["payment-tab"]}>
+                      <tbody>
+                        <tr>
+                          <td>Tạm tính </td>
+                          <td>
+                            <span>1</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Phí vận chuyển </td>
+                          <td>
+                            <span>Miễn phí</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Tổng tiền </td>
+                          <td>
+                            <span
+                              style={{
+                                color: "red",
+                                fontSize: "18px",
+                                fontWeight: "500",
+                              }}
+                            >
+                              1 ₫
+                            </span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div className="items-end">(Đã bao gồm thuế)</div>
+                  </div>
+                  <Button
+                    onClick={handleSubmit}
+                    variant="contained"
+                    sx={{
+                      marginTop: "15px",
+                      color: "#fff",
+                      width: "100%",
+                      border: "none",
+                      padding: "10px",
+                      fontWeight: 500,
+                      borderRadius: "5px",
+                      // backgroundColor: "#1435c3",
+                    }}
+                  >
+                    THANH TOÁN
+                  </Button>
+                </div>
+              </div>
             </Box>
           </Grid>
         </Grid>

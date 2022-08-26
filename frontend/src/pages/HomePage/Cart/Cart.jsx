@@ -1,20 +1,21 @@
 import { Button, Container, Link, TextField } from "@mui/material";
 import React, { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import useStyles from "./style";
 import HomeIcon from "@mui/icons-material/Home";
 import { useDispatch, useSelector } from "react-redux";
 export default function Cart() {
   const classes = useStyles();
-  const { cart, total } = useSelector((state) => state.CartReducer);
+  const { total } = useSelector((state) => state.CartReducer);
   console.log("total", total);
-  console.log("cart", cart);
+  const history = useHistory()
+  // console.log("cart", cart);
 
   // let cartList = localStorage.getItem("cart")
   //   ? JSON.parse(localStorage.getItem("cart"))
   //   : null;
 
-  // let cartList = JSON.parse(localStorage.getItem("cart"));
+  let cart = JSON.parse(localStorage.getItem("cart"));
   // console.log("cartList", cartList);
 
   const totalPrice = cart?.reduce(
@@ -25,30 +26,30 @@ export default function Cart() {
   );
   const dispatch = useDispatch();
 
-  const hadleClickPlug = (maSP,tangGiam) => {
-    // console.log("event", e);
+  const hadleClickPlus = (maSP, tangGiam) => {
+    console.log("hadleClickPlug", maSP);
     dispatch({
       type: "CHANGE_QUANTITY",
       payload: {
         data: cart,
         maSP,
-        tangGiam: true,
+        tangGiam,
       },
     });
   };
 
-  const handleDelete = (maSP)=>{{
-    console.log("first")
+  const handleDelete = (maSP) => {
+    console.log("maSP", maSP);
     dispatch({
-      type:"REMOVE_ITEM",
-      payload:{
+      type: "REMOVE_ITEM",
+      payload: {
         maSP,
-      }
-    })
-  }}
-  
+      },
+    });
+  };
+
   const hadleClickMinus = (maSP, tangGiam) => {
-      console.log("maSP", maSP);
+    console.log("hadleClickMinus", maSP);
     dispatch({
       type: "CHANGE_QUANTITY",
       payload: {
@@ -59,16 +60,9 @@ export default function Cart() {
     });
   };
 
-  // useEffect(() => {
-
-  //   console.log("totalPrice", totalPrice);
-  //   dispatch({
-  //     type: "TONG_TIEN",
-  //     payload: {
-  //       data: totalPrice,
-  //     },
-  //   });
-  // }, [cart]);
+  const handleSubmit = () => {
+    history.push("/checkout")
+  }
 
   return (
     <div>
@@ -83,7 +77,7 @@ export default function Cart() {
             </div>
             <div className={classes.breadcrumbsName}>
               <NavLink className={classes.breadcrumbsLink} to={"/"}>
-                Cart
+                Giỏ hàng
               </NavLink>
             </div>
           </div>
@@ -94,30 +88,33 @@ export default function Cart() {
                   <div className={classes["cart__wrapper-content--box"]}>
                     <div className={classes.box__content}>
                       <div className={classes["box__content-name"]}>
-                        <NavLink
-                          className={`${classes["box__content-name-img"]} ${classes.center}`}
-                          to={"/"}
-                        >
-                          <img src="../../../../img/phone.webp" alt="" />
+                        <NavLink className={`${classes.center}`} to={"/"}>
+                          <img
+                            style={{ width: "120px", height: "50px" }}
+                            src="../../../../img/logo_white.png"
+                            alt=""
+                          />
                         </NavLink>
-                        <p className={classes["box__content-name-product"]}>
+                        <p
+                          className={`${classes["box__content-name-product"]} ${classes.bookName} `}
+                        >
                           PHONG VO TRADING SERVICE JOINT STOCK COMPANY
                         </p>
                       </div>
                       <div
                         className={`${classes["box__content-unitPrice"]} ${classes.center}`}
                       >
-                        <p> Price</p>
+                        <p> Giá</p>
                       </div>
                       <div
                         className={`${classes["box__content-quantity"]} ${classes.center} ${classes.amount}`}
                       >
-                        <p>Quantity</p>
+                        <p>Số lượng</p>
                       </div>
                       <div
                         className={`${classes["box__content-quantity"]} ${classes.center}`}
                       >
-                        <p>Total</p>
+                        <p>Tổng tiền</p>
                       </div>
                     </div>
                   </div>
@@ -125,11 +122,12 @@ export default function Cart() {
                     <div className={`${classes["cart__wrapper-content--box"]}`}>
                       <div className={`${classes.box__content} `}>
                         <div className={classes["box__content-name"]}>
-                          <NavLink
-                            className={`${classes["box__content-name-img"]} ${classes.center}`}
-                            to={"/"}
-                          >
-                            <img src={item.image} alt="" />
+                          <NavLink className={` ${classes.center}`} to={"/"}>
+                            <img
+                              style={{ width: "100px", height: "80px" }}
+                              src={item.image}
+                              alt=""
+                            />
                           </NavLink>
                           <p className={classes["box__content-name-product"]}>
                             {item.name}
@@ -138,7 +136,10 @@ export default function Cart() {
                         <div
                           className={`${classes["box__content-unitPrice"]} ${classes.center}`}
                         >
-                          <p style={{ fontWeight: "600" }}>{item.price}</p>
+                          <p style={{ fontWeight: "600" }}>
+                            {" "}
+                            {item.price.toLocaleString()}{" "}
+                          </p>
                         </div>
                         <div
                           className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity}`}
@@ -149,7 +150,7 @@ export default function Cart() {
                             <button
                               className="plusItem"
                               onClick={() => hadleClickMinus(item.id, false)}
-
+                              disabled={item.quantity === 1 ? true : false}
                               // onClick={dispatch({
                               //   type: "TANG_GIAM_SL",
                               //   payload: {
@@ -177,6 +178,7 @@ export default function Cart() {
                               </span>
                             </button>
                             <input
+                           
                               className={classes.quantityValue}
                               value={item.quantity}
                             />
@@ -184,7 +186,7 @@ export default function Cart() {
                             <button
                               className="dashItem"
                               onClick={
-                                () => hadleClickPlug(item.id, true)
+                                (e) => hadleClickPlus(item.id, true)
 
                                 //   dispatch({
                                 //   type: "TANG_GIAM_SL",
@@ -215,7 +217,12 @@ export default function Cart() {
                             </button>
                           </div>
 
-                          <div className={classes.delete} onClick={handleDelete}>Delete</div>
+                          <div
+                            className={`${classes.delete} text-blue-600 `}
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            Xóa
+                          </div>
                         </div>
 
                         <div
@@ -223,7 +230,7 @@ export default function Cart() {
                         >
                           <p style={{ fontWeight: "600", color: "#1435c3" }}>
                             {" "}
-                            {item.price * item.quantity}
+                            {(item.price * item.quantity).toLocaleString()}
                           </p>
                         </div>
                       </div>
@@ -234,37 +241,37 @@ export default function Cart() {
             </div>
             <div className={classes["cart__wrapper-content--right"]}>
               <div className={classes["cart__wrapper-content--info"]}>
-                <h4>Select discount code/coupon</h4>
+                <h4>Chọn mã giảm giá</h4>
                 <div className={classes.info__voucher}>
                   <div className={classes["info-text"]}>
                     <input type="text " placeholder="Enter your code" />
                   </div>
 
                   <Button variant="contained" className={classes.apply}>
-                    Apply
+                    Áp dụng
                   </Button>
                 </div>
               </div>
               <div className={classes["cart__wrapper-content--payment"]}>
                 <div className={classes["cart__wrapper-content--info"]}>
-                  <h4 className="text-xl">Payment</h4>
+                  <h4 className="text-xl">Thanh toán</h4>
                   <div className={classes["info-payment"]}>
                     <table className={classes["payment-tab"]}>
                       <tbody>
                         <tr>
-                          <td>Provisional </td>
+                          <td>Tạm tính </td>
                           <td>
-                            <span>{totalPrice?.toLocaleString()}</span>
+                            <span>{(1 * totalPrice)?.toLocaleString()}</span>
                           </td>
                         </tr>
                         <tr>
-                          <td>Transport fee </td>
+                          <td>Phí vận chuyển </td>
                           <td>
-                            <span>FREE</span>
+                            <span>Miễn phí</span>
                           </td>
                         </tr>
                         <tr>
-                          <td>Total </td>
+                          <td>Tổng tiền </td>
                           <td>
                             <span
                               style={{
@@ -273,15 +280,16 @@ export default function Cart() {
                                 fontWeight: "500",
                               }}
                             >
-                              {totalPrice?.toLocaleString()}
+                              {totalPrice?.toLocaleString()} ₫
                             </span>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-                    <div className="items-end">(VAT included)</div>
+                    <div className="items-end">(Đã bao gồm thuế)</div>
                   </div>
                   <Button
+                    onClick={handleSubmit}
                     variant="contained"
                     sx={{
                       marginTop: "15px",
@@ -294,7 +302,7 @@ export default function Cart() {
                       // backgroundColor: "#1435c3",
                     }}
                   >
-                    CONTINUE
+                    TIẾP TỤC
                   </Button>
                 </div>
               </div>

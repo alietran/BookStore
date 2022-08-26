@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     overflow: "hidden",
     cursor: "pointer",
-    height: "120px",
+    height: "100px",
   },
   menu__item: {
     width: "100% !important",

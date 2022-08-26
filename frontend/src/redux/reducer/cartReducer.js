@@ -2,8 +2,6 @@
 //   ? JSON.parse(localStorage.getItem("cart"))
 //   : null;
 
-import { isBuffer } from "lodash";
-
 const stateDefault = {
   cart: [],
   total: null,
@@ -42,25 +40,48 @@ export const CartReducer = (state = stateDefault, action) => {
       };
     }
     case "CHANGE_QUANTITY": {
-        const index = state.cart?.findIndex(
-          (item) => item.id === action.payload.maSP
-        );
-        if(index !== -1){
-          if(action.payload.tangGiam){
-             state.cart[index].quantity += 1;
-          }else{
-             state.cart[index].quantity -= 1;
-          }
-        }
-        return {...state, cart: state.cart}
-    }
-    case "REMOVE_ITEM":{
-      const index = state.cart?.findIndex(
+      const cartList = JSON.parse(localStorage.getItem("cart"));
+
+      console.log("12");
+
+      const index = cartList?.findIndex(
         (item) => item.id === action.payload.maSP
-      )
-      // if(index !== -1){
-      //   state.cart
-      // }
+      );
+
+      console.log("tangiam", action.payload.tangGiam);
+      if (index !== -1) {
+        if (action.payload.tangGiam) {
+          cartList[index].quantity += 1;
+
+          localStorage.setItem("cart", JSON.stringify(cartList));
+        } else {
+          if (cartList[index].quantity <= 1) {
+            alert("Số lượng tối thiểu");
+            cartList[index].quantity = 1;
+          } else {
+            cartList[index].quantity -= 1;
+          }
+
+          localStorage.setItem("cart", JSON.stringify(cartList));
+        }
+      }
+
+      return { ...state };
+    }
+    case "REMOVE_ITEM": {
+      const cartList = JSON.parse(localStorage.getItem("cart"));
+      const index = cartList?.findIndex(
+        (item) => item.id === action.payload.maSP
+      );
+      console.log("index", index);
+      console.log("cartList ngoai", cartList);
+
+      if (index !== -1) {
+        cartList.splice(index, 1);
+        console.log("cartList trong", cartList);
+        localStorage.setItem("cart", JSON.stringify(cartList));
+      }
+      return { ...state, cart: cartList };
     }
 
     default:
