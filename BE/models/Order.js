@@ -74,6 +74,10 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  notes: {
+    type: String,
+    default: '',
+  },
 });
 
 orderSchema.pre(/^find/, function (next) {

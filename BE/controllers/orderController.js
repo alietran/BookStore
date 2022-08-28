@@ -5,6 +5,18 @@ const Payment = require('../models/Payment');
 const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
+
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_APP, // generated ethereal user
+    pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+  },
+});
 
 exports.getAllOrder = factory.getAll(Order);
 
@@ -73,6 +85,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     status: 'success',
     result: order.length,
     data: order,
+  });
+
+  await transporter.sendMail({
+    from: `"Giao Dich Thanh Cong " <ltd.ctu@gmail.com>`, // sender address
+    to: 'thanhledatomon@gmail.com', // list of receivers
+    subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
+    // text: "Hello world?", // plain text body
+    html: `Thành công`,
   });
 });
 

@@ -31,6 +31,7 @@ import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailBook } from "../../../redux/action/bookAction";
 import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -56,8 +57,6 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-
-
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
@@ -78,40 +77,60 @@ const rows = [
 export default function ProductDetail(props) {
   const { id } = props.match.params;
   const dispatch = useDispatch();
+  const history = useHistory();
   const [openComment, setOpenComment] = useState(false);
   const [warningtext, setwarningtext] = useState(false);
   const [value, setValue] = React.useState("1");
   const { successDetailBook } = useSelector((state) => state.BookReducer);
-    const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     dispatch(getDetailBook(id));
-  },[]);
+  }, []);
 
   console.log("successDetailBook", successDetailBook);
-  const bookDetail = successDetailBook?.data
+  const bookDetail = successDetailBook?.data;
 
-
-const handleAddToCart = () => { 
-  console.log("bookDetail", bookDetail);
-  const cart = {
-    name: bookDetail.name,
-    price: bookDetail.price,
-    image: bookDetail.image,
-    id: bookDetail.id,
-    quantity: 1,
+  const handleAddToCart = () => {
+    console.log("bookDetail", bookDetail);
+    const cart = {
+      name: bookDetail.name,
+      price: bookDetail.price,
+      image: bookDetail.image,
+      id: bookDetail.id,
+      quantity: 1,
+    };
+    console.log("cart", cart);
+    dispatch({
+      type: "ADD_TO_CART",
+      payload: {
+        data: cart,
+      },
+    });
+    const action = (snackbarId) => (
+      <>
+        <Button
+          variant="contained"
+          className="py-1 px-1 text-xs"
+          sx={{
+            padding: "6px !important",
+            fontSize: "12.5px !important",
+            marginRight: "7px !important",
+          }}
+          onClick={() => {
+            history.push("/cart");
+          }}
+        >
+          Xem giỏ hàng
+        </Button>
+      </>
+    );
+    enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+      variant: "success",
+      autoHideDuration: 1500,
+      action,
+    });
   };
-  console.log("cart", cart);
-  dispatch({
-    type: "ADD_TO_CART",
-    payload: {
-      data: cart,
-    },
-  }); 
-     enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
-       variant: "success",
-     });
-};
 
   // const { cartList } = useSelector((state) => state.CartReducer);
   // console.log("cartList", cartList);
