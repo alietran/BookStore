@@ -8,15 +8,15 @@ const AppError = require('../utils/appError');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// let transporter = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 587,
-//   secure: false, // true for 465, false for other ports
-//   auth: {
-//     user: process.env.EMAIL_APP, // generated ethereal user
-//     pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
-//   },
-// });
+let transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_APP, // generated ethereal user
+    pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+  },
+});
 
 exports.getAllOrder = factory.getAll(Order);
 
@@ -29,78 +29,88 @@ const filterObj = (obj, ...allowedField) => {
 };
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-  req.body.user = req.user.id;
+  const { id, fullName, phoneNumber } = req.user;
 
-  const objOrder = filterObj(
-    req.body,
-    'address',
-    'totalPrice',
-    'user',
-    'paymentMethod',
-    'admin',
-    'shipper'
-  );
+  try {
+    req.body.user = id;
 
-  const order = await Order.create(objOrder);
+    const objOrder = filterObj(
+      req.body,
+      'address',
+      'totalPrice',
+      'user',
+      'paymentMethod',
+      'admin',
+      'shipper'
+    );
 
-  let arrayItems = [];
-  if (order._id) {
-    req.body.items.map(async (item, index) => {
-      let book = await Book.findById(item.productId);
-      if (book) {
-        //  console.log('book', book);
-        book.quantity = book.quantity - item.quantity;
-        book.quantitySold = book.quantitySold + item.quantity;
-        await book.save();
-        let product = {
-          quantity: item.quantity,
-          price: book.price,
-          totalPrice: item.quantity * book.price,
-          order,
-          book: book._id,
-        };
-        arrayItems.push(product);
-      } else {
-        return next(new AppError('Không tồn tại quyển sách nào!', 404));
-      }
+    const order = await Order.create(objOrder);
+    req.order = order;
 
-      console.log('arrayItems', arrayItems);
-      if (index === req.body.items.length - 1) {
-        await OrderDetail.insertMany(arrayItems);
-      }
+    let arrayItems = [];
 
-      // if (order._id) {
-      //   req.body.map((item, index) => {
-      //     req.body[index].order = order._id;
-      //   });
-      // }
-    });
+    if (order._id) {
+      await req.body.items.map(async (item, index) => {
+        let book = await Book.findById(item.productId);
+        if (book) {
+          book.quantity = book.quantity - item.quantity;
+          book.quantitySold = book.quantitySold + item.quantity;
+          await book.save();
+          let product = {
+            quantity: item.quantity,
+            price: book.price,
+            totalPrice: item.quantity * book.price,
+            order,
+            book: book._id,
+            name: book.name,
+          };
+          arrayItems.push(product);
+        } else {
+          return next(new AppError('Không tồn tại quyển sách nào!', 404));
+        }
+
+        if (index === req.body.items.length - 1) {
+          let orderDetail = await OrderDetail.insertMany(arrayItems);
+          req.arrayItems = arrayItems;
+
+          const { address, totalPrice } = req.order;
+          await transporter.sendMail({
+            from: `"Giao Dich Thanh Cong " <ltd.ctu@gmail.com>`, // sender address
+            to: 'ngocdiep710@gmail.com', // list of receivers
+            subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
+            // text: "Hello world?", // plain text body
+            html: `<p>Họ và tên: ${fullName}</p>
+            <p>Số điện thoại: ${phoneNumber}</p>
+              <p>Địa chỉ: ${address.address}, ${address.ward}, ${
+              address.district
+            }, ${address.city}</p>
+              <p>Tổng tiền: ${(totalPrice * 1).toLocaleString('vi-VI')} VNĐ</p>
+              <p>Chi tiết sản phẩm: 
+              <span>
+              ${arrayItems.map(
+                (item,index) =>
+                  `<div key=${index}>${item.name}  <b>x</b> ${item.quantity} = ${(
+                    item.price * 1
+                  ).toLocaleString('vi-VI')}đ </div>`
+              )} 
+              </span>
+              </p>
+             `,
+          });
+        }
+      });
+
+      res.status(201).json({
+        status: 'success',
+        result: order.length,
+        data: order,
+      });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err });
   }
 
-  // await OrderDetail.insertMany(arrayItems);
-  // let query = Book.findById(req.body.items[0].productId);
-  // const item = await query;
 
-  res.status(201).json({
-    status: 'success',
-    result: order.length,
-    data: order,
-  });
-
-  // await transporter.sendMail({
-  //   from: `"Giao Dich Thanh Cong " <ltd.ctu@gmail.com>`, // sender address
-  //   to: 'thanhledatomon@gmail.com', // list of receivers
-  //   subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
-  //   // text: "Hello world?", // plain text body
-  //   html: `Thành công`,
-  // });
 });
 
-// exports.getDetailOrder= catchAsync(async (req, res, next) => {
 
-//   res.status(201).json({
-//     status: 'success',
-//     result: order.length,
-//     data: order,
-//   });
-// });
