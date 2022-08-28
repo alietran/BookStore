@@ -174,6 +174,9 @@ const AdminTemplate = (props) => {
               <Menu.Item key="7" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/books">Sách</NavLink>
               </Menu.Item>
+              {/* <Menu.Item key="9" icon={<ReceiptIcon />}>
+                <NavLink to="/admin/paymentMethod">Thanh toán</NavLink>
+              </Menu.Item> */}
             </Menu>
           </Sider>
           <Layout className="site-layout">

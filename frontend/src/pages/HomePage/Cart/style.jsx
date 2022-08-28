@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    padding: "15px 15px 0 15px",
+    padding: "15px 15px 10px 15px",
     background: "white",
     borderRadius: "8px",
   },

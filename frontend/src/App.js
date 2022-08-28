@@ -38,6 +38,9 @@ import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
 
 import DetailReceipt from "./pages/Admin/ReceiptManager/DetailReceipt/DetailReceipt";
 import Cart from "./pages/HomePage/Cart/Cart";
+import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod";
+import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
+import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
 
 function App() {
   const themeOptions = useMemo(
@@ -96,14 +99,20 @@ function App() {
               "/checkout",
               "/productDetail/:id",
               "/cart",
+              "/confirmOrder/:id"
             ]}
           >
             <MainLayout>
               <Route exact path="/" component={HomePage} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/checkout" component={Checkout} />
-              <Route exact path="/productDetail/:id" component={ProductDetail} />
+              <Route
+                exact
+                path="/productDetail/:id"
+                component={ProductDetail}
+              />
               <Route exact path="/cart" component={Cart} />
+              <Route exact path="/confirmOrder/:id" component={ConfirmOrder} />
             </MainLayout>
           </Route>
           <Route exact path="/admin/login" component={LoginAdmin} />
@@ -123,6 +132,7 @@ function App() {
               "/admin/authors",
               "/admin/promotions",
               "/admin/books",
+              "/admin/paymentMethod",
             ]}
           >
             <AdminTemplate>
@@ -176,6 +186,11 @@ function App() {
                 path="/admin/promotions"
                 component={PromotionManager}
               />
+              {/* <AdminRoute
+                exact
+                path="/admin/paymentMethod"
+                component={PaymentManager}
+              /> */}
               <AdminRoute exact path="/admin/books" component={BookManager} />
             </AdminTemplate>
           </Route>

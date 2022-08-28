@@ -11,21 +11,59 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import Address from "./Address";
 import PaymentMethod from "./PaymentMethod/PaymentMethod";
 import { NavLink } from "react-router-dom";
 import useStyles from "./style";
+import { useDispatch, useSelector } from "react-redux";
+import { getPaymentList } from "../../../redux/action/paymentAction";
+import { createOrder } from "../../../redux/action/orderAction";
 
 export default function Checkout() {
   const classes = useStyles();
+  const { address, addressItem } = useSelector((state) => state.OrderReducer);
+  console.log("addressItem", addressItem);
   const [value, setValue] = React.useState("1");
+  const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  let cart = JSON.parse(localStorage.getItem("cart"));
-  const handleSubmit = () => {};
+
+  let cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+  let totalPrice = cart?.reduce(
+    (total, item) =>
+      // console.log("item", item)
+      (total = total + item.price * item.quantity),
+    0
+  );
+  
+  let orderItem = [];
+   cart?.map((item, index) => (
+     // return [...order1, { productId: item.id, quantity: item.quantity }];
+     orderItem.push({ productId: item.id, quantity: item.quantity })
+   ));
+   console.log("orderItem24", orderItem);
+  // useEffect(() => {
+
+   
+  // }, [cart]);
+
+
+  const handleSubmit = () => {
+    let order = {
+      totalPrice,
+      items: orderItem,
+      address :  address ? address : addressItem[0],
+      paymentMethod: "63079da2cd7d0340e8be170c",
+      notes: "",
+    };
+    console.log("order", order);
+    dispatch(createOrder(order));
+
+  };
+
   return (
     <Box className="m-5">
       <Container maxWidth="lg">
@@ -159,7 +197,7 @@ export default function Checkout() {
                         <tr>
                           <td>Tạm tính </td>
                           <td>
-                            <span>1</span>
+                            <span> {totalPrice.toLocaleString()} ₫</span>
                           </td>
                         </tr>
                         <tr>
@@ -178,7 +216,7 @@ export default function Checkout() {
                                 fontWeight: "500",
                               }}
                             >
-                              1 ₫
+                              {totalPrice.toLocaleString()} ₫
                             </span>
                           </td>
                         </tr>

@@ -82,16 +82,39 @@ export default function Address() {
     }
   }, [addressList]);
 
+  useEffect(()=>{
+      let addressItem = addressList?.data.filter((item) => item.isDefault);
+    dispatch({
+      type: "ADDRESS_DEFAULT",
+      payload: {
+        data: addressItem,
+      },
+    });
+
+  },[])
+
   const handleAddress = (item, index) => {
+    console.log("!245")
     let addressIsDefault = addressList?.data.filter((item) => item.isDefault);
     addressIsDefault[0].isDefault = false;
     dispatch(updateAddress(addressIsDefault[0].id, addressIsDefault[0]));
-
+  
     setTimeout(async () => {
       item.isDefault = true;
      await dispatch(updateAddress(item.id, item));
+
     }, 100);
+   setTimeout(async () => {
+    await dispatch({
+      type: "ORDER_ADDRESS",
+      payload:{
+        data: item 
+      }
+    })
+   
+   }, 200);
   };
+
   const [data, setData] = useState({
     setCity: "",
     cityName: "",
@@ -409,7 +432,10 @@ export default function Address() {
       <div className={classes.address}>
         {addressList?.data.map((item, index) => {
           return (
-            <div className={classes.address__detail}>
+            <div
+              className={classes.address__detail}
+              onClick={(e) => handleAddress(item, index)}
+            >
               <div className={classes.address__option}>
                 <p className={classes.address__detailName}>{item.fullName}</p>
                 {/* Có xử lý truyền id thì sd arrow func kh thì chỉ cần gọi handle */}
@@ -442,8 +468,8 @@ export default function Address() {
                   ", " +
                   item.city}
               </p>
-
-              <div>
+                    
+              {/* <div>
                 <div className={classes.border__checked}></div>
                 <span className={classes.checked}>
                   <img
@@ -452,7 +478,7 @@ export default function Address() {
                     alt="icon-check"
                   />
                 </span>
-              </div>
+              </div> */}
 
               {item.isDefault && (
                 <div>
@@ -466,7 +492,6 @@ export default function Address() {
                   </span>
                 </div>
               )}
-
             </div>
           );
         })}

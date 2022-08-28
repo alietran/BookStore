@@ -128,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
   },
   img__library: {
     display: "flex",
-
+    padding: "20px 0",
     justifyContent: "flex-start",
     gap: "0.5rem",
   },
@@ -142,20 +142,22 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     width: "50px",
     height: "50px",
-    overflow: "hidden",
   },
   "img__library-content--item": {
     position: "relative",
     display: "inline-block",
-    overflow: "hidden",
+    // overflow: "hidden",
+    display: "flex",
     borderRadius: "4px",
-    height: "50px",
-    width: "50px",
+    height: "70px",
+    width: "70px",
+    // padding: "10px",
     "& img": {
       width: "100%",
-      height: "50px",
+      height: "100%",
       objectFit: "contain",
       transition: "transform 0.3s ease 0s",
+      // padding: "10px 0"
     },
   },
 
@@ -261,7 +263,6 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid seagreen",
     color: "seagreen",
     fontWeight: 600,
-  
   },
   "productDetail__wrapper-content--right--right": {
     boxSizing: "border-box",

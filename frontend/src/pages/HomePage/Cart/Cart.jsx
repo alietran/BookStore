@@ -15,8 +15,10 @@ export default function Cart() {
   //   ? JSON.parse(localStorage.getItem("cart"))
   //   : null;
 
-  let cart = JSON.parse(localStorage.getItem("cart"));
-  // console.log("cartList", cartList);
+let cart = localStorage.getItem("cart")
+  ? JSON.parse(localStorage.getItem("cart"))
+  : [];
+  console.log("cart", cart);
 
   const totalPrice = cart?.reduce(
     (total, item) =>
@@ -291,6 +293,7 @@ export default function Cart() {
                   <Button
                     onClick={handleSubmit}
                     variant="contained"
+                    disabled={ (cart && cart.length === 0 ) ? true : false}
                     sx={{
                       marginTop: "15px",
                       color: "#fff",

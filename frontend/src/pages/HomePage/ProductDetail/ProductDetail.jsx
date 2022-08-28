@@ -176,7 +176,7 @@ const handleAddToCart = () => {
                           <img src={bookDetail?.image} />
                         </div>
                       </div>
-                      <div className="img__library">
+                      <div className={classes["img__library"]}>
                         <div className={classes["img__library-content"]}>
                           <div
                             className={classes["img__library-content--item"]}
@@ -186,14 +186,11 @@ const handleAddToCart = () => {
                             ))} */}
                             {bookDetail?.gallery.map((item, index) => {
                               // console.log("index", item[index]);
-                              return   <img src={item} key={index} />;
+                              return <img src={item} key={index} />;
                             })}
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className={classes["box__content-left--line"]}>
-                      <div className={classes.line}></div>
                     </div>
                   </div>
                   <div className={classes["box__content-right"]}>
