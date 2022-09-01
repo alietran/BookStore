@@ -15,20 +15,20 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     "& tbody": {
       fontFamily: "Barlow",
-      fontSize: "17px",
+      fontSize: "16px",
     },
     "& tbody tr td:first-child": {
-      width: " 20%",
+      width: " 23%",
       color: "#696969 !important",
       "& h3": {
-        fontSize: "17px",
+        fontSize: "16px",
         fontWeight: "900",
         color: "#696969 !important",
         marginBottom: "0px",
       },
     },
     "& tbody tr td:last-child": {
-      width: "80%",
+      width: "77%",
       textAlign: "end",
       "& h3": {
         fontSize: "20px !important",
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   productInfo: {
-    fontSize: "17px !important",
+    fontSize: "16px !important",
   },
   confirmButton: {
     padding: " 5px 0 !important",
