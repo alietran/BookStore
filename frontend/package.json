@@ -24,6 +24,7 @@
     "@tinymce/tinymce-react": "^4.2.0",
     "antd": "^4.22.4",
     "axios": "^0.27.2",
+    "buffer": "^6.0.3",
     "firebase": "^9.9.1",
     "formik": "^2.2.9",
     "fs-extra": "^10.1.0",

@@ -91,7 +91,12 @@ export const CartReducer = (state = stateDefault, action) => {
       }
       return { ...state, cart: cartList };
     }
-
+    case "RESET_CART": {
+      return {
+        ...state,
+        cart: [],
+      };
+    }
     default:
       return { ...state };
   }

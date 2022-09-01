@@ -1,0 +1,5 @@
+export const ACCESSKEY = "F8BBA842ECF85";
+export const SECRETKEY = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+export const PARTNERCODE = "MOMO";
+export const REQUESTID="MOMO123456_7890";
+

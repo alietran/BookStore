@@ -1,26 +1,32 @@
 const mongoose = require('mongoose');
 
-const orderDetailSchema = new mongoose.Schema({
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  totalPrice: { type: Number, required: true },
-  order: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Order',
+const orderDetailSchema = new mongoose.Schema(
+  {
+    quantity: { type: Number, required: true },
+    price: { type: Number, required: true },
+    totalPrice: { type: Number, required: true },
+    order: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Order',
+    },
+    book: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Book',
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updateAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
-  book: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Book',
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updateAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 orderDetailSchema.pre(/^find/, function (next) {
   this.populate({

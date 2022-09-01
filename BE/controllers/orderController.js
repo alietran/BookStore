@@ -19,6 +19,8 @@ let transporter = nodemailer.createTransport({
 });
 
 exports.getAllOrder = factory.getAll(Order);
+exports.updateOrder = factory.updateOne(Order);
+exports.getDetailOrder = factory.getOne(Order, { path: 'orderDetail' });
 
 const filterObj = (obj, ...allowedField) => {
   const newObj = {};
@@ -53,30 +55,41 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       await req.body.items.map(async (item, index) => {
         let book = await Book.findById(item.productId);
         if (book) {
-          book.quantity = book.quantity - item.quantity;
-          book.quantitySold = book.quantitySold + item.quantity;
-          await book.save();
-          let product = {
-            quantity: item.quantity,
-            price: book.price,
-            totalPrice: item.quantity * book.price,
-            order,
-            book: book._id,
-            name: book.name,
-          };
-          arrayItems.push(product);
+          if (order.paymentMethod.resultCode == 1006) {
+            let product = {
+              quantity: item.quantity,
+              price: book.price,
+              totalPrice: item.quantity * book.price,
+              order,
+              book: book._id,
+              name: book.name,
+            };
+            arrayItems.push(product);
+          } else {
+            book.quantity = book.quantity - item.quantity;
+            book.quantitySold = book.quantitySold + item.quantity;
+            await book.save();
+            let product = {
+              quantity: item.quantity,
+              price: book.price,
+              totalPrice: item.quantity * book.price,
+              order,
+              book: book._id,
+              name: book.name,
+            };
+            arrayItems.push(product);
+          }
         } else {
           return next(new AppError('Không tồn tại quyển sách nào!', 404));
         }
 
-        if (index === req.body.items.length - 1) {
-          let orderDetail = await OrderDetail.insertMany(arrayItems);
-          req.arrayItems = arrayItems;
-
+        if (arrayItems.length === req.body.items.length) {
+          await OrderDetail.insertMany(arrayItems);
           const { address, totalPrice } = req.order;
+
           await transporter.sendMail({
             from: `"Giao Dich Thanh Cong " <ltd.ctu@gmail.com>`, // sender address
-            to: 'ngocdiep710@gmail.com', // list of receivers
+            to: 'thanhledatomon@gmail.com', // list of receivers
             subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
             // text: "Hello world?", // plain text body
             html: `<p>Họ và tên: ${fullName}</p>
@@ -85,14 +98,16 @@ exports.createOrder = catchAsync(async (req, res, next) => {
               address.district
             }, ${address.city}</p>
               <p>Tổng tiền: ${(totalPrice * 1).toLocaleString('vi-VI')} VNĐ</p>
-              <p>Chi tiết sản phẩm: 
+              <p>Chi tiết sản phẩm:
               <span>
               ${arrayItems.map(
-                (item,index) =>
-                  `<div key=${index}>${item.name}  <b>x</b> ${item.quantity} = ${(
-                    item.price * 1
-                  ).toLocaleString('vi-VI')}đ </div>`
-              )} 
+                (item, index) =>
+                  `<div key=${index}>${item.name}  <b>x</b> ${
+                    item.quantity
+                  } = ${(item.quantity * item.price).toLocaleString(
+                    'vi-VI'
+                  )}đ </div>`
+              )}
               </span>
               </p>
              `,
@@ -109,8 +124,4 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: err });
   }
-
-
 });
-
-

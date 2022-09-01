@@ -53,3 +53,61 @@ export const createOrder= (data) => {
     }
   };
 };
+
+export const updateOrder = (id, data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "UPDATE_ORDER_REQUEST",
+      });
+      const result = await orderAPI.updateOrder(id, data);
+      console.log("result", result);
+      dispatch({
+        type: "UPDATE_ORDER_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "UPDATE_ORDER_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
+
+export const getDetailOrder = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "GET_DETAIL_ORDER_REQUEST",
+      });
+      const result = await orderAPI.getDetailOrder(id);
+      console.log("result", result);
+      dispatch({
+        type: "GET_DETAIL_ORDER_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "GET_DETAIL_ORDER_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
+
+export const resetCreateOrder = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "RESET_CREATE_ORDER",
+    });
+  };
+};

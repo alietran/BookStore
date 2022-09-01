@@ -4,11 +4,20 @@ const paymentSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  status: {
+  resultCode: {
+    type: Number,
+  },
+  orderId: {
     type: String,
-    default: '',
+  },
+  message: {
+    type: String,
+  },
+  isDefault: {
+    type: Boolean,
+    default: true,
   },
 });
 
 const Payment = mongoose.model('Payment', paymentSchema);
-module.exports = Payment;
+module.exports = { Payment, paymentSchema };

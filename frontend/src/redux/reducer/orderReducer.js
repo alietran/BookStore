@@ -1,10 +1,18 @@
 const stateDefault = {
   address: null,
-  addressItem:null,
+  addressItem: null,
 
   loadingCreateOrder: false,
   successCreateOrder: null,
   errorCreateOrder: null,
+
+  loadingUpdateOrder: false,
+  successUpdateOrder: null,
+  errorUpdateOrder: null,
+
+  loadingDetailOrder: false,
+  successDetailOrder: null,
+  errorDetailOrder: null,
 };
 
 export const OrderReducer = (state = stateDefault, action) => {
@@ -40,6 +48,49 @@ export const OrderReducer = (state = stateDefault, action) => {
         errorCreateOrder: action.payload.error,
         loadingCreateOrder: false,
       };
+    }
+
+    case "UPDATE_ORDER_REQUEST": {
+      return { ...state, loadingUpdateOrder: true, errorUpdateOrder: null };
+    }
+    case "UPDATE_ORDER_SUCCESS": {
+      return {
+        ...state,
+        successUpdateOrder: action.payload.data,
+        loadingUpdateOrder: false,
+      };
+    }
+    case "UPDATE_ORDER_FAIL": {
+      return {
+        ...state,
+        errorUpdateOrder: action.payload.error,
+        loadingUpdateOrder: false,
+      };
+    }
+
+    case "GET_DETAIL_ORDER_REQUEST": {
+      return { ...state, loadingDetailOrder: true, errorDetailOrder: null };
+    }
+    case "GET_DETAIL_ORDER_SUCCESS": {
+      return {
+        ...state,
+        successDetailOrder: action.payload.data,
+        loadingDetailOrder: false,
+      };
+    }
+    case "GET_DETAIL_ORDER_FAIL": {
+      return {
+        ...state,
+        errorDetailOrder: action.payload.error,
+        loadingDetailOrder: false,
+      };
+    }
+
+    case "RESET_CREATE_ORDER": {
+      state.loadingCreateOrder = false;
+      state.successCreateOrder = null;
+      state.errorCreateOrder = null;
+      return state;
     }
     default:
       return { ...state };

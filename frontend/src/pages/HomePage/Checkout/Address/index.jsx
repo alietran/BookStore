@@ -82,16 +82,16 @@ export default function Address() {
     }
   }, [addressList]);
 
-  useEffect(()=>{
-      let addressItem = addressList?.data.filter((item) => item.isDefault);
+  useEffect(() => {
+    let addressItem = addressList?.data.filter((item) => item.isDefault);
+    console.log("addressItem123",addressItem);
     dispatch({
       type: "ADDRESS_DEFAULT",
       payload: {
         data: addressItem,
       },
     });
-
-  },[])
+  }, [addressList]);
 
   const handleAddress = (item, index) => {
     console.log("!245")

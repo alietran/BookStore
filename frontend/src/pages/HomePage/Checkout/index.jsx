@@ -11,7 +11,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import Address from "./Address";
 import PaymentMethod from "./PaymentMethod/PaymentMethod";
@@ -19,13 +19,21 @@ import { NavLink } from "react-router-dom";
 import useStyles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { getPaymentList } from "../../../redux/action/paymentAction";
-import { createOrder } from "../../../redux/action/orderAction";
+import { createOrder, updateOrder } from "../../../redux/action/orderAction";
+import paymentAPI from "../../../api/paymentAPI";
 
 export default function Checkout() {
   const classes = useStyles();
   const { discount } = useSelector((state) => state.CartReducer);
-  const { address, addressItem } = useSelector((state) => state.OrderReducer);
-  console.log("addressItem", addressItem);
+  const { address, addressItem, successCreateOrder } = useSelector(
+    (state) => state.OrderReducer
+  );
+  const { payment } = useSelector((state) => state.PaymentReducer);
+  console.log("address", address);
+  // console.log("addressItem[0]", addressItem[0]);
+  const [linkMoMo, setLinkMoMo] = useState("");
+  const checkoutLinkRef = useRef();
+
   const [value, setValue] = React.useState("1");
   const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
@@ -47,22 +55,56 @@ export default function Checkout() {
     // return [...order1, { productId: item.id, quantity: item.quantity }];
     orderItem.push({ productId: item.id, quantity: item.quantity })
   );
-  console.log("orderItem24", orderItem);
-  // useEffect(() => {
 
-  // }, [cart]);
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let order = {
       totalPrice,
       items: orderItem,
       address: address ? address : addressItem[0],
-      paymentMethod: "63079da2cd7d0340e8be170c",
+      paymentMethod: {
+        name: payment,
+        resultCode: 1000,
+        message:
+          "Giao dịch đã được khởi tạo, chờ người dùng xác nhận thanh toán.",
+        orderId: "",
+      },
       notes: "",
     };
-    console.log("order", order);
-    dispatch(createOrder(order));
+    localStorage.setItem("order", JSON.stringify(order));
+    if (payment === "Thanh toán bằng ví MoMo") {
+      const { data } = await paymentAPI.createMoMoPayment({
+        // _id: idShowtime,
+        total: totalPrice,
+        extraData: { address: address, cart },
+        orderInfo: `${address.fullName} - ${address.phoneNumber} - ${
+          address.address
+        }, ${address.ward}, ${address.district}, ${
+          address.city
+        }- Tổng tiền ${totalPrice.toLocaleString("vi-VI")}đ`,
+      });
+      console.log("data", data);
+      localStorage.setItem("createPaymentMoMo", JSON.stringify(data));
+
+      // riderect to momo website
+      setLinkMoMo(data.qrCodeUrl);
+      checkoutLinkRef.current.click();
+    } else {
+      dispatch(createOrder(order));
+    }
   };
+
+  useEffect(() => {
+    if (successCreateOrder !== null) {
+      localStorage.removeItem("order");
+    }
+    setTimeout(() => {
+      dispatch({ type: "RESET_CART" });
+    }, 100);
+
+    setTimeout(() => {
+      dispatch({ type: "RESET_CREATE_ORDER" });
+    }, 200);
+  }, [successCreateOrder]);
 
   return (
     <Box className="m-5">
@@ -249,6 +291,14 @@ export default function Checkout() {
                   </Button>
                 </div>
               </div>
+
+              <a
+                ref={checkoutLinkRef}
+                style={{ display: "none" }}
+                href={linkMoMo}
+              >
+                checkout momo
+              </a>
             </Box>
           </Grid>
         </Grid>

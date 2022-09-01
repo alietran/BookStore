@@ -7,4 +7,9 @@ router.post('/', authController.protectUser, orderController.createOrder);
 
 router.route('/').get(orderController.getAllOrder);
 
+router
+  .route('/:id')
+  .get(orderController.getDetailOrder)
+  .patch(orderController.updateOrder);
+
 module.exports = router;
