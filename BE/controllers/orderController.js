@@ -5,6 +5,7 @@ const Payment = require('../models/Payment');
 const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const formatDate = require('../utils/formatDate');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
@@ -85,11 +86,12 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
         if (arrayItems.length === req.body.items.length) {
           await OrderDetail.insertMany(arrayItems);
-          const { address, totalPrice, _id } = req.order;
-          console.log('arrayItems', arrayItems);
+          const { address, totalPrice, _id, paymentMethod, createdAt } =
+            req.order;
+          let dayFull = formatDate(createdAt).dateFull;
           await transporter.sendMail({
-            from: `"Giao Dich Thanh Cong " <ltd.ctu@gmail.com>`, // sender address
-            to: 'thanhledatomon@gmail.com', // list of receivers
+            from: `"Thông báo xác nhận đơn hàng #${_id}" <ltd.ctu@gmail.com>`, // sender address
+            to: 'ngocdiep710@gmail.com', // list of receivers
             subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
             // text: "Hello world?", // plain text body
             html: `
@@ -100,7 +102,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 <td align="center" valign="top">
 						<div id="m_-2654664080331285438template_header_image">
 													</div>
-						<table border="0" cellpadding="0" cellspacing="0" width="600" id="m_-2654664080331285438template_container" style="background-color:#fff;border:1px solid #dedede;border-radius:3px" bgcolor="#fff">
+						<table border="0" cellpadding="0" cellspacing="0" width="720" id="m_-2654664080331285438template_container" style="background-color:#fff;border:1px solid #dedede;border-radius:3px" bgcolor="#fff">
 <tbody><tr>
 <td align="center" valign="top">
 									
@@ -115,7 +117,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 <tr>
 <td align="center" valign="top">
 									
-									<table border="0" cellpadding="0" cellspacing="0" width="600" id="m_-2654664080331285438template_body"><tbody><tr>
+									<table border="0" cellpadding="0" cellspacing="0" width="720" id="m_-2654664080331285438template_body"><tbody><tr>
 <td valign="top" id="m_-2654664080331285438body_content" style="background-color:#fff" bgcolor="#fff">
 												
 												<table border="0" cellpadding="20" cellspacing="0" width="100%"><tbody><tr>
@@ -123,12 +125,12 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 															<div id="m_-2654664080331285438body_content_inner" style="color:#636363;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:14px;line-height:150%;text-align:left" align="left">
 
 <p style="margin:0 0 16px">Xin chào ${address.fullName},</p>
-<p style="margin:0 0 16px">Chúng tôi đã xử lý xong <span class="il">đơn</span> <span class="il">hàng</span> của bạn.</p>
-<p style="margin:0 0 16px">Trả tiền mặt khi giao <span class="il">hàng</span>.</p>
+<p style="margin:0 0 16px">Chúng tôi đã nhận được đặt hàng của bạn và đã sẵn sàng để vận chuyển. Chúng tôi sẽ thông báo cho bạn khi đơn hàng được gửi đi.</p>
+<p style="margin:0 0 16px">${paymentMethod.name}</span>.</p>
 
 
 <h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">
-	[<span class="il">Đơn</span> <span class="il">hàng</span> #${_id}] (6 Tháng Năm, 2022)</h2>
+	[<span class="il">Đơn</span> <span class="il">hàng</span> #${_id}] (${dayFull})</h2>
 
 <div style="margin-bottom:40px">
 	<table cellspacing="0" cellpadding="6" border="1" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;width:100%;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif" width="100%">
@@ -138,8 +140,9 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 				<th scope="col" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Giá</th>
 			</tr></thead>
 <tbody>
- ${arrayItems.map(
-   (item, index) =>
+
+ ${arrayItems
+   .map((item, index) =>
      `
    <tr key=${index}>
               <td style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;word-wrap:break-word" align="left">
@@ -150,30 +153,38 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 		<td style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif" align="left">
 			<span>${(item.quantity * item.price).toLocaleString(
         'vi-VI'
-      )}&nbsp;<span>₫</span></span>		</td></tr>
-              `
- )}
+      )}&nbsp;<span>đ</span></span>		</td></tr>
+              `.trim()
+   )
+   .join('')}
   </tbody>
 <tfoot>
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left">Tổng số phụ:</th>
-						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>${(
-              item.quantity * item.price
-            ).toLocaleString('vi-VI')}&nbsp;<span>₫</span></span></td>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>${totalPrice.toLocaleString(
+              'vi-VI'
+            )} &nbsp;<span>₫</span></span></td>
 					</tr>
+<tr>
+<th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left">Khuyến mãi:</th>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>0 &nbsp;<span>₫</span></span></td>
+					</tr>
+
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Giao nhận <span class="il">hàng</span>:</th>
 						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Giao <span class="il">hàng</span> miễn phí</td>
 					</tr>
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Phương thức thanh toán:</th>
-						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Trả tiền mặt khi nhận <span class="il">hàng</span></td>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">${
+              paymentMethod.name
+            }</span></td>
 					</tr>
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left">Tổng cộng:</th>
-						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left"><span>${(
-              item.quantity * item.price
-            ).toLocaleString('vi-VI')}&nbsp;<span>₫</span></span></td>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left" align="left"><span>${totalPrice.toLocaleString(
+              'vi-VI'
+            )}&nbsp;<span>₫</span></span></td>
 					</tr>
 </tfoot>
 </table>
@@ -184,13 +195,29 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 			<h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Địa chỉ thanh toán</h2>
 
 			<address style="padding:12px;color:#636363;border:1px solid #e5e5e5">
-				Thành 123123<br>12312<br>123123<br>Cần Thơ									<br><a href="tel:0916671369" style="color:#96588a;font-weight:normal;text-decoration:underline" target="_blank">0916671369</a>													<br><a href="mailto:thanhledatomon@gmail.com" target="_blank">thanhledatomon@gmail.com</a>							</address>
+				${address.fullName}
+        <br><a href="tel:${
+          address.phoneNumber
+        }" style="color:#96588a;font-weight:normal;text-decoration:underline" target="_blank">${
+              address.phoneNumber
+            }</a>
+        <br>Số nhà : ${address.address}, ${address.ward}, ${
+              address.district
+            }, ${address.city}</address>
 		</td>
 					<td valign="top" width="50%" style="text-align:left;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;padding:0" align="left">
 				<h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Địa chỉ giao <span class="il">hàng</span></h2>
 
-				<address style="padding:12px;color:#636363;border:1px solid #e5e5e5">
-					Thành 123123<br>12312<br>123123<br>Cần Thơ									</address>
+						<address style="padding:12px;color:#636363;border:1px solid #e5e5e5">
+				${address.fullName}
+        <br><a href="tel:${
+          address.phoneNumber
+        }" style="color:#96588a;font-weight:normal;text-decoration:underline" target="_blank">${
+              address.phoneNumber
+            }</a>
+        <br>Số nhà : ${address.address}, ${address.ward}, ${
+              address.district
+            }, ${address.city}</address>
 			</td>
 			</tr></tbody></table>
 <p style="margin:0 0 16px">Cảm ơn đã mua <span class="il">hàng</span> của chúng tôi.</p>
@@ -213,7 +240,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 <td valign="top" style="padding:0;border-radius:6px">
 									<table border="0" cellpadding="10" cellspacing="0" width="100%"><tbody><tr>
 <td colspan="2" valign="middle" id="m_-2654664080331285438credit" style="border-radius:6px;border:0;color:#8a8a8a;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:12px;line-height:150%;text-align:center;padding:24px 0" align="center">
-												<p style="margin:0 0 16px">webbanhang</p>
+											<p style="margin:0;color:#999;line-height:150%;font-size:14px">Nếu bạn có bất cứ câu hỏi nào, đừng ngần ngại liên lạc với chúng tôi tại <a href="mailto:ngocdiep710@gmail.com" style="font-size:14px;text-decoration:none;color:#1666a2" target="_blank">ngocdiep710@gmail.com</a></p>
 											</td>
 										</tr></tbody></table>
 </td>
