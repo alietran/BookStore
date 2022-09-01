@@ -100,7 +100,7 @@ export default function ProductDetail(props) {
       id: bookDetail.id,
       quantity: 1,
     };
-    console.log("cart", cart);
+    // console.log("cart", cart);
     dispatch({
       type: "ADD_TO_CART",
       payload: {

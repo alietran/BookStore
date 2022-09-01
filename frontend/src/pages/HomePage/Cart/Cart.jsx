@@ -1,24 +1,28 @@
 import { Button, Container, Link, TextField } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import useStyles from "./style";
 import HomeIcon from "@mui/icons-material/Home";
 import { useDispatch, useSelector } from "react-redux";
+import Voucher from "./Voucher/Voucher";
 export default function Cart() {
   const classes = useStyles();
-  const { total } = useSelector((state) => state.CartReducer);
-  console.log("total", total);
-  const history = useHistory()
+  const { discount, miniPrice } = useSelector((state) => state.CartReducer);
+  const [totalCart, setTotalCart] = useState(0);
+  console.log("miniPrice", typeof miniPrice);
+  console.log("discount", discount);
+
+  const history = useHistory();
   // console.log("cart", cart);
 
-  // let cartList = localStorage.getItem("cart")
-  //   ? JSON.parse(localStorage.getItem("cart"))
-  //   : null;
+  // useEffect(() => {
+  //   // total = total;
+  // }, [total]);
 
-let cart = localStorage.getItem("cart")
-  ? JSON.parse(localStorage.getItem("cart"))
-  : [];
-  console.log("cart", cart);
+  let cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
+  // console.log("cart", cart);
 
   const totalPrice = cart?.reduce(
     (total, item) =>
@@ -26,6 +30,34 @@ let cart = localStorage.getItem("cart")
       (total = total + item.price * item.quantity),
     0
   );
+  console.log("total totalPrice", totalPrice);
+
+  useEffect(() => {
+    console.log("miniPrice", miniPrice);
+    console.log("totalCart125364", totalCart);
+    if (totalCart < miniPrice) {
+       setTotalCart(totalPrice);
+    } else {
+      setTotalCart(totalPrice);
+    }
+  }, [totalPrice]);
+
+  // useEffect(()=>{
+  //   setTotalCart(total)
+  // },total)
+
+  // useEffect(() => {
+  //   dispatch({
+  //     type: "TONG_TIEN",
+  //     payload: {
+  //       data: {
+  //         totalPrice,
+  //         discount: 0,
+  //       },
+  //     },
+  //   });
+  // }, [totalPrice]);
+
   const dispatch = useDispatch();
 
   const hadleClickPlus = (maSP, tangGiam) => {
@@ -63,8 +95,8 @@ let cart = localStorage.getItem("cart")
   };
 
   const handleSubmit = () => {
-    history.push("/checkout")
-  }
+    history.push("/checkout");
+  };
 
   return (
     <div>
@@ -180,7 +212,6 @@ let cart = localStorage.getItem("cart")
                               </span>
                             </button>
                             <input
-                           
                               className={classes.quantityValue}
                               value={item.quantity}
                             />
@@ -242,18 +273,7 @@ let cart = localStorage.getItem("cart")
               </div>
             </div>
             <div className={classes["cart__wrapper-content--right"]}>
-              <div className={classes["cart__wrapper-content--info"]}>
-                <h4>Chọn mã giảm giá</h4>
-                <div className={classes.info__voucher}>
-                  <div className={classes["info-text"]}>
-                    <input type="text " placeholder="Enter your code" />
-                  </div>
-
-                  <Button variant="contained" className={classes.apply}>
-                    Áp dụng
-                  </Button>
-                </div>
-              </div>
+              <Voucher totalPrice={totalCart} />
               <div className={classes["cart__wrapper-content--payment"]}>
                 <div className={classes["cart__wrapper-content--info"]}>
                   <h4 className="text-xl">Thanh toán</h4>
@@ -263,7 +283,17 @@ let cart = localStorage.getItem("cart")
                         <tr>
                           <td>Tạm tính </td>
                           <td>
-                            <span>{(1 * totalPrice)?.toLocaleString()}</span>
+                            <span>{totalCart.toLocaleString()}</span>
+                            {/* {(1 * total)?.toLocaleString()} */}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Khuyến mãi </td>
+                          <td>
+                            <span>
+                              {discount ? discount.toLocaleString() : 0}{" "}
+                            </span>
+                            {/* {(1 * total)?.toLocaleString()} */}
                           </td>
                         </tr>
                         <tr>
@@ -282,7 +312,10 @@ let cart = localStorage.getItem("cart")
                                 fontWeight: "500",
                               }}
                             >
-                              {totalPrice?.toLocaleString()} ₫
+                              {totalCart < miniPrice
+                                ? (totalCart - 0).toLocaleString()
+                                : (totalCart - discount).toLocaleString()}{" "}
+                              ₫
                             </span>
                           </td>
                         </tr>
@@ -293,7 +326,7 @@ let cart = localStorage.getItem("cart")
                   <Button
                     onClick={handleSubmit}
                     variant="contained"
-                    disabled={ (cart && cart.length === 0 ) ? true : false}
+                    disabled={cart && cart.length === 0 ? true : false}
                     sx={{
                       marginTop: "15px",
                       color: "#fff",

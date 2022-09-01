@@ -23,6 +23,7 @@ import { createOrder } from "../../../redux/action/orderAction";
 
 export default function Checkout() {
   const classes = useStyles();
+  const { discount } = useSelector((state) => state.CartReducer);
   const { address, addressItem } = useSelector((state) => state.OrderReducer);
   console.log("addressItem", addressItem);
   const [value, setValue] = React.useState("1");
@@ -31,37 +32,36 @@ export default function Checkout() {
     setValue(newValue);
   };
 
-  let cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+  let cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
   let totalPrice = cart?.reduce(
     (total, item) =>
       // console.log("item", item)
       (total = total + item.price * item.quantity),
     0
   );
-  
+
   let orderItem = [];
-   cart?.map((item, index) => (
-     // return [...order1, { productId: item.id, quantity: item.quantity }];
-     orderItem.push({ productId: item.id, quantity: item.quantity })
-   ));
-   console.log("orderItem24", orderItem);
+  cart?.map((item, index) =>
+    // return [...order1, { productId: item.id, quantity: item.quantity }];
+    orderItem.push({ productId: item.id, quantity: item.quantity })
+  );
+  console.log("orderItem24", orderItem);
   // useEffect(() => {
 
-   
   // }, [cart]);
-
 
   const handleSubmit = () => {
     let order = {
       totalPrice,
       items: orderItem,
-      address :  address ? address : addressItem[0],
+      address: address ? address : addressItem[0],
       paymentMethod: "63079da2cd7d0340e8be170c",
       notes: "",
     };
     console.log("order", order);
     dispatch(createOrder(order));
-
   };
 
   return (
@@ -200,6 +200,13 @@ export default function Checkout() {
                             <span> {totalPrice.toLocaleString()} ₫</span>
                           </td>
                         </tr>
+                        <td>Khuyến mãi </td>
+                        <td>
+                          <span>
+                            {discount ? discount.toLocaleString() : 0}{" "}
+                          </span>
+                          {/* {(1 * total)?.toLocaleString()} */}
+                        </td>
                         <tr>
                           <td>Phí vận chuyển </td>
                           <td>

@@ -21,7 +21,20 @@ const useStyles = makeStyles((theme) => ({
   "info-product": {
     marginLeft: "20px",
     flex: "0 0 70%",
-    lineHeight:0.8,
+    lineHeight: 0.8,
+  },
+  "payment-tab": {
+    width: "100%",
+    captionSide: "bottom",
+    borderCollapse: "collapse",
+    "& td": {
+      lineHeight: "1.8rem",
+    },
+  },
+  "info-payment": {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
   },
 }));
 

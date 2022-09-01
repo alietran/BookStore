@@ -172,7 +172,7 @@ export default function EditAddress({
     }
   }, [listCity, successDetailAddress]);
 
-  console.log("dataZ", data);
+  // console.log("dataZ", data);
 
   const [fullName, setFullName] = useState(successDetailAddress?.data.fullName);
 

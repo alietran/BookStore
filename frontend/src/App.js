@@ -41,6 +41,7 @@ import Cart from "./pages/HomePage/Cart/Cart";
 import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod";
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
+import Overview from "./pages/Admin/Overview/Overview";
 
 function App() {
   const themeOptions = useMemo(
@@ -99,7 +100,7 @@ function App() {
               "/checkout",
               "/productDetail/:id",
               "/cart",
-              "/confirmOrder/:id"
+              "/confirmOrder/:id",
             ]}
           >
             <MainLayout>
@@ -122,7 +123,6 @@ function App() {
               "/admin/users",
               "/admin/receipts/list",
               "/admin/receipts/detail/:receiptId",
-
               "/admin/receipts/create",
               "/admin/users/createUser",
               "/admin/categories",
@@ -133,6 +133,7 @@ function App() {
               "/admin/promotions",
               "/admin/books",
               "/admin/paymentMethod",
+              "/admin/overview",
             ]}
           >
             <AdminTemplate>
@@ -141,6 +142,11 @@ function App() {
                 exact
                 path="/admin/receipts/list"
                 component={ReceiptManager}
+              />
+              <AdminRoute
+                exact
+                path="/admin/overview"
+                component={Overview}
               />
 
               <AdminRoute

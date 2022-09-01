@@ -163,7 +163,7 @@ export default function Header() {
       // }
 
       console.log("cateListFilter", cateListFilter);
-      console.log("groupBy", groupBy);
+      // console.log("groupBy", groupBy);
       console.log("array", array);
       // console.log("index", index);[[...]]
       array.push({

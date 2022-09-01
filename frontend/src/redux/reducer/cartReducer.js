@@ -5,13 +5,21 @@
 const stateDefault = {
   cart: [],
   total: null,
+  discount: null,
+  miniPrice: null,
 };
 
 export const CartReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "TONG_TIEN": {
-      console.log("total", state.total);
-      return { ...state, total: action.payload.data };
+      const { discount, miniPrice } = action.payload.data;
+      console.log("totalPrice re", state.totalPrice);
+      console.log("miniPrice re", miniPrice);
+      return {
+        ...state,
+       miniPrice,
+        discount,
+      };
     }
     case "ADD_TO_CART": {
       // localStorage.setItem("cart",[]);
@@ -73,12 +81,12 @@ export const CartReducer = (state = stateDefault, action) => {
       const index = cartList?.findIndex(
         (item) => item.id === action.payload.maSP
       );
-      console.log("index", index);
-      console.log("cartList ngoai", cartList);
+      // console.log("index", index);
+      // console.log("cartList ngoai", cartList);
 
       if (index !== -1) {
         cartList.splice(index, 1);
-        console.log("cartList trong", cartList);
+        // console.log("cartList trong", cartList);
         localStorage.setItem("cart", JSON.stringify(cartList));
       }
       return { ...state, cart: cartList };

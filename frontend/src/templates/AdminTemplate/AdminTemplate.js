@@ -141,6 +141,9 @@ const AdminTemplate = (props) => {
               />
             </div>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+              <Menu.Item key="0" icon={<UserOutlined />}>
+                <NavLink to="/admin/overview">Tổng quan</NavLink>
+              </Menu.Item>
               <Menu.Item key="1" icon={<UserOutlined />}>
                 <NavLink to="/admin/users">Quản lý người dùng</NavLink>
               </Menu.Item>
@@ -148,7 +151,9 @@ const AdminTemplate = (props) => {
               <Menu.Item key="8" icon={<UserOutlined />}>
                 <NavLink to="/admin/receipts/list">Quản lý phiếu nhập</NavLink>
               </Menu.Item>
-
+              <Menu.Item key="7" icon={<ReceiptIcon />}>
+                <NavLink to="/admin/books">Sách</NavLink>
+              </Menu.Item>
               <Menu.Item key="2" icon={<CategoryIcon />}>
                 <NavLink to="/admin/categories"></NavLink>Thể loại
               </Menu.Item>
@@ -171,9 +176,7 @@ const AdminTemplate = (props) => {
               <Menu.Item key="6" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
               </Menu.Item>
-              <Menu.Item key="7" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/books">Sách</NavLink>
-              </Menu.Item>
+
               {/* <Menu.Item key="9" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/paymentMethod">Thanh toán</NavLink>
               </Menu.Item> */}
