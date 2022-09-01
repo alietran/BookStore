@@ -24,13 +24,15 @@ import paymentAPI from "../../../api/paymentAPI";
 
 export default function Checkout() {
   const classes = useStyles();
-  const { discount } = useSelector((state) => state.CartReducer);
+  const { discount, total, miniPrice } = useSelector(
+    (state) => state.CartReducer
+  );
   const { address, addressItem, successCreateOrder } = useSelector(
     (state) => state.OrderReducer
   );
   const { payment } = useSelector((state) => state.PaymentReducer);
-  console.log("address", address);
-  // console.log("addressItem[0]", addressItem[0]);
+  console.log("payment", payment);
+  console.log("addressItem", addressItem);
   const [linkMoMo, setLinkMoMo] = useState("");
   const checkoutLinkRef = useRef();
 
@@ -58,9 +60,9 @@ export default function Checkout() {
 
   const handleSubmit = async () => {
     let order = {
-      totalPrice,
+      totalPrice: totalPrice - discount,
       items: orderItem,
-      address: address ? address : addressItem[0],
+      address: address,
       paymentMethod: {
         name: payment,
         resultCode: 1000,
@@ -69,18 +71,19 @@ export default function Checkout() {
         orderId: "",
       },
       notes: "",
+      discount
     };
     localStorage.setItem("order", JSON.stringify(order));
     if (payment === "Thanh toán bằng ví MoMo") {
       const { data } = await paymentAPI.createMoMoPayment({
         // _id: idShowtime,
-        total: totalPrice,
-        extraData: { address: address, cart },
+        total: total - discount,
+        extraData: { address:address, cart },
         orderInfo: `${address.fullName} - ${address.phoneNumber} - ${
           address.address
         }, ${address.ward}, ${address.district}, ${
           address.city
-        }- Tổng tiền ${totalPrice.toLocaleString("vi-VI")}đ`,
+        }- Tổng tiền ${(total-discount).toLocaleString("vi-VI")}đ`,
       });
       console.log("data", data);
       localStorage.setItem("createPaymentMoMo", JSON.stringify(data));
@@ -265,7 +268,10 @@ export default function Checkout() {
                                 fontWeight: "500",
                               }}
                             >
-                              {totalPrice.toLocaleString()} ₫
+                              {total < miniPrice
+                                ? (total - 0).toLocaleString()
+                                : (total - discount).toLocaleString()}{" "}
+                              ₫
                             </span>
                           </td>
                         </tr>

@@ -29,6 +29,7 @@ export default function ConfirmOrder() {
   const extraData = new URLSearchParams(search).get("extraData");
   const dispatch = useDispatch();
   const { payment } = useSelector((state) => state.PaymentReducer);
+  const { discount } = useSelector((state) => state.CartReducer);
   console.log("extraData", extraData);
   console.log("resultCode", resultCode);
   console.log("successCreateOrder", successCreateOrder);
@@ -74,8 +75,9 @@ export default function ConfirmOrder() {
   useEffect(() => {
     if (resultCode && createPaymentMoMo && successMoMo) {
       let item = JSON.parse(localStorage.getItem("order"));
+      
       let order = {
-        totalPrice,
+        totalPrice:totalPrice-item.discount,
         items: item.items,
         address: item.address,
         paymentMethod: {

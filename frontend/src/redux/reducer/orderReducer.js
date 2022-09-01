@@ -32,9 +32,11 @@ export const OrderReducer = (state = stateDefault, action) => {
     }
     case "CREATE_ORDER_SUCCESS": {
       console.log("124");
+
       localStorage.setItem("cart", [""]);
-      let cart = JSON.parse(localStorage.getItem("cart"));
-      // console.log("cart local");
+    // JSON.parse(localStorage.getItem("products"));
+      // let cart = JSON.parse(localStorage.getItem("cart"));
+      // console.log("cart local", cart);
       return {
         ...state,
         successCreateOrder: action.payload.data,

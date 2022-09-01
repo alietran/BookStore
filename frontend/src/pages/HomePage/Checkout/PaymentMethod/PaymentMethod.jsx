@@ -21,18 +21,21 @@ export default function PaymentMethod() {
   }, [paymentList]);
 
   useEffect(() => {
-    if (paymentList) {
-      let payment = paymentList?.data.filter((item) => item.isDefault);
-      setPaymentIsDefault(payment);
-    }
+    let payment = paymentList?.data.filter((item) => item.isDefault);
+   if(payment){
+     dispatch({
+       type: "ORDER_PAYMENT",
+       payload: {
+         data: payment[0].name,
+       },
+     });
+   }
   }, [paymentList]);
-  console.log("paymentIsDefault", paymentIsDefault);
 
   const handlePayment = (item, index) => {
     console.log("item123", item);
 
     const paymentDefault = paymentList?.data.filter((item) => item.isDefault);
-    console.log("paymentDefault", paymentDefault);
 
     paymentDefault[0].isDefault = false;
     dispatch(updatePayment(paymentDefault[0]._id, paymentDefault[0]));

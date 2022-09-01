@@ -28,9 +28,7 @@ import {
   getAddressList,
   getDetailAddress,
   getListProvinces,
-
   updateAddress,
-
 } from "../../../../redux/action/addressAction";
 import EditAddress from "./EditAddress";
 
@@ -84,35 +82,36 @@ export default function Address() {
 
   useEffect(() => {
     let addressItem = addressList?.data.filter((item) => item.isDefault);
-    console.log("addressItem123",addressItem);
-    dispatch({
-      type: "ADDRESS_DEFAULT",
-      payload: {
-        data: addressItem,
-      },
-    });
+    console.log("addressItem123", addressItem);
+    if (addressItem) {
+      dispatch({
+        type: "ORDER_ADDRESS",
+        payload: {
+          data: addressItem[0],
+        },
+      });
+    }
   }, [addressList]);
 
   const handleAddress = (item, index) => {
-    console.log("!245")
+    console.log("!245");
     let addressIsDefault = addressList?.data.filter((item) => item.isDefault);
     addressIsDefault[0].isDefault = false;
     dispatch(updateAddress(addressIsDefault[0].id, addressIsDefault[0]));
-  
+
     setTimeout(async () => {
       item.isDefault = true;
-     await dispatch(updateAddress(item.id, item));
-
+      await dispatch(updateAddress(item.id, item));
     }, 100);
-   setTimeout(async () => {
-    await dispatch({
-      type: "ORDER_ADDRESS",
-      payload:{
-        data: item 
-      }
-    })
-   
-   }, 200);
+
+    setTimeout(async () => {
+      await dispatch({
+        type: "ORDER_ADDRESS",
+        payload: {
+          data: item,
+        },
+      });
+    }, 200);
   };
 
   const [data, setData] = useState({
@@ -468,7 +467,7 @@ export default function Address() {
                   ", " +
                   item.city}
               </p>
-                    
+
               {/* <div>
                 <div className={classes.border__checked}></div>
                 <span className={classes.checked}>
@@ -504,7 +503,6 @@ export default function Address() {
               <AddIcon />
               <p style={{ color: "#999999" }}>Thêm địa chỉ</p>
             </div>
-
           </div>
         )}
 

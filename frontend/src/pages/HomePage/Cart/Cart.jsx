@@ -30,6 +30,17 @@ export default function Cart() {
       (total = total + item.price * item.quantity),
     0
   );
+
+  useEffect(() => {
+    dispatch({
+      type: "TOTAL",
+      payload: {
+        data: {
+          totalPrice,
+        },
+      },
+    });
+  }, [totalCart]);
   console.log("total totalPrice", totalPrice);
 
   useEffect(() => {
@@ -42,21 +53,7 @@ export default function Cart() {
     }
   }, [totalPrice]);
 
-  // useEffect(()=>{
-  //   setTotalCart(total)
-  // },total)
 
-  // useEffect(() => {
-  //   dispatch({
-  //     type: "TONG_TIEN",
-  //     payload: {
-  //       data: {
-  //         totalPrice,
-  //         discount: 0,
-  //       },
-  //     },
-  //   });
-  // }, [totalPrice]);
 
   const dispatch = useDispatch();
 

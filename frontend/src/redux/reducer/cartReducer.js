@@ -17,8 +17,17 @@ export const CartReducer = (state = stateDefault, action) => {
       console.log("miniPrice re", miniPrice);
       return {
         ...state,
-       miniPrice,
+        miniPrice,
         discount,
+      };
+    }
+    case "TOTAL": {
+      const { totalPrice } = action.payload.data;
+     
+      return {
+        ...state,
+        total: totalPrice,
+ 
       };
     }
     case "ADD_TO_CART": {
