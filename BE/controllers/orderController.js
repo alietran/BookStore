@@ -44,7 +44,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       'user',
       'paymentMethod',
       'admin',
-      'shipper'
+      'shipper',
+      'promotion'
     );
 
     const order = await Order.create(objOrder);
