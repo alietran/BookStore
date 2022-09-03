@@ -15,6 +15,7 @@ import { AddressReducer } from "./reducer/addressReducer";
 import { ReceiptDetailReducer } from "./reducer/receiptDetailReducer";
 import { CartReducer } from "./reducer/cartReducer";
 import { OrderReducer } from "./reducer/orderReducer";
+import { OrderDetailReducer } from "./reducer/orderDetailReducer";
 import { PaymentReducer } from "./reducer/paymentReducer";
 
 
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   ReceiptDetailReducer,
   CartReducer,
   OrderReducer,
+  OrderDetailReducer,
   PaymentReducer,
 });
 

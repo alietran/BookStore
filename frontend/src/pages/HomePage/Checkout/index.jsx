@@ -15,15 +15,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import Address from "./Address";
 import PaymentMethod from "./PaymentMethod/PaymentMethod";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import useStyles from "./style";
 import { useDispatch, useSelector } from "react-redux";
 import { getPaymentList } from "../../../redux/action/paymentAction";
 import { createOrder, updateOrder } from "../../../redux/action/orderAction";
 import paymentAPI from "../../../api/paymentAPI";
+import { useSnackbar } from "notistack";
 
 export default function Checkout() {
   const classes = useStyles();
+  const history = useHistory();
   const { discount, total, miniPrice } = useSelector(
     (state) => state.CartReducer
   );
@@ -31,11 +33,13 @@ export default function Checkout() {
     (state) => state.OrderReducer
   );
   const { payment } = useSelector((state) => state.PaymentReducer);
+  const { voucherId } = useSelector((state) => state.CartReducer);
+  
   console.log("payment", payment);
   console.log("addressItem", addressItem);
   const [linkMoMo, setLinkMoMo] = useState("");
   const checkoutLinkRef = useRef();
-
+  const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = React.useState("1");
   const dispatch = useDispatch();
   const handleChange = (event, newValue) => {
@@ -59,6 +63,7 @@ export default function Checkout() {
   );
 
   const handleSubmit = async () => {
+
     let order = {
       totalPrice: totalPrice - discount,
       items: orderItem,
@@ -71,19 +76,20 @@ export default function Checkout() {
         orderId: "",
       },
       notes: "",
-      discount
+      discount,
+      promotion: voucherId,
     };
     localStorage.setItem("order", JSON.stringify(order));
     if (payment === "Thanh toán bằng ví MoMo") {
       const { data } = await paymentAPI.createMoMoPayment({
         // _id: idShowtime,
         total: total - discount,
-        extraData: { address:address, cart },
+        extraData: { address: address, cart },
         orderInfo: `${address.fullName} - ${address.phoneNumber} - ${
           address.address
-        }, ${address.ward}, ${address.district}, ${
-          address.city
-        }- Tổng tiền ${(total-discount).toLocaleString("vi-VI")}đ`,
+        }, ${address.ward}, ${address.district}, ${address.city}- Tổng tiền ${(
+          total - discount
+        ).toLocaleString("vi-VI")}đ`,
       });
       console.log("data", data);
       localStorage.setItem("createPaymentMoMo", JSON.stringify(data));
@@ -93,6 +99,14 @@ export default function Checkout() {
       checkoutLinkRef.current.click();
     } else {
       dispatch(createOrder(order));
+
+      setTimeout(
+        history.push("/"),
+        enqueueSnackbar("Đặt hàng thành công!", {
+          variant: "success",
+        }),
+        100
+      );
     }
   };
 
@@ -281,6 +295,7 @@ export default function Checkout() {
                   </div>
                   <Button
                     onClick={handleSubmit}
+                    disabled={!address ? true : false}
                     variant="contained"
                     sx={{
                       marginTop: "15px",

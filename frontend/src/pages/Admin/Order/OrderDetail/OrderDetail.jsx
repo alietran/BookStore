@@ -21,7 +21,8 @@ import {
   getAllDetailReceipt,
   getDetailReceipt,
 } from "../../../../redux/action/receiptDetailAction";
-import Info from "./Info";
+import { getAllDetailOrder } from "../../../../redux/action/orderDetailAction";
+// import Info from "./Info";
 
 const breadcrumbs = [
   <Link
@@ -40,34 +41,32 @@ const breadcrumbs = [
     color="text.primary"
     sx={{ "&:hover": { color: "#212B36" } }}
   >
-    Danh sách phiếu nhập hàng{" "}
+    Danh sách đơn hàng{" "}
   </Link>,
   <Typography key="3" color="inherit">
-    Chi tiết phiếu nhập hàng
+    Chi tiết đơn hàng
   </Typography>,
 ];
 
-export default function DetailReceipt() {
-  let { receiptDetailList } = useSelector(
-    (state) => state.ReceiptDetailReducer
-  );
+export default function OrderDetail() {
+  let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
 
-  console.log("receiptDetailList", receiptDetailList);
   const history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
 
-  receiptDetailList = receiptDetailList?.data.filter(
-    (item) => item.receiptId.id === params.receiptId
+  orderDetailList = orderDetailList?.data.filter(
+    (item) => item.order.id === params.orderId
   );
 
+  
   useEffect(function () {
-    dispatch(getAllDetailReceipt());
+    dispatch(getAllDetailOrder());
     // return () => {
     //   dispatch({ type: "RESET_RECEIPT_DETAIL" });
     // };
   }, []);
-  console.log("receiptDetailList", receiptDetailList);
+  console.log("orderDetailList", orderDetailList);
   return (
     <Container
       sx={{ paddingRight: "0px !important", paddingLeft: "0px !important" }}
@@ -86,14 +85,14 @@ export default function DetailReceipt() {
             className="font-normal text-gray-900"
             sx={{ fontWeight: "400 !important" }}
           >
-            Chi tiết phiếu nhập hàng{" "}
+            Chi tiết đơn hàng{" "}
             <span className="text-lg">
               {" "}
-              #{receiptDetailList && receiptDetailList[0]?.receiptId._id} -{" "}
+              #{orderDetailList && orderDetailList[0]?.order._id} -{" "}
               <span>
                 {" "}
-                {receiptDetailList &&
-                receiptDetailList[0]?.receiptId.inventoryStatus ? (
+                {orderDetailList &&
+                orderDetailList[0]?.order.inventoryStatus ? (
                   <Chip
                     label="Đã nhập kho"
                     color="success"
@@ -115,13 +114,13 @@ export default function DetailReceipt() {
         </Stack>
       </Stack>
       <Box sx={{ width: "100%", typography: "body1" }}>
-        <Info
+        {/* <Info
           // receiptDetailList={successDetailReceipt?.data.receiptId.supplierId}
           // totalPriceReceiptDetail={
           //   successDetailReceipt?.data.totalPriceReceiptDetail
           // }
           receiptDetailList={receiptDetailList}
-        />
+        /> */}
       </Box>
     </Container>
   );

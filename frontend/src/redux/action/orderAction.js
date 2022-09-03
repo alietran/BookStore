@@ -1,7 +1,7 @@
 
 import orderAPI from "../../api/orderAPI";
 
-export const getBookList = () => {
+export const getOrderList = () => {
   return (dispatch) => {
     dispatch({
       type: "GET_ORDER_REQUEST",
@@ -108,6 +108,16 @@ export const resetCreateOrder = () => {
   return (dispatch) => {
     dispatch({
       type: "RESET_CREATE_ORDER",
+    });
+  };
+};
+
+
+
+export const resetOrder= () => {
+  return (dispatch) => {
+    dispatch({
+      type: "RESET_SUPPLIER",
     });
   };
 };

@@ -3,7 +3,7 @@ import Item from "antd/lib/list/Item";
 import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import { useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import paymentAPI from "../../../../api/paymentAPI";
 import { PARTNERCODE, REQUESTID } from "../../../../constants/config";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,11 +16,14 @@ import { Buffer } from "buffer";
 import useStyles from "./style";
 
 export default function ConfirmOrder() {
+  const classes = useStyles();
+  const history = useHistory();
   const [successMoMo, setSuccessMomMo] = useState(false);
   const search = useLocation().search;
   const { successCreateOrder, successDetailOrder } = useSelector(
     (state) => state.OrderReducer
   );
+   
   const params = useParams();
   const message = new URLSearchParams(search).get("message");
   const orderId = new URLSearchParams(search).get("orderId");
@@ -29,12 +32,12 @@ export default function ConfirmOrder() {
   const extraData = new URLSearchParams(search).get("extraData");
   const dispatch = useDispatch();
   const { payment } = useSelector((state) => state.PaymentReducer);
-  const { discount } = useSelector((state) => state.CartReducer);
+  const { discount, voucherId } = useSelector((state) => state.CartReducer);
   console.log("extraData", extraData);
   console.log("resultCode", resultCode);
   console.log("successCreateOrder", successCreateOrder);
-  console.log("message", message);
-  const classes = useStyles();
+  console.log("voucherId", voucherId);
+
 
   const decrypt_token = (data) => {
     let buffer = new Buffer(data, "base64");
@@ -77,7 +80,7 @@ export default function ConfirmOrder() {
       let item = JSON.parse(localStorage.getItem("order"));
       
       let order = {
-        totalPrice:totalPrice-item.discount,
+        totalPrice: totalPrice - item.discount,
         items: item.items,
         address: item.address,
         paymentMethod: {
@@ -87,6 +90,7 @@ export default function ConfirmOrder() {
           orderId,
         },
         notes: "",
+        promotion: item.promotion,
       };
 
       dispatch(createOrder(order));
@@ -255,10 +259,16 @@ export default function ConfirmOrder() {
                     </tr>
                   </tbody>
                 </table>
-
-                <Button variant="contained" className={classes.confirmButton}>
+                <Button
+                  variant="contained"
+                  className={classes.confirmButton}
+                  onClick={() => {
+                    history.push("/");
+                  }}
+                >
                   Xác nhận
                 </Button>
+                
               </Grid>
             </Grid>
           </Item>

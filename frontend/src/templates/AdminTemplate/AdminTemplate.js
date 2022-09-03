@@ -176,6 +176,9 @@ const AdminTemplate = (props) => {
               <Menu.Item key="6" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
               </Menu.Item>
+              <Menu.Item key="9" icon={<ReceiptIcon />}>
+                <NavLink to="/admin/orders">Đơn hàng</NavLink>
+              </Menu.Item>
 
               {/* <Menu.Item key="9" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/paymentMethod">Thanh toán</NavLink>

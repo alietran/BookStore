@@ -42,6 +42,9 @@ import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
 import Overview from "./pages/Admin/Overview/Overview";
+import OrderManager from "./pages/Admin/Order/OrderManager";
+import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
+
 
 function App() {
   const themeOptions = useMemo(
@@ -123,6 +126,7 @@ function App() {
               "/admin/users",
               "/admin/receipts/list",
               "/admin/receipts/detail/:receiptId",
+              "/admin/orders/detail/:orderId",
               "/admin/receipts/create",
               "/admin/users/createUser",
               "/admin/categories",
@@ -134,6 +138,7 @@ function App() {
               "/admin/books",
               "/admin/paymentMethod",
               "/admin/overview",
+              "/admin/orders"
             ]}
           >
             <AdminTemplate>
@@ -143,11 +148,7 @@ function App() {
                 path="/admin/receipts/list"
                 component={ReceiptManager}
               />
-              <AdminRoute
-                exact
-                path="/admin/overview"
-                component={Overview}
-              />
+              <AdminRoute exact path="/admin/overview" component={Overview} />
 
               <AdminRoute
                 exact
@@ -158,6 +159,12 @@ function App() {
                 exact
                 path="/admin/receipts/detail/:receiptId"
                 component={DetailReceipt}
+              />
+              <AdminRoute
+             
+                exact
+                path="/admin/orders/detail/:orderId"
+                component={OrderDetail}
               />
               <AdminRoute
                 exact
@@ -198,6 +205,8 @@ function App() {
                 component={PaymentManager}
               /> */}
               <AdminRoute exact path="/admin/books" component={BookManager} />
+              <AdminRoute exact path="/admin/orders" component={OrderManager} />
+            
             </AdminTemplate>
           </Route>
         </Switch>

@@ -5,10 +5,13 @@ import useStyles from "./style";
 import HomeIcon from "@mui/icons-material/Home";
 import { useDispatch, useSelector } from "react-redux";
 import Voucher from "./Voucher/Voucher";
+import { useSnackbar } from "notistack";
 export default function Cart() {
   const classes = useStyles();
+  const user = JSON.parse(localStorage.getItem("user"));
   const { discount, miniPrice } = useSelector((state) => state.CartReducer);
   const [totalCart, setTotalCart] = useState(0);
+   const { enqueueSnackbar } = useSnackbar();
   console.log("miniPrice", typeof miniPrice);
   console.log("discount", discount);
 
@@ -92,7 +95,13 @@ export default function Cart() {
   };
 
   const handleSubmit = () => {
-    history.push("/checkout");
+    if(!user){
+       enqueueSnackbar("Vui lòng đăng nhập để đến bước tiếp theo!", { variant: "error" });
+    }
+    else{
+     history.push("/checkout");
+
+    }
   };
 
   return (

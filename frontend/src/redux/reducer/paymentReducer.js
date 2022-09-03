@@ -25,8 +25,9 @@ const stateDefault = {
 export const PaymentReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "ORDER_PAYMENT": {
-      console.log(" action.payload.data", action.payload.data);
-      return { ...state, payment: action.payload.data };
+      const { data  } = action.payload;
+    
+      return { ...state, payment: data,  };
     }
     case "GET_PAYMENT_REQUEST": {
       return { ...state, loadingPaymentList: true, errorPaymentList: null };

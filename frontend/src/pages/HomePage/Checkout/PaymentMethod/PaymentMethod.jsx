@@ -22,11 +22,13 @@ export default function PaymentMethod() {
 
   useEffect(() => {
     let payment = paymentList?.data.filter((item) => item.isDefault);
+    
    if(payment){
      dispatch({
        type: "ORDER_PAYMENT",
        payload: {
          data: payment[0].name,
+       
        },
      });
    }
@@ -50,6 +52,7 @@ export default function PaymentMethod() {
         type: "ORDER_PAYMENT",
         payload: {
           data: item.name,
+        
         },
       });
     }, 200);

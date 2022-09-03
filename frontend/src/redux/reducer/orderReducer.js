@@ -2,6 +2,10 @@ const stateDefault = {
   address: null,
   addressItem: null,
 
+  orderList: null,
+  loadingOrderList: false,
+  errorOrderList: null,
+
   loadingCreateOrder: false,
   successCreateOrder: null,
   errorCreateOrder: null,
@@ -34,14 +38,13 @@ export const OrderReducer = (state = stateDefault, action) => {
       console.log("124");
 
       localStorage.setItem("cart", [""]);
-    // JSON.parse(localStorage.getItem("products"));
+      // JSON.parse(localStorage.getItem("products"));
       // let cart = JSON.parse(localStorage.getItem("cart"));
       // console.log("cart local", cart);
       return {
         ...state,
         successCreateOrder: action.payload.data,
         loadingCreateOrder: false,
-      
       };
     }
     case "CREATE_ORDER_FAIL": {
@@ -88,12 +91,39 @@ export const OrderReducer = (state = stateDefault, action) => {
       };
     }
 
-    case "RESET_CREATE_ORDER": {
-      state.loadingCreateOrder = false;
-      state.successCreateOrder = null;
-      state.errorCreateOrder = null;
-      return state;
+    case "GET_ORDER_REQUEST": {
+      return { ...state, loadingOrderList: true, errorOrderList: null };
     }
+    case "GET_ORDER_SUCCESS": {
+      return {
+        ...state,
+        orderList: action.payload.data,
+        loadingOrderList: false,
+      };
+    }
+    case "GET_ORDER_FAIL": {
+      return {
+        ...state,
+        errorOrderList: action.payload.error,
+        loadingOrderList: false,
+      };
+    }
+    case "RESET_ORDER": {
+      return {
+        ...state,
+
+        orderList: "",
+        loadingOrderList: false,
+        errorOrderList: null,
+
+        loadingCreateOrder: false,
+        successCreateOrder: "",
+        errorCreateOrder: null,
+
+   
+      };
+    }
+
     default:
       return { ...state };
   }

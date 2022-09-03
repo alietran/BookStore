@@ -7,18 +7,22 @@ const stateDefault = {
   total: null,
   discount: null,
   miniPrice: null,
+  voucherId: null
 };
 
 export const CartReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "TONG_TIEN": {
-      const { discount, miniPrice } = action.payload.data;
+      const { discount, miniPrice,voucherId } = action.payload.data;
+
       console.log("totalPrice re", state.totalPrice);
       console.log("miniPrice re", miniPrice);
+      console.log("voucherId re", voucherId);
       return {
         ...state,
         miniPrice,
         discount,
+        voucherId,
       };
     }
     case "TOTAL": {
