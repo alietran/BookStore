@@ -1,4 +1,3 @@
-
 import orderAPI from "../../api/orderAPI";
 
 export const getOrderList = () => {
@@ -28,8 +27,7 @@ export const getOrderList = () => {
   };
 };
 
-
-export const createOrder= (data) => {
+export const createOrder = (data) => {
   return async (dispatch) => {
     try {
       dispatch({
@@ -62,6 +60,7 @@ export const updateOrder = (id, data) => {
       });
       const result = await orderAPI.updateOrder(id, data);
       console.log("result", result);
+      console.log("414");
       dispatch({
         type: "UPDATE_ORDER_SUCCESS",
         payload: {
@@ -69,6 +68,7 @@ export const updateOrder = (id, data) => {
         },
       });
     } catch (error) {
+      console.log("error", error);
       dispatch({
         type: "UPDATE_ORDER_FAIL",
         payload: {
@@ -103,21 +103,11 @@ export const getDetailOrder = (id) => {
     }
   };
 };
-
-export const resetCreateOrder = () => {
+ 
+export const resetOrder = () => {
   return (dispatch) => {
     dispatch({
-      type: "RESET_CREATE_ORDER",
-    });
-  };
-};
-
-
-
-export const resetOrder= () => {
-  return (dispatch) => {
-    dispatch({
-      type: "RESET_SUPPLIER",
+      type: "RESET_ORDER",
     });
   };
 };

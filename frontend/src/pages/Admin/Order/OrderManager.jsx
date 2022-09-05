@@ -15,6 +15,7 @@ import {
   TablePagination,
   Breadcrumbs,
   Link,
+  Chip,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
@@ -49,13 +50,14 @@ import OptionOrder from "./OptionOrder/OptionOrder";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
- 
   { id: "id", label: "Mã đơn hàng", alignRight: false },
   { id: "name", label: "Tên khách hàng", alignRight: false },
-  { id: "address", label: "Địa chỉ", alignRight: false },
+
   { id: "date", label: "Ngày đặt", alignRight: false },
-  { id: "date", label: "Trạng thái", alignRight: false },
-  { id: "payment method", label: "Phương thức thanh toán", alignRight: false },
+  { id: "status", label: "Trạng thái", alignRight: false },
+
+  { id: "total", label: "Tổng tiền", alignRight: false },
+  { id: "payment", label: "Thanh toán", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
   { id: "" },
@@ -112,7 +114,7 @@ export default function OrderManager() {
     successDeleteAuthor,
   } = useSelector((state) => state.AuthorReducer);
   const { orderList } = useSelector((state) => state.OrderReducer);
-  // console.log("successDeleteCate", successDeleteCate);
+  console.log("orderList", orderList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
@@ -276,7 +278,7 @@ export default function OrderManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, address, status, createdAt, paymentMethod } =
+                  const { _id, address, status, createdAt, paymentMethod , totalPrice} =
                     row;
                   const isItemSelected =
                     selected.indexOf(address.fullName) !== -1;
@@ -300,21 +302,59 @@ export default function OrderManager() {
                       </TableCell>
                       <TableCell align="left">{_id}</TableCell>
                       <TableCell align="left">{address.fullName}</TableCell>
-                      <TableCell align="left">
-                        {address.address +
-                          ", " +
-                          address.ward +
-                          ", " +
-                          address.district +
-                          ", " +
-                          address.city}
-                      </TableCell>
+
                       {/* {/* <TableCell align="left">{name}</TableCell> */}
                       <TableCell align="left">
                         {moment(createdAt).format("DD/MM/YYYY")}
                       </TableCell>
-                      <TableCell align="left">{status}</TableCell>
-                      <TableCell align="left">{paymentMethod.name}</TableCell>
+                      <TableCell align="left">
+                        {/* <Chip
+                          label={status}
+                          color={
+                            status === "Đang xử lý"
+                              ? "warning"
+                              : status === "Đang vận chuyển"
+                              ? "secondary"
+                              : status === "Đã giao hàng" ? "success" : "error"
+                          }
+                        /> */}
+                        {/* <Label variant="ghost" color={"success"}>
+                          Đã xử lý
+                        </Label> */}
+                        <Label
+                          variant="ghost"
+                          color={
+                            status === "Đang xử lý"
+                              ? "warning"
+                              : status === "Đang vận chuyển"
+                              ? "info"
+                              : status === "Đã giao hàng" ? "success" : "error"
+                          }
+                        >
+                          {status}
+                        </Label>
+
+                        {/* {status === "Đang xử lý" ? (
+                          <Chip label="Đã thanh toán" color="primary" />
+                        ) : paymentMethod.resultCode === 1000 ? (
+                          <Chip label="Chờ thanh toán" color="warning" />
+                        ) : (
+                          <Chip label="Đã hủy" color="error" />
+                        )} */}
+                      </TableCell>
+                      <TableCell align="left">
+                        {totalPrice.toLocaleString()}
+                      </TableCell>
+                      <TableCell align="left">
+                        {paymentMethod.resultCode === 0 ? (
+                          <Chip label="Đã thanh toán" color="primary" />
+                        ) : paymentMethod.resultCode === 1000 ? (
+                          <Chip label="Chờ thanh toán" color="warning" />
+                        ) : (
+                          <Chip label="Đã hủy" color="error" />
+                        )}
+                      </TableCell>
+
                       <TableCell align="center">
                         <OptionOrder id={_id} order={row} />
                       </TableCell>

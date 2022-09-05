@@ -14,11 +14,12 @@ import React, { useState } from "react";
 import moment from "moment";
 import UserListHead from "../../../../components/user/UserListHead";
 
-export default function OrderInfo({ receiptDetailList }) {
+export default function OrderInfo({ orderDetailList }) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+
   // const receiptId = receiptDetailList[0]?.receiptId;
-  console.log("receiptDetailList", receiptDetailList);
+  console.log("receiptDetailList", orderDetailList);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -38,9 +39,9 @@ export default function OrderInfo({ receiptDetailList }) {
   return (
     <Box>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={6} sx={{ marginBottom: "50px" }}>
+        <Grid item xs={4} sx={{ marginBottom: "50px" }}>
           <Typography variant="h6" sx={{ marginLeft: 1, marginBottom: 2 }}>
-            Thông tin nhà cung cấp
+            Địa chỉ giao hàng
           </Typography>
           <Card
             sx={{
@@ -51,32 +52,137 @@ export default function OrderInfo({ receiptDetailList }) {
           >
             <div className="text-sm">
               <p className="font-semibold">
-                Tên nhà cung cấp:
+                Tên người nhận
                 <span className="ml-6 font-normal">
                   {" "}
-                  {receiptDetailList &&
-                    receiptDetailList[0]?.receiptId.supplierId?.name}
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.address?.fullName}
                 </span>
               </p>
               <p className="font-semibold">
-                Số điện thoại nhà cung cấp:{" "}
+                Số điện thoại :
                 <span className="ml-6 font-normal">
-                  {receiptDetailList &&
-                    receiptDetailList[0]?.receiptId.supplierId?.phoneNumber}
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.address?.phoneNumber}
                 </span>
               </p>
               <p className="font-semibold">
-                Địa chỉ nhà cung cấp:{" "}
+                Địa chỉ
                 <span className="ml-6 font-normal">
-                  {receiptDetailList &&
-                    receiptDetailList[0]?.receiptId.supplierId?.address}
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.address?.address +
+                      ", " +
+                      orderDetailList[0]?.order.address?.ward +
+                      ", " +
+                      orderDetailList[0]?.order.address?.district +
+                      ", " +
+                      orderDetailList[0]?.order.address?.city}
                 </span>
               </p>
               {/* <p className="font-semibold">
                 Tổng tiền:{" "}
                 <span className="ml-6 font-normal">
-                  {receiptDetailList &&
-                    receiptDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
+                  {orderDetailList &&
+                    orderDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
+                      "it-IT",
+                      {
+                        style: "currency",
+                        currency: "VND",
+                      }
+                    )}
+                </span>
+              </p> */}
+            </div>
+          </Card>
+        </Grid>
+        <Grid item xs={4} sx={{ marginBottom: "50px" }}>
+          <Typography variant="h6" sx={{ marginLeft: 1, marginBottom: 2 }}>
+            Thông tin thanh toán
+          </Typography>
+          <Card
+            sx={{
+              borderRadius: " 16px",
+              zIndex: 0,
+              padding: "24px",
+              paddingBottom: "58px",
+            }}
+          >
+            <div className="text-sm">
+              <p className="font-semibold">
+                Phương thức thanh toán
+                <span className="ml-6 font-normal">
+                  {" "}
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.paymentMethod?.name}
+                </span>
+              </p>
+              <p className="font-semibold">
+                Số tiền khách cần trả :
+                <span className="ml-6 font-normal">
+                  {orderDetailList &&
+                  orderDetailList[0]?.order.paymentMethod?.name ===
+                    "Thanh toán tiền mặt khi nhận hàng"
+                    ? orderDetailList[0]?.price.toLocaleString()
+                    : 0}
+                </span>
+              </p>
+
+              {/* <p className="font-semibold">
+                Tổng tiền:{" "}
+                <span className="ml-6 font-normal">
+                  {orderDetailList &&
+                    orderDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
+                      "it-IT",
+                      {
+                        style: "currency",
+                        currency: "VND",
+                      }
+                    )}
+                </span>
+              </p> */}
+            </div>
+          </Card>
+        </Grid>
+        <Grid item xs={4} sx={{ marginBottom: "50px" }}>
+          <Typography variant="h6" sx={{ marginLeft: 1, marginBottom: 2 }}>
+            Thông tin người giao hàng
+          </Typography>
+          <Card
+            sx={{
+              borderRadius: " 16px",
+              zIndex: 0,
+              padding: "24px",
+              paddingBottom: "45px",
+            }}
+          >
+            <div className="text-sm">
+              <p className="font-semibold">
+                Họ tên:
+                <span className="ml-6 font-normal">
+                  {" "}
+                  {orderDetailList && orderDetailList[0]?.order?.shipper?.name}
+                </span>
+              </p>
+              <p className="font-semibold">
+                Số điện thoại:
+                <span className="ml-6 font-normal">
+                  {orderDetailList &&
+                    orderDetailList[0]?.order?.shipper?.phoneNumber}
+                </span>
+              </p>
+              <p className="font-semibold">
+                Biển số xe
+                <span className="ml-6 font-normal">
+                  {" "}
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.shipper?.license_plates}
+                </span>
+              </p>
+              {/* <p className="font-semibold">
+                Tổng tiền:{" "}
+                <span className="ml-6 font-normal">
+                  {orderDetailList &&
+                    orderDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
                       "it-IT",
                       {
                         style: "currency",
@@ -94,18 +200,13 @@ export default function OrderInfo({ receiptDetailList }) {
           <Table>
             <UserListHead
               headLabel={TABLE_HEAD}
-              rowCount={receiptDetailList?.result}
+              rowCount={orderDetailList?.result}
             />
             <TableBody>
-              {receiptDetailList
+              {orderDetailList
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row) => {
-                  const {
-                    _id,
-                    bookId: { image, name },
-                    price,
-                    amount,
-                  } = row;
+                  const { book, _id, quantity, price } = row;
                   return (
                     <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
                       <TableCell padding="checkbox"></TableCell>
@@ -113,10 +214,10 @@ export default function OrderInfo({ receiptDetailList }) {
                         <div className="flex">
                           <img
                             className="w-16 h-16 mr-4"
-                            src={image}
-                            alt={name}
+                            src={book.image}
+                            alt={book.image}
                           />
-                          <div className="items-center flex">{name}</div>
+                          <div className="items-center flex">{book.name}</div>
                         </div>
                       </TableCell>
                       <TableCell align="flex">
@@ -125,9 +226,9 @@ export default function OrderInfo({ receiptDetailList }) {
                           currency: "VND",
                         })}
                       </TableCell>
-                      <TableCell align="flex">{amount}</TableCell>
+                      <TableCell align="flex">{quantity}</TableCell>
                       <TableCell align="flex">
-                        {(price * amount * 1).toLocaleString("it-IT", {
+                        {(price * quantity * 1).toLocaleString("it-IT", {
                           style: "currency",
                           currency: "VND",
                         })}
@@ -142,8 +243,8 @@ export default function OrderInfo({ receiptDetailList }) {
                 <TableCell>Tổng cộng </TableCell>
                 <TableCell>
                   {" "}
-                  {receiptDetailList &&
-                    receiptDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
+                  {orderDetailList &&
+                    orderDetailList[0]?.order.totalPrice?.toLocaleString(
                       "it-IT",
                       {
                         style: "currency",
@@ -159,7 +260,7 @@ export default function OrderInfo({ receiptDetailList }) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={receiptDetailList?.length}
+          count={orderDetailList?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

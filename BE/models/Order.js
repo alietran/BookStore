@@ -98,9 +98,13 @@ orderSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
     select: 'fullName phoneNumber email',
-  }).populate({
-    path: 'promotion',
-  });
+  })
+    .populate({
+      path: 'promotion',
+    })
+    .populate({
+      path: 'shipper',
+    });
 
   next();
 });

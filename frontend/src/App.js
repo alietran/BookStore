@@ -41,7 +41,7 @@ import Cart from "./pages/HomePage/Cart/Cart";
 import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod";
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
-import Overview from "./pages/Admin/Overview/Overview";
+// import Overview from "./pages/Admin/Overview/Overview";
 import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
 
@@ -137,7 +137,7 @@ function App() {
               "/admin/promotions",
               "/admin/books",
               "/admin/paymentMethod",
-              "/admin/overview",
+              // "/admin/overview",
               "/admin/orders"
             ]}
           >
@@ -148,7 +148,7 @@ function App() {
                 path="/admin/receipts/list"
                 component={ReceiptManager}
               />
-              <AdminRoute exact path="/admin/overview" component={Overview} />
+              {/* <AdminRoute exact path="/admin/overview" component={Overview} /> */}
 
               <AdminRoute
                 exact

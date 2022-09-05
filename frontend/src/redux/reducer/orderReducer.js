@@ -120,7 +120,9 @@ export const OrderReducer = (state = stateDefault, action) => {
         successCreateOrder: "",
         errorCreateOrder: null,
 
-   
+        loadingUpdateOrder: false,
+        successUpdateOrder: "",
+        errorUpdateOrder: null,
       };
     }
 

@@ -9,6 +9,7 @@ import { useSnackbar } from "notistack";
 export default function Cart() {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log("user",user);
   const { discount, miniPrice } = useSelector((state) => state.CartReducer);
   const [totalCart, setTotalCart] = useState(0);
    const { enqueueSnackbar } = useSnackbar();

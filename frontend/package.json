@@ -23,6 +23,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "antd": "^4.22.4",
+    "apexcharts": "^3.35.5",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "firebase": "^9.9.1",
