@@ -116,13 +116,23 @@ export default function OrderInfo({ orderDetailList }) {
                     orderDetailList[0]?.order.paymentMethod?.name}
                 </span>
               </p>
+
+              <p className="font-semibold">
+                Giảm giá:
+                <span className="ml-6 font-normal">
+                  {orderDetailList &&
+                  orderDetailList[0]?.order?.promotion ?
+                     (orderDetailList[0]?.order.promotion?.price).toLocaleString()
+                    : 0}
+                </span>
+              </p>
               <p className="font-semibold">
                 Số tiền khách cần trả :
                 <span className="ml-6 font-normal">
                   {orderDetailList &&
                   orderDetailList[0]?.order.paymentMethod?.name ===
                     "Thanh toán tiền mặt khi nhận hàng"
-                    ? orderDetailList[0]?.price.toLocaleString()
+                    ? orderDetailList[0]?.order.totalPrice?.toLocaleString()
                     : 0}
                 </span>
               </p>

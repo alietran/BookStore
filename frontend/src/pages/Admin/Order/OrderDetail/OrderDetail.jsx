@@ -93,6 +93,11 @@ export default function OrderDetail() {
       dispatch(getShipperList());
     }
   }, [shipperList]);
+  useEffect(() => {
+    if (!orderDetailList) {
+      dispatch(getAllDetailOrder());
+    }
+  }, [orderDetailList]);
 
   const [shipper, setShipper] = useState();
   console.log("shipper", shipper);
@@ -107,7 +112,6 @@ export default function OrderDetail() {
     setShipper(event.target.value);
     // getAllDetailOrder()
   };
-
 
   useEffect(() => {
     if (successUpdateOrder) {
