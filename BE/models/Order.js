@@ -69,20 +69,21 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Shipper',
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
-    updateAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    // createdAt: {
+    //   type: Date,
+    //   default: Date.now(),
+    // },
+    // updateAt: {
+    //   type: Date,
+    //   default: Date.now(),
+    // },
     notes: {
       type: String,
       default: '',
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

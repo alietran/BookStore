@@ -8,6 +8,10 @@ router.post('/', authController.protectUser, orderController.createOrder);
 router.route('/').get(orderController.getAllOrder);
 
 router
+  .route('/orderRevenueStatisticsForWeek')
+  .get(orderController.orderRevenueStatisticsForWeek);
+
+router
   .route('/:id')
   .get(orderController.getDetailOrder)
   .patch(orderController.updateOrder);

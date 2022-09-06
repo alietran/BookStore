@@ -16,12 +16,9 @@ const receiptDetailSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Book',
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
