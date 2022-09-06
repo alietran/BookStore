@@ -14,6 +14,10 @@ const stateDefault = {
   loadingUpdateReceipt: false,
   successUpdateReceipt: null,
   errorUpdateReceipt: null,
+
+  receiptRSForWeek: null,
+  loadingReceiptRSForWeek: false,
+  errorReceiptRSForWeek: null,
 };
 
 export const ReceiptReducer = (state = stateDefault, action) => {
@@ -90,7 +94,27 @@ export const ReceiptReducer = (state = stateDefault, action) => {
         loadingUpdateReceipt: false,
       };
     }
-
+    case "GET_RECEIPT_RS_FOR_WEEK_REQUEST": {
+      return {
+        ...state,
+        loadingReceiptRSForWeek: true,
+        errorReceiptRSForWeek: null,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_WEEK_SUCCESS": {
+      return {
+        ...state,
+        receiptRSForWeek: action.payload.data,
+        loadingReceiptRSForWeek: false,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_WEEK_FAIL": {
+      return {
+        ...state,
+        errorReceiptRSForWeek: action.payload.error,
+        loadingReceiptRSForWeek: false,
+      };
+    }
     case "RESET_RECEIPT": {
       return {
         ...state,

@@ -18,6 +18,10 @@ const orderAPI = {
     const path = `/v1/orders/${id}`;
     return axiosClient.get(path);
   },
+
+  getOrderRSForWeek: () => {
+    return axiosClient.get("v1/orders/orderRevenueStatisticsForWeek");
+  },
 };
 
 export default orderAPI;

@@ -20,6 +20,9 @@ const receiptAPI = {
     const path = `/v1/receipts/${id}`;
     return axiosClient.patch(path, data);
   },
+  getReceiptRSForWeek: () => {
+    return axiosClient.get("v1/receipts/receiptRevenueStatisticsForWeek");
+  },
 };
 
 export default receiptAPI;

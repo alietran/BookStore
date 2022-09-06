@@ -79,6 +79,33 @@ export const updateReceipt = (id, data) => {
   };
 };
 
+
+export const getReceiptRSForWeek = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_RECEIPT_RS_FOR_WEEK_REQUEST",
+    });
+    receiptAPI
+      .getReceiptRSForWeek()
+      .then((result) => {
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_WEEK_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_WEEK_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
 export const resetReceiptList = () => {
   return (dispatch) => {
     dispatch({
