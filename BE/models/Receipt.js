@@ -8,18 +8,13 @@ const receiptSchema = new mongoose.Schema(
     },
     adminId: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
     supplierId: { type: mongoose.Schema.ObjectId, ref: 'Supplier' },
-
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
-
     inventoryStatus: {
       type: Boolean,
       default: false,
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

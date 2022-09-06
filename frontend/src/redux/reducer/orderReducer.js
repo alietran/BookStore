@@ -17,6 +17,10 @@ const stateDefault = {
   loadingDetailOrder: false,
   successDetailOrder: null,
   errorDetailOrder: null,
+
+  orderRSForWeek: null,
+  loadingOrderRSForWeek: false,
+  errorOrderRSForWeek: null,
 };
 
 export const OrderReducer = (state = stateDefault, action) => {
@@ -108,6 +112,24 @@ export const OrderReducer = (state = stateDefault, action) => {
         loadingOrderList: false,
       };
     }
+    case "GET_ORDER_RS_FOR_WEEK_REQUEST": {
+      return { ...state, loadingOrderRSForWeek: true, errorOrderRSForWeek: null };
+    }
+    case "GET_ORDER_RS_FOR_WEEK_SUCCESS": {
+      return {
+        ...state,
+        orderRSForWeek: action.payload.data,
+        loadingOrderRSForWeek: false,
+      };
+    }
+    case "GET_ORDER_RS_FOR_WEEK_FAIL": {
+      return {
+        ...state,
+        errorOrderRSForWeek: action.payload.error,
+        loadingOrderRSForWeek: false,
+      };
+    }
+
     case "RESET_ORDER": {
       return {
         ...state,

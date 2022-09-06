@@ -7,6 +7,9 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const formatDate = require('../utils/formatDate');
 const nodemailer = require('nodemailer');
+const moment = require('moment');
+const _ = require('lodash');
+
 require('dotenv').config();
 
 let transporter = nodemailer.createTransport({
@@ -263,6 +266,43 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         data: order,
       });
     }
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+
+exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
+  const dayLabel = [];
+  // const dayLabel = Array.apply(null, Array(7)).map(function (_, i) {
+  //   return moment(i, 'e')
+  //     .startOf('week')
+  //     .isoWeekday(i + 1)
+  //     .format('DD-MM-YYYY');
+  // });
+  for (let i = 0; i < moment(i, 'e').startOf('week').isoWeekday(i); i--) {
+    dayLabel.push(moment().day(i).format('DD-MM-YYYY'));
+  }
+  console.log('dayLabel', dayLabel.reverse());
+  console.log('moment().day(-7).toDate()', moment().day(-6).toDate());
+
+  console.log('week', moment().startOf('week').isoWeekday(8).toDate());
+  let array = await Order.find({
+    createdAt: {
+      $gte: moment().day(-6).toDate(),
+      $lt: moment().startOf('week').isoWeekday(8).toDate(),
+    },
+  }).sort({ createdAt: 1 });
+  let result = _(array)
+    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+    .map((value, key) => ({ name: key, orderRevenue: value }))
+    .value();
+
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: result.length,
+      data: result,
+    });
   } catch (err) {
     res.status(400).json({ message: err });
   }

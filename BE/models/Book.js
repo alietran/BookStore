@@ -62,12 +62,9 @@ const bookSchema = new mongoose.Schema(
     gallery: {
       type: Array,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }

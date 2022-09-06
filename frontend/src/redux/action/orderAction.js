@@ -104,6 +104,34 @@ export const getDetailOrder = (id) => {
   };
 };
  
+
+
+export const getOrderRSForWeek = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_RS_FOR_WEEK_REQUEST",
+    });
+    orderAPI
+      .getOrderRSForWeek()
+      .then((result) => {
+        dispatch({
+          type: "GET_ORDER_RS_FOR_WEEK_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_ORDER_RS_FOR_WEEK_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
 export const resetOrder = () => {
   return (dispatch) => {
     dispatch({

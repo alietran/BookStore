@@ -4,6 +4,8 @@ const ReceiptDetail = require('../models/ReceiptDetail');
 const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const _ = require('lodash');
+const moment = require('moment');
 
 const filterObj = (obj, ...allowedField) => {
   const newObj = {};
@@ -74,4 +76,29 @@ exports.updateReceipt = catchAsync(async (req, res, next) => {
     result: doc.length,
     data: doc,
   });
+});
+
+exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
+  console.log('bắt đầU', moment().day(-7).toDate());
+  console.log('week', moment().startOf('week').toDate());
+  let array = await Receipt.find({
+    createdAt: {
+      $gte: moment().day(-6).toDate(),
+      $lt: moment().startOf('week').isoWeekday(8).toDate(),
+    },
+  }).sort({ createdAt: 1 });
+  let result = _(array)
+    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+    .map((value, key) => ({ name: key, receiptRevenue: value }))
+    .value();
+
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: result.length,
+      data: result,
+    });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
 });
