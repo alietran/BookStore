@@ -30,6 +30,11 @@ const paymentAPI = {
     const url = "/v1/payments/query";
     return axiosClient.post(url, data);
   },
+
+  refundMoMoPayment: (data) => {
+    const url = "/v1/payments/refund";
+    return axiosClient.post(url, data);
+  },
 };
 
 export default paymentAPI;

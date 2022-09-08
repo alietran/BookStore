@@ -35,16 +35,14 @@ import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
 
-
 import DetailReceipt from "./pages/Admin/ReceiptManager/DetailReceipt/DetailReceipt";
 import Cart from "./pages/HomePage/Cart/Cart";
 import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod";
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
-// import Overview from "./pages/Admin/Overview/Overview";
+import Overview from "./pages/Admin/Overview/Overview";
 import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
-
 
 function App() {
   const themeOptions = useMemo(
@@ -137,8 +135,8 @@ function App() {
               "/admin/promotions",
               "/admin/books",
               "/admin/paymentMethod",
-              // "/admin/overview",
-              "/admin/orders"
+              "/admin/overview",
+              "/admin/orders",
             ]}
           >
             <AdminTemplate>
@@ -148,7 +146,7 @@ function App() {
                 path="/admin/receipts/list"
                 component={ReceiptManager}
               />
-              {/* <AdminRoute exact path="/admin/overview" component={Overview} /> */}
+              <AdminRoute exact path="/admin/overview" component={Overview} />
 
               <AdminRoute
                 exact
@@ -161,7 +159,6 @@ function App() {
                 component={DetailReceipt}
               />
               <AdminRoute
-             
                 exact
                 path="/admin/orders/detail/:orderId"
                 component={OrderDetail}
@@ -206,7 +203,6 @@ function App() {
               /> */}
               <AdminRoute exact path="/admin/books" component={BookManager} />
               <AdminRoute exact path="/admin/orders" component={OrderManager} />
-            
             </AdminTemplate>
           </Route>
         </Switch>

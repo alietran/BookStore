@@ -196,3 +196,91 @@ exports.queryPayment = (request, response) => {
   req.write(requestBody);
   req.end();
 };
+
+exports.refundMoMoPayment = (request, response) => {
+  console.log('request.body', request.body);
+  var partnerCode = process.env.PARTNERCODE;
+  var accessKey = process.env.ACCESSKEY;
+  var secretkey = process.env.SECRETKEY;
+  var requestId = partnerCode + new Date().getTime();
+  var date = new Date().getTime();
+  var orderId = date + ':0123456778';
+  var amount = request.body.amount;
+  var orderInfo = 'Thanh toán qua ví MoMo';
+  var lang = 'vi';
+  var transId = request.body.transId;
+  var description = '';
+  //before sign HMAC SHA256 with format
+  //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
+  var rawSignature =
+    'accessKey=' +
+    accessKey +
+    '&amount=' +
+    amount +
+    '&description=' +
+    description +
+    '&orderId=' +
+    orderId +
+    '&partnerCode=' +
+    partnerCode +
+    '&requestId=' +
+    requestId +
+    '&transId=' +
+    transId;
+
+  //signature
+  const crypto = require('crypto');
+  var signature = crypto
+    .createHmac('sha256', secretkey)
+    .update(rawSignature)
+    .digest('hex');
+
+  //json object send to MoMo endpoint
+  const requestBody = JSON.stringify({
+    partnerCode: partnerCode,
+    orderId: orderId,
+    requestId: requestId,
+    amount: amount,
+    transId: transId,
+    lang: 'vi',
+    description: description,
+    signature: signature,
+  });
+  //Create the HTTPS objects
+  const https = require('https');
+  const options = {
+    hostname: 'test-payment.momo.vn',
+    port: 443,
+    path: '/v2/gateway/api/refund',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(requestBody),
+    },
+  };
+  //Send the request and get the response
+  const req = https.request(options, (res) => {
+    console.log(`Status: ${res.statusCode}`);
+    console.log(`Headers: ${JSON.stringify(res.headers)}`);
+    res.setEncoding('utf8');
+    let result = '';
+    res.on('data', (body) => {
+      console.log('body', body);
+      result += body;
+    });
+    res.on('end', () => {
+      const data = JSON.parse(result);
+      response.status(200).json(data);
+
+      console.log('No more data in response.');
+    });
+  });
+
+  req.on('error', (e) => {
+    console.log(`problem with request: ${e.message}`);
+  });
+  // write data to request body
+  console.log('Sending....');
+  req.write(requestBody);
+  req.end();
+};

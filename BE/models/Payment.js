@@ -10,6 +10,7 @@ const paymentSchema = new mongoose.Schema({
   orderId: {
     type: String,
   },
+  transId: { type: String },
   message: {
     type: String,
   },

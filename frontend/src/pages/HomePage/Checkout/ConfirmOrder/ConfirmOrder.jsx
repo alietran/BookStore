@@ -29,6 +29,7 @@ export default function ConfirmOrder() {
   const orderId = new URLSearchParams(search).get("orderId");
   const amount = new URLSearchParams(search).get("amount");
   const resultCode = new URLSearchParams(search).get("resultCode");
+  const transId = new URLSearchParams(search).get("transId");
   const extraData = new URLSearchParams(search).get("extraData");
   const dispatch = useDispatch();
   const { payment } = useSelector((state) => state.PaymentReducer);
@@ -88,6 +89,7 @@ export default function ConfirmOrder() {
           resultCode,
           message,
           orderId,
+          transId,
         },
         notes: "",
         promotion: item.promotion,

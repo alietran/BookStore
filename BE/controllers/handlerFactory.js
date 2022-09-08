@@ -79,7 +79,7 @@ exports.getAll = (Model, populateOptions) =>
     //   .paginate();
     // const doc = await features.query;
 
-    let query = Model.find(req.query);
+    let query = Model.find(req.query).sort({ createdAt: -1 });
     if (populateOptions) query = query.populate(populateOptions);
     const doc = await query;
 

@@ -1,7 +1,7 @@
 const Order = require('../models/Order');
 const OrderDetail = require('../models/OrderDetail');
 const Book = require('../models/Book');
-const Payment = require('../models/Payment');
+const Promotion = require('../models/Promotion');
 const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -23,8 +23,61 @@ let transporter = nodemailer.createTransport({
 });
 
 exports.getAllOrder = factory.getAll(Order);
-exports.updateOrder = factory.updateOne(Order);
+// exports.updateOrder = factory.updateOne(Order);
 exports.getDetailOrder = factory.getOne(Order, { path: 'orderDetail' });
+
+exports.updateOrder = catchAsync(async (req, res, next) => {
+  const _id = req.params.id;
+  let orderDetailList = [];
+  if (req.body.status === 'Đã hủy') {
+    let doc = await Order.findByIdAndUpdate(_id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    let orderDetail = await OrderDetail.find();
+
+    orderDetailList = orderDetail.filter(
+      (item) => item.order.id === req.params.id
+    );
+
+    await orderDetailList.map(async (item, index) => {
+      let book = await Book.findById(item.book._id);
+      if (book) {
+        book.quantity = book.quantity + item.quantity;
+        book.quantitySold = book.quantitySold - item.quantity;
+        await book.save();
+      } else {
+        return next(new AppError('Không tồn tại quyển sách nào!', 404));
+      }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      result: doc.length,
+      data: doc,
+    });
+    console.log('orderDetailList', orderDetailList);
+  } else {
+    const doc = await Order.findByIdAndUpdate(_id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+    res.status(200).json({
+      status: 'success',
+      result: doc.length,
+      data: doc,
+    });
+  }
+});
 
 const filterObj = (obj, ...allowedField) => {
   const newObj = {};
@@ -50,12 +103,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       'shipper',
       'promotion'
     );
-
     const order = await Order.create(objOrder);
     req.order = order;
-
+    console.log('req.order.promotion', req.order.promotion);
     let arrayItems = [];
-
+    if (req.order.promotion !== undefined) {
+      const promotion = await Promotion.find(req.order.promotion);
+      req.promotion = promotion;
+    }
     if (order._id) {
       await req.body.items.map(async (item, index) => {
         let book = await Book.findById(item.productId);
@@ -93,6 +148,9 @@ exports.createOrder = catchAsync(async (req, res, next) => {
           const { address, totalPrice, _id, paymentMethod, createdAt } =
             req.order;
           let dayFull = formatDate(createdAt).dateFull;
+          console.log('req.promotion', req.promotion);
+          req.promotion =
+            req.promotion !== undefined ? Number(req.promotion[0].price) :0;
           await transporter.sendMail({
             from: `"Thông báo xác nhận đơn hàng #${_id}" <ltd.ctu@gmail.com>`, // sender address
             to: 'ngocdiep710@gmail.com', // list of receivers
@@ -157,7 +215,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 		<td style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif" align="left">
 			<span>${(item.quantity * item.price).toLocaleString(
         'vi-VI'
-      )}&nbsp;<span>đ</span></span>		</td></tr>
+      )}&nbsp;<span>₫</span></span>		</td></tr>
               `.trim()
    )
    .join('')}
@@ -165,13 +223,15 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 <tfoot>
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left">Tổng số phụ:</th>
-						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>${totalPrice.toLocaleString(
-              'vi-VI'
-            )} &nbsp;<span>₫</span></span></td>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>${(
+              Number(totalPrice) + req.promotion
+            ).toLocaleString('vi-VI')} &nbsp;<span>₫</span></span></td>
 					</tr>
 <tr>
 <th scope="row" colspan="2" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left">Khuyến mãi:</th>
-						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>0 &nbsp;<span>₫</span></span></td>
+						<td style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left;border-top-width:4px" align="left"><span>${req.promotion.toLocaleString(
+              'vi-VI'
+            )} &nbsp;<span>₫</span></span></td>
 					</tr>
 
 <tr>
@@ -196,9 +256,9 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
 <table id="m_-2654664080331285438addresses" cellspacing="0" cellpadding="0" border="0" style="width:100%;vertical-align:top;margin-bottom:40px;padding:0" width="100%"><tbody><tr>
 <td valign="top" width="50%" style="text-align:left;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;border:0;padding:0" align="left">
-			<h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Địa chỉ thanh toán</h2>
+			<h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Địa chỉ giao hàng</h2>
 
-			<address style="padding:12px;color:#636363;border:1px solid #e5e5e5">
+			<address style="padding:12px;color:#636363;border:1px solid #e5e5e5; font-size: 15px">
 				${address.fullName}
         <br><a href="tel:${
           address.phoneNumber
@@ -209,20 +269,6 @@ exports.createOrder = catchAsync(async (req, res, next) => {
               address.district
             }, ${address.city}</address>
 		</td>
-					<td valign="top" width="50%" style="text-align:left;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;padding:0" align="left">
-				<h2 style="color:#96588a;display:block;font-family:&quot;Helvetica Neue&quot;,Helvetica,Roboto,Arial,sans-serif;font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Địa chỉ giao <span class="il">hàng</span></h2>
-
-						<address style="padding:12px;color:#636363;border:1px solid #e5e5e5">
-				${address.fullName}
-        <br><a href="tel:${
-          address.phoneNumber
-        }" style="color:#96588a;font-weight:normal;text-decoration:underline" target="_blank">${
-              address.phoneNumber
-            }</a>
-        <br>Số nhà : ${address.address}, ${address.ward}, ${
-              address.district
-            }, ${address.city}</address>
-			</td>
 			</tr></tbody></table>
 <p style="margin:0 0 16px">Cảm ơn đã mua <span class="il">hàng</span> của chúng tôi.</p>
 															</div>
@@ -282,10 +328,7 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   for (let i = 0; i < moment(i, 'e').startOf('week').isoWeekday(i); i--) {
     dayLabel.push(moment().day(i).format('DD-MM-YYYY'));
   }
-  console.log('dayLabel', dayLabel.reverse());
-  console.log('moment().day(-7).toDate()', moment().day(-6).toDate());
 
-  console.log('week', moment().startOf('week').isoWeekday(8).toDate());
   let array = await Order.find({
     createdAt: {
       $gte: moment().day(-6).toDate(),
@@ -297,6 +340,31 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
     .map((value, key) => ({ name: key, orderRevenue: value }))
     .value();
 
+  function convert(str) {
+    var date = new Date(str),
+      mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+      day = ('0' + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join('-');
+  }
+
+  var getDaysArray = function (year, month) {
+    var monthIndex = month - 1; // 0..11 instead of 1..12
+    var names = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+    var date = new Date(year, monthIndex, 1);
+    var result = [];
+    while (date.getMonth() == monthIndex) {
+      result.push(moment(convert(new Date(date))).format('DD-MM-YYYY') + '');
+      date.setDate(date.getDate() + 1);
+    }
+    return result;
+  };
+  // 👇️ All days in March of 2022
+  console.log(getDaysArray(2022, 9));
+
+  // console.log('dayLabel', dayLabel.reverse());
+  // console.log('moment().day(-7).toDate()', moment().day(-6).toDate());
+
+  // console.log('week', moment().startOf('week').isoWeekday(8).toDate());
   try {
     res.status(200).json({
       status: 'success',

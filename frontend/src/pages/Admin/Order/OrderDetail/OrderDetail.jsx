@@ -45,6 +45,7 @@ import {
   resetOrder,
   updateOrder,
 } from "../../../../redux/action/orderAction";
+import paymentAPI from "../../../../api/paymentAPI";
 
 const breadcrumbs = [
   <Link
@@ -131,13 +132,44 @@ export default function OrderDetail() {
   //   }
   // }, [successUpdateOrder]);
 
-  const handleCancel = () => {
-    dispatch(
-      updateOrder(params.orderId, {
-        status: "Đã hủy",
-      })
-    );
-    setOpen(false);
+  const handleCancel = async () => {
+    if (
+      orderDetailList[0]?.order?.paymentMethod?.name ===
+      "Thanh toán bằng ví MoMo"
+    ) {
+      console.log("orderDetailList[0]", orderDetailList[0]);
+
+      const { data } = await paymentAPI.refundMoMoPayment({
+        // _id: idShowtime,
+        amount: orderDetailList[0].order.totalPrice,
+        transId: Number(orderDetailList[0].order.paymentMethod.transId),
+      });
+      console.log("123data", data);
+      if (data?.resultCode == 0) {
+        dispatch(
+          updateOrder(params.orderId, {
+            status: "Đã hủy",
+          })
+        );
+        setOpen(false);
+      } else {
+        console.log("Error:", data?.messages);
+      }
+    } else {
+      dispatch(
+        updateOrder(params.orderId, {
+          status: "Đã hủy",
+        })
+      );
+      setOpen(false);
+    }
+
+    // dispatch(
+    //   updateOrder(params.orderId, {
+    //     status: "Đã hủy",
+    //   })
+    // );
+    // setOpen(false);
   };
 
   const hanldeSubmit = (shipper) => {
@@ -310,9 +342,7 @@ export default function OrderDetail() {
           sx={{ marginRight: "63px", marginLeft: "10px" }}
           disabled={
             orderDetailList &&
-            (orderDetailList[0]?.order?.status !== "Đang xử lý" ||
-              orderDetailList[0]?.order?.paymentMethod?.name !==
-                "Thanh toán tiền mặt khi nhận hàng")
+            orderDetailList[0]?.order?.status !== "Đang xử lý"
               ? true
               : false
           }
