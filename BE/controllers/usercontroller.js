@@ -102,38 +102,30 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.updateUser= factory.updateOne(User);
-
+// exports.updateUser = factory.updateOne(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  if (req.body.password || req.body.passwordConfirm) {
-    return next(
-      new AppError(
-        'This route is not fro password updates. Please use /updateMyPassword.',
-        400
-      )
-    );
-  }
   // 2) Update user document
+  // console.log(req.body);
   // Get filtered name and email
   const filteredBody = filterObj(
     req.body,
-    'fullName',
     'phoneNumber',
+    'email',
     'gender',
-    'dateOfBirth',
-    'avatar',
-    'address',
-    'idRole'
+    'dateOfBirth'
   );
-  const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
-  const urlImage = `http://localhost:8080${path}`;
-  if (req.file) filteredBody.avatar = urlImage;
-  const user = await Admin.findByIdAndUpdate(req.user.id, filteredBody, {
+  //  console.log(req.user.id);
+  const updateUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
   });
-  createSendToken(user, 200, res);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: updateUser,
+    },
+  });
 });
 
 exports.getUserLoginOtp = catchAsync(async (req, res, next) => {

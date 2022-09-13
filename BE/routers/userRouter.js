@@ -1,5 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
@@ -25,6 +26,8 @@ router.get('/login/failed', (req, res) => {
     message: 'failure',
   });
 });
+
+router.patch('/updateMe', authController.protectUser,userController.updateMe);
 
 router.get('/login/success', (req, res) => {
   if (req.user) {
@@ -62,9 +65,6 @@ router.get('/logout', (req, res) => {
   res.redirect(successLoginURL);
 });
 
-
-router
-  .route('/:id')
-  .put(userController.updateUser)
+// router.route('/:id').put(userController.updateUser);
 
 module.exports = router;

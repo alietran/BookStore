@@ -43,6 +43,8 @@ import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
 import Overview from "./pages/Admin/Overview/Overview";
 import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
+import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
+import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHistoryDetail";
 
 function App() {
   const themeOptions = useMemo(
@@ -102,6 +104,8 @@ function App() {
               "/productDetail/:id",
               "/cart",
               "/confirmOrder/:id",
+              "/userInfo",
+              "/orderDetail/:receiptId",
             ]}
           >
             <MainLayout>
@@ -114,7 +118,13 @@ function App() {
                 component={ProductDetail}
               />
               <Route exact path="/cart" component={Cart} />
+              <Route exact path="/userInfo" component={UserInfo} />
               <Route exact path="/confirmOrder/:id" component={ConfirmOrder} />
+              <Route
+                exact
+                path="/orderDetail/:receiptId"
+                component={OrderHistoryDetail}
+              />
             </MainLayout>
           </Route>
           <Route exact path="/admin/login" component={LoginAdmin} />

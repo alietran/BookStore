@@ -22,7 +22,7 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-exports.getAllOrder = factory.getAll(Order);
+exports.getAllOrder = factory.getAll(Order, { path: 'orderDetail' });
 // exports.updateOrder = factory.updateOne(Order);
 exports.getDetailOrder = factory.getOne(Order, { path: 'orderDetail' });
 
@@ -152,7 +152,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
           req.promotion =
             req.promotion !== undefined ? Number(req.promotion[0].price) :0;
           await transporter.sendMail({
-            from: `"Thông báo xác nhận đơn hàng #${_id}" <ltd.ctu@gmail.com>`, // sender address
+            from: `"Thông báo xác nhận đơn hàng #${_id}" <alietran0211@gmail.com>`, // sender address
             to: 'ngocdiep710@gmail.com', // list of receivers
             subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
             // text: "Hello world?", // plain text body
@@ -374,4 +374,20 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: err });
   }
+});
+
+
+exports.getAllTicketByUser = catchAsync(async (req, res, next) => {
+  console.log('req.user',typeof req.user.id);
+  let order = await Order.find()
+    .populate(['user', 'orderDetail'])
+    .sort({ createdAt: -1 });
+  console.log('order', order);
+  let data = order.filter((item) => item.user.id === req.user.id);
+
+  res.status(200).json({
+    status: 'success',
+    result: data.length,
+    data,
+  });
 });

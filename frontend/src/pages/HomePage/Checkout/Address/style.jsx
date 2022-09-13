@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-start",
     fontSize: " 0.875rem",
+    marginBottom:0
   },
   address__detail: {
     borderRadius: "4px",
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     overflow: "hidden",
     cursor: "pointer",
-    height: "100px",
+    height: "110px",
   },
   menu__item: {
     width: "100% !important",

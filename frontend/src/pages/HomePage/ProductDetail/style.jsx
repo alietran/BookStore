@@ -123,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 0,
     margin: "auto",
     borderRadius: "8px",
-
+    justifyContent: "center",
     width: "100%",
   },
   img__library: {
@@ -459,6 +459,40 @@ const useStyles = makeStyles((theme) => ({
   rootcloseButton: {
     margin: "0 !important",
     padding: "0 !important",
+  },
+  "product-images-slider": {
+    // backgroundColor:"red",
+    "& swiper-slide": {
+      paddingTop: "100%",
+      overflow: "hidden",
+      position: "relative",
+
+      img: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "10%",
+      },
+    },
+
+    "& swiper-button-prev": {
+      left: 0,
+      color: "#000 !important",
+    },
+
+    "& swiper-button-next": {
+      right: 0,
+      color: "#000 !important",
+    },
+  },
+  "swiper-button-prev": {
+    left: 0,
+    color: "#000 !important",
+  },
+
+  "swiper-button-next": {
+    right: 0,
+    color: "#000 !important",
   },
   // closeButton: {
   //   position: "absolute !important",

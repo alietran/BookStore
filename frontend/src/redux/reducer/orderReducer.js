@@ -21,6 +21,10 @@ const stateDefault = {
   orderRSForWeek: null,
   loadingOrderRSForWeek: false,
   errorOrderRSForWeek: null,
+
+  orderByUser: null,
+  loadingOrderByUser: false,
+  errorOrderByUser: null,
 };
 
 export const OrderReducer = (state = stateDefault, action) => {
@@ -113,7 +117,11 @@ export const OrderReducer = (state = stateDefault, action) => {
       };
     }
     case "GET_ORDER_RS_FOR_WEEK_REQUEST": {
-      return { ...state, loadingOrderRSForWeek: true, errorOrderRSForWeek: null };
+      return {
+        ...state,
+        loadingOrderRSForWeek: true,
+        errorOrderRSForWeek: null,
+      };
     }
     case "GET_ORDER_RS_FOR_WEEK_SUCCESS": {
       return {
@@ -127,6 +135,27 @@ export const OrderReducer = (state = stateDefault, action) => {
         ...state,
         errorOrderRSForWeek: action.payload.error,
         loadingOrderRSForWeek: false,
+      };
+    }
+    case "GET_ORDER_BY_USER_REQUEST": {
+      return {
+        ...state,
+        loadingOrderByUser: true,
+        errorOrderByUser: null,
+      };
+    }
+    case "GET_ORDER_BY_USER_SUCCESS": {
+      return {
+        ...state,
+        orderByUser: action.payload.data,
+        loadingOrderByUser: false,
+      };
+    }
+    case "GET_ORDER_BY_USER_FAIL": {
+      return {
+        ...state,
+        errorOrderByUser: action.payload.error,
+        loadingOrderByUser: false,
       };
     }
 

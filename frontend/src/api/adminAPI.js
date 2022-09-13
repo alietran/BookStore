@@ -20,6 +20,8 @@ const adminAPI = {
     const path = `/v1/admins/${id}`;
     return axiosClient.put(path, data);
   },
+
+  
   updateCurrentUser: (currentUser) => {
     const path = `/v1/admins/updateMe`;
     const formData = new FormData();
@@ -28,6 +30,8 @@ const adminAPI = {
     }
     return axiosClient.patch(path, formData);
   },
+
+
   changePassword: (currentUser) => {
     const path = `/v1/admins/updateMyPassword`;
     return axiosClient.patch(path, currentUser);

@@ -7,6 +7,7 @@ import useStyles from "../NewProduct/style";
 export default function Product() {
   const classes = useStyles();
   const { bookList } = useSelector((state) => state.BookReducer);
+
   return (
     <div style={{ backgroundColor: "#E4FBDF" }}>
       <Container className="py-12 " maxWidth="lg">
@@ -17,15 +18,12 @@ export default function Product() {
           <Box className="mt-6  grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
             {bookList?.data.map((product, index) => (
               <div>
-                <p className={classes.productNew}>New</p>
-
                 <ProductItem
                   className={classes.productItem}
                   product={product}
                 />
               </div>
             ))}
-          
           </Box>
         </div>
       </Container>

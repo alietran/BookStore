@@ -104,7 +104,7 @@ export default function OrderInfo({ orderDetailList }) {
               borderRadius: " 16px",
               zIndex: 0,
               padding: "24px",
-              paddingBottom: "58px",
+              paddingBottom: "25px",
             }}
           >
             <div className="text-sm">

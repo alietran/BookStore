@@ -1,4 +1,14 @@
-import { Button, Container, Link, TextField } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Link,
+  TextField,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import useStyles from "./style";
@@ -9,10 +19,12 @@ import { useSnackbar } from "notistack";
 export default function Cart() {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("user",user);
+  console.log("user", user);
   const { discount, miniPrice } = useSelector((state) => state.CartReducer);
   const [totalCart, setTotalCart] = useState(0);
-   const { enqueueSnackbar } = useSnackbar();
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  const {quantity, setQuantity} = useState()
   console.log("miniPrice", typeof miniPrice);
   console.log("discount", discount);
 
@@ -26,7 +38,7 @@ export default function Cart() {
   let cart = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
-  // console.log("cart", cart);
+  console.log("cart", cart);
 
   const totalPrice = cart?.reduce(
     (total, item) =>
@@ -49,30 +61,45 @@ export default function Cart() {
 
   useEffect(() => {
     console.log("miniPrice", miniPrice);
-    console.log("totalCart125364", totalCart);
-    if (totalCart < miniPrice) {
-       setTotalCart(totalPrice);
+    console.log("totalCart125364", totalPrice);
+    if (totalPrice < miniPrice) {
+      setTotalCart(totalPrice);
+      dispatch({
+        type: "TONG_TIEN",
+        payload: {
+          data: {
+            discount: 0,
+          },
+        },
+      });
     } else {
       setTotalCart(totalPrice);
     }
   }, [totalPrice]);
 
-
-
   const dispatch = useDispatch();
 
-  const hadleClickPlus = (maSP, tangGiam) => {
+  const hadleClickPlus = (maSP, tangGiam, item) => {
     console.log("hadleClickPlug", maSP);
-    dispatch({
-      type: "CHANGE_QUANTITY",
-      payload: {
-        data: cart,
-        maSP,
-        tangGiam,
-      },
-    });
+    console.log("item", item);
+    if (item.warehouse !== item.quantity) {
+      dispatch({
+        type: "CHANGE_QUANTITY",
+        payload: {
+          data: cart,
+          maSP,
+          tangGiam,
+        },
+      });
+    } else {
+      enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+        variant: "error",
+      });
+    }
   };
-
+  const handleClickConfirm = () => {
+    setOpenConfirm(true);
+  };
   const handleDelete = (maSP) => {
     console.log("maSP", maSP);
     dispatch({
@@ -96,14 +123,23 @@ export default function Cart() {
   };
 
   const handleSubmit = () => {
-    if(!user){
-       enqueueSnackbar("Vui lòng đăng nhập để đến bước tiếp theo!", { variant: "error" });
-    }
-    else{
-     history.push("/checkout");
-
+    if (!user) {
+      enqueueSnackbar("Vui lòng đăng nhập để đến bước tiếp theo!", {
+        variant: "error",
+      });
+    } else {
+      history.push("/checkout");
     }
   };
+    const handleCancel = () => {
+      setOpenConfirm(false);
+    };
+
+      const handleCloseConfirm = (id) => {
+        setOpenConfirm(false);
+        handleDelete(id);
+      };
+
 
   return (
     <div>
@@ -221,12 +257,14 @@ export default function Cart() {
                             <input
                               className={classes.quantityValue}
                               value={item.quantity}
+                              // onChange={() => setQuantity(item.quantity)}
+                              // type="number"
                             />
 
                             <button
                               className="dashItem"
                               onClick={
-                                (e) => hadleClickPlus(item.id, true)
+                                (e) => hadleClickPlus(item.id, true, item)
 
                                 //   dispatch({
                                 //   type: "TANG_GIAM_SL",
@@ -259,10 +297,34 @@ export default function Cart() {
 
                           <div
                             className={`${classes.delete} text-blue-600 `}
-                            onClick={() => handleDelete(item.id)}
+                            onClick={handleClickConfirm}
                           >
                             Xóa
                           </div>
+                          <Dialog
+                            open={openConfirm}
+                            // onClose={handleCloseCnfirm}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Xóa sản phẩm"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Bạn chắc chắn muốn xóa sản phẩm này.
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleCancel}>Hủy</Button>
+                              <Button
+                                onClick={() => handleDelete(item.id)}
+                                autoFocus
+                              >
+                                Đồng ý
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </div>
 
                         <div

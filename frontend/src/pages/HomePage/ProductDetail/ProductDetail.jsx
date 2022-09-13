@@ -31,7 +31,7 @@ import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailBook } from "../../../redux/action/bookAction";
 import { useSnackbar } from "notistack";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -75,7 +75,7 @@ const rows = [
 //  };
 
 export default function ProductDetail(props) {
-  const { id } = props.match.params;
+  const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
   const [openComment, setOpenComment] = useState(false);
@@ -87,26 +87,32 @@ export default function ProductDetail(props) {
   useEffect(() => {
     dispatch(getDetailBook(id));
   }, []);
+  const [imageURL, setImageURL] = useState(successDetailBook?.data.gallery[0]);
+  const [itemImg,seItemImage] = useState(0)
+  //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
 
-  console.log("successDetailBook", successDetailBook);
+  //  console.log("sliderImg", sliderImg);
+  console.log("successDetailBook", successDetailBook?.data.gallery[0]);
   const bookDetail = successDetailBook?.data;
 
+  console.log("bookDetail", bookDetail);
+  const handleChangeImage = (item, index) => {
+    // console.log("item", item);
+    setImageURL(item);
+    seItemImage(index)
+    console.log("itemImg",itemImg)
+  };
   const handleAddToCart = () => {
     console.log("bookDetail", bookDetail);
+
     const cart = {
       name: bookDetail.name,
       price: bookDetail.price,
       image: bookDetail.image,
       id: bookDetail.id,
       quantity: 1,
+      warehouse: bookDetail.quantity,
     };
-    // console.log("cart", cart);
-    dispatch({
-      type: "ADD_TO_CART",
-      payload: {
-        data: cart,
-      },
-    });
     const action = (snackbarId) => (
       <>
         <Button
@@ -125,15 +131,25 @@ export default function ProductDetail(props) {
         </Button>
       </>
     );
-    enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
-      variant: "success",
-      autoHideDuration: 1500,
-      action,
-    });
+    console.log("cart", cart);
+    if (bookDetail.quantity === 0) {
+      enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+        variant: "error",
+      });
+    } else {
+      enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+        variant: "success",
+        autoHideDuration: 1500,
+        action,
+      });
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: {
+          data: cart,
+        },
+      });
+    }
   };
-
-  // const { cartList } = useSelector((state) => state.CartReducer);
-  // console.log("cartList", cartList);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -192,7 +208,7 @@ export default function ProductDetail(props) {
                     <div className="box__content-left--img">
                       <div className={classes.img__box}>
                         <div className={classes.img__content}>
-                          <img src={bookDetail?.image} />
+                          <img src={imageURL ? imageURL : bookDetail?.image} />
                         </div>
                       </div>
                       <div className={classes["img__library"]}>
@@ -205,7 +221,16 @@ export default function ProductDetail(props) {
                             ))} */}
                             {bookDetail?.gallery.map((item, index) => {
                               // console.log("index", item[index]);
-                              return <img src={item} key={index} />;
+                              return (
+                                <img
+                                // className={}
+                                  src={item}
+                                  key={index}
+                                  onMouseOut={() =>
+                                    handleChangeImage(item, index)
+                                  }
+                                />
+                              );
                             })}
                           </div>
                         </div>
@@ -353,35 +378,32 @@ export default function ProductDetail(props) {
                       className={classes.infoDetail}
                       style={{
                         width: "100%",
+                        textAlign: "center",
                       }}
                     >
                       <tr>
-                        <td>Nhà cung cấp</td>
-                        <td>Contact</td>
+                        <td className="font-bold text-center">Tác giả</td>
+                        <td>{bookDetail?.authorId.name}</td>
                       </tr>
                       <tr>
-                        <td>Tác giả</td>
-                        <td>Maria Anders</td>
+                        <td className="font-bold  text-center">NXB</td>
+                        <td>{bookDetail?.issuer}</td>
                       </tr>
                       <tr>
-                        <td>NXB</td>
-                        <td>Francisco Chang</td>
+                        <td className="font-bold  text-center">Kích thước</td>
+                        <td>{bookDetail?.size}</td>
                       </tr>
                       <tr>
-                        <td>Kích thước</td>
-                        <td>Roland Mendel</td>
+                        <td className="font-bold  text-center">Bìa</td>
+                        <td>{bookDetail?.bookCover}</td>
                       </tr>
                       <tr>
-                        <td>Bìa</td>
-                        <td>Helen Bennett</td>
+                        <td className="font-bold  text-center">Số trang</td>
+                        <td>{bookDetail?.bookCover}</td>
                       </tr>
                       <tr>
-                        <td>Số trang</td>
-                        <td>Yoshi Tannamuri</td>
-                      </tr>
-                      <tr>
-                        <td>Nhà phát hành</td>
-                        <td>Giovanni Rovelli</td>
+                        <td className="font-bold">Nhà phát hành</td>
+                        <td>{bookDetail?.publisher}</td>
                       </tr>
                     </table>
                   </TabPanel>

@@ -68,6 +68,7 @@ export const updateCurrentUser = (currentUser) => {
     adminAPI
       .updateCurrentUser(currentUser)
       .then((result) => {
+        console.log("124155")
         dispatch({
           type: "UPDATE_USER_CURRENT_SUCCESS",
           payload: {

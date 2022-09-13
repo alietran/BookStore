@@ -35,7 +35,7 @@ export const getDetailUsers = () => {
     userAPI
       .getDetailUser()
       .then((result) => {
-        console.log("result1234", result);
+        // console.log("result1234", result);
         dispatch({
           type: "GET_DETAIL_USER_SUCCESS",
           payload: {
@@ -54,6 +54,7 @@ export const getDetailUsers = () => {
   };
 };
 
+//khh dùng
 export const updateUser = (id, data) => {
   return async (dispatch) => {
     try {
@@ -61,7 +62,7 @@ export const updateUser = (id, data) => {
         type: "UPDATE_USER_REQUEST",
       });
       const result = await userAPI.updateUser(id, data);
-      console.log("result", result);
+      console.log("result24", result);
       dispatch({
         type: "UPDATE_USER_SUCCESS",
         payload: {
@@ -69,6 +70,7 @@ export const updateUser = (id, data) => {
         },
       });
     } catch (error) {
+      console.log("error", error);
       dispatch({
         type: "UPDATE_USER_FAIL",
         payload: {
@@ -76,5 +78,35 @@ export const updateUser = (id, data) => {
         },
       });
     }
+  };
+};
+
+export const updateCurrentHomeUser = (currentUser) => {
+  return (dispatch) => {
+    dispatch({
+      type: "UPDATE_USER_HOME_CURRENT_REQUEST",
+    });
+    userAPI
+      .updateCurrentHomeUser(currentUser)
+      .then((result) => {
+        console.log("123456");
+        console.log("result", result);
+        dispatch({
+          type: "UPDATE_USER_HOME_CURRENT_SUCCESS",
+          payload: {
+            data: result.data,
+           
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch({
+          type: "UPDATE_USER_HOME_CURRENT_FAIL",
+          payload: {
+            error: error.response?.data.message,
+          },
+        });
+      });
   };
 };

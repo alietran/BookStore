@@ -458,6 +458,7 @@ export default function Address() {
                   ></i>
                 </div>
               </div>
+              <p className="m-0">{item.phoneNumber}</p>
               <p style={{ color: "#999999", margin: 0 }}>
                 {item.address +
                   ", " +

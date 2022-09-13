@@ -207,7 +207,7 @@ export default function Header() {
     const menuDashboard = (
       <Menu>
         <Menu.Item key="0">
-          <NavLink to="/admin/account">Xem thông tin</NavLink>
+          <NavLink to="/userInfo">Xem thông tin</NavLink>
         </Menu.Item>
 
         <Menu.Item key="2" className="mr-3">

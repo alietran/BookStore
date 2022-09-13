@@ -98,9 +98,12 @@ export default function Voucher({ totalPrice }) {
   };
 
   console.log("useCode", useCode);
+
+
   const hanldeApply = (index, itemPro) => {
     buttonIsChoose = index;
     setButtonIsChoose(buttonIsChoose);
+
     setStroke(!stroke);
     setTimeout(() => {
       enqueueSnackbar("Mã giảm  giá đã áp dụng thành công!", {

@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/', authController.protectUser, orderController.createOrder);
 
 router.route('/').get(orderController.getAllOrder);
-
+router.get('/orderList', authController.protectUser, orderController.getAllTicketByUser);
 router
   .route('/orderRevenueStatisticsForWeek')
   .get(orderController.orderRevenueStatisticsForWeek);

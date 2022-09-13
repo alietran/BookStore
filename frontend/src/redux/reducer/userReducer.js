@@ -13,6 +13,10 @@ const stateDefault = {
   loadingUpdateUser: false,
   successUpdateUser: null,
   errorUpdateUser: null,
+
+  loadingUpdateUserCurrent: false,
+  successUpdateUserCurrent: null,
+  errorUpdateUserCurrent: null,
 };
 
 export const UserReducer = (state = stateDefault, action) => {
@@ -50,6 +54,27 @@ export const UserReducer = (state = stateDefault, action) => {
         ...state,
         errorUpdateUser: action.payload.error,
         loadingUpdateUser: false,
+      };
+    }
+    case "UPDATE_USER_HOME_CURRENT_REQUEST": {
+      return {
+        ...state,
+        loadingUpdateUserCurrent: true,
+        errorUpdateUserCurrent: null,
+      };
+    }
+    case "UPDATE_USER_HOME_CURRENT_SUCCESS": {
+      return {
+        ...state,
+        successUpdateUserCurrent: action.payload.data,
+        loadingUpdateUserCurrent: false,
+      };
+    }
+    case "UPDATE_USER_HOME_CURRENT_FAIL": {
+      return {
+        ...state,
+        errorUpdateUserCurrent: action.payload.error,
+        loadingUpdateUserCurrent: false,
       };
     }
     default:
