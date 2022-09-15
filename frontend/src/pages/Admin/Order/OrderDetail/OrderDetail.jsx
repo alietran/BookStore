@@ -148,7 +148,7 @@ export default function OrderDetail() {
       if (data?.resultCode == 0) {
         dispatch(
           updateOrder(params.orderId, {
-            status: "Đã hủy",
+            status: "Đang xử lý",
           })
         );
         setOpen(false);
