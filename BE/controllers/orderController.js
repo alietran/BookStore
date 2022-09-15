@@ -101,7 +101,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
       'paymentMethod',
       'admin',
       'shipper',
-      'promotion'
+      'promotion',
+      'status'
     );
     const order = await Order.create(objOrder);
     req.order = order;
@@ -145,18 +146,20 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
         if (arrayItems.length === req.body.items.length) {
           await OrderDetail.insertMany(arrayItems);
-          const { address, totalPrice, _id, paymentMethod, createdAt } =
+          const { address, totalPrice, _id, paymentMethod, createdAt, status } =
             req.order;
-          let dayFull = formatDate(createdAt).dateFull;
-          console.log('req.promotion', req.promotion);
-          req.promotion =
-            req.promotion !== undefined ? Number(req.promotion[0].price) :0;
-          await transporter.sendMail({
-            from: `"Thông báo xác nhận đơn hàng #${_id}" <alietran0211@gmail.com>`, // sender address
-            to: 'ngocdiep710@gmail.com', // list of receivers
-            subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
-            // text: "Hello world?", // plain text body
-            html: `
+          if (status !== 'Đã hủy') {
+            let dayFull = formatDate(createdAt).dateFull;
+            console.log('req.promotion', req.promotion);
+            req.promotion =
+              req.promotion !== undefined ? Number(req.promotion[0].price) : 0;
+
+            await transporter.sendMail({
+              from: `"Thông báo xác nhận đơn hàng #${_id}" <alietran0211@gmail.com>`, // sender address
+              to: 'ngocdiep710@gmail.com', // list of receivers
+              subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
+              // text: "Hello world?", // plain text body
+              html: `
             <div marginwidth="0" marginheight="0" style="padding:0">
 		<div id="m_-2654664080331285438wrapper" dir="ltr" style="background-color:#f7f7f7;margin:0;padding:70px 0;width:100%" bgcolor="#f7f7f7" width="100%">
 			<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
@@ -263,11 +266,11 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         <br><a href="tel:${
           address.phoneNumber
         }" style="color:#96588a;font-weight:normal;text-decoration:underline" target="_blank">${
-              address.phoneNumber
-            }</a>
+                address.phoneNumber
+              }</a>
         <br>Số nhà : ${address.address}, ${address.ward}, ${
-              address.district
-            }, ${address.city}</address>
+                address.district
+              }, ${address.city}</address>
 		</td>
 			</tr></tbody></table>
 <p style="margin:0 0 16px">Cảm ơn đã mua <span class="il">hàng</span> của chúng tôi.</p>
@@ -302,7 +305,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 </div></div><div class="adL">
 	</div></div>
              `,
-          });
+            });
+          }
         }
       });
 
@@ -318,16 +322,18 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
-  const dayLabel = [];
-  // const dayLabel = Array.apply(null, Array(7)).map(function (_, i) {
-  //   return moment(i, 'e')
-  //     .startOf('week')
-  //     .isoWeekday(i + 1)
-  //     .format('DD-MM-YYYY');
-  // });
-  for (let i = 0; i < moment(i, 'e').startOf('week').isoWeekday(i); i--) {
-    dayLabel.push(moment().day(i).format('DD-MM-YYYY'));
+  // const dayLabel = [];
+
+  let dayLabel = [];
+  for (var i = 0; i < 7; i++) {
+    dayLabel[i] = moment().subtract(i, 'days').format('DD-MM-YYYY');
   }
+
+  // for (let i = 0; i < moment(i, 'e').startOf('week').isoWeekday(i); i--) {
+  //   dayLabel.push(moment().day(i).format('DD-MM-YYYY'));
+  // }
+  console.log('moment().day(-6).toDate()', moment().day(-6).toDate());
+  console.log('123', moment().startOf('week').isoWeekday(8).toDate());
 
   let array = await Order.find({
     createdAt: {
@@ -359,7 +365,7 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
     return result;
   };
   // 👇️ All days in March of 2022
-  console.log(getDaysArray(2022, 9));
+  // console.log(array);
 
   // console.log('dayLabel', dayLabel.reverse());
   // console.log('moment().day(-7).toDate()', moment().day(-6).toDate());
@@ -376,9 +382,8 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   }
 });
 
-
 exports.getAllTicketByUser = catchAsync(async (req, res, next) => {
-  console.log('req.user',typeof req.user.id);
+  console.log('req.user', typeof req.user.id);
   let order = await Order.find()
     .populate(['user', 'orderDetail'])
     .sort({ createdAt: -1 });

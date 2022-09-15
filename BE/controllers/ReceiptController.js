@@ -76,11 +76,11 @@ exports.updateReceipt = catchAsync(async (req, res, next) => {
     result: doc.length,
     data: doc,
   });
+
+  
 });
 
 exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
-  console.log('bắt đầU', moment().day(-7).toDate());
-  console.log('week', moment().startOf('week').toDate());
   let array = await Receipt.find({
     createdAt: {
       $gte: moment().day(-6).toDate(),

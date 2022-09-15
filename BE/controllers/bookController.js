@@ -4,6 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const mkdirp = require('mkdirp');
 const multer = require('multer');
 const AppError = require('../utils/appError');
+const fullTextSearch = require('fulltextsearch');
+var fullTextSearchVi = fullTextSearch.vi;
 
 const made = mkdirp.sync('./public/img/books');
 
@@ -94,7 +96,26 @@ exports.createBook = catchAsync(async (req, res, next) => {
     result: doc.length,
     data: doc,
   });
+  
 });
 
 exports.deleteBook = factory.deleteOne(Book);
 exports.getAllBook = factory.getAll(Book);
+
+exports.searchBook = catchAsync(async (req, res, next) => {
+  const { search } = req.query;
+
+  var filter = {};
+  if (search != '') {
+    filter.name = new RegExp(fullTextSearchVi(search), 'i');
+  }
+
+
+  await Book.find(filter).then((records) => {
+    res.status(200).json({
+      status: 'success',
+      result: records.length,
+      data: records,
+    });
+  });
+});

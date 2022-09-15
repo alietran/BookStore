@@ -19,6 +19,7 @@ const receiptDetailRouters = require('./routers/receiptDetailRouter');
 const paymentRouters = require('./routers/paymentRouter');
 const orderRouters = require('./routers/orderRouter');
 const orderDetailRouters = require('./routers/orderDetailRouter');
+const reviewRouters = require('./routers/reviewRouter');
 
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -90,6 +91,8 @@ app.use('/api/v1/receiptsdetail', receiptDetailRouters);
 app.use('/api/v1/payments', paymentRouters);
 app.use('/api/v1/orders', orderRouters);
 app.use('/api/v1/ordersdetail', orderDetailRouters);
+app.use('/api/v1/reviews', reviewRouters);
+
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {
   next(new AppError(`Can'n find ${req.originalUrl} on this sever!`, 404));
