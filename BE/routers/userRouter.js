@@ -9,6 +9,13 @@ const passport = require('passport');
 const successLoginURL = 'http://localhost:3000';
 const errorLoginURL = 'http://localhost:3000/login/failed"';
 
+router.patch(
+  '/updateMe',
+  authController.protectUser,
+  userController.uploadUserPhoto,
+  userController.updateMe
+);
+
 router.route('/').get(userController.getAllUser);
 
 const signToken = (id) => {
@@ -26,8 +33,6 @@ router.get('/login/failed', (req, res) => {
     message: 'failure',
   });
 });
-
-router.patch('/updateMe', authController.protectUser,userController.updateMe);
 
 router.get('/login/success', (req, res) => {
   if (req.user) {

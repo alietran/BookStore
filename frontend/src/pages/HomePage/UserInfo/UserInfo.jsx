@@ -1,11 +1,13 @@
 import { Box, Container, Tabs } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import UserAccount from "./UserAccount/UserAccount";
 import OrderHistory from "./OrderHistory/OrderHistory";
+import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,6 +47,19 @@ export default function UserInfo() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { successUpdateUserCurrent } = useSelector(
+    (state) => state.UserReducer
+  );
+
+  useEffect(() => {
+    if (successUpdateUserCurrent) {
+      enqueueSnackbar("Cập nhật thành công!", {
+        variant: "success",
+      });
+    }
+  }, [successUpdateUserCurrent]);
   return (
     <div>
       <Container maxWidth="lg" sx={{ margin: "20px auto" }}>
@@ -69,9 +84,7 @@ export default function UserInfo() {
           index={0}
           sx={{ backgroundColor: "white", padding: "0 !important" }}
         >
-          <UserAccount
-         
-          />
+          <UserAccount />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <OrderHistory />

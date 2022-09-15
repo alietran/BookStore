@@ -16,6 +16,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
+import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 
 const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
@@ -102,7 +103,8 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   alignItems: "center",
   ...(ownerState.active && {
     backgroundColor: "#2dc258",
-    boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+    // boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+    boxShadow: "0 2px 11px 0 rgba(0,0,0,.5)",
   }),
   ...(ownerState.completed && {
     backgroundColor: "#2dc258",
@@ -111,12 +113,16 @@ const ColorlibStepIconRoot = styled("div")(({ theme, ownerState }) => ({
 
 function ColorlibStepIcon(props) {
   const { active, completed, className } = props;
-
+  console.log("props", props);
   const icons = {
     1: <ReceiptIcon />,
     2: <LocalShippingIcon />,
     3: <CheckIcon />,
     4: <StarBorderIcon />,
+  };
+  const iconCancel = {
+    1: <ReceiptIcon />,
+    2: <ProductionQuantityLimitsIcon />,
   };
 
   return (
@@ -125,6 +131,23 @@ function ColorlibStepIcon(props) {
       className={className}
     >
       {icons[String(props.icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
+function ColorlibStepIconCancel(props) {
+  const { active, completed, className } = props;
+  console.log(props);
+  const iconCancel = {
+    1: <ReceiptIcon />,
+    2: <ProductionQuantityLimitsIcon />,
+  };
+
+  return (
+    <ColorlibStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {iconCancel[String(props.icon)]}
     </ColorlibStepIconRoot>
   );
 }
@@ -147,21 +170,49 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 
+ColorlibStepIconCancel.propTypes = {
+  /**
+   * Whether this step is active.
+   * @default false
+   */
+  active: PropTypes.bool,
+  className: PropTypes.string,
+  /**
+   * Mark the step as completed. Is passed to child components.
+   * @default false
+   */
+  completed: PropTypes.bool,
+  /**
+   * The label displayed in the step icon.
+   */
+  icon: PropTypes.node,
+};
+
 const steps = ["Chờ xác nhận", "Đang vận chuyển", "Hoàn thành", "Đánh giá"];
+const stepsCancel = ["Chờ xác nhận", "Đã hủy"];
 export default function CustomizedSteppers({ orderDetail }) {
   console.log("first,", orderDetail.status);
   const [step, setStep] = useState(0);
-
+  const [cancelStatus, setCancelStatus] = useState(0);
   useEffect(() => {
     if (orderDetail !== "undefined" && orderDetail.status === "Đang xử lý") {
       setStep(0);
     } else if (
       orderDetail !== "undefined" &&
-      orderDetail.status === "Đang vận chuyển"
+      (orderDetail.status === "Đang vận chuyển" ||
+        orderDetail.status === "Đã hủy")
     ) {
       console.log("Step", step);
       setStep(1);
-    } else if (
+    }
+    // else if(
+    //    orderDetail !== "undefined" &&
+    //   orderDetail.status === "Đang vận chuyển"
+    // )
+    // {
+    //    setCancelStatus(1);
+    // }
+    else if (
       orderDetail !== "undefined" &&
       orderDetail.status === "Đã giao hàng"
     ) {
@@ -174,19 +225,35 @@ export default function CustomizedSteppers({ orderDetail }) {
     <div>
       {" "}
       <Stack sx={{ width: "100%", margin: "20px 0" }} spacing={4}>
-        <Stepper
-          alternativeLabel
-          activeStep={step}
-          connector={<ColorlibConnector />}
-        >
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel StepIconComponent={ColorlibStepIcon}>
-                {label}
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+        {orderDetail !== "undefined" && orderDetail.status !== "Đã hủy" ? (
+          <Stepper
+            alternativeLabel
+            activeStep={step}
+            connector={<ColorlibConnector />}
+          >
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={ColorlibStepIcon}>
+                  {label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        ) : (
+          <Stepper
+            alternativeLabel
+            activeStep={step}
+            connector={<ColorlibConnector />}
+          >
+            {stepsCancel.map((label) => (
+              <Step key={label}>
+                <StepLabel StepIconComponent={ColorlibStepIconCancel}>
+                  {label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        )}
       </Stack>
     </div>
   );

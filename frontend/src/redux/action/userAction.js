@@ -94,7 +94,7 @@ export const updateCurrentHomeUser = (currentUser) => {
         dispatch({
           type: "UPDATE_USER_HOME_CURRENT_SUCCESS",
           payload: {
-            data: result.data,
+            data: result.data.data,
            
           },
         });

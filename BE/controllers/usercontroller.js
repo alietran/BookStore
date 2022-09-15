@@ -106,25 +106,30 @@ const createSendToken = (user, statusCode, res) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 2) Update user document
-  // console.log(req.body);
   // Get filtered name and email
   const filteredBody = filterObj(
     req.body,
+    'fullName',
     'phoneNumber',
-    'email',
     'gender',
-    'dateOfBirth'
+    'dateOfBirth',
+    'avatar',
   );
-  //  console.log(req.user.id);
-  const updateUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+  console.log('filteredBody', filteredBody);
+  console.log('req.body', req.body);
+  console.log('req.user.id', req.user.id);
+
+  const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
+  const urlImage = `http://localhost:8080${path}`;
+  if (req.file) filteredBody.avatar = urlImage;
+  const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,
   });
   res.status(200).json({
     status: 'success',
-    data: {
-      user: updateUser,
-    },
+    result: user.length,
+    data: user,
   });
 });
 

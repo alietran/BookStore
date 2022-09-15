@@ -1,9 +1,9 @@
 // import { CHANGE_PASSWORD, DELETE_USER, GET_ALL_USER, LOGIN, REGISTER } from '../constants/constant';
 
 // // Quản lý ng dùng
-const userLogin = localStorage.getItem("user")
-  ? JSON.parse(localStorage.getItem("user"))
-  : null;
+// let userLogin = localStorage.getItem("user")
+//   ? JSON.parse(localStorage.getItem("user"))
+//   : null;
 
 const stateDefault = {
   loadingCreateUser: false,
@@ -64,9 +64,14 @@ export const UserReducer = (state = stateDefault, action) => {
       };
     }
     case "UPDATE_USER_HOME_CURRENT_SUCCESS": {
+      const { data } = action.payload;
+      console.log("action.payload", action.payload.data);
+      let userLogin = JSON.parse(localStorage.getItem("user"));
+      userLogin = { ...userLogin, user: data };
+      localStorage.setItem("user", JSON.stringify(userLogin));
       return {
         ...state,
-        successUpdateUserCurrent: action.payload.data,
+        successUpdateUserCurrent: data,
         loadingUpdateUserCurrent: false,
       };
     }

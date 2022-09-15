@@ -96,6 +96,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'address',
     'idRole'
   );
+  console.log('filteredBody', filteredBody);
+
   const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
   const urlImage = `http://localhost:8080${path}`;
   if (req.file) filteredBody.avatar = urlImage;

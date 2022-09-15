@@ -45,6 +45,7 @@ import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
 import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
 import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHistoryDetail";
+import LoginShipper from "./pages/Shipper/LoginShipper";
 
 function App() {
   const themeOptions = useMemo(
@@ -94,6 +95,9 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
+          <Route exact path={["/shipper"]}>
+            <Route exact path="/shipper" component={LoginShipper} />
+          </Route>
           <Route
             exact
             path={[

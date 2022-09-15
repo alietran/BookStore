@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDetailBook } from "../../../redux/action/bookAction";
 import { useSnackbar } from "notistack";
 import { useHistory, useParams } from "react-router-dom";
+import Label from "../../../components/Label";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -83,6 +84,10 @@ export default function ProductDetail(props) {
   const [value, setValue] = React.useState("1");
   const { successDetailBook } = useSelector((state) => state.BookReducer);
   const { enqueueSnackbar } = useSnackbar();
+  const { errorAddCart } = useSelector((state) => state.CartReducer);
+
+  console.log("errorAddCart", errorAddCart);
+
 
   useEffect(() => {
     dispatch(getDetailBook(id));
@@ -92,6 +97,8 @@ export default function ProductDetail(props) {
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
 
   //  console.log("sliderImg", sliderImg);
+ 
+
   console.log("successDetailBook", successDetailBook?.data.gallery[0]);
   const bookDetail = successDetailBook?.data;
 
@@ -104,7 +111,7 @@ export default function ProductDetail(props) {
   };
   const handleAddToCart = () => {
     console.log("bookDetail", bookDetail);
-
+    // if(cart.filter((item)=>item.id ===)
     const cart = {
       name: bookDetail.name,
       price: bookDetail.price,
@@ -131,8 +138,10 @@ export default function ProductDetail(props) {
         </Button>
       </>
     );
+
+  
     console.log("cart", cart);
-    if (bookDetail.quantity === 0) {
+    if (bookDetail.quantity === 0 || errorAddCart) {
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
       });
@@ -150,6 +159,9 @@ export default function ProductDetail(props) {
       });
     }
   };
+
+
+  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -223,7 +235,7 @@ export default function ProductDetail(props) {
                               // console.log("index", item[index]);
                               return (
                                 <img
-                                // className={}
+                                  // className={}
                                   src={item}
                                   key={index}
                                   onMouseOut={() =>
@@ -259,7 +271,21 @@ export default function ProductDetail(props) {
                     <div className={classes.content__line}>
                       <div className={classes.line}></div>
                     </div>
-                    <div>Kho: {bookDetail?.quantity}</div>
+                    <div>
+                      Kho: {bookDetail?.quantity}{" "}
+                      <Label
+                        variant="ghost"
+                        color={
+                          bookDetail?.quantity > 0
+                            ? "success"
+                           
+                            : "error"
+                        }
+                      >
+                        {" "}
+                        {bookDetail?.quantity > 0 ? "Còn hàng "  : "Hết hàng"}
+                      </Label>
+                    </div>
                     <div className="content__title-discount">
                       Chọn mã giảm giá
                     </div>

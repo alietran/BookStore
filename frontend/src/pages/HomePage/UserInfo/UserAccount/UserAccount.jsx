@@ -30,20 +30,18 @@ export default function UserAccount() {
   const { successUpdateUserCurrent } = useSelector(
     (state) => state.UserReducer
   );
+
   const [srcImage, setSrcImage] = useState(userLogin?.user.avatar);
   const [valueDate, setValueDate] = useState(null);
   const enqueueSnackbar = useSnackbar();
+
   useEffect(() => {
     values.dateOfBirth = moment(userLogin.user.dateOfBirth)?.format(
       "YYYY-MM-DDTHH:mm:SS"
     );
   }, [valueDate]);
 
-  const Createchema = Yup.object().shape({
-    // fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
-    // phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
-    // gender: Yup.string().required("*Vui lòng nhập thông tin này"),
-  });
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
@@ -52,8 +50,7 @@ export default function UserAccount() {
       avatar: userLogin.user.avatar,
       phoneNumber: userLogin.user.phoneNumber,
       gender: userLogin.user.gender,
-      dateOfBirth: userLogin.user.dateOfBirth,
-      
+      dateOfBirth: userLogin.user.dateOfBirth ? userLogin.user.dateOfBirth : "",
     },
     // validationSchema: Createchema,
     onSubmit: (data) => {
@@ -75,15 +72,6 @@ export default function UserAccount() {
     setFieldValue,
   } = formik;
 
-  useEffect(() => {
-    if (successUpdateUserCurrent) {
-      setTimeout(() => {
-        enqueueSnackbar("Cập nhật thành công!", { variant: "success" });
-      }, 100);
-      return;
-    }
-  }, [successUpdateUserCurrent]);
-
   const handleChangeFile = (e) => {
     //doc file base 64
     let file = e.target.files[0];
@@ -98,14 +86,15 @@ export default function UserAccount() {
   };
   const handleChangeGender = (event) => {
     setGender(event.target.value);
-     console.log("gender", gender);
+    console.log("gender", gender);
   };
- 
 
   const handleChangeDate = (newValue) => {
     setValueDate(newValue);
-    console.log("valueDate",valueDate);
+    console.log("valueDate", valueDate);
   };
+
+
   return (
     <div style={{ backgroundColor: "white", padding: "25px" }}>
       <FormikProvider value={formik} sx={{ backgroundColor: "white" }}>
@@ -164,7 +153,7 @@ export default function UserAccount() {
                   fullWidth
                   autoComplete="code"
                   label="Email"
-                  disabled
+                  disabled={userLogin.user.googleId}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -177,6 +166,7 @@ export default function UserAccount() {
                   <TextField
                     fullWidth
                     autoComplete="code"
+                    disabled={userLogin.user.phoneUID}
                     label="Số điện thoại"
                     InputLabelProps={{
                       shrink: true,

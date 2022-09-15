@@ -2,18 +2,21 @@
 //   ? JSON.parse(localStorage.getItem("cart"))
 //   : null;
 
+import { isBuffer } from "lodash";
+
 const stateDefault = {
   cart: [],
   total: null,
   discount: null,
   miniPrice: null,
-  voucherId: null
+  voucherId: null,
+  errorAddCart: false,
 };
 
 export const CartReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "TONG_TIEN": {
-      const { discount, miniPrice,voucherId } = action.payload.data;
+      const { discount, miniPrice, voucherId } = action.payload.data;
 
       console.log("totalPrice re", state.totalPrice);
       console.log("miniPrice re", miniPrice);
@@ -27,25 +30,46 @@ export const CartReducer = (state = stateDefault, action) => {
     }
     case "TOTAL": {
       const { totalPrice } = action.payload.data;
-     
+
       return {
         ...state,
         total: totalPrice,
- 
       };
     }
     case "ADD_TO_CART": {
       // localStorage.setItem("cart",[]);
       const { data } = action.payload;
+      state.errorAddCart = false;
       // state.cart.push(data);
+      console.log("data", data);
       const cartList = localStorage.getItem("cart");
 
       if (cartList) {
         state.cart = JSON.parse(cartList);
       }
       let index = state.cart?.findIndex((item) => item.id === data.id);
+      console.log("index", index);
       if (index !== -1) {
-        state.cart[index].quantity += 1;
+        console.log("1434");
+        console.log(" state.cart[index].quantity", state.cart[index].quantity);
+        console.log(
+          " state.cart[index].warehouse",
+          state.cart[index].warehouse
+        );
+        if (state.cart[index].quantity < state.cart[index].warehouse) { 
+           if (state.cart[index].quantity + 1 === state.cart[index].warehouse) {
+             state.errorAddCart = true;
+           }
+          state.cart[index].quantity += 1; 
+          console.log("first,", state.cart[index].quantity + 1);
+         
+          
+        } else {
+          console.log("124");
+          
+            state.errorAddCart = true;
+          
+        }
       } else {
         // cartItem.quantity = 1;
         state.cart.push(data);
@@ -58,6 +82,7 @@ export const CartReducer = (state = stateDefault, action) => {
       return {
         ...state,
         cart: state.cart,
+        errorAddCart: state.errorAddCart,
       };
     }
     case "CHANGE_QUANTITY": {
