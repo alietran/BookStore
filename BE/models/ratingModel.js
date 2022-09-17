@@ -16,7 +16,7 @@ const ratingSchema = new mongoose.Schema(
       type: String,
     },
     userLikeThisComment: [],
-    image: {
+    imageRating: {
       type: Array,
     },
     active: {

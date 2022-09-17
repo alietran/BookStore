@@ -20,6 +20,7 @@ const paymentRouters = require('./routers/paymentRouter');
 const orderRouters = require('./routers/orderRouter');
 const orderDetailRouters = require('./routers/orderDetailRouter');
 const ratingRouters = require('./routers/ratingRouter');
+const imageRatingRouters = require('./routers/imageRatingRouter');
 
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -67,7 +68,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -92,6 +93,7 @@ app.use('/api/v1/payments', paymentRouters);
 app.use('/api/v1/orders', orderRouters);
 app.use('/api/v1/ordersdetail', orderDetailRouters);
 app.use('/api/v1/ratings', ratingRouters);
+app.use('/api/v1/image-ratings', imageRatingRouters);
 
 // trả về đường dẫn not found
 app.all('*', (req, res, next) => {

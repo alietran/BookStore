@@ -8,7 +8,11 @@ router.route('/book-rating-detail/:id').get(ratingController.bookRatingDetail);
 router
   .route('/')
   .get(ratingController.getAllRating)
-  .post(authController.protectUser, ratingController.createRating);
+  .post(
+    authController.protectUser,
+    ratingController.uploadImageRating,
+    ratingController.createRating
+  );
 
 router
   .route('/:id')
