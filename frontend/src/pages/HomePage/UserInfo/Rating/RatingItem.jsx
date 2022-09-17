@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Rating } from "@mui/material";
 import useStyles from "../OrderHistory/style";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { useDispatch, useSelector } from "react-redux";
 const labels = {
   1: "Tệ",
   2: "Không hài lòng",
@@ -10,21 +11,13 @@ const labels = {
   5: "Tuyệt vời",
 };
 
-export default function RatingItem() {
-  // const [imgValue, setImgValue] = useState();
-
-//   const {
-//     errors,
-//     touched,
-//     handleSubmit,
-//     getFieldProps,
-//     values,
-//     setFieldValue,
-//   } = formik;
+export default function RatingItem({ productItem }) {
+  const { rating } = useSelector((state) => state.RatingReducer);
+  console.log("productItem", productItem);
   const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
-
+  const dispatch = useDispatch();
   const classes = useStyles();
   const handleChangeFileGallery = (e) => {
     let files = e.target.files;
@@ -44,41 +37,67 @@ export default function RatingItem() {
     }
   };
 
-
-    useEffect(() => {
-      const images = [],
-        fileReaders = [];
-      let isCancel = false;
-      if (imageFiles.length) {
-        imageFiles.forEach((file) => {
-          const fileReader = new FileReader();
-          fileReaders.push(fileReader);
-          //đọc từng file
-          fileReader.onload = (e) => {
-            const { result } = e.target;
-            if (result) {
-              images.push(result);
-            }
-            // sl file nhập vào bằng sl file đã đọc
-            if (images.length === imageFiles.length && !isCancel) {
-              setImages(images);
-            }
-          };
-          //đọc url
-          fileReader.readAsDataURL(file);
-        });
-      }
-      return () => {
-        isCancel = true;
-        fileReaders.forEach((fileReader) => {
-          if (fileReader.readyState === 1) {
-            // nhiều ảnh thì dùng
-            fileReader.abort();
+  useEffect(() => {
+    const images = [],
+      fileReaders = [];
+    let isCancel = false;
+    if (imageFiles.length) {
+      imageFiles.forEach((file) => {
+        const fileReader = new FileReader();
+        fileReaders.push(fileReader);
+        //đọc từng file
+        fileReader.onload = (e) => {
+          const { result } = e.target;
+          if (result) {
+            images.push(result);
           }
-        });
-      };
-    }, [imageFiles]);
+          // sl file nhập vào bằng sl file đã đọc
+          if (images.length === imageFiles.length && !isCancel) {
+            setImages(images);
+          }
+        };
+        //đọc url
+        fileReader.readAsDataURL(file);
+      });
+    }
+    return () => {
+      isCancel = true;
+      fileReaders.forEach((fileReader) => {
+        if (fileReader.readyState === 1) {
+          // nhiều ảnh thì dùng
+          fileReader.abort();
+        }
+      });
+    };
+  }, [imageFiles]);
+
   const [value, setValue] = useState(3);
+  const [desc, setDesc] = useState();
+  const handleChangeRating = (event, newValue) => {
+    setValue(newValue);
+    dispatch({
+      type: "CHANGE_RATING",
+      payload: {
+        order: productItem.order.id,
+        book: productItem._id,
+        rating: newValue,
+        content: "",
+      },
+    });
+  };
+  const handleChangeContent = (e) => {
+    setDesc(e.target.value);
+    dispatch({
+      type: "CHANGE_RATING",
+      payload: {
+        order: productItem.order.id,
+        book: productItem._id,
+        rating: "",
+        content: e.target.value,
+      },
+    });
+  };
+  console.log("rating", rating);
   return (
     <div>
       {" "}
@@ -89,9 +108,7 @@ export default function RatingItem() {
             className="ml-5"
             value={value}
             size={"medium"}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
+            onChange={handleChangeRating}
           />
         </span>
         <Box sx={{ ml: 2 }}>
@@ -106,6 +123,7 @@ export default function RatingItem() {
         className={classes.inputReviwer}
         type="text"
         placeholder="Bạn nghĩ gì về trải nghiệm mua hàng này ?"
+        onChange={handleChangeContent}
       />
       <Button
         variant="contained"

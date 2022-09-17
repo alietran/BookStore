@@ -13,10 +13,7 @@ import useStyles from "./style";
 
 import RatingItem from "../Rating/RatingItem";
 
-
 export default function OrderHistory() {
-
-
   const { orderByUser } = useSelector((state) => state.OrderReducer);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,6 +31,12 @@ export default function OrderHistory() {
   console.log("item", item);
 
   const handleClose = () => {
+    dispatch({
+      type: "CHANGE_RATING",
+      payload: {
+        cannel: "",
+      },
+    });
     setOpen(false);
   };
 
@@ -155,11 +158,10 @@ export default function OrderHistory() {
 
                             <p>{item[0]?.totalPrice.toLocaleString()}</p>
                           </div>
-                          <RatingItem />                        
+                          <RatingItem productItem={itemDetail} />
                         </div>
                       );
                     })}
-                 
                 </DialogContent>
                 <DialogActions>
                   <Button

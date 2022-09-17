@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const reviewSchema = new mongoose.Schema(
+const ratingSchema = new mongoose.Schema(
   {
     order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
     book: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
@@ -31,7 +31,7 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-reviewSchema.pre(/^find/, function (next) {
+ratingSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'order',
   }).populate({
@@ -40,6 +40,6 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
-const Review = mongoose.model('Review', reviewSchema);
+const Rating = mongoose.model('Rating', ratingSchema);
 
-module.exports = Review;
+module.exports = Rating;
