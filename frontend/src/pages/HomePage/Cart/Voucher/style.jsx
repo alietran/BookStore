@@ -1,6 +1,9 @@
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
+  backDrop: {
+    background: "rgba(0, 0, 0, 0.5) !important",
+  },
   "cart__wrapper-content--info": {
     padding: "16px",
     background: "white",

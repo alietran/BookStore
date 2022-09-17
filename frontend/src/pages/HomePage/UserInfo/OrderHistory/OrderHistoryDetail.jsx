@@ -49,8 +49,7 @@ export default function OrderHistoryDetail() {
       {orderByUser?.map((orderDetail, index) => {
         if (orderDetail.id === id.receiptId) {
           return (
-            <div style={{padding:"30px "}}>
-                
+            <div style={{ padding: "30px " }}>
               <Stack spacing={2}>
                 <div className="flex justify-between">
                   <Typography
@@ -67,32 +66,32 @@ export default function OrderHistoryDetail() {
                         <Label
                           variant="ghost"
                           color={
-                            orderDetail &&
-                            orderDetail.status === "Đang xử lý"
-                              ? "warning"
+                            orderDetail && orderDetail.status === "Đang xử lý"
+                              ? "default"
                               : orderDetail &&
-                                orderDetail.status ===
-                                  "Đang vận chuyển"
+                                orderDetail.status === "Đang vận chuyển"
                               ? "info"
                               : orderDetail &&
-                                orderDetail.status ===
-                                  "Đã giao hàng"
+                                orderDetail.status === "Đã giao hàng"
                               ? "success"
+                              : orderDetail && orderDetail.status === "Đã nhận"
+                              ? "success"
+                              
+                              : orderDetail && orderDetail.status === "Đã đánh giá"
+                              ? "warning"
                               : "error"
                           }
                         >
                           {orderDetail && orderDetail.status}
                         </Label>
-                    
+
                         {/* )} */}
                       </span>
                     </span>
                   </Typography>
                 </div>
-
-               
               </Stack>
-              <CustomizedSteppers orderDetail={orderDetail}/>
+              <CustomizedSteppers orderDetail={orderDetail} />
               <Grid
                 container
                 rowSpacing={1}

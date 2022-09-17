@@ -15,6 +15,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Tabs from "@mui/material/Tabs";
 
@@ -33,6 +34,8 @@ import { getDetailBook } from "../../../redux/action/bookAction";
 import { useSnackbar } from "notistack";
 import { useHistory, useParams } from "react-router-dom";
 import Label from "../../../components/Label";
+import RatingItem from "../UserInfo/Rating/RatingItem";
+import { getRatingDetail } from "../../../redux/action/ratingAction";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -66,16 +69,8 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-//  const handleClickComment = () => {
-//   //  if (!userLogin) {
-//   //    isLogin();
-//   //    return;
-//   //  }
-//    setOpenComment(true);
-//    setwarningtext(false);
-//  };
-
 export default function ProductDetail(props) {
+  const { ratingDetail } = useSelector((state) => state.RatingReducer);
   const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -88,16 +83,21 @@ export default function ProductDetail(props) {
 
   console.log("errorAddCart", errorAddCart);
 
-
   useEffect(() => {
     dispatch(getDetailBook(id));
   }, []);
+
+  useEffect(() => {
+    dispatch(getRatingDetail(id));
+  }, []);
+
+
+  console.log("ratingDetail,", ratingDetail);
   const [imageURL, setImageURL] = useState(successDetailBook?.data.gallery[0]);
-  const [itemImg,seItemImage] = useState(0)
+  const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
 
   //  console.log("sliderImg", sliderImg);
- 
 
   console.log("successDetailBook", successDetailBook?.data.gallery[0]);
   const bookDetail = successDetailBook?.data;
@@ -106,8 +106,12 @@ export default function ProductDetail(props) {
   const handleChangeImage = (item, index) => {
     // console.log("item", item);
     setImageURL(item);
-    seItemImage(index)
-    console.log("itemImg",itemImg)
+    seItemImage(index);
+    console.log("itemImg", itemImg);
+  };
+  const handleBuy = () => {
+    handleAddToCart();
+    history.push("/checkout");
   };
   const handleAddToCart = () => {
     console.log("bookDetail", bookDetail);
@@ -139,8 +143,10 @@ export default function ProductDetail(props) {
       </>
     );
 
-  
+    console.log("bookDetail.quantity", bookDetail.quantity);
     console.log("cart", cart);
+    console.log("errorAddCart", errorAddCart);
+
     if (bookDetail.quantity === 0 || errorAddCart) {
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
@@ -148,7 +154,7 @@ export default function ProductDetail(props) {
     } else {
       enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
         variant: "success",
-        autoHideDuration: 1500,
+        autoHideDuration: 1000,
         action,
       });
       dispatch({
@@ -159,9 +165,6 @@ export default function ProductDetail(props) {
       });
     }
   };
-
-
-  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -275,15 +278,10 @@ export default function ProductDetail(props) {
                       Kho: {bookDetail?.quantity}{" "}
                       <Label
                         variant="ghost"
-                        color={
-                          bookDetail?.quantity > 0
-                            ? "success"
-                           
-                            : "error"
-                        }
+                        color={bookDetail?.quantity > 0 ? "success" : "error"}
                       >
                         {" "}
-                        {bookDetail?.quantity > 0 ? "Còn hàng "  : "Hết hàng"}
+                        {bookDetail?.quantity > 0 ? "Còn hàng " : "Hết hàng"}
                       </Label>
                     </div>
                     <div className="content__title-discount">
@@ -314,6 +312,7 @@ export default function ProductDetail(props) {
                     </div>
                     <div className={classes.content__button}>
                       <Button
+                        onClick={handleBuy}
                         variant="contained"
                         className={`${classes["content__button--buy"]} ${classes.buttonAction}`}
                       >
@@ -389,7 +388,7 @@ export default function ProductDetail(props) {
                     >
                       <Tab label="Mô tả" value="1" />
                       <Tab label="Thông tin chi tiết" value="2" />
-                      <Tab label="Bình luận" value="3" />
+                      <Tab label="Đánh giá sản phẩm" value="3" />
                     </TabList>
                   </Box>
                   <TabPanel value="1">
@@ -434,44 +433,57 @@ export default function ProductDetail(props) {
                     </table>
                   </TabPanel>
                   <TabPanel value="3">
-                    <div className={classes.danhGia}>
-                      <div
-                        className={classes.inputRoot}
-                        // onClick={handleClickComment}
-                      >
-                        <span className={classes.avatarReviewer}>
-                          <img
-                            src="../../../../img/phone.webp"
-                            alt="avatar"
-                            className={classes.avatarImg}
-                          />
-                        </span>
-                        <input
-                          className={classes.inputReviwer}
-                          type="text"
-                          placeholder="Bạn nghĩ gì về phim này?"
-                          readOnly="readonly"
-                        />
-
-                        <span className={classes.imgReviewerStar}>
-                          <Rating
-                            value={5}
-                            size={"medium"}
-                            readOnly
-                            precision={0.5}
-                          />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className={classes.moreMovie}>
-                      <Button
-                        // onClick={() => setopenMore()}
-                        variant="outlined"
-                        className={classes.moreMovieButton}
-                      >
-                        XEM THÊM
-                      </Button>
+                    <div>
+                      {ratingDetail?.data.map((item, index)=>{
+                        return (
+                          <div className="flex mb-3">
+                            <div className="mr-3 ">
+                              <img
+                                src="../../../../img/User_Circle.png"
+                                alt="avatar"
+                                style={{ width: "50px", height: "50px" }}
+                              />
+                            </div>
+                            <div className="leading-6">
+                              <p className="mb-2">{item.order.user.fullName}</p>
+                              <Rating value={item.rating} size={"medium"} />
+                              <p className="text-slate-300">{moment(item.createdAt).format('DD/MM/YYYY, h:mm a')}</p>
+                              <p> {item.content}</p>
+                              <div className="mt-3 flex ">
+                                <img
+                                  src="../../../../img/User_Circle.png"
+                                  alt=""
+                                  style={{
+                                    width: "80px",
+                                    height: "80px",
+                                    marginRight: "10px",
+                                  }}
+                                />
+                                <img
+                                  src="../../../../img/User_Circle.png"
+                                  alt=""
+                                  style={{
+                                    width: "80px",
+                                    height: "80px",
+                                    marginRight: "10px",
+                                  }}
+                                />
+                                <img
+                                  src="../../../../img/User_Circle.png"
+                                  alt=""
+                                  style={{
+                                    width: "80px",
+                                    height: "80px",
+                                    marginRight: "10px",
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    
+                      <hr />
                     </div>
                   </TabPanel>
                 </TabContext>

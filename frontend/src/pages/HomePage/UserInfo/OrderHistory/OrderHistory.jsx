@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderByUser } from "../../../../redux/action/orderAction";
+import {
+  getOrderByUser,
+  updateOrder,
+} from "../../../../redux/action/orderAction";
 import { useHistory } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -12,17 +15,93 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useStyles from "./style";
 
 import RatingItem from "../Rating/RatingItem";
-
+import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
+import paymentAPI from "../../../../api/paymentAPI";
+import { createRating } from "../../../../redux/action/ratingAction";
+import Swal from "sweetalert2";
 export default function OrderHistory() {
   const { orderByUser } = useSelector((state) => state.OrderReducer);
+  const { rating, createRatingDetail } = useSelector(
+    (state) => state.RatingReducer
+  );
+  console.log("createRatingDetail", createRatingDetail);
+  const [hadRating, setHadRating] = useState(true);
+
+  console.log("hadRating", hadRating);
+  console.log("rating12", rating);
   const dispatch = useDispatch();
   const history = useHistory();
   const [item, setItem] = useState("");
   useEffect(() => {
-    dispatch(getOrderByUser());
-  }, []);
-  const [open, setOpen] = React.useState(false);
+    if (orderByUser === null) dispatch(getOrderByUser());
+  }, [orderByUser]);
 
+  useEffect(() => {
+    if (createRatingDetail) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Cám ơn bạn đã đánh giá",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  }, [createRatingDetail]);
+  const [open, setOpen] = React.useState(false);
+  const handleDoneOrder = (order) => {
+    console.log("order", order);
+    dispatch(
+      updateOrder(order.id, {
+        status: "Đã nhận",
+      })
+    );
+  };
+
+  const handlePushRating = (rating) => {
+    dispatch(createRating(rating));
+    setOpen(false);
+    setHadRating(false);
+  };
+
+  console.log("orderByUser", orderByUser);
+  const handleClickCancel = async (order) => {
+    console.log("order", order);
+    console.log("order.id", order.id);
+    if (order?.paymentMethod?.name === "Thanh toán bằng ví MoMo") {
+      // console.log("orderDetailList[0]", orderDetailList[0]);
+
+      const { data } = await paymentAPI.refundMoMoPayment({
+        // _id: idShowtime,
+        amount: order.totalPrice,
+        transId: Number(order.paymentMethod.transId),
+      });
+      console.log("123data", data);
+      if (data?.resultCode == 0) {
+        dispatch(
+          updateOrder(order.id, {
+            status: "Đang xử lý",
+          })
+        );
+        setOpen(false);
+      } else {
+        console.log("Error:", data?.messages);
+      }
+    } else {
+      dispatch(
+        updateOrder(order.id, {
+          status: "Đã hủy",
+        })
+      );
+      setOpen(false);
+    }
+
+    dispatch(
+      updateOrder(order.id, {
+        status: "Đã hủy",
+      })
+    );
+    setOpen(false);
+  };
   const handleClickOpen = (id) => {
     setOpen(true);
     const a = orderByUser?.filter((item) => item.id === id);
@@ -108,85 +187,126 @@ export default function OrderHistory() {
             </div>
             <div className=" flex justify-end">
               {" "}
+              {/* {order.status === "Đã nhận" ? } */}
+              {order.status === "Đã nhận" && hadRating ? (
+                <Button
+                  variant="outlined"
+                  style={{ marginRight: "10px" }}
+                  onClick={() => handleClickOpen(order.id)}
+                >
+                  Đánh giá
+                </Button>
+              ) : (
+                ""
+              )}
+              {order.status === "Đã giao hàng" ? (
+                <Button
+                  variant="contained"
+                  onClick={() => handleDoneOrder(order)}
+                  sx={{ marginRight: "10px" }}
+                >
+                  Đã nhận
+                </Button>
+              ) : (
+                ""
+              )}
               <Button
+                color="info"
                 variant="contained"
                 onClick={() => handleDetail(order.id)}
               >
                 Xem chi tiết
               </Button>
-              <Button
-                variant="outlined"
-                style={{ marginLeft: "10px" }}
-                onClick={() => handleClickOpen(order.id)}
-              >
-                Đánh giá
-              </Button>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth="sm"
-                fullWidth={true}
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {"Đánh giá sản phẩm"}
-                </DialogTitle>
-                <DialogContent>
-                  {item &&
-                    item[0]?.orderDetail.map((itemDetail, index) => {
-                      return (
-                        <div>
-                          <div className="flex justify-between py-3">
-                            <div className="flex">
-                              <div>
-                                {" "}
-                                <img
-                                  src={itemDetail?.book?.image}
-                                  style={{
-                                    width: "80px",
-                                    height: "80px",
-                                    marginRight: "5px",
-                                  }}
-                                />
-                              </div>
-                              <div>
-                                <p>{itemDetail?.book?.name}</p>
-                                <p>Số lượng: {itemDetail?.quantity}</p>
-                              </div>
-                            </div>
-
-                            <p>{item[0]?.totalPrice.toLocaleString()}</p>
-                          </div>
-                          <RatingItem productItem={itemDetail} />
-                        </div>
-                      );
-                    })}
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={handleClose}
-                    sx={{ textTransform: "none !important" }}
-                    // className="normal-case "
-                  >
-                    Hủy bỏ
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={handleClose}
-                    sx={{ textTransform: "none !important" }}
-                    autoFocus
-                  >
-                    Đồng ý
-                  </Button>
-                </DialogActions>
-              </Dialog>
+              {order.status === "Đang xử lý" ? (
+                <Button
+                  color="error"
+                  variant="outlined"
+                  style={{ marginLeft: "10px" }}
+                  onClick={() => handleClickCancel(order)}
+                >
+                  Hủy
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         );
       })}
+      <CustomDialog open={open} handleClose={handleClose} dialogSize="sm">
+        <DialogTitle id="alert-dialog-title">{"Đánh giá sản phẩm"}</DialogTitle>
+        <DialogContent>
+          {item &&
+            item[0]?.orderDetail.map((itemDetail, index) => {
+              return (
+                <div>
+                  <div className="flex justify-between py-3">
+                    <div className="flex">
+                      <div>
+                        {" "}
+                        <img
+                          src={itemDetail?.book?.image}
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            marginRight: "5px",
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <p>{itemDetail?.book?.name}</p>
+                        <p>Số lượng: {itemDetail?.quantity}</p>
+                      </div>
+                    </div>
+
+                    <p>{(itemDetail?.price).toLocaleString()}</p>
+                  </div>
+                  <RatingItem productItem={itemDetail} />
+                </div>
+              );
+            })}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleClose}
+            sx={{ textTransform: "none !important" }}
+            // className="normal-case "
+          >
+            Hủy bỏ
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              handlePushRating(rating);
+            }}
+            sx={{ textTransform: "none !important" }}
+            autoFocus
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </CustomDialog>
+      {/* <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">{"Hủy đơn"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Bạn chắc chắn muốn hủy đơn hàng này
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Không
+          </Button>
+          <Button onClick={handleCancel}>Đồng ý</Button>
+        </DialogActions>
+      </Dialog> */}
     </div>
   );
 }

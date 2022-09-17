@@ -84,7 +84,7 @@ export default function ConfirmOrder() {
         totalPrice: totalPrice - item.discount,
         items: item.items,
         address: item.address,
-        status: resultCode == 1006 && "Đã hủy",
+        status: resultCode == 1006 ? "Đã hủy" : "Đang xử lý",
         paymentMethod: {
           name: item.paymentMethod.name,
           resultCode,

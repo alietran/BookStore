@@ -15,10 +15,10 @@ exports.createRating = catchAsync(async (req, res, next) => {
 });
 
 exports.bookRatingDetail = catchAsync(async (req, res, next) => {
-  const { bookId } = req.query;
-  console.log('bookId', bookId);
+  const { id } = req.params;
+  console.log('bookId', id);
 
-  const doc = await Rating.find({ book: bookId });
+  const doc = await Rating.find({ book: id });
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));

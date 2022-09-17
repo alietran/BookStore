@@ -16,6 +16,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import { useDispatch, useSelector } from "react-redux";
 import Voucher from "./Voucher/Voucher";
 import { useSnackbar } from "notistack";
+import CustomDialog from "../../../components/CustomDialog/CustomDialog";
 export default function Cart() {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -24,7 +25,7 @@ export default function Cart() {
   const [totalCart, setTotalCart] = useState(0);
   const [openConfirm, setOpenConfirm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const {quantity, setQuantity} = useState()
+  const { quantity, setQuantity } = useState();
   console.log("miniPrice", typeof miniPrice);
   console.log("discount", discount);
 
@@ -131,15 +132,14 @@ export default function Cart() {
       history.push("/checkout");
     }
   };
-    const handleCancel = () => {
-      setOpenConfirm(false);
-    };
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
 
-      const handleCloseConfirm = (id) => {
-        setOpenConfirm(false);
-        handleDelete(id);
-      };
-
+  const handleCloseConfirm = (id) => {
+    setOpenConfirm(false);
+    handleDelete(id);
+  };
 
   return (
     <div>
@@ -196,146 +196,146 @@ export default function Cart() {
                     </div>
                   </div>
                   {cart?.map((item, index) => (
-                    <div className={`${classes["cart__wrapper-content--box"]}`}>
-                      <div className={`${classes.box__content} `}>
-                        <div className={classes["box__content-name"]}>
-                          <NavLink className={` ${classes.center}`} to={"/"}>
-                            <img
-                              style={{ width: "100px", height: "80px" }}
-                              src={item.image}
-                              alt=""
-                            />
-                          </NavLink>
-                          <p className={classes["box__content-name-product"]}>
-                            {item.name}
-                          </p>
-                        </div>
-                        <div
-                          className={`${classes["box__content-unitPrice"]} ${classes.center}`}
-                        >
-                          <p style={{ fontWeight: "600" }}>
-                            {" "}
-                            {item.price.toLocaleString()}{" "}
-                          </p>
-                        </div>
-                        <div
-                          className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity}`}
-                        >
+                    <div>
+                      {" "}
+                      <div
+                        className={`${classes["cart__wrapper-content--box"]}`}
+                      >
+                        <div className={`${classes.box__content} `}>
+                          <div className={classes["box__content-name"]}>
+                            <NavLink className={` ${classes.center}`} to={"/"}>
+                              <img
+                                style={{ width: "100px", height: "80px" }}
+                                src={item.image}
+                                alt=""
+                              />
+                            </NavLink>
+                            <p className={classes["box__content-name-product"]}>
+                              {item.name}
+                            </p>
+                          </div>
                           <div
-                            className={classes["box__content-quantity-detail"]}
+                            className={`${classes["box__content-unitPrice"]} ${classes.center}`}
                           >
-                            <button
-                              className="plusItem"
-                              onClick={() => hadleClickMinus(item.id, false)}
-                              disabled={item.quantity === 1 ? true : false}
-                              // onClick={dispatch({
-                              //   type: "TANG_GIAM_SL",
-                              //   payload: {
-                              //     tangGiam: true,
-                              //   },
-                              // })}
-                            >
-                              <span>
-                                <svg
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  size="16"
-                                  color="textPrimary"
-                                  height="16"
-                                  width="16"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M3.25 12C3.25 11.5858 3.58579 11.25 4 11.25H20C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75H4C3.58579 12.75 3.25 12.4142 3.25 12Z"
-                                    fill="#82869E"
-                                  ></path>
-                                </svg>
-                              </span>
-                            </button>
-                            <input
-                              className={classes.quantityValue}
-                              value={item.quantity}
-                              // onChange={() => setQuantity(item.quantity)}
-                              // type="number"
-                            />
-
-                            <button
-                              className="dashItem"
-                              onClick={
-                                (e) => hadleClickPlus(item.id, true, item)
-
-                                //   dispatch({
-                                //   type: "TANG_GIAM_SL",
-                                //   payload: {
-                                //     tangGiam: false,
-                                //   },
-                                // })}
+                            <p style={{ fontWeight: "600" }}>
+                              {" "}
+                              {item.price.toLocaleString()}{" "}
+                            </p>
+                          </div>
+                          <div
+                            className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity}`}
+                          >
+                            <div
+                              className={
+                                classes["box__content-quantity-detail"]
                               }
                             >
-                              <span>
-                                <svg
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  size="16"
-                                  color="textPrimary"
-                                  height="16"
-                                  width="16"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                    fill="#82869E"
-                                  ></path>
-                                </svg>
-                              </span>
-                            </button>
+                              <button
+                                className="plusItem"
+                                onClick={() => hadleClickMinus(item.id, false)}
+                                disabled={item.quantity === 1 ? true : false}
+                                // onClick={dispatch({
+                                //   type: "TANG_GIAM_SL",
+                                //   payload: {
+                                //     tangGiam: true,
+                                //   },
+                                // })}
+                              >
+                                <span>
+                                  <svg
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    size="16"
+                                    color="textPrimary"
+                                    height="16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      clip-rule="evenodd"
+                                      d="M3.25 12C3.25 11.5858 3.58579 11.25 4 11.25H20C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75H4C3.58579 12.75 3.25 12.4142 3.25 12Z"
+                                      fill="#82869E"
+                                    ></path>
+                                  </svg>
+                                </span>
+                              </button>
+                              <input
+                                className={classes.quantityValue}
+                                value={item.quantity}
+                                // onChange={() => setQuantity(item.quantity)}
+                                // type="number"
+                              />
+
+                              <button
+                                className="dashItem"
+                                onClick={(e) =>
+                                  hadleClickPlus(item.id, true, item)
+                                }
+                              >
+                                <span>
+                                  <svg
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    size="16"
+                                    color="textPrimary"
+                                    height="16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      clip-rule="evenodd"
+                                      d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                                      fill="#82869E"
+                                    ></path>
+                                  </svg>
+                                </span>
+                              </button>
+                            </div>
+
+                            <div
+                              className={`${classes.delete} text-blue-600 `}
+                              onClick={handleClickConfirm}
+                            >
+                              Xóa
+                            </div>
                           </div>
 
                           <div
-                            className={`${classes.delete} text-blue-600 `}
-                            onClick={handleClickConfirm}
+                            className={`${classes["box__content-quantity"]} ${classes.center}`}
                           >
-                            Xóa
+                            <p style={{ fontWeight: "600", color: "#1435c3" }}>
+                              {" "}
+                              {(item.price * item.quantity).toLocaleString()}
+                            </p>
                           </div>
-                          <Dialog
-                            open={openConfirm}
-                            // onClose={handleCloseCnfirm}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Xóa sản phẩm"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Bạn chắc chắn muốn xóa sản phẩm này.
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleCancel}>Hủy</Button>
-                              <Button
-                                onClick={() => handleDelete(item.id)}
-                                autoFocus
-                              >
-                                Đồng ý
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
-                        </div>
-
-                        <div
-                          className={`${classes["box__content-quantity"]} ${classes.center}`}
-                        >
-                          <p style={{ fontWeight: "600", color: "#1435c3" }}>
-                            {" "}
-                            {(item.price * item.quantity).toLocaleString()}
-                          </p>
                         </div>
                       </div>
+                      <CustomDialog
+                        open={openConfirm}
+                        handleClose={handleCancel}
+                        dialogSize="xs"
+                        overlayStyle={{ backgroundColor: "transparent" }}
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Xóa sản phẩm"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Bạn chắc chắn muốn xóa sản phẩm này.
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCancel}>Hủy</Button>
+                          <Button
+                            onClick={() => handleCloseConfirm(item.id)}
+                            autoFocus
+                          >
+                            Đồng ý
+                          </Button>
+                        </DialogActions>
+                      </CustomDialog>
                     </div>
                   ))}
                 </div>

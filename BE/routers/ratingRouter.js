@@ -3,7 +3,7 @@ const ratingController = require('../controllers/ratingController');
 const authController = require('../controllers/authController');
 const router = express.Router({ mergeParams: true });
 
-router.route('/book-rating-detail').get(ratingController.bookRatingDetail);
+router.route('/book-rating-detail/:id').get(ratingController.bookRatingDetail);
 
 router
   .route('/')

@@ -75,11 +75,12 @@ export default function RatingItem({ productItem }) {
   const [desc, setDesc] = useState();
   const handleChangeRating = (event, newValue) => {
     setValue(newValue);
+    console.log("productItem", productItem);
     dispatch({
       type: "CHANGE_RATING",
       payload: {
         order: productItem.order.id,
-        book: productItem._id,
+        book: productItem.book.id,
         rating: newValue,
         content: "",
       },
@@ -91,7 +92,7 @@ export default function RatingItem({ productItem }) {
       type: "CHANGE_RATING",
       payload: {
         order: productItem.order.id,
-        book: productItem._id,
+        book: productItem.book.id,
         rating: "",
         content: e.target.value,
       },

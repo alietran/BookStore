@@ -95,11 +95,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(
-      array,
-      (_user) =>
-        _user._id.indexOf(query) !== -1
-    );
+    return filter(array, (_user) => _user._id.indexOf(query) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -278,8 +274,14 @@ export default function OrderManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
-                  const { _id, address, status, createdAt, paymentMethod , totalPrice} =
-                    row;
+                  const {
+                    _id,
+                    address,
+                    status,
+                    createdAt,
+                    paymentMethod,
+                    totalPrice,
+                  } = row;
                   const isItemSelected =
                     selected.indexOf(address.fullName) !== -1;
 
@@ -325,10 +327,16 @@ export default function OrderManager() {
                           variant="ghost"
                           color={
                             status === "Đang xử lý"
-                              ? "warning"
+                              ? "default"
                               : status === "Đang vận chuyển"
                               ? "info"
-                              : status === "Đã giao hàng" ? "success" : "error"
+                              : status === "Đã giao hàng"
+                              ? "success"
+                              : status === "Đã nhận"
+                              ? "success"                             
+                              : status === "Đã đánh giá"
+                              ? "warning"
+                              : "error"
                           }
                         >
                           {status}

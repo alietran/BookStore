@@ -33,6 +33,36 @@ const useStyles = makeStyles(() => {
       borderBottom: "2px #eaeaea solid",
       marginBottom: "5px",
     },
+    dataResult: {
+      marginTop: "5px",
+      width: "300px",
+      height: "auto",
+      backgroundColor: "darrk",
+      boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+      overflow: "hidden",
+      overflowY: "auto",
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
+    },
+    dataItem: {
+      width: "100%",
+      height: "50px",
+      display: "flex",
+      alignItems: "center",
+      color: "black",
+      "& p": {
+        marginLeft: "10px",
+      },
+
+      "& a": {
+        textDecoration: "none",
+      },
+      "&:hover": {
+        color: "black",
+        backgroundColor: "lightgrey",
+      },
+    },
   };
 });
 

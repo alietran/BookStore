@@ -20,6 +20,8 @@ import { getPromotionList } from "../../../../redux/action/promotionAction";
 import moment from "moment";
 import { identity, stubTrue } from "lodash";
 import { useSnackbar } from "notistack";
+import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
+import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 export default function Voucher({ totalPrice }) {
   const [open, setOpen] = React.useState(false);
   const [stroke, setStroke] = useState(false);
@@ -147,9 +149,8 @@ export default function Voucher({ totalPrice }) {
           </p>
         </div>
       </div>
-
-      <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="xs">
-        <DialogTitle>Khuyến mãi</DialogTitle>
+      <CustomDialog open={open} handleClose={handleClose} dialogSize="xs">
+        <ModalDialog onClose={handleClose}>Khuyến mãi</ModalDialog>
         <Box
           sx={{
             position: "relative",
@@ -374,7 +375,7 @@ export default function Voucher({ totalPrice }) {
               })}
           </div>
         </Box>
-      </Dialog>
+      </CustomDialog>
     </div>
   );
 }

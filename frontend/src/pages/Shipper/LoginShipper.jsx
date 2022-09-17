@@ -21,8 +21,8 @@ export default function LoginShipper() {
     setShowPassword((show) => !show);
   };
   const LoginShipperSchema = yup.object().shape({
-    email: yup.string().required("Please input your email!"),
-    password: yup.string().required("Please input your password!"),
+    email: yup.string().required("Vui lòng nhập địa chỉ email !"),
+    password: yup.string().required("Vui lòng nhập mật khẩu !"),
   });
 
   const formik = useFormik({

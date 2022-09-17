@@ -17,7 +17,7 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
-
+import DomainVerificationIcon from '@mui/icons-material/DomainVerification';
 const QontoStepIconRoot = styled("div")(({ theme, ownerState }) => ({
   color: theme.palette.mode === "dark" ? theme.palette.grey[700] : "#eaeaf0",
   display: "flex",
@@ -117,8 +117,9 @@ function ColorlibStepIcon(props) {
   const icons = {
     1: <ReceiptIcon />,
     2: <LocalShippingIcon />,
-    3: <CheckIcon />,
-    4: <StarBorderIcon />,
+    3: <DomainVerificationIcon/>,
+    4: <CheckIcon />,
+    5: <StarBorderIcon />,
   };
   const iconCancel = {
     1: <ReceiptIcon />,
@@ -188,7 +189,7 @@ ColorlibStepIconCancel.propTypes = {
   icon: PropTypes.node,
 };
 
-const steps = ["Chờ xác nhận", "Đang vận chuyển", "Hoàn thành", "Đánh giá"];
+const steps = ["Chờ xác nhận", "Đang vận chuyển", "Đã giao hàng" ,"Đã nhận", "Đánh giá"];
 const stepsCancel = ["Chờ xác nhận", "Đã hủy"];
 export default function CustomizedSteppers({ orderDetail }) {
   console.log("first,", orderDetail.status);
@@ -205,14 +206,9 @@ export default function CustomizedSteppers({ orderDetail }) {
       console.log("Step", step);
       setStep(1);
     }
-    // else if(
-    //    orderDetail !== "undefined" &&
-    //   orderDetail.status === "Đang vận chuyển"
-    // )
-    // {
-    //    setCancelStatus(1);
-    // }
-    else if (
+    else if (orderDetail !== "undefined" && orderDetail.status === "Đã đánh giá") {
+      setStep(4);
+    } else if (
       orderDetail !== "undefined" &&
       orderDetail.status === "Đã giao hàng"
     ) {

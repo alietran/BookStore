@@ -17,6 +17,7 @@ const userAPI = {
     }
     return axiosClient.patch(path, formData);
   },
+ 
 };
 
 export default userAPI;

@@ -107,6 +107,7 @@ export default function OrderDetail() {
   const params = useParams();
   console.log("shipper13", shipper);
   orderDetailList = orderDetailList?.data.filter(
+    // params.orderId là app ghi sao thì điền vào
     (item) => item.order.id === params.orderId
   );
   const handleChangeShipper = (event) => {

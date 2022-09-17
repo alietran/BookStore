@@ -123,6 +123,7 @@ export default function ShipperManager() {
     successCreateShipper,
     successUpdateShipper,
     errorUpdateShipper,
+    successDeleteShipper,
   } = useSelector((state) => state.ShipperReducer);
   // console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
@@ -157,10 +158,20 @@ export default function ShipperManager() {
   }, []);
 
   useEffect(() => {
-    if (successCreateShipper || successUpdateShipper || errorUpdateShipper) {
+    if (
+      successCreateShipper ||
+      successUpdateShipper ||
+      errorUpdateShipper ||
+      successDeleteShipper
+    ) {
       dispatch(getShipperList());
     }
-  }, [successCreateShipper, successUpdateShipper, errorUpdateShipper]);
+  }, [
+    successCreateShipper,
+    successUpdateShipper,
+    errorUpdateShipper,
+    successDeleteShipper,
+  ]);
 
   useEffect(() => {
     if (successCreateShipper) {

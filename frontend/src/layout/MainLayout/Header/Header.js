@@ -18,11 +18,12 @@ import {
   ViewGridIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import "./style.css";
+
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { NavLink, useHistory } from "react-router-dom";
 import { Box, Container, maxWidth } from "@mui/system";
 import {
+  Badge,
   Button,
   FormControl,
   Grid,
@@ -44,49 +45,37 @@ import {
 import { styled } from "@mui/material/styles";
 import { Dropdown, Menu, Space } from "antd";
 import _ from "lodash";
-
-// import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-const resources = [
-  {
-    name: "Help Center",
-    description:
-      "Get all of your questions answered in our forums or contact support.",
-    href: "#",
-    icon: SupportIcon,
-  },
-  {
-    name: "Guides",
-    description:
-      "Learn how to maximize our platform to get the most out of it.",
-    href: "#",
-    icon: BookmarkAltIcon,
-  },
-  {
-    name: "Events",
-    description:
-      "See what meet-ups and other events we might be planning near you.",
-    href: "#",
-    icon: CalendarIcon,
-  },
-  {
-    name: "Security",
-    description: "Understand how we take your privacy seriously.",
-    href: "#",
-    icon: ShieldCheckIcon,
-  },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { getBookList } from "../../../redux/action/bookAction";
 
 export default function Header() {
   const { cateList } = useSelector((state) => state.CateReducer);
+  const { bookList } = useSelector((state) => state.BookReducer);
+  const [filteredData, setFilteredData] = useState([]);
+  const [wordEntered, setWordEntered] = useState("");
+  console.log("filteredData", filteredData);
+  useEffect(() => {
+    if (!bookList) {
+      dispatch(getBookList());
+    }
+  }, [bookList]);
+  console.log("bookList", bookList);
   const classes = useStyles();
+  let cart = localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart"))
+    : [];
+  console.log("cart", cart);
+  let quanityCart = cart.reduce((total, item) => {
+    return (total = total + item.quantity);
+  }, 0);
+  console.log("quanityCart", quanityCart);
   // const {userLogin, setUserLogin}
   const [userLogin, setUserLogin] = useState(
     JSON.parse(localStorage.getItem("user"))
   );
+  const hanldeChangePage = () => {
+    setFilteredData([]);
+    setWordEntered("");
+  };
   const handleChangeUserogin = (newValue) => {
     setUserLogin(newValue);
   };
@@ -97,14 +86,27 @@ export default function Header() {
     window.open("http://localhost:8080/api/v1/users/logout", "_self");
     dispatch({ type: "LOGOUT" });
   };
- const [anchorEl, setAnchorEl] = React.useState(null);
- const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
- const handleClick = (event) => {
-   setAnchorEl(event.currentTarget);
- };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  
+  const handleChangeFilter = (event) => {
+    const data = event.target.value;
+    setWordEntered(data);
+    const newFilter = bookList?.data?.filter((value) => {
+      // include để xem một chuỗi có đc tìm thấy trong chuỗi khác hay không
+      return value.name.toLowerCase().includes(data.toLowerCase());
+    });
+    if (data === "") {
+      setFilteredData([]);
+    } else {
+      setFilteredData(newFilter);
+    }
+  };
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
@@ -204,29 +206,29 @@ export default function Header() {
       // }
     });
   console.log("array", array);
-    const menuDashboard = (
-      <Menu>
-        <Menu.Item key="0">
-          <NavLink to="/userInfo">Xem thông tin</NavLink>
-        </Menu.Item>
+  const menuDashboard = (
+    <Menu>
+      <Menu.Item key="0">
+        <NavLink to="/userInfo">Xem thông tin</NavLink>
+      </Menu.Item>
 
-        <Menu.Item key="2" className="mr-3">
-          {" "}
-          <button
-            onClick={() => {
-              // // localStorage.removeItem("profile");
-              // // localStorage.removeItem("user");
-              // // localStorage.removeItem("token");
-              history.push("");
-              dispatch(logout());
-            }}
-            className="text-blue-800"
-          >
-            Đăng xuất
-          </button>{" "}
-        </Menu.Item>
-      </Menu>
-    );
+      <Menu.Item key="2" className="mr-3">
+        {" "}
+        <button
+          onClick={() => {
+            // // localStorage.removeItem("profile");
+            // // localStorage.removeItem("user");
+            // // localStorage.removeItem("token");
+            history.push("");
+            dispatch(logout());
+          }}
+          className="text-blue-800"
+        >
+          Đăng xuất
+        </button>{" "}
+      </Menu.Item>
+    </Menu>
+  );
   const menu = (
     <Menu
       style={{
@@ -280,48 +282,69 @@ export default function Header() {
               <Box
                 sx={{
                   position: "relative",
-                  backgroundColor: "#f8f8f8",
+                  // backgroundColor: "#f8f8f8",
                   borderRadius: "10px",
                   padding: "5px",
-                  display: "flex",
-                  flex: "1 1 0",
+
                   maxWidth: "680px",
                   marginLeft: "auto",
                   marginRight: "auto",
                 }}
               >
-                <TextField
-                  fullWidth
-                  size="small"
-                  type="text"
-                  label="Tìm kiếm..."
-                  className="header__navigationBar-text"
-                  sx={{
-                    backgroundColor: "transparent",
-                    outline: "none",
-                    border: "none",
-                  }}
-                />
-                <Button
-                  sx={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "4px 0",
-                    background:
-                      "linear-gradient(107.23deg,#00AB55 ,  #049e51 100%)",
-                    color: "white",
-                    marginLeft: "10px",
-                  }}
-                  className="header__navigationBar-button"
-                >
-                  <SearchOutlined
+                <Box sx={{ display: "flex", flex: "1 1 0" }}>
+                  <TextField
+                    fullWidth
+                    value={wordEntered}
+                    onChange={handleChangeFilter}
+                    size="small"
+                    type="text"
+                    label="Tìm kiếm..."
+                    className="header__navigationBar-text"
                     sx={{
-                      display: "inline-block",
-                      width: "26px",
-                      height: "26px",
+                      backgroundColor: "#f8f8f8",
+                      outline: "none",
+                      border: "none",
                     }}
                   />
-                </Button>
+                  <Button
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "4px 0",
+                      background:
+                        "linear-gradient(107.23deg,#00AB55 ,  #049e51 100%)",
+                      color: "white",
+                      marginLeft: "10px",
+                    }}
+                    className="header__navigationBar-button"
+                  >
+                    <SearchOutlined
+                      sx={{
+                        display: "inline-block",
+                        width: "26px",
+                        height: "26px",
+                      }}
+                    />
+                  </Button>
+                </Box>
+                {filteredData.length !== 0 && (
+                  <Box
+                    className={`${classes.dataResult} absolute mt-6  z-30 bg-white `}
+                  >
+                    {filteredData?.map((value, index) => {
+                      return (
+                        <NavLink
+                          to={`/productDetail/${value?._id}`}
+                          className={classes.dataItem}
+                          target="_blank"
+                          onClick={hanldeChangePage}
+                        >
+                          <p>{value.name}</p>
+                        </NavLink>
+                      );
+                    })}
+                  </Box>
+                )}
               </Box>
 
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
@@ -329,7 +352,13 @@ export default function Header() {
                   to="/cart"
                   className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600 "
                 >
-                  <ShoppingCartOutlinedIcon />
+                  <Badge
+                    badgeContent={quanityCart ? quanityCart : "0"}
+                    color="primary"
+                  >
+                    {" "}
+                    <ShoppingCartOutlinedIcon />
+                  </Badge>
                 </NavLink>
                 {userLogin ? (
                   <div>
