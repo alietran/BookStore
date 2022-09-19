@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -117,6 +117,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function ShipperManager() {
   const dispatch = useDispatch();
+  const params = useParams()
   const { enqueueSnackbar } = useSnackbar();
   const {
     shipperList,
@@ -140,7 +141,7 @@ export default function ShipperManager() {
   const [rowsPerPage1, setRowsPerPage1] = useState(5);
   const [open, setOpen] = useState(false);
   const { orderList } = useSelector((state) => state.OrderReducer);
-  //  let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
+   let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
   const [list, setList] = useState();
   console.log("orderList", orderList);
 
@@ -260,9 +261,9 @@ export default function ShipperManager() {
     setOpen(false);
   };
   const isUserNotFound = shipperList?.result === 0;
-  //  orderDetailList = orderDetailList?.data.filter(
-  //     (item) => item.order.id === params.orderId
-  //   );
+   orderDetailList = orderDetailList?.data.filter(
+      (item) => item.order.id === params.orderId
+    );
   const handleList = (_id) => {
     console.log("id", typeof _id);
     console.log("orderList232", orderList);
@@ -442,7 +443,7 @@ export default function ShipperManager() {
                                                   onChange={(event) =>
                                                     handleClick(
                                                       event,
-                                                      address.fullName
+                                                      address?.fullName
                                                     )
                                                   }
                                                 />

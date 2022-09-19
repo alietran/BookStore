@@ -39,6 +39,10 @@ const bookAPI = {
     }
     return axiosClient.patch(path, formData);
   },
+  search: (data) => {
+    const path = `/v1/books/search-book/?search=${data}`;
+    return axiosClient.get(path, data);
+  },
 };
 
 export default bookAPI;

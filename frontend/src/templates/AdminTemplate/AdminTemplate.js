@@ -147,7 +147,7 @@ const AdminTemplate = (props) => {
               <Menu.Item key="1" icon={<UserOutlined />}>
                 <NavLink to="/admin/users">Quản lý người dùng</NavLink>
               </Menu.Item>
-
+          
               <Menu.Item key="8" icon={<UserOutlined />}>
                 <NavLink to="/admin/receipts/list">Quản lý phiếu nhập</NavLink>
               </Menu.Item>

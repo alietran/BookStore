@@ -1,7 +1,8 @@
 const stateDefault = {
   rating: [],
   content: [],
-
+  imageRating: [],
+  
   ratingDetail: null,
   loadingRatingDetail: false,
   errorRatingDetail: null,
@@ -14,7 +15,7 @@ const stateDefault = {
 export const RatingReducer = (state = stateDefault, action) => {
   switch (action.type) {
     case "CHANGE_RATING": {
-      const { rating, book, content, cannel } = action.payload;
+      const { rating, book, imageRating, content, cannel } = action.payload;
       if (cannel === "") {
         state.rating = [];
       } else {
@@ -28,11 +29,15 @@ export const RatingReducer = (state = stateDefault, action) => {
           if (content !== "") {
             state.rating[index].content = content;
           }
+          if (imageRating !== "") {
+            state.rating[index].imageRating = imageRating;
+          }
         } else {
           state.rating.push(action.payload);
         }
         state.rating = [...state.rating];
         state.content = [...state.content];
+        state.imageRating = [...state.imageRating];
       }
 
       return { ...state };
@@ -59,7 +64,11 @@ export const RatingReducer = (state = stateDefault, action) => {
       };
     }
     case "CREATE_RATING_DETAIL_REQUEST": {
-      return { ...state, loadingCreateRatingDetail: true, errorCreateRatingDetail: null };
+      return {
+        ...state,
+        loadingCreateRatingDetail: true,
+        errorCreateRatingDetail: null,
+      };
     }
     case "CREATE_RATING_DETAIL_SUCCESS": {
       return {

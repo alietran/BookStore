@@ -7,3 +7,5 @@ exports.createShipper = factory.createOne(Shipper);
 exports.updateShipper = factory.updateOne(Shipper);
 exports.deleteShipper = factory.deleteOne(Shipper);
 exports.getDetailShipper = factory.getOne(Shipper);
+
+

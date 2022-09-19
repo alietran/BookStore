@@ -48,6 +48,7 @@ import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHist
 import LoginShipper from "./pages/Shipper/LoginShipper";
 import OrderListShipper from "./pages/Shipper/OrderListShipper";
 import Search from "./pages/HomePage/Search/Search";
+import WarehouseRoute from "./guards/WarehouseRoute";
 
 function App() {
   const themeOptions = useMemo(
@@ -169,7 +170,11 @@ function App() {
                 path="/admin/receipts/list"
                 component={ReceiptManager}
               />
-              <AdminRoute exact path="/admin/overview" component={Overview} />
+              <WarehouseRoute
+                exact
+                path="/admin/overview"
+                component={Overview}
+              />
 
               <AdminRoute
                 exact

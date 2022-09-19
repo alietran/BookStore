@@ -95,9 +95,9 @@ export default function OrderDetail() {
     }
   }, [shipperList]);
   useEffect(() => {
-    if (!orderDetailList) {
+   
       dispatch(getAllDetailOrder());
-    }
+    
   }, [orderDetailList]);
 
   const [shipper, setShipper] = useState();
@@ -106,7 +106,7 @@ export default function OrderDetail() {
   const dispatch = useDispatch();
   const params = useParams();
   console.log("shipper13", shipper);
-  orderDetailList = orderDetailList?.data.filter(
+  orderDetailList = orderDetailList?.data?.filter(
     // params.orderId là app ghi sao thì điền vào
     (item) => item.order.id === params.orderId
   );

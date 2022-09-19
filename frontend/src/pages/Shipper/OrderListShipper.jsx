@@ -12,7 +12,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -42,9 +42,12 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "white",
+
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-
+    "&::placeholder": {
+      color: "white",
+    },
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
@@ -88,6 +91,7 @@ export default function OrderListShipper() {
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
+                classnName="placeholder:text-slate-400"
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />

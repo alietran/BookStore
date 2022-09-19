@@ -55,9 +55,20 @@ export default function RatingItem({ productItem }) {
           if (images.length === imageFiles.length && !isCancel) {
             setImages(images);
           }
+          // console.log("images", images);
         };
         //đọc url
         fileReader.readAsDataURL(file);
+        dispatch({
+          type: "CHANGE_RATING",
+          payload: {
+            order: productItem.order.id,
+            book: productItem.book.id,
+            rating: "",
+            content: "",
+            imageRating: images, //images mã hóa base64 mảng
+          },
+        });
       });
     }
     return () => {
@@ -83,6 +94,7 @@ export default function RatingItem({ productItem }) {
         book: productItem.book.id,
         rating: newValue,
         content: "",
+        imageRating: "",
       },
     });
   };
@@ -95,6 +107,7 @@ export default function RatingItem({ productItem }) {
         book: productItem.book.id,
         rating: "",
         content: e.target.value,
+        imageRating: "",
       },
     });
   };

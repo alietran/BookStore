@@ -18,6 +18,11 @@ const stateDefault = {
   loadingDeleteBook: false,
   successDeleteBook: null,
   errorDeleteBook: null,
+
+
+  loadingBookSearch: false,
+  bookSearch: null,
+  errorBookSearch: null,
 };
 
 export const BookReducer = (state = stateDefault, action) => {
@@ -112,6 +117,23 @@ export const BookReducer = (state = stateDefault, action) => {
         ...state,
         errorUpdateBook: action.payload.error,
         loadingDeleteBook: false,
+      };
+    }
+    case "SEARCH_BOOK_REQUEST": {
+      return { ...state, loadingBookSearch: true, errorBookSearch: null };
+    }
+    case "SEARCH_BOOK_SUCCESS": {
+      return {
+        ...state,
+        bookSearch: action.payload.data,
+        loadingBookSearch: false,
+      };
+    }
+    case "SEARCH_BOOK_FAIL": {
+      return {
+        ...state,
+        errorBookSearch: action.payload.error,
+        loadingBookSearch: false,
       };
     }
 

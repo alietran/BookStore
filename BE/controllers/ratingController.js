@@ -47,6 +47,7 @@ exports.createRating = catchAsync(async (req, res, next) => {
   let count = 0;
   req.body.map((item) => {
     if (item.imageRating.length > 0) {
+      //imageRating base64
       item.imageRating.map(async (image) => {
         const uploadedResponse = await cloudinary.uploader.upload(image, {
           upload_preset: 'image_rating',
@@ -98,7 +99,7 @@ exports.bookRatingDetail = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   console.log('bookId', id);
 
-  const doc = await Rating.find({ book: id });
+  const doc = await Rating.find({ book: id }).sort({ createdAt: -1 });
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));

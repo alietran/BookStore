@@ -19,14 +19,20 @@ import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
 import paymentAPI from "../../../../api/paymentAPI";
 import { createRating } from "../../../../redux/action/ratingAction";
 import Swal from "sweetalert2";
+import { Box } from "@mui/material";
 export default function OrderHistory() {
-  const { orderByUser } = useSelector((state) => state.OrderReducer);
+  const { orderByUser, successUpdateOrder } = useSelector(
+    (state) => state.OrderReducer
+  );
+  const [openConfirm, setOpenConfirm] = useState(false);
   const { rating, createRatingDetail } = useSelector(
     (state) => state.RatingReducer
   );
   console.log("createRatingDetail", createRatingDetail);
   const [hadRating, setHadRating] = useState(true);
-
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
   console.log("hadRating", hadRating);
   console.log("rating12", rating);
   const dispatch = useDispatch();
@@ -35,6 +41,10 @@ export default function OrderHistory() {
   useEffect(() => {
     if (orderByUser === null) dispatch(getOrderByUser());
   }, [orderByUser]);
+
+  useEffect(() => {
+    if (successUpdateOrder) dispatch(getOrderByUser());
+  }, [successUpdateOrder]);
 
   useEffect(() => {
     if (createRatingDetail) {
@@ -48,15 +58,25 @@ export default function OrderHistory() {
     }
   }, [createRatingDetail]);
   const [open, setOpen] = React.useState(false);
+
   const handleDoneOrder = (order) => {
     console.log("order", order);
+    setOpenConfirm(true);
+    // dispatch(
+    //   updateOrder(order.id, {
+    //     status: "Đã nhận",
+    //   })
+    // );
+  };
+  const handleConfirm = (order) => {
     dispatch(
       updateOrder(order.id, {
         status: "Đã nhận",
       })
     );
+    setOpenConfirm(false);
   };
-
+  console.log("successUpdateOrder", successUpdateOrder);
   const handlePushRating = (rating) => {
     dispatch(createRating(rating));
     setOpen(false);
@@ -200,13 +220,37 @@ export default function OrderHistory() {
                 ""
               )}
               {order.status === "Đã giao hàng" ? (
-                <Button
-                  variant="contained"
-                  onClick={() => handleDoneOrder(order)}
-                  sx={{ marginRight: "10px" }}
-                >
-                  Đã nhận
-                </Button>
+                <Box>
+                  {" "}
+                  <Button
+                    variant="contained"
+                    onClick={handleDoneOrder}
+                    sx={{ marginRight: "10px" }}
+                  >
+                    Đã nhận
+                  </Button>
+                  <CustomDialog
+                    open={openConfirm}
+                    handleClose={handleCancel}
+                    dialogSize="xs"
+                    overlayStyle={{ backgroundColor: "transparent" }}
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Xác nhận đơn hàng"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        Bạn chắc chắn đã nhận đơn hàng này.
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleCancel}>Hủy</Button>
+                      <Button onClick={() => handleConfirm(order)} autoFocus>
+                        Đồng ý
+                      </Button>
+                    </DialogActions>
+                  </CustomDialog>
+                </Box>
               ) : (
                 ""
               )}
@@ -288,25 +332,6 @@ export default function OrderHistory() {
           </Button>
         </DialogActions>
       </CustomDialog>
-      {/* <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">{"Hủy đơn"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Bạn chắc chắn muốn hủy đơn hàng này
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Không
-          </Button>
-          <Button onClick={handleCancel}>Đồng ý</Button>
-        </DialogActions>
-      </Dialog> */}
     </div>
   );
 }

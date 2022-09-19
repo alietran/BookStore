@@ -95,6 +95,8 @@ export default function Header() {
 
   const handleChangeFilter = (event) => {
     const data = event.target.value;
+    console.log("data search", data);
+    // console.log("data search wordEntered", wordEntered);
     setWordEntered(data);
     const newFilter = bookList?.data?.filter((value) => {
       // include để xem một chuỗi có đc tìm thấy trong chuỗi khác hay không
@@ -106,6 +108,13 @@ export default function Header() {
       setFilteredData(newFilter);
     }
   };
+  const handleNavigate = ()=>{
+    history.push("/search/")
+    // history.push({
+    //   pathname: "/search/",
+    //   search: `?search=${wordEntered}`,
+    // });
+  }
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -279,73 +288,78 @@ export default function Header() {
                   </Dropdown>
                 </Box>
               </div>
-              <Box
-                sx={{
-                  position: "relative",
-                  // backgroundColor: "#f8f8f8",
-                  borderRadius: "10px",
-                  padding: "5px",
-
-                  maxWidth: "680px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                <Box sx={{ display: "flex", flex: "1 1 0" }}>
-                  <TextField
-                    fullWidth
-                    value={wordEntered}
-                    onChange={handleChangeFilter}
-                    size="small"
-                    type="text"
-                    label="Tìm kiếm..."
-                    className="header__navigationBar-text"
-                    sx={{
-                      backgroundColor: "#f8f8f8",
-                      outline: "none",
-                      border: "none",
-                    }}
-                  />
-                  <Button
-                    sx={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "4px 0",
-                      background:
-                        "linear-gradient(107.23deg,#00AB55 ,  #049e51 100%)",
-                      color: "white",
-                      marginLeft: "10px",
-                    }}
-                    className="header__navigationBar-button"
-                  >
-                    <SearchOutlined
+              {/* gửi tên action vào tìm  kiếm ?search phải có form button có submit */}
+              <form autocomplete="off">
+                <Box
+                  sx={{
+                    position: "relative",
+                    borderRadius: "10px",
+                    padding: "5px",
+                    maxWidth: "680px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
+                  <Box sx={{ display: "flex", flex: "1 1 0" }}>
+                    <TextField
+                      fullWidth
+                      // autoComplete="false"
+                      value={wordEntered}
+                      onChange={handleChangeFilter}
+                      size="small"
+                      name="search" //quan trong
+                      type="text"
+                      label="Tìm kiếm..."
+                      className="header__navigationBar-text"
                       sx={{
-                        display: "inline-block",
-                        width: "26px",
-                        height: "26px",
+                        backgroundColor: "#f8f8f8",
+                        outline: "none",
+                        border: "none",
                       }}
                     />
-                  </Button>
-                </Box>
-                {filteredData.length !== 0 && (
-                  <Box
-                    className={`${classes.dataResult} absolute mt-6  z-30 bg-white `}
-                  >
-                    {filteredData?.map((value, index) => {
-                      return (
-                        <NavLink
-                          to={`/productDetail/${value?._id}`}
-                          className={classes.dataItem}
-                          target="_blank"
-                          onClick={hanldeChangePage}
-                        >
-                          <p>{value.name}</p>
-                        </NavLink>
-                      );
-                    })}
+                    <Button
+                      sx={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "4px 0",
+                        background:
+                          "linear-gradient(107.23deg,#00AB55 ,  #049e51 100%)",
+                        color: "white",
+                        marginLeft: "10px",
+                      }}
+                      type="submit" //quan trọng
+                      onClick={handleNavigate}
+                      className="header__navigationBar-button"
+                    >
+                      <SearchOutlined
+                        sx={{
+                          display: "inline-block",
+                          width: "26px",
+                          height: "26px",
+                        }}
+                      />
+                    </Button>
                   </Box>
-                )}
-              </Box>
+                  {filteredData.length !== 0 && (
+                    <Box
+                      className={`${classes.dataResult} absolute mt-6  z-30 bg-white `}
+                    >
+                      {filteredData?.map((value, index) => {
+                        return (
+                          <NavLink
+                            to={`/productDetail/${value?._id}`}
+                            className={classes.dataItem}
+                            target="_blank"
+                            onClick={hanldeChangePage}
+                          >
+                            <p>{value.name}</p>
+                          </NavLink>
+                        );
+                      })}
+                    </Box>
+                  )}
+                </Box>
+              </form>
 
               <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                 <NavLink

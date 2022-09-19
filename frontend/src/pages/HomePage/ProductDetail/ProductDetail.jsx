@@ -234,7 +234,7 @@ export default function ProductDetail(props) {
                             {/* {bookDetail?.gallery.map((image,index)=>(
                               
                             ))} */}
-                            {bookDetail?.gallery.map((item, index) => {
+                            {bookDetail?.gallery?.map((item, index) => {
                               // console.log("index", item[index]);
                               return (
                                 <img
@@ -445,38 +445,27 @@ export default function ProductDetail(props) {
                               />
                             </div>
                             <div className="leading-6">
-                              <p className="mb-2">{item.order.user.fullName}</p>
+                              <p className="mb-2">{item?.order?.user?.fullName}</p>
                               <Rating value={item.rating} size={"medium"} />
-                              <p className="text-slate-300">{moment(item.createdAt).format('DD/MM/YYYY, h:mm a')}</p>
+                              <p className="text-slate-300">
+                                {moment(item.createdAt).format(
+                                  "DD/MM/YYYY, h:mm a"
+                                )}
+                              </p>
                               <p> {item.content}</p>
                               <div className="mt-3 flex ">
-                                <img
-                                  src="../../../../img/User_Circle.png"
-                                  alt=""
-                                  style={{
-                                    width: "80px",
-                                    height: "80px",
-                                    marginRight: "10px",
-                                  }}
-                                />
-                                <img
-                                  src="../../../../img/User_Circle.png"
-                                  alt=""
-                                  style={{
-                                    width: "80px",
-                                    height: "80px",
-                                    marginRight: "10px",
-                                  }}
-                                />
-                                <img
-                                  src="../../../../img/User_Circle.png"
-                                  alt=""
-                                  style={{
-                                    width: "80px",
-                                    height: "80px",
-                                    marginRight: "10px",
-                                  }}
-                                />
+                                {item?.imageRating?.map((img,index)=>{
+                                 return  <img
+                                     src={img}
+                                     alt=""
+                                     style={{
+                                       width: "80px",
+                                       height: "80px",
+                                       marginRight: "10px",
+                                     }}
+                                   />;
+                                })}
+                               
                               </div>
                             </div>
                           </div>

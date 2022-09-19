@@ -104,7 +104,7 @@ exports.getAllBook = factory.getAll(Book);
 
 exports.searchBook = catchAsync(async (req, res, next) => {
   const { search } = req.query;
-
+    // console.log("search", search)
   var filter = {}; 
   if (search != '') {
     filter.name = new RegExp(fullTextSearchVi(search), 'i');

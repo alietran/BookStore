@@ -135,3 +135,28 @@ export const deleteBook = (id) => {
     }
   };
 };
+
+export const search = (data)=>{
+   return async (dispatch) => {
+     try {
+       dispatch({
+         type: "SEARCH_BOOK_REQUEST",
+       });
+       const result = await bookAPI.search(data);
+       console.log("result book", result);
+       dispatch({
+         type: "SEARCH_BOOK_SUCCESS",
+         payload: {
+           data: result.data,
+         },
+       });
+     } catch (error) {  console.log("error book", error);
+       dispatch({
+         type: "SEARCH_BOOK_FAIL",
+         payload: {
+           error: error.response?.data.message,
+         },
+       });
+     }
+   };
+}
