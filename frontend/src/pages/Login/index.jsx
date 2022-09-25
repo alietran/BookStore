@@ -107,6 +107,12 @@ export default function Login() {
                 })
                 .then((resObject) => {
                   console.log("resObject", resObject);
+                  dispatch({
+                    type: "LOGIN_USER",
+                    payload: {
+                      data: resObject,
+                    },
+                  });
                   localStorage.setItem("user", JSON.stringify(resObject));
                   localStorage.setItem("token", resObject.token);
                   if (resObject) {

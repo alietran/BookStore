@@ -17,10 +17,21 @@ const stateDefault = {
   loadingUpdateUserCurrent: false,
   successUpdateUserCurrent: null,
   errorUpdateUserCurrent: null,
+
+  loginUserSucces: null
 };
 
 export const UserReducer = (state = stateDefault, action) => {
   switch (action.type) {
+    case "LOGIN_USER":{
+      return {
+        ...state,
+        loginUserSucces: action.payload.data,
+     
+      };
+    }
+
+
     case "CREATE_USER1_REQUEST": {
       return { ...state, loadingCreateUser: true, errorCreateUser: null };
     }

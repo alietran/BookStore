@@ -9,17 +9,30 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, FormikProvider, useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import * as yup from "yup";
 import eyeFill from "@iconify/icons-eva/eye-fill";
 import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../redux/action/shipperAction";
+import { useHistory } from "react-router-dom";
 
 export default function LoginShipper() {
+  const dispatch = useDispatch();
+  const history = useHistory()
+  const { loginSuccess } = useSelector((state) => state.ShipperReducer);
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+
+  useEffect(() => {
+    if (loginSuccess) {
+     history.push("/orderListShipper");
+    }
+  });
+
   const LoginShipperSchema = yup.object().shape({
     email: yup.string().required("Vui lòng nhập địa chỉ email !"),
     password: yup.string().required("Vui lòng nhập mật khẩu !"),
@@ -32,7 +45,9 @@ export default function LoginShipper() {
     },
     validationSchema: LoginShipperSchema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      console.log("values", values);
+      // alert(JSON.stringify(values, null, 2));
+      dispatch(login(values));
     },
   });
   const {

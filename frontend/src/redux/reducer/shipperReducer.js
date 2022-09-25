@@ -18,6 +18,10 @@ const stateDefault = {
   loadingDeleteShipper: false,
   successDeleteShipper: null,
   errorDeleteShipper: null,
+
+  loadingLogin: false,
+  loginSuccess: null,
+  errorLogin: null,
 };
 
 export const ShipperReducer = (state = stateDefault, action) => {
@@ -114,7 +118,35 @@ export const ShipperReducer = (state = stateDefault, action) => {
         loadingDeleteShipper: false,
       };
     }
+    case "SHIPPER_LOGGIN_REQUEST": {
+      return { ...state, loadingLogin: true, errorLogin: null };
+    }
+    case "SHIPPER_LOGGIN_SUCCESS": {
+      const { data, token } = action.payload;
+      console.log("action.payload", action.payload);
+      localStorage.setItem("shipper", JSON.stringify(data));
+      localStorage.setItem("shipper_token", token);
 
+      return {
+        ...state,
+        loginSuccess: data,
+        loadingLogin: false,
+      };
+    }
+    case "SHIPPER_LOGGIN_FAIL": {
+      return {
+        ...state,
+        errorLogin: action.payload.error,
+        loadingLogin: false,
+      };
+    }
+    case "LOGOUT_SHIPPER": {
+      localStorage.removeItem("shipper");
+      localStorage.removeItem("shipper_token");
+      return {
+        ...state
+      };
+    }
     case "RESET_SHIPPER": {
       return {
         ...state,

@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
-
+const cloudinary = require('../utils/cloudinary');
 exports.getAllUser = factory.getAll(User);
 
 exports.createUser = catchAsync(async (req, res, next) => {
@@ -118,10 +118,16 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   console.log('filteredBody', filteredBody);
   console.log('req.body', req.body);
   console.log('req.user.id', req.user.id);
-
-  const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
-  const urlImage = `http://localhost:8080${path}`;
-  if (req.file) filteredBody.avatar = urlImage;
+  const uploadedResponse = await cloudinary.uploader.upload(
+    filteredBody.avatar,
+    {
+      upload_preset: 'profile',
+    }
+  );
+     filteredBody.avatar = uploadedResponse.secure_url;
+  // const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
+  // const urlImage = `http://localhost:8080${path}`;
+  // if (req.file) filteredBody.avatar = urlImage;
   const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,

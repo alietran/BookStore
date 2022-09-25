@@ -2,7 +2,7 @@ const stateDefault = {
   rating: [],
   content: [],
   imageRating: [],
-  
+
   ratingDetail: null,
   loadingRatingDetail: false,
   errorRatingDetail: null,
@@ -10,6 +10,14 @@ const stateDefault = {
   createRatingDetail: null,
   loadingCreateRatingDetail: false,
   errorCreateRatingDetail: null,
+
+  updateRatingSuccess: null,
+  loadingUpdateRating: false,
+  errorUpdateRating: null,
+
+  ratinglist: null,
+  loadingRatingList: false,
+  errorRatingList: null,
 };
 
 export const RatingReducer = (state = stateDefault, action) => {
@@ -82,6 +90,40 @@ export const RatingReducer = (state = stateDefault, action) => {
         ...state,
         errorCreateRatingDetail: action.payload.error,
         loadingCreateRatingDetail: false,
+      };
+    }
+    case "GET_RATING_REQUEST": {
+      return { ...state, loadingRatingList: true, errorRatingList: null };
+    }
+    case "GET_RATING_SUCCESS": {
+      return {
+        ...state,
+        ratinglist: action.payload.data,
+        loadingRatingList: false,
+      };
+    }
+    case "GET_RATING_FAIL": {
+      return {
+        ...state,
+        errorRatingList: action.payload.error,
+        loadingRatingList: false,
+      };
+    }
+    case "UPDATE_RATING_REQUEST": {
+      return { ...state, loadingUpdateRating: true, errorUpdateRating: null };
+    }
+    case "UPDATE_RATING_SUCCESS": {
+      return {
+        ...state,
+        updateRatingSuccess: action.payload.data,
+        loadingUpdateRating: false,
+      };
+    }
+    case "UPDATE_RATING_FAIL": {
+      return {
+        ...state,
+        errorUpdateRating: action.payload.error,
+        loadingUpdateRating: false,
       };
     }
     default:

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var validator = require('validator');
+const bcrypt = require('bcryptjs');
 const shipperSchema = new mongoose.Schema(
   {
     name: {
@@ -72,6 +73,25 @@ const shipperSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+shipperSchema.pre('save', async function (next) {
+  // Only run this function if password was actually modified
+  if (!this.isModified('password')) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
+});
+
+shipperSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const Shipper = mongoose.model('Shipper', shipperSchema);
 // categorySchema.virtual('categorys', {

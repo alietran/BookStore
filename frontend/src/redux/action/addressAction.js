@@ -120,6 +120,7 @@ export const updateAddress = (id, data) => {
         },
       });
     } catch (error) {
+      console.log("error", error);
       dispatch({
         type: "UPDATE_ADDRESS_FAIL",
         payload: {

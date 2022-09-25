@@ -50,28 +50,33 @@ import { getBookList } from "../../../redux/action/bookAction";
 export default function Header() {
   const { cateList } = useSelector((state) => state.CateReducer);
   const { bookList } = useSelector((state) => state.BookReducer);
+  const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  console.log("loginUserSucces", loginUserSucces);
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
-  console.log("filteredData", filteredData);
+
   useEffect(() => {
     if (!bookList) {
       dispatch(getBookList());
     }
   }, [bookList]);
-  console.log("bookList", bookList);
+
   const classes = useStyles();
   let cart = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
-  console.log("cart", cart);
   let quanityCart = cart.reduce((total, item) => {
     return (total = total + item.quantity);
   }, 0);
-  console.log("quanityCart", quanityCart);
-  // const {userLogin, setUserLogin}
-  const [userLogin, setUserLogin] = useState(
+
+  const [userLogin, setUserLogin] =  useState(
     JSON.parse(localStorage.getItem("user"))
   );
+    console.log("userLogin", userLogin);
+// useEffect(() => {
+
+// }, [userLogin]);
+
   const hanldeChangePage = () => {
     setFilteredData([]);
     setWordEntered("");
@@ -80,7 +85,7 @@ export default function Header() {
     setUserLogin(newValue);
   };
   // const userLogin = JSON.parse(localStorage.getItem("user"))
-  console.log("userLogin", userLogin?.user.fullName);
+
   const dispatch = useDispatch();
   const logout = () => {
     window.open("http://localhost:8080/api/v1/users/logout", "_self");
@@ -108,13 +113,13 @@ export default function Header() {
       setFilteredData(newFilter);
     }
   };
-  const handleNavigate = ()=>{
-    history.push("/search/")
+  const handleNavigate = () => {
+    history.push("/search/");
     // history.push({
     //   pathname: "/search/",
     //   search: `?search=${wordEntered}`,
     // });
-  }
+  };
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -136,6 +141,16 @@ export default function Header() {
   const children = [];
   const cateListFilter = [];
   const cateListDuplicate = [];
+  const { successUpdateUserCurrent } = useSelector(
+    (state) => state.UserReducer
+  );
+
+  useEffect(() => {
+    if (successUpdateUserCurrent ) {
+      setUserLogin(JSON.parse(localStorage.getItem("user")));
+    }
+  }, [successUpdateUserCurrent]);
+
   cateList?.data
     .filter((item) => item.parentCateId === "62e806c528500064e4f9930a")
     .map((item, index) => {
@@ -374,13 +389,13 @@ export default function Header() {
                     <ShoppingCartOutlinedIcon />
                   </Badge>
                 </NavLink>
-                {userLogin ? (
+                {loginUserSucces || userLogin ? (
                   <div>
                     <Dropdown overlay={menuDashboard} trigger={["click"]}>
                       <div
                         style={{
-                          width: 50,
-                          height: 50,
+                          width: 40,
+                          height: 40,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -388,12 +403,20 @@ export default function Header() {
                         className="text-2xl ml-5 rounded-full bg-red-200 ant-dropdown-link
                 onClick={(e) => e.preventDefault()}"
                       >
-                        {/* {userLogin.userName.substr(0, 1)} */}
-                        <img
-                          src={userLogin?.user.avatar}
-                          alt="avatar"
-                          className="rounded-full"
-                        />
+                        {/* {loginUserSucces.userName.substr(0, 1)} */}
+                        {loginUserSucces?.user?.googleId ? (
+                          <img
+                            src={loginUserSucces?.user.avatar}
+                            alt="avatar"
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <img
+                            src="../../../../img/user.png"
+                            alt="avatar"
+                            className="rounded-full"
+                          />
+                        )}
                       </div>
                     </Dropdown>
                   </div>

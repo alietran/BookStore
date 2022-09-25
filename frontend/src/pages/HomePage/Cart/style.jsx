@@ -121,7 +121,11 @@ const useStyles = makeStyles((theme) => ({
   "box__content-name-product": {
     fontSize: "15px",
     marginLeft: "20px",
-    textAlign:"center"
+    textAlign:"center",
+    color:"black",
+    "&:hover":{
+       color:"green"
+    }
   },
   bookName : {
     marginBottom:"0"
@@ -232,11 +236,11 @@ const useStyles = makeStyles((theme) => ({
   quantityValue: {
     backgroundColor: "rgb(248, 248, 252)",
     textAlign: "center",
-    backgroundColor: "transparent",
+   
     fontSize: "0.8125rem",
     fontWeight: 500,
     color: "rgb(67, 70, 87)",
-    width: "25px",
+   
   },
 
   apply: {

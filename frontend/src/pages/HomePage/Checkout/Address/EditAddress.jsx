@@ -172,7 +172,7 @@ export default function EditAddress({
     }
   }, [listCity, successDetailAddress]);
 
-  // console.log("dataZ", data);
+  console.log("successDetailAddress", successDetailAddress);
 
   const [fullName, setFullName] = useState(successDetailAddress?.data.fullName);
 
@@ -182,9 +182,12 @@ export default function EditAddress({
   );
   const [email, setEmail] = useState(successDetailAddress?.data.email);
   const [address, setAddress] = useState(successDetailAddress?.data.address);
-  const handleUpdate = () => {
-    setOpenEdit(false);
-  };
+  const [city, setCity] = useState(successDetailAddress?.data.city);
+  const [district, setDistrict] = useState(successDetailAddress?.data.district);
+  const [ward, setWard] = useState(successDetailAddress?.data.ward);
+  // const handleUpdate = () => {
+
+  // };
   const Createchema = Yup.object().shape({
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
     email: Yup.string().required("*Vui lòng nhập thông tin này"),
@@ -199,9 +202,9 @@ export default function EditAddress({
         ? phoneNumber
         : successDetailAddress?.data.phoneNumber,
       email: email ? email : successDetailAddress?.data.email,
-      city: data.cityName,
-      district: data.districtName,
-      ward: data.wardName,
+      city: city ? city : data.cityName,
+      district: district ? district : data.districtName,
+      ward: ward ? ward : data.wardName,
       address: address ? address : successDetailAddress?.data.address,
     },
     validationSchema: Createchema,
@@ -223,7 +226,7 @@ export default function EditAddress({
           address: "",
         },
       });
-
+      setOpenEdit(false);
       // setOpen(false);
     },
   });
@@ -558,7 +561,6 @@ export default function EditAddress({
                       name="district"
                       label="Quận / Huyện"
 
-
                       // onChange={handleChangeDistrict}
                     >
                       {data.districtRender.map((item, index) => (
@@ -645,7 +647,7 @@ export default function EditAddress({
                 type="submit"
                 variant="contained"
                 // loading={loadingCreateAuthor}
-                onClick={handleUpdate}
+                // onClick={handleUpdate}
                 // disabled={!isReadyCreateCate}
                 className={classes.buttonCreate}
               >

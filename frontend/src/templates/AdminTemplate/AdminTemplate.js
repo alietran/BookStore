@@ -90,6 +90,7 @@ const AdminTemplate = (props) => {
       {/* {!_.isEmpty(userLogin) ? ( */}
       <Fragment>
         <div className="flex justify-end">
+          <span className="font-bold">{userLogin?.user.idRole.roleName}</span>
           <Dropdown overlay={menu} trigger={["click"]}>
             <div
               style={{
@@ -141,45 +142,74 @@ const AdminTemplate = (props) => {
               />
             </div>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item key="0" icon={<UserOutlined />}>
-                <NavLink to="/admin/overview">Tổng quan</NavLink>
-              </Menu.Item>
-              <Menu.Item key="1" icon={<UserOutlined />}>
-                <NavLink to="/admin/users">Quản lý người dùng</NavLink>
-              </Menu.Item>
-          
-              <Menu.Item key="8" icon={<UserOutlined />}>
-                <NavLink to="/admin/receipts/list">Quản lý phiếu nhập</NavLink>
-              </Menu.Item>
-              <Menu.Item key="7" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/books">Sách</NavLink>
-              </Menu.Item>
-              <Menu.Item key="2" icon={<CategoryIcon />}>
-                <NavLink to="/admin/categories"></NavLink>Thể loại
-              </Menu.Item>
+              {userLogin.user.idRole.roleName === "Admin" ? (
+                <>
+                  {" "}
+                  <Menu.Item key="0" icon={<UserOutlined />}>
+                    <NavLink to="/admin/overview">Tổng quan</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="1" icon={<UserOutlined />}>
+                    <NavLink to="/admin/users">Quản lý người dùng</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="8" icon={<UserOutlined />}>
+                    <NavLink to="/admin/receipts/list">
+                      Quản lý phiếu nhập
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="7" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/books">Sách</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="2" icon={<CategoryIcon />}>
+                    <NavLink to="/admin/categories"></NavLink>Thể loại
+                  </Menu.Item>
+                  <Menu.Item key="3" icon={<BusinessIcon />}>
+                    <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
+                  </Menu.Item>
+                  {/* </SubMenu> */}
+                  <Menu.Item key="4" icon={<HailIcon />}>
+                    <NavLink to="/admin/shippers">Shipper</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="5" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/authors">Tác giả</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="6" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="9" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/orders">Đơn hàng</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="10" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/rating">Đánh giá</NavLink>
+                  </Menu.Item>
+                </>
+              ) : (
+                ""
+              )}
 
-              {/* <SubMenu
-                      key="sub2"
-                      icon={<FileOutlined />}
-                      title="Quản lý rạp"
-                    > */}
-              <Menu.Item key="3" icon={<BusinessIcon />}>
-                <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
-              </Menu.Item>
-              {/* </SubMenu> */}
-              <Menu.Item key="4" icon={<HailIcon />}>
-                <NavLink to="/admin/shippers">Shipper</NavLink>
-              </Menu.Item>
-              <Menu.Item key="5" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/authors">Tác giả</NavLink>
-              </Menu.Item>
-              <Menu.Item key="6" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
-              </Menu.Item>
-              <Menu.Item key="9" icon={<ReceiptIcon />}>
-                <NavLink to="/admin/orders">Đơn hàng</NavLink>
-              </Menu.Item>
-
+              {userLogin.user.idRole.roleName === "NV Kho" ? (
+                <>
+                  {" "}
+                  <Menu.Item key="8" icon={<UserOutlined />}>
+                    <NavLink to="/admin/receipts/list">
+                      Quản lý phiếu nhập
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="7" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/books">Sách</NavLink>
+                  </Menu.Item>
+                </>
+              ) : (
+                ""
+              )}
+              {userLogin.user.idRole.roleName === "NV Bán Hàng" ? (
+                <>
+                  <Menu.Item key="7" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/books">Sách</NavLink>
+                  </Menu.Item>
+                </>
+              ) : (
+                ""
+              )}
               {/* <Menu.Item key="9" icon={<ReceiptIcon />}>
                 <NavLink to="/admin/paymentMethod">Thanh toán</NavLink>
               </Menu.Item> */}
@@ -191,12 +221,14 @@ const AdminTemplate = (props) => {
               style={{ padding: 0, backgroundColor: "white " }}
             >
               <div className="text-right pr-10 pt-1">{operations}</div>
+            
             </Header>
             <Content style={{ margin: "20px 16px" }}>
               {/* <Breadcrumb style={{ margin: "16px 0" }}>
                       <Breadcrumb.Item>User</Breadcrumb.Item>
                       <Breadcrumb.Item>Bill</Breadcrumb.Item>
                     </Breadcrumb> */}
+
               <div
                 className="site-layout-background"
                 style={{ padding: 24, minHeight: "85vh" }}

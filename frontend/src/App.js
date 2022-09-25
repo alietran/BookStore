@@ -49,6 +49,9 @@ import LoginShipper from "./pages/Shipper/LoginShipper";
 import OrderListShipper from "./pages/Shipper/OrderListShipper";
 import Search from "./pages/HomePage/Search/Search";
 import WarehouseRoute from "./guards/WarehouseRoute";
+import OrderShipperDetail from "./pages/Shipper/OrderShipperDetail";
+import RatingManager from "./pages/Admin/Rating/RatingManager";
+import { useDispatch } from "react-redux";
 
 function App() {
   const themeOptions = useMemo(
@@ -58,10 +61,10 @@ function App() {
       typography,
       shadows,
       customShadows,
-    }),
+    }), 
     []
   );
-
+  const dispatch = useDispatch();
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
   const [user, setUser] = useState(null);
@@ -85,6 +88,12 @@ function App() {
           localStorage.setItem("user", JSON.stringify(resObject));
           localStorage.setItem("token", resObject.token);
           setUser(resObject.user);
+          dispatch({
+            type: "LOGIN_USER",
+            payload: {
+              data: resObject,
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -98,12 +107,24 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Switch>
-          <Route exact path={["/shipper", "/orderListShipper"]}>
+          <Route
+            exact
+            path={[
+              "/shipper",
+              "/orderListShipper",
+              "/orderListShipper/:orderId",
+            ]}
+          >
             <Route exact path="/shipper" component={LoginShipper} />
             <Route
               exact
               path="/orderListShipper"
               component={OrderListShipper}
+            />
+            <Route
+              exact
+              path="/orderListShipper/:orderId"
+              component={OrderShipperDetail}
             />
           </Route>
           <Route
@@ -161,6 +182,7 @@ function App() {
               "/admin/paymentMethod",
               "/admin/overview",
               "/admin/orders",
+              "/admin/rating",
             ]}
           >
             <AdminTemplate>
@@ -180,6 +202,11 @@ function App() {
                 exact
                 path="/admin/receipts/create"
                 component={CreateReceipt}
+              />
+              <AdminRoute
+                exact
+                path="/admin/rating"
+                component={RatingManager}
               />
               <AdminRoute
                 exact

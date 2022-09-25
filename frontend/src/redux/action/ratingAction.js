@@ -30,7 +30,34 @@ export const getRatingDetail = (id) => {
 };
 
 
+export const updateRating = (id,data) => {
+  console.log("data", data);
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "UPDATE_RATING_REQUEST",
+      });
+      const result = await ratingAPI.updateRating(id,data);
+      console.log("result14", result);
+      dispatch({
+        type: "UPDATE_RATING_SUCCESS",
+        payload: {
+          data: result.data.data,
+        },
+      });
+    } catch (error) {
+      console.log("error123", error);
+      dispatch({
+        type: "UPDATE_RATING_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
 export const createRating = (data) => {
+  console.log("data", data);
   return async (dispatch) => {
     try {
       dispatch({
@@ -45,7 +72,7 @@ export const createRating = (data) => {
         },
       });
     } catch (error) {
-      console.log("error", error);
+      console.log("error123", error);
       dispatch({
         type: "CREATE_RATING_DETAIL_FAIL",
         payload: {
@@ -53,5 +80,32 @@ export const createRating = (data) => {
         },
       });
     }
+  };
+};
+
+export const getAllRating = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_RATING_REQUEST",
+    });
+    ratingAPI
+      .getAllRating()
+      .then((result) => {
+        console.log("result1234", result);
+        dispatch({
+          type: "GET_RATING_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_RATING_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
   };
 };

@@ -81,22 +81,17 @@ exports.createBook = catchAsync(async (req, res, next) => {
     const urlGallery = `http://localhost:8080${path}`;
     newArray.push(urlGallery);
   });
-
   if (req.files.gallery) req.body.gallery = newArray;
   const path = image[0].path.replace(/\\/g, '/').substring('public'.length);
   const urlImage = `http://localhost:8080${path}`;
-
   if (req.files.image) req.body.image = urlImage;
-
   const doc = await Book.create(req.body);
   console.log('doc', doc);
-
   res.status(201).json({
     status: 'success',
     result: doc.length,
     data: doc,
-  });
-  
+  });  
 });
 
 exports.deleteBook = factory.deleteOne(Book);

@@ -134,3 +134,29 @@ export const deleteShipper = (id) => {
     }
   };
 };
+
+export const login = (user) => {
+  return async(dispatch)=>{
+dispatch({
+    type: "SHIPPER_LOGGIN_REQUEST",
+  });
+  shipperAPI.login(user).then((result)=>{
+    dispatch({
+      type: "SHIPPER_LOGGIN_SUCCESS",
+      payload: {
+          data: result.data,
+          token: result.data.token,
+        },
+    });
+  }).catch((err)=>{
+     dispatch({
+        type: "SHIPPER_LOGGIN_FAIL",
+        payload: {
+          err: err.response.data.message,
+        },
+  })
+  })
+  
+}
+}
+

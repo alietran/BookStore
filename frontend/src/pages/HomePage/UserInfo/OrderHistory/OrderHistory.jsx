@@ -48,6 +48,7 @@ export default function OrderHistory() {
 
   useEffect(() => {
     if (createRatingDetail) {
+      dispatch(getOrderByUser());
       Swal.fire({
         position: "center",
         icon: "success",
@@ -77,10 +78,16 @@ export default function OrderHistory() {
     setOpenConfirm(false);
   };
   console.log("successUpdateOrder", successUpdateOrder);
-  const handlePushRating = (rating) => {
+  const handlePushRating = () => {
+    // console.log("rating", rating);
     dispatch(createRating(rating));
     setOpen(false);
     setHadRating(false);
+    // dispatch(
+    //   updateOrder(rating.id, {
+    //     status: "Đã đánh giá",
+    //   })
+    // );
   };
 
   console.log("orderByUser", orderByUser);
@@ -322,9 +329,7 @@ export default function OrderHistory() {
           </Button>
           <Button
             variant="contained"
-            onClick={() => {
-              handlePushRating(rating);
-            }}
+            onClick={handlePushRating}
             sx={{ textTransform: "none !important" }}
             autoFocus
           >

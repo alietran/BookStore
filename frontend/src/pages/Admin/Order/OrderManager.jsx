@@ -50,14 +50,14 @@ import OptionOrder from "./OptionOrder/OptionOrder";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "id", label: "Mã đơn hàng", alignRight: false },
+  { id: "id", label: "Sản phẩm", alignRight: false },
   { id: "name", label: "Tên khách hàng", alignRight: false },
 
-  { id: "date", label: "Ngày đặt", alignRight: false },
+  { id: "content", label: "Nội dung", alignRight: false },
+  { id: "rating", label: "Số sao", alignRight: false },
+  { id: "date", label: "Ngày đánh giá", alignRight: false },
   { id: "status", label: "Trạng thái", alignRight: false },
 
-  { id: "total", label: "Tổng tiền", alignRight: false },
-  { id: "payment", label: "Thanh toán", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
   { id: "" },

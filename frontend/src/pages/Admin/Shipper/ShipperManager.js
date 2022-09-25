@@ -150,6 +150,7 @@ export default function ShipperManager() {
       dispatch(getOrderList());
     }
   }, [orderList]);
+  
   useEffect(() => {
     // get list user lần đầu
     if (!shipperList) {

@@ -3,6 +3,7 @@ const factory = require('./handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const cloudinary = require('../utils/cloudinary');
 const multer = require('multer');
+const Order = require('../models/Order');
 
 exports.getAllRating = factory.getAll(Rating);
 exports.getDetailRating = factory.getOne(Rating);
@@ -43,9 +44,14 @@ const filterObj = (obj, ...allowedField) => {
 };
 
 exports.createRating = catchAsync(async (req, res, next) => {
+  console.log('req', req.body[0].order);
   let arrayItems = [];
   let count = 0;
-  req.body.map((item) => {
+  const orderStatus = await Order.findByIdAndUpdate(req.body[0].order, {
+    status: 'Đã đánh giá',
+  });
+  console.log('orderStatus', orderStatus);
+  req.body.map(async (item) => {
     if (item.imageRating.length > 0) {
       //imageRating base64
       item.imageRating.map(async (image) => {
@@ -91,10 +97,17 @@ exports.createRating = catchAsync(async (req, res, next) => {
 
         // console.log('req.body[0].imageRating[0]', req.body[0].imageRating[0]);
       });
+    } else {
+      const rating = await Rating.insertMany(req.body);
+      res.status(201).json({
+        status: 'success',
+        result: rating.length,
+        data: rating,
+      });
     }
   });
 });
-
+exports.updateRating = factory.updateOne(Rating);
 exports.bookRatingDetail = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   console.log('bookId', id);

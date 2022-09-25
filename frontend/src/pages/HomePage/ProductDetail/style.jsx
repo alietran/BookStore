@@ -125,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "8px",
     justifyContent: "center",
     width: "100%",
+    height:"300px"
   },
   img__library: {
     display: "flex",

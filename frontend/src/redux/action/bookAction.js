@@ -34,6 +34,8 @@ export const createBook = (data) => {
         type: "CREATE_BOOK_REQUEST",
       });
       const result = await bookAPI.postCreateBook(data);
+        console.log("1231");
+      console.log("result", result);
       dispatch({
         type: "CREATE_BOOK_SUCCESS",
         payload: {
@@ -42,6 +44,7 @@ export const createBook = (data) => {
       });
     } catch (error) {
       console.log("error1211156", error);
+       console.log("235");
       dispatch({
         type: "CREATE_BOOK_FAIL",
         payload: {

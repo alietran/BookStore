@@ -80,6 +80,8 @@ export default function Address() {
     }
   }, [addressList]);
 
+ 
+
   useEffect(() => {
     let addressItem = addressList?.data.filter((item) => item.isDefault);
     console.log("addressItem123", addressItem);
@@ -370,21 +372,15 @@ export default function Address() {
       // }
       dispatch(createAddress(data));
       //  fullName:"";
-      // resetForm(
-
-      //    {
-
-      //   {
-      //     fullName:"",
-      // phoneNumber:"",
-      // email:"",
-      // city:"",
-      // district:"",
-      // ward: "",
-      // address:""
-      //   }
-
-      // });
+      resetForm({
+        fullName: "",
+        phoneNumber: "",
+        email: "",
+        city: "",
+        district: "",
+        ward: "",
+        address: "",
+      });
 
       setOpen(false);
     },

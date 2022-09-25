@@ -17,6 +17,7 @@ exports.deleteOne = (Model) =>
 
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    console.log('req',req.body);
     const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
     const urlImage = `http://localhost:8080${path}`;
     if (req.file) req.body.photo = urlImage;

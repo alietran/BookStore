@@ -20,6 +20,9 @@ const shipperAPI = {
     const path = `/v1/shippers/${id}`;
     return axiosClient.patch(path, data);
   },
+  login: (data) => {
+    return axiosClient.post("/v1/shippers/login", data);
+  },
 };
 
 export default shipperAPI;

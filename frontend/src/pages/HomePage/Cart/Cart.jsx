@@ -25,7 +25,7 @@ export default function Cart() {
   const [totalCart, setTotalCart] = useState(0);
   const [openConfirm, setOpenConfirm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const { quantity, setQuantity } = useState();
+
   console.log("miniPrice", typeof miniPrice);
   console.log("discount", discount);
 
@@ -40,7 +40,10 @@ export default function Cart() {
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
   console.log("cart", cart);
+  // cart.map((item,index)=>{
 
+  // })
+  const [quantity, setQuantity] = useState(1);
   const totalPrice = cart?.reduce(
     (total, item) =>
       // console.log("item", item)
@@ -79,7 +82,39 @@ export default function Cart() {
   }, [totalPrice]);
 
   const dispatch = useDispatch();
+  const handleChangeQuantity = (sp, e) => {
+    const quanty = Number(e.target.value);
+    setQuantity(quanty);
+    console.log(
+      "quanty24 sp.warehouse sp.quantity",
+      quanty,
+      sp.warehouse
+      // sp.quantity
+    );
+    // console.log("sp.warehouse14", sp.warehouse);
+    // console.log("sp.quantity124", sp.quantity);
 
+    if (sp.warehouse >= quanty) {
+      if (quanty === 0) {
+        enqueueSnackbar(`Số lượng mua tối thiểu của sản phẩm này là 1 !`, {
+          variant: "error",
+        });
+      } else {
+        dispatch({
+          type: "CHANGE_QUANTITY_NUMBER",
+          payload: {
+            data: cart,
+            maSP: sp.id,
+            quanty: Number(quanty),
+          },
+        });
+      }
+    } else {
+      enqueueSnackbar(`Số lượng còn lại của sản phẩm này là ${sp.warehouse}!`, {
+        variant: "error",
+      });
+    }
+  };
   const hadleClickPlus = (maSP, tangGiam, item) => {
     console.log("hadleClickPlug", maSP);
     console.log("item", item);
@@ -203,16 +238,22 @@ export default function Cart() {
                       >
                         <div className={`${classes.box__content} `}>
                           <div className={classes["box__content-name"]}>
-                            <NavLink className={` ${classes.center}`} to={"/"}>
+                            <NavLink
+                              className={` ${classes.center}`}
+                              to={`/productDetail/${item.id}`}
+                            >
                               <img
                                 style={{ width: "100px", height: "80px" }}
-                                src={item.image}
+                                src={item.image}Giảm giá
                                 alt=""
                               />
                             </NavLink>
-                            <p className={classes["box__content-name-product"]}>
+                            <NavLink
+                              className={classes["box__content-name-product"]}
+                              to={`/productDetail/${item.id}`}
+                            >
                               {item.name}
-                            </p>
+                            </NavLink>
                           </div>
                           <div
                             className={`${classes["box__content-unitPrice"]} ${classes.center}`}
@@ -234,12 +275,6 @@ export default function Cart() {
                                 className="plusItem"
                                 onClick={() => hadleClickMinus(item.id, false)}
                                 disabled={item.quantity === 1 ? true : false}
-                                // onClick={dispatch({
-                                //   type: "TANG_GIAM_SL",
-                                //   payload: {
-                                //     tangGiam: true,
-                                //   },
-                                // })}
                               >
                                 <span>
                                   <svg
@@ -261,10 +296,17 @@ export default function Cart() {
                                 </span>
                               </button>
                               <input
+                                style={{ width: "30px" }}
+                                type="number"
+                                name="quantity"
                                 className={classes.quantityValue}
-                                value={item.quantity}
-                                // onChange={() => setQuantity(item.quantity)}
-                                // type="number"
+                                value={item.quantity ? item.quantity : quantity}
+                                onChange={
+                                  (e) => handleChangeQuantity(item, e)
+                                  // setQuantity(2)
+                                }
+
+                                // // type="number"
                               />
 
                               <button

@@ -16,8 +16,15 @@ router
 
 router
   .route('/:id')
+    .patch(authController.protect, ratingController.updateRating);
+
+router
+  .route('/:id')
   .get(ratingController.getDetailRating)
   .delete(authController.protectUser, ratingController.deleteRating)
-  .patch(authController.protectUser, ratingController.likeRating);
+  .patch(authController.protectUser, ratingController.likeRating)
+  
+
+
 
 module.exports = router;

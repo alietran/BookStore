@@ -97,6 +97,25 @@ export const CartReducer = (state = stateDefault, action) => {
 
       return { ...state };
     }
+    case "CHANGE_QUANTITY_NUMBER": {
+      const cartList = JSON.parse(localStorage.getItem("cart"));
+
+      console.log("12");
+
+      const index = cartList?.findIndex(
+        (item) => item.id === action.payload.maSP
+      );
+
+      console.log("tangiam", action.payload.tangGiam);
+      if (index !== -1) {
+        // if (state.cart[index].quantity < state.cart[index].warehouse) {
+          cartList[index].quantity = action.payload.quanty;
+          localStorage.setItem("cart", JSON.stringify(cartList));
+        // }
+      }
+
+      return { ...state };
+    }
     case "REMOVE_ITEM": {
       const cartList = JSON.parse(localStorage.getItem("cart"));
       const index = cartList?.findIndex(

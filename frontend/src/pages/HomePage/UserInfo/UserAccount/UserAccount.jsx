@@ -26,33 +26,45 @@ import { updateCurrentHomeUser } from "../../../../redux/action/userAction";
 export default function UserAccount() {
   const [gender, setGender] = useState("Nam");
   const dispatch = useDispatch();
-  const { userLogin } = useSelector((state) => state.AuthReducer);
-  const { successUpdateUserCurrent } = useSelector(
-    (state) => state.UserReducer
-  );
+  // const { userLogin } = useSelector((state) => state.AuthReducer);
+  const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  // const
 
-  const [srcImage, setSrcImage] = useState(userLogin?.user.avatar);
+  const [srcImage, setSrcImage] = useState(loginUserSucces?.user.avatar);
   const [valueDate, setValueDate] = useState(null);
   const enqueueSnackbar = useSnackbar();
 
   useEffect(() => {
-    values.dateOfBirth = moment(userLogin.user.dateOfBirth)?.format(
+    values.dateOfBirth = moment(loginUserSucces?.user.dateOfBirth)?.format(
       "YYYY-MM-DDTHH:mm:SS"
     );
   }, [valueDate]);
 
-
+  const Createchema = Yup.object().shape({
+    fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
+    phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
+    gender: Yup.string().required("*Vui lòng nhập thông tin này"),
+    dateOfBirth: Yup.date()
+      .required("*Ngày sinh không được bỏ trống!")
+      .test("checkAge", "Ngày phải nhỏ hơn ngày hôm nay", (value) => {
+        var today = new Date();
+        return value < today;
+      }),
+    address: Yup.string().required("*Vui lòng nhập thông tin này"),
+  });
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      fullName: userLogin.user.fullName,
-      email: userLogin.user.email,
-      avatar: userLogin.user.avatar,
-      phoneNumber: userLogin.user.phoneNumber,
-      gender: userLogin.user.gender,
-      dateOfBirth: userLogin.user.dateOfBirth ? userLogin.user.dateOfBirth : "",
+      fullName: loginUserSucces?.user.fullName,
+      email: loginUserSucces?.user.email,
+      avatar: loginUserSucces?.user.avatar,
+      phoneNumber: loginUserSucces?.user.phoneNumber,
+      gender: loginUserSucces?.user.gender,
+      dateOfBirth: loginUserSucces?.user.dateOfBirth
+        ? loginUserSucces.user.dateOfBirth
+        : "",
     },
-    // validationSchema: Createchema,
+    validationSchema: Createchema,
     onSubmit: (data) => {
       console.log("data23423", data);
       // if (loadingCreateCate) {
@@ -80,9 +92,9 @@ export default function UserAccount() {
     reader.onload = function (e) {
       // sau khi thực hiên xong lênh trên thì set giá trị có được
       setSrcImage(e.target.result);
+      // Đem dữ liệu file lưu vào formik
+      formik.setFieldValue("avatar", e.target.result);
     };
-    // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("avatar", file);
   };
   const handleChangeGender = (event) => {
     setGender(event.target.value);
@@ -93,7 +105,6 @@ export default function UserAccount() {
     setValueDate(newValue);
     console.log("valueDate", valueDate);
   };
-
 
   return (
     <div style={{ backgroundColor: "white", padding: "25px" }}>
@@ -153,7 +164,7 @@ export default function UserAccount() {
                   fullWidth
                   autoComplete="code"
                   label="Email"
-                  disabled={userLogin.user.googleId}
+                  disabled={loginUserSucces?.user.googleId}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -166,7 +177,7 @@ export default function UserAccount() {
                   <TextField
                     fullWidth
                     autoComplete="code"
-                    disabled={userLogin.user.phoneUID}
+                    disabled={loginUserSucces?.user.phoneUID}
                     label="Số điện thoại"
                     InputLabelProps={{
                       shrink: true,
@@ -192,17 +203,38 @@ export default function UserAccount() {
                     </Select>
                   </FormControl>
                 </Box>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       label="Ngày sinh"
                       inputFormat="MM/dd/yyyy"
                       value={valueDate}
                       onChange={handleChangeDate}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(touched) => (
+                        <TextField
+                          {...touched}
+                          error={Boolean(
+                            touched.dateOfBirth && errors.dateOfBirth
+                          )}
+                          helperText={touched.dateOfBirth && errors.dateOfBirth}
+                        />
+                      )}
                     />
                   </Stack>
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+                <TextField
+                  type="date"
+                  fullWidth
+                  autoComplete="code"
+                  label="Ngày Sinh"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  className="mt-0"
+                  {...getFieldProps("dateOfBirth")}
+                  error={Boolean(touched.dateOfBirth && errors.dateOfBirth)}
+                  helperText={touched.dateOfBirth && errors.dateOfBirth}
+                />
                 <LoadingButton
                   fullWidth
                   size="medium"

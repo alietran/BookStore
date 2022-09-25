@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderRSForWeek } from "../../../redux/action/orderAction";
 import moment from "moment";
 import { getReceiptRSForWeek } from "../../../redux/action/receiptAction";
+import { Box, Grid, Typography } from "@mui/material";
 export default function Overview() {
   const dispatch = useDispatch();
-
   const { orderRSForWeek } = useSelector((state) => state.OrderReducer);
   const { receiptRSForWeek } = useSelector((state) => state.ReceiptReducer);
   const [listReceiptItem, setListReceiptItem] = useState([]);
@@ -23,7 +23,6 @@ export default function Overview() {
   }
   console.log("dayLabel", dayLabel);
 
-  // console.log("weeknumber1", weeknumber1);
   console.log("orderRSForWeek", orderRSForWeek);
 
   useEffect(() => {
@@ -97,7 +96,6 @@ export default function Overview() {
       console.log("orderDayListReceipt12345", orderDayListReceipt);
     });
   };
- 
 
   let state = {
     series: [
@@ -114,14 +112,12 @@ export default function Overview() {
       chart: {
         type: "bar",
         height: 430,
-       
       },
       plotOptions: {
         bar: {
           horizontal: false,
           dataLabels: {
             position: "top",
-            
           },
         },
       },
@@ -149,13 +145,161 @@ export default function Overview() {
   };
 
   return (
-    <div id="chart" style={{ width: "70%" }}>
-      <ReactApexChart
-        options={state.options}
-        series={state.series}
-        type="bar"
-        height={430}
-      />
+    <div>
+      <div style={{ width: "100%" }}>
+        <Box>
+          <Grid container spacing={4}>
+            <Grid item xs={3}>
+              {" "}
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "280px",
+                  borderRadius: "10px",
+                  padding: "20px",
+                  marginTop: "90px",
+                  marginBottom: "10px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <div className="text-left leading-5">
+                      {" "}
+                      <Typography className="m-0">Sản phẩm</Typography>
+                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                        556
+                      </Typography>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <img
+                      src="../../../../img/static.jpg"
+                      alt=""
+                      height={400}
+                      width={400}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              {" "}
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "280px",
+                  borderRadius: "10px",
+                  padding: "20px",
+                  marginTop: "90px",
+                  marginBottom: "10px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <div className="text-left leading-5">
+                      {" "}
+                      <Typography className="m-0">Người Dùng</Typography>
+                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                        556
+                      </Typography>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <img
+                      src="../../../../img/images.png"
+                      alt=""
+                      height={400}
+                      width={400}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              {" "}
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "280px",
+                  borderRadius: "10px",
+                  padding: "20px",
+                  marginTop: "90px",
+                  marginBottom: "10px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <div className="text-left leading-5">
+                      {" "}
+                      <Typography className="m-0">Đơn hàng</Typography>
+                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                        556
+                      </Typography>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <img
+                      src="../../../../img/cart.png"
+                      alt=""
+                      height={800}
+                      width={800}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+            <Grid item xs={3}>
+              {" "}
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "280px",
+                  borderRadius: "10px",
+                  padding: "20px",
+                  marginTop: "90px",
+                  marginBottom: "10px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <div className="text-left leading-5">
+                      {" "}
+                      <Typography className="m-0">Người Dùng</Typography>
+                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                        556
+                      </Typography>
+                    </div>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <img
+                      src="../../../../img/static.jpg"
+                      alt=""
+                      height={400}
+                      width={400}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
+      <div id="chart" style={{ width: "70%" }}>
+        <ReactApexChart
+          options={state.options}
+          series={state.series}
+          type="bar"
+          height={430}
+        />
+      </div>
     </div>
   );
 }

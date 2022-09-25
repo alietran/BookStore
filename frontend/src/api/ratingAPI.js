@@ -8,7 +8,12 @@ const ratingAPI = {
     const path = `/v1/ratings`;
     return axiosClient.post(path, data);
   },
+  getAllRating: () => {
+    return axiosClient.get("v1/ratings");
+  },
+  updateRating: (id,data) =>{
+    return axiosClient.patch(`v1/ratings/${id}`,data);
+  }
 };
-
 
 export default ratingAPI;

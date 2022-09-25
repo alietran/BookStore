@@ -36,6 +36,7 @@ import { useHistory, useParams } from "react-router-dom";
 import Label from "../../../components/Label";
 import RatingItem from "../UserInfo/Rating/RatingItem";
 import { getRatingDetail } from "../../../redux/action/ratingAction";
+import Fancybox from "./FancyBox";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,6 +61,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
+
 
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
@@ -91,8 +93,14 @@ export default function ProductDetail(props) {
     dispatch(getRatingDetail(id));
   }, []);
 
-
   console.log("ratingDetail,", ratingDetail);
+  //  const ratingMovie = totalReview / totalReviewer;
+  const totalReview = ratingDetail?.data.reduce((total, item) => {
+    return total + item.rating;
+  }, 0);
+  
+   const ratingMovie = totalReview / ratingDetail?.result;
+   console.log("ratingMovie,", ratingMovie);
   const [imageURL, setImageURL] = useState(successDetailBook?.data.gallery[0]);
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
@@ -237,14 +245,16 @@ export default function ProductDetail(props) {
                             {bookDetail?.gallery?.map((item, index) => {
                               // console.log("index", item[index]);
                               return (
-                                <img
-                                  // className={}
-                                  src={item}
-                                  key={index}
-                                  onMouseOut={() =>
-                                    handleChangeImage(item, index)
-                                  }
-                                />
+                                <Fancybox options={{ infinite: false }}>
+                                  <img
+                                    data-fancybox="gallery"
+                                    src={item}
+                                    key={index}
+                                    onMouseOut={() =>
+                                      handleChangeImage(item, index)
+                                    }
+                                  />
+                                </Fancybox>
                               );
                             })}
                           </div>
@@ -255,22 +265,34 @@ export default function ProductDetail(props) {
                   <div className={classes["box__content-right"]}>
                     <div className="content__title">
                       <h1>{bookDetail?.name}</h1>
-                      <div className="content__trademark">
+                      <div className="content__trademark flex">
+                        <Rating
+                          value={ratingMovie.toFixed(1)}
+                          precision={0.5}
+                          readOnly
+                        />
+                        {/* <StarIcon sx={{ color: "gold" }} />
                         <StarIcon sx={{ color: "gold" }} />
                         <StarIcon sx={{ color: "gold" }} />
                         <StarIcon sx={{ color: "gold" }} />
-                        <StarIcon sx={{ color: "gold" }} />
-                        <StarIcon sx={{ color: "gold" }} />
-                        <span>(Xem 12 lượt đánh giá)</span>
+                        <StarIcon sx={{ color: "gold" }} /> */}
+                        <span className="mb-3">
+                          (Xem {ratingDetail?.result} lượt đánh giá)
+                        </span>
+                      </div>
+                      <div className="leading-3">
+                        {" "}
+                        <p>Tác Giả: {bookDetail?.authorId.name}</p>
+                        <p>Thể loại: {bookDetail?.idCate.name}</p>
+                        <p>Nhà xuất bản: {bookDetail?.publisher}</p>
+                        <p>Nhà phát hành:{bookDetail?.issuer}</p>
                       </div>
                     </div>
-
                     <div className="content__price">
                       <div className="content__price--title text-red-500 text-2xl font-medium">
                         {bookDetail?.price.toLocaleString()} ₫
                       </div>
                     </div>
-
                     <div className={classes.content__line}>
                       <div className={classes.line}></div>
                     </div>
@@ -284,7 +306,7 @@ export default function ProductDetail(props) {
                         {bookDetail?.quantity > 0 ? "Còn hàng " : "Hết hàng"}
                       </Label>
                     </div>
-                    <div className="content__title-discount">
+                    {/* <div className="content__title-discount">
                       Chọn mã giảm giá
                     </div>
 
@@ -309,7 +331,7 @@ export default function ProductDetail(props) {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className={classes.content__button}>
                       <Button
                         onClick={handleBuy}
@@ -434,44 +456,53 @@ export default function ProductDetail(props) {
                   </TabPanel>
                   <TabPanel value="3">
                     <div>
-                      {ratingDetail?.data.map((item, index)=>{
-                        return (
-                          <div className="flex mb-3">
-                            <div className="mr-3 ">
-                              <img
-                                src="../../../../img/User_Circle.png"
-                                alt="avatar"
-                                style={{ width: "50px", height: "50px" }}
-                              />
-                            </div>
-                            <div className="leading-6">
-                              <p className="mb-2">{item?.order?.user?.fullName}</p>
-                              <Rating value={item.rating} size={"medium"} />
-                              <p className="text-slate-300">
-                                {moment(item.createdAt).format(
-                                  "DD/MM/YYYY, h:mm a"
-                                )}
-                              </p>
-                              <p> {item.content}</p>
-                              <div className="mt-3 flex ">
-                                {item?.imageRating?.map((img,index)=>{
-                                 return  <img
-                                     src={img}
-                                     alt=""
-                                     style={{
-                                       width: "80px",
-                                       height: "80px",
-                                       marginRight: "10px",
-                                     }}
-                                   />;
-                                })}
-                               
+                      {ratingDetail?.data
+                        .filter((item) => item.hidden === false)
+                        .map((item, index) => {
+                          return (
+                            <div className="flex mb-3">
+                              <div className="mr-3 ">
+                                <img
+                                  src="../../../../img/User_Circle.png"
+                                  alt="avatar"
+                                  style={{ width: "50px", height: "50px" }}
+                                />
+                              </div>
+                              <div className="leading-6">
+                                <p className="mb-2">
+                                  {item?.order?.user?.fullName}
+                                </p>
+                                <Rating
+                                  readOnly
+                                  value={item.rating}
+                                  size={"medium"}
+                                />
+                                <p className="text-slate-300">
+                                  {moment(item.createdAt).format(
+                                    "DD/MM/YYYY, h:mm a"
+                                  )}
+                                </p>
+                                <p> {item.content}</p>
+                                <div className="mt-3 flex ">
+                                  {item?.imageRating?.map((img, index) => {
+                                    return (
+                                      <img
+                                        src={img}
+                                        alt=""
+                                        style={{
+                                          width: "80px",
+                                          height: "80px",
+                                          marginRight: "10px",
+                                        }}
+                                      />
+                                    );
+                                  })}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    
+                          );
+                        })}
+
                       <hr />
                     </div>
                   </TabPanel>

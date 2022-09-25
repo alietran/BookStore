@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const mkdirp = require('mkdirp');
-
+const cloudinary = require('../utils/cloudinary');
 exports.getAllAdmin = factory.getAll(Admin);
 exports.createAdmin = factory.createOne(Admin);
 exports.updateAdmin = factory.updateOne(Admin);
@@ -96,11 +96,19 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     'address',
     'idRole'
   );
-  console.log('filteredBody', filteredBody);
-
-  const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
-  const urlImage = `http://localhost:8080${path}`;
-  if (req.file) filteredBody.avatar = urlImage;
+  console.log('filteredBody ', filteredBody);
+  const uploadedResponse = await cloudinary.uploader.upload(
+    filteredBody.avatar,
+    {
+      upload_preset: 'profile',
+    }
+  );
+  //multer
+  // const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
+  // const urlImage = `http://localhost:8080${path}`;
+  
+   filteredBody.avatar = uploadedResponse.secure_url;
+   console.log('uploadedResponse',uploadedResponse);
   const user = await Admin.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
     runValidators: true,

@@ -78,20 +78,18 @@ export default function Login() {
     // đăng nhập thành công thì quay về trang trước đó
     if (userLogin) {
       //  console.log("userLogin24", userLogin.user.role);
-      // if (
-      //   userLogin.user?.idRole.roleName === "Admin"
-      // )
-      //   setTimeout(() => {
-      //     history.push("/admin/users");
-      //   }, 2000);
-      // else {
-      //   // setTimeout(() => {
-      //   history.push("/");
-      //   // }, 3000);
-      // }
-      history.push("/admin/users");
+      if (userLogin.user?.idRole.roleName === "Admin") {
+        history.push("/admin/users");
+      }
+      else if (userLogin.user?.idRole.roleName === "NV Kho") {
+        history.push("/admin/receipts/list");
+      }
+      else if (userLogin.user?.idRole.roleName === "NV Bán Hàng") {
+        history.push("/admin/books");
+      }
+
     }
-    // , [userLogin]
+ 
   }, [userLogin]);
 
   const formik = useFormik({
@@ -104,7 +102,6 @@ export default function Login() {
     onSubmit: (user) => {
       dispatch(login(user));
     },
-    
   });
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
     formik;

@@ -37,6 +37,7 @@ import {
 } from "@mui/material";
 import { resetUserListUpdate } from "../../../redux/action/adminAction";
 
+
 export default function Info() {
   const { userLogin, successUpdateUserCurrent, errorUpdateUserCurrent } =
     useSelector((state) => state.AuthReducer);
@@ -50,14 +51,16 @@ export default function Info() {
   const handleChangeFile = (e) => {
     //doc file base 64
     let file = e.target.files[0];
+    console.log("e.target.files[0]", e.target.files[0]);
     var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function (e) {
       // sau khi thực hiên xong lênh trên thì set giá trị có được
       setSrcImage(e.target.result);
+      console.log("e.target.result", e.target.result);
+      formik.setFieldValue("avatar", e.target.result);
     };
     // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("avatar", file);
   };
 
   const [gender, setGender] = useState("Nam");
@@ -84,7 +87,12 @@ export default function Info() {
     fullName: Yup.string().required("*Vui lòng nhập thông tin này"),
     phoneNumber: Yup.string().required("*Vui lòng nhập thông tin này"),
     gender: Yup.string().required("*Vui lòng nhập thông tin này"),
-    dateOfBirth: Yup.string().required("*Vui lòng nhập thông tin này"),
+    dateOfBirth: Yup.date()
+      .required("*Ngày sinh không được bỏ trống!")
+      .test("checkAge", "Ngày phải nhỏ hơn ngày hôm nay", (value) => {
+        var today = new Date();
+        return value < today;
+      }),
     address: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
   const formik = useFormik({
@@ -265,7 +273,27 @@ export default function Info() {
                   </Select>
                 </FormControl>
               </Box>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TextField
+                type="date"
+                fullWidth
+                
+                autoComplete="code"
+                label="Ngày Sinh"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                value={
+                  valueDate
+                    ? valueDate
+                    : moment(userLogin.user.dateOfBirth).format("YYYY-MM-DD")
+                }
+                className="mt-0"
+                onChange={handleChangeDate}
+                {...getFieldProps("dateOfBirth")}
+                error={Boolean(touched.dateOfBirth && errors.dateOfBirth)}
+                helperText={touched.dateOfBirth && errors.dateOfBirth}
+              />
+              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Stack spacing={3}>
                   <DesktopDatePicker
                     label="Ngày sinh"
@@ -278,10 +306,18 @@ export default function Info() {
                           )
                     }
                     onChange={handleChangeDate}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(touched) => (
+                      <TextField
+                        {...touched}
+                        error={Boolean(
+                          touched.dateOfBirth && errors.dateOfBirth
+                        )}
+                        helperText={touched.dateOfBirth && errors.dateOfBirth}
+                      />
+                    )}
                   />
                 </Stack>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
               <TextField
                 fullWidth
                 autoComplete="code"

@@ -24,11 +24,11 @@ const adminAPI = {
   
   updateCurrentUser: (currentUser) => {
     const path = `/v1/admins/updateMe`;
-    const formData = new FormData();
-    for (const key in currentUser) {
-      formData.append(key, currentUser[key]);
-    }
-    return axiosClient.patch(path, formData);
+    // const formData = new FormData();
+    // for (const key in currentUser) {
+    //   formData.append(key, currentUser[key]);
+    // }
+    return axiosClient.patch(path, currentUser);
   },
 
 

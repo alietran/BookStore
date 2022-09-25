@@ -1,6 +1,81 @@
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
+  "cart__wrapper-breadcrumbs": {
+    whiteSpace: "nowrap",
+    display: "flex",
+    width: "90%",
+    margin: "1rem 1rem 1rem 0",
+  },
+  breadcrumbsIcon: {
+    height: "32px",
+    width: "fit-content",
+
+    alignItems: "center",
+    display: "flex",
+
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+    marginRight: "10px",
+  },
+  breadcrumbsIconLink: {
+    marginRight: "10px",
+    cursor: "pointer",
+    overflow: "hidden",
+    lineHeight: "1rem",
+    display: "inline-flex",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+    textAlign: "center",
+    userSelect: "none",
+    flexDirection: "row",
+    position: "relative",
+    padding: "8px",
+    color: "rgb(51, 51, 51)",
+    textDecoration: "none",
+    backgroundColor: "rgb(255, 255, 255)",
+    pointerEvents: "auto",
+    border: "1px solid rgb(224, 224, 224)",
+    borderRadius: "9999px",
+    "& img": {
+      width: "16px",
+      height: "16px",
+      display: "inline-block",
+    },
+  },
+  breadcrumbsName: {
+    height: " 32px",
+    width: " fit-content",
+
+    alignItems: "center",
+    display: "flex",
+
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+  },
+  breadcrumbsLink: {
+    cursor: "pointer",
+    overflow: "hidden",
+    lineHeight: "1rem",
+    display: "inline-flex",
+
+    alignItems: "center",
+
+    justifyContent: "center",
+    textAlign: "center",
+    userSelect: "none",
+    flexDirection: "row",
+    position: "relative",
+    padding: "8px",
+    color: "#333333",
+    textDecoration: "none !important",
+    backgroundColor: "rgb(255, 255, 255)",
+    pointerEvents: "none",
+    border: "1px solid rgb(224, 224, 224)",
+    borderRadius: "9999px",
+  },
   "info-text": {
     borderStyle: "solid",
     borderRadius: "0.25rem",

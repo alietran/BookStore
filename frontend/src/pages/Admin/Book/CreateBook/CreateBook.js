@@ -148,7 +148,7 @@ export default function CreateBook() {
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
     desc: Yup.string().required("*Vui lòng nhập thông tin này"),
     price: Yup.string().required("*Vui lòng nhập thông tin này"),
-    quantity: Yup.string().required("*Vui lòng nhập thông tin này"),
+    // quantity: Yup.string().required("*Vui lòng nhập thông tin này"),
     bookCover: Yup.string().required("*Vui lòng nhập thông tin này"),
     totalPage: Yup.string().required("*Vui lòng nhập thông tin này"),
     publisher: Yup.string().required("*Vui lòng nhập thông tin này"),
@@ -162,7 +162,7 @@ export default function CreateBook() {
       name: "",
       desc: "",
       price: "",
-      quantity: "",
+      // quantity: "",
       bookCover: "",
       totalPage: "",
       publisher: "",
@@ -342,14 +342,14 @@ export default function CreateBook() {
                     error={Boolean(touched.price && errors.price)}
                     helperText={touched.price && errors.price}
                   />
-                  <TextField
+                  {/* <TextField
                     fullWidth
                     autoComplete="quantity"
                     label="Số lượng"
                     {...getFieldProps("quantity")}
                     error={Boolean(touched.quantity && errors.quantity)}
                     helperText={touched.quantity && errors.quantity}
-                  />
+                  /> */}
                 </Stack>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={3}>
                   <TextField

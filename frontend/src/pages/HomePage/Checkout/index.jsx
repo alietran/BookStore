@@ -22,7 +22,7 @@ import { getPaymentList } from "../../../redux/action/paymentAction";
 import { createOrder, updateOrder } from "../../../redux/action/orderAction";
 import paymentAPI from "../../../api/paymentAPI";
 import { useSnackbar } from "notistack";
-
+import HomeIcon from "@mui/icons-material/Home";
 export default function Checkout() {
   const classes = useStyles();
   const history = useHistory();
@@ -34,7 +34,7 @@ export default function Checkout() {
   );
   const { payment } = useSelector((state) => state.PaymentReducer);
   const { voucherId } = useSelector((state) => state.CartReducer);
-  
+
   console.log("payment", payment);
   console.log("addressItem", addressItem);
   const [linkMoMo, setLinkMoMo] = useState("");
@@ -63,7 +63,6 @@ export default function Checkout() {
   );
 
   const handleSubmit = async () => {
-
     let order = {
       totalPrice: totalPrice - discount,
       items: orderItem,
@@ -126,6 +125,25 @@ export default function Checkout() {
   return (
     <Box className="m-5">
       <Container maxWidth="lg">
+        <div className={classes["cart__wrapper-breadcrumbs"]}>
+          <div className={classes.breadcrumbsIcon}>
+            <Link className={classes.breadcrumbsIconLink} to={"/"}>
+              <HomeIcon />
+            </Link>
+            <span className="css-rhmj3t pl-2"> &gt; </span>
+          </div>
+          <div className={classes.breadcrumbsName}>
+            <NavLink className={classes.breadcrumbsLink} to={"/cart"}>
+              Giỏ hàng
+            </NavLink>
+            <span className="css-rhmj3t pl-2 pr-2"> &gt; </span>
+          </div>
+          <div className={classes.breadcrumbsName}>
+            <NavLink className={`${classes.breadcrumbsLink} `} to={"/"}>
+              Thanh toán
+            </NavLink>
+          </div>
+        </div>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={8}>
             <Box

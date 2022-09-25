@@ -23,6 +23,11 @@ const ratingSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+     hidden: {
+      type: Boolean,
+      default: false,
+    },
+    
   },
   {
     timestamps: true,

@@ -3,6 +3,7 @@ const shipperController = require('../controllers/shipperController');
 
 const router = express.Router();
 
+router.route('/login').post(shipperController.login);
 router
   .route('/')
   .post(shipperController.createShipper)

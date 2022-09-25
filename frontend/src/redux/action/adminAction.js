@@ -102,6 +102,7 @@ export const updateAdmin = (id, data) => {
         },
       });
     } catch (error) {
+      console.log("error", error);
       dispatch({
         type: "UPDATE_ADMIN_FAIL",
         payload: {
