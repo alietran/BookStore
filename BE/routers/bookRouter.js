@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/search-book', bookController.searchBook);
 
+
 router
   .route('/')
   .post(bookController.uploadBookPhoto, bookController.createBook)

@@ -30,7 +30,7 @@ import { Editor } from "@tinymce/tinymce-react";
 
 export default function OptionBook({ id, book }) {
   console.log("book", book);
-   const { authorList } = useSelector((state) => state.AuthorReducer);
+  const { authorList } = useSelector((state) => state.AuthorReducer);
   const { loadingUpdateBook } = useSelector((state) => state.BookReducer);
   const { cateList } = useSelector((state) => state.CateReducer);
   const classes = useStyles();
@@ -72,9 +72,9 @@ export default function OptionBook({ id, book }) {
     reader.onload = function (e) {
       // sau khi thực hiên xong lênh trên thì set giá trị có được
       setSrcImage(e.target.result);
+      formik.setFieldValue("image", e.target.result);
     };
     // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("image", file);
   };
 
   const [imageFiles, setImageFiles] = useState([]);
@@ -92,8 +92,6 @@ export default function OptionBook({ id, book }) {
 
     if (validImageFiles.length) {
       setImageFiles(validImageFiles);
-      formik.setFieldValue("gallery", e.target.files);
-
       // values.gallery = e.target.files;
       return;
     }
@@ -117,6 +115,7 @@ export default function OptionBook({ id, book }) {
           }
         };
         fileReader.readAsDataURL(file);
+        formik.setFieldValue("gallery", images);
       });
     }
     return () => {
@@ -151,8 +150,8 @@ export default function OptionBook({ id, book }) {
         return;
       }
       dispatch(updateBook(book._id, data));
-
-      resetForm();
+      console.log("data",data);
+      // resetForm();
     },
   });
 
@@ -176,9 +175,9 @@ export default function OptionBook({ id, book }) {
     if (isReadyEditCate) setOpen(false);
   };
 
-  const handleChangeAuthor = (event) =>{
+  const handleChangeAuthor = (event) => {
     setAuthor(event.target.value);
-  }
+  };
   const handleClickConfirm = () => {
     setOpenConfirm(true);
   };
