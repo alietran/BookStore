@@ -91,9 +91,9 @@ export default function CreateBook() {
     reader.onload = function (e) {
       // sau khi thực hiên xong lênh trên thì set giá trị có được
       setSrcImage(e.target.result);
+      formik.setFieldValue("image", e.target.result);
     };
     // Đem dữ liệu file lưu vào formik
-    formik.setFieldValue("image", file);
   };
 
   const [imageFiles, setImageFiles] = useState([]);
@@ -110,7 +110,6 @@ export default function CreateBook() {
     if (validImageFiles.length) {
       setImageFiles(validImageFiles);
 
-      values.gallery = e.target.files;
       return;
     }
   };
@@ -133,6 +132,7 @@ export default function CreateBook() {
           }
         };
         fileReader.readAsDataURL(file);
+        formik.setFieldValue("gallery", images);
       });
     }
     return () => {
@@ -178,9 +178,11 @@ export default function CreateBook() {
       if (loadingCreateBook) {
         return;
       }
+      console.log("data", data);
       dispatch(createBook(data));
+     resetForm();
+     setOpen(false);
 
-      // resetForm();
     },
   });
 

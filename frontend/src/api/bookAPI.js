@@ -6,16 +6,7 @@ const bookAPI = {
   },
   postCreateBook: (data) => {
     const path = `/v1/books`;
-    const formData = new FormData();
-    for (const key in data) {
-      formData.append(key, data[key]);
-      if (key === "gallery") {
-        for (let i = 0; i < data[key].length; i++) {
-          formData.append(key, data[key][i]);
-        }
-      }
-    }
-    return axiosClient.post(path, formData);
+    return axiosClient.post(path, data);
   },
 
   getDetailBook: (id) => {
@@ -28,16 +19,7 @@ const bookAPI = {
   },
   updateBook: (id, data) => {
     const path = `/v1/books/${id}`;
-    const formData = new FormData();
-    for (const key in data) {
-      formData.append(key, data[key]);
-      if (key === "gallery") {
-        for (let i = 0; i < data[key].length; i++) {
-          formData.append(key, data[key][i]);
-        }
-      }
-    }
-    return axiosClient.patch(path, formData);
+    return axiosClient.patch(path, data);
   },
   search: (data) => {
     const path = `/v1/books/search-book/?search=${data}`;

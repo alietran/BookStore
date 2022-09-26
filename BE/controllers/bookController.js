@@ -6,6 +6,7 @@ const multer = require('multer');
 const AppError = require('../utils/appError');
 const fullTextSearch = require('fulltextsearch');
 var fullTextSearchVi = fullTextSearch.vi;
+const cloudinary = require('../utils/cloudinary');
 
 const made = mkdirp.sync('./public/img/books');
 
@@ -39,59 +40,72 @@ exports.uploadBookPhoto = upload.fields([
 // exports.uploadBookPhoto = upload.single('image');
 exports.getDetailBook = factory.getOne(Book);
 exports.updateBook = catchAsync(async (req, res, next) => {
-  const { gallery, image } = req.files;
-  let newArray = [];
-  gallery?.map((files) => {
-    const path = files.path.replace(/\\/g, '/').substring('public'.length);
-    const urlGallery = `http://localhost:8080${path}`;
-    newArray.push(urlGallery);
-  });
-
-  if (req.files.gallery) req.body.gallery = newArray;
-  if (image !== undefined) {
-    const path = image[0]?.path.replace(/\\/g, '/').substring('public'.length);
-    const urlImage = `http://localhost:8080${path}`;
-
-    if (req.files.image) req.body.image = urlImage;
-  }
-
+  const { gallery, image } = req.body;
   const _id = req.params.id;
 
-  const doc = await Book.findByIdAndUpdate(_id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  // console.log('gallery', gallery);
+  let arrayGallery = [];
+  if (gallery.length > 0 && image !== '') {
+    gallery.map(async (item) => {
+      // console.log('item ', item);
+      const uploadedResponse = await cloudinary.uploader.upload(item, {
+        upload_preset: 'image_book',
+      });
+      arrayGallery.push(uploadedResponse.secure_url);
+      if (arrayGallery.length === gallery.length) {
+        req.body.gallery = arrayGallery;
+        const uploadedImage = await cloudinary.uploader.upload(image, {
+          upload_preset: 'image_book',
+        });
+        req.body.image = uploadedImage.secure_url;
+        const doc = await Book.findByIdAndUpdate(_id, req.body);
 
-  if (!doc) {
-    return next(new AppError('No document found with that ID', 404));
+        res.status(201).json({
+          status: 'success',
+          result: doc.length,
+          data: doc,
+        });
+      }
+
+      // req.body.image = uploadedImage.secure_url;
+      // arrayGallery.push(uploadedResponse.secure_url);
+      // console.log('uploadedResponse.secure_url ', uploadedResponse.secure_url);
+
+      // if (arrayGallery.length === gallery.length - 1) {
+      //   console.log('arrayGallery.length ', arrayGallery);
+      //   res.status(200).json({
+      //     status: 'success',
+      //   });
+      // }
+    });
   }
-
-  res.status(200).json({
-    status: 'success',
-    result: doc.length,
-    data: doc,
-  });
 });
 
 exports.createBook = catchAsync(async (req, res, next) => {
-  const { gallery, image } = req.files;
-  let newArray = [];
-  gallery?.map((files) => {
-    const path = files.path.replace(/\\/g, '/').substring('public'.length);
-    const urlGallery = `http://localhost:8080${path}`;
-    newArray.push(urlGallery);
-  });
-  if (req.files.gallery) req.body.gallery = newArray;
-  const path = image[0].path.replace(/\\/g, '/').substring('public'.length);
-  const urlImage = `http://localhost:8080${path}`;
-  if (req.files.image) req.body.image = urlImage;
-  const doc = await Book.create(req.body);
-  console.log('doc', doc);
-  res.status(201).json({
-    status: 'success',
-    result: doc.length,
-    data: doc,
-  });  
+  const { gallery, image } = req.body;
+  let arrayGallery = [];
+  if (gallery.length > 0 && image !== '') {
+    gallery.map(async (item, index) => {
+      const uploadedResponse = await cloudinary.uploader.upload(item, {
+        upload_preset: 'image_book',
+      });
+      arrayGallery.push(uploadedResponse.secure_url);
+      if (arrayGallery.length === gallery.length) {
+        req.body.gallery = arrayGallery;
+        const uploadedImage = await cloudinary.uploader.upload(image, {
+          upload_preset: 'image_book',
+        });
+        req.body.image = uploadedImage.secure_url;
+        const doc = await Book.create(req.body);
+
+        res.status(201).json({
+          status: 'success',
+          result: doc.length,
+          data: doc,
+        });
+      }
+    });
+  }
 });
 
 exports.deleteBook = factory.deleteOne(Book);
@@ -99,12 +113,11 @@ exports.getAllBook = factory.getAll(Book);
 
 exports.searchBook = catchAsync(async (req, res, next) => {
   const { search } = req.query;
-    // console.log("search", search)
-  var filter = {}; 
+  // console.log("search", search)
+  var filter = {};
   if (search != '') {
     filter.name = new RegExp(fullTextSearchVi(search), 'i');
   }
-
 
   await Book.find(filter).then((records) => {
     res.status(200).json({
