@@ -17,6 +17,8 @@ router.patch(
 );
 
 router.route('/').get(userController.getAllUser);
+router.route('/:id').put(userController.updateUser);
+
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {

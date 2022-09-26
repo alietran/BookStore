@@ -8,14 +8,14 @@ import componentsOverride from "./theme/overrides";
 import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import UserManager from "./pages/Admin/UserManager/UserManager";
-
+import Swal from "sweetalert2";
 import { useEffect, useMemo, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import LoginAdmin from "./pages/Auth/Login";
 import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
 import AuthorManager from "./pages/Admin/AuthorManager/AuthorManager";
-
+import { useHistory } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
 
@@ -61,9 +61,10 @@ function App() {
       typography,
       shadows,
       customShadows,
-    }), 
+    }),
     []
   );
+  const history = useHistory();
   const dispatch = useDispatch();
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
@@ -85,19 +86,26 @@ function App() {
         })
         .then((resObject) => {
           console.log("resObject", resObject);
-          localStorage.setItem("user", JSON.stringify(resObject));
-          localStorage.setItem("token", resObject.token);
           setUser(resObject.user);
-          dispatch({
-            type: "LOGIN_USER",
-            payload: {
-              data: resObject,
-            },
-          });
+          if (resObject?.user.active) {
+            dispatch({
+              type: "LOGIN_USER",
+              payload: {
+                data: resObject,
+              },
+            });
+            localStorage.setItem("user", JSON.stringify(resObject));
+            localStorage.setItem("token", resObject.token);
+          } else {
+            // Swal.fire({
+            //   icon: "error",
+            //   title: "Lỗi...",
+            //   text: "Tài khoản của bạn đã bị khóa!",
+            // });
+            // history.push("/login");
+          }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     };
     getUser();
   }, []);

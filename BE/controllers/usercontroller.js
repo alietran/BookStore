@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const cloudinary = require('../utils/cloudinary');
 exports.getAllUser = factory.getAll(User);
-
+exports.updateUser = factory.updateOne(User);
+// 
 exports.createUser = catchAsync(async (req, res, next) => {
   const { user } = req.body;
   User.findOne(
@@ -21,6 +22,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       console.log('user', user);
       let customPhoneNumber = '0' + user.phoneNumber.slice(3);
       console.log('customPhoneNumber', customPhoneNumber);
+      //Kiểm tra tồn tại của người dùng
       if (!userOTP) {
         newUser = new User({
           active: true,
@@ -138,6 +140,43 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     data: user,
   });
 });
+
+// exports.updateMe = catchAsync(async (req, res, next) => {
+//   // 2) Update user document
+//   // Get filtered name and email
+//   const filteredBody = filterObj(
+//     req.body,
+//     'fullName',
+//     'phoneNumber',
+//     'gender',
+//     'dateOfBirth',
+//     'avatar',
+//   );
+//   console.log('filteredBody', filteredBody);
+//   console.log('req.body', req.body);
+//   console.log('req.user.id', req.user.id);
+//   const uploadedResponse = await cloudinary.uploader.upload(
+//     filteredBody.avatar,
+//     {
+//       upload_preset: 'profile',
+//     }
+//   );
+//      filteredBody.avatar = uploadedResponse.secure_url;
+//   // const path = req.file?.path.replace(/\\/g, '/').substring('public'.length);
+//   // const urlImage = `http://localhost:8080${path}`;
+//   // if (req.file) filteredBody.avatar = urlImage;
+//   const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+//     new: true,
+//     runValidators: true,
+//   });
+//   res.status(200).json({
+//     status: 'success',
+//     result: user.length,
+//     data: user,
+//   });
+// });
+
+
 
 exports.getUserLoginOtp = catchAsync(async (req, res, next) => {
   const { phoneNumber } = req.body;

@@ -9,12 +9,13 @@ import { authentication } from "../../firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createUser } from "../../redux/action/userAction";
-
+import Swal from "sweetalert2";
 export default function Login() {
   const { errorLogin } = useSelector((state) => state.AuthReducer);
   const google = () => {
     window.open("http://localhost:8080/api/v1/users/google", "_self");
   };
+  const [errorLoginOTP, setErrorLoginOTP] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+84");
   const [activeError, setActiveError] = useState(false);
   const [expandForm, setExpandForm] = useState(false);
@@ -107,19 +108,29 @@ export default function Login() {
                 })
                 .then((resObject) => {
                   console.log("resObject", resObject);
-                  dispatch({
-                    type: "LOGIN_USER",
-                    payload: {
-                      data: resObject,
-                    },
-                  });
-                  localStorage.setItem("user", JSON.stringify(resObject));
-                  localStorage.setItem("token", resObject.token);
-                  if (resObject) {
+                  if (resObject?.user.active) {
+                    dispatch({
+                      type: "LOGIN_USER",
+                      payload: {
+                        data: resObject,
+                      },
+                    });
+                    localStorage.setItem("user", JSON.stringify(resObject));
+                    localStorage.setItem("token", resObject.token);
+                    if (resObject) {
+                      history.push("/");
+                    }
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Lỗi...",
+                      text: "Tài khoản của bạn đã bị khóa!",
+                    });
                     history.push("/");
                   }
                 })
                 .catch((err) => {
+                 
                   console.log("err", err);
                 });
             };
@@ -127,6 +138,7 @@ export default function Login() {
           }, 1000);
         })
         .catch((err) => {
+           setErrorLoginOTP(true);
           console.log("err", err);
         });
       console.log("OTP", otp);
@@ -282,7 +294,10 @@ export default function Login() {
                       type="text"
                       fullWidth
                       variant="standard"
+                      // error={Boolean(touched.password && errors.password)}
+                      // helperText={touched.password && errors.password}
                     />
+                    {errorLoginOTP ? <span className="text-red-600">OTP không đúng</span> : "" }
                     <div className="text-red-600 mt-16">Đã gửi OTP</div>
                   </>
                 )}
