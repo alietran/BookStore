@@ -17,7 +17,10 @@ import useStyles from "./style";
 import RatingItem from "../Rating/RatingItem";
 import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
 import paymentAPI from "../../../../api/paymentAPI";
-import { createRating } from "../../../../redux/action/ratingAction";
+import {
+  createRating,
+  resetRating,
+} from "../../../../redux/action/ratingAction";
 import Swal from "sweetalert2";
 import { Box } from "@mui/material";
 export default function OrderHistory() {
@@ -35,6 +38,7 @@ export default function OrderHistory() {
   };
   console.log("hadRating", hadRating);
   console.log("rating12", rating);
+  console.log("orderByUser", orderByUser);
   const dispatch = useDispatch();
   const history = useHistory();
   const [item, setItem] = useState("");
@@ -44,6 +48,7 @@ export default function OrderHistory() {
 
   useEffect(() => {
     if (successUpdateOrder) dispatch(getOrderByUser());
+    return () => dispatch(resetRating());
   }, [successUpdateOrder]);
 
   useEffect(() => {
@@ -58,6 +63,8 @@ export default function OrderHistory() {
       });
     }
   }, [createRatingDetail]);
+
+  // createRatingDetail;
   const [open, setOpen] = React.useState(false);
 
   const handleDoneOrder = (order) => {

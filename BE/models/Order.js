@@ -98,7 +98,7 @@ orderSchema.virtual('orderDetail', {
 orderSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
-    select: 'fullName phoneNumber email',
+    select: 'fullName phoneNumber email avatar',
   })
     .populate({
       path: 'promotion',

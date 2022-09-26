@@ -459,11 +459,12 @@ export default function ProductDetail(props) {
                       {ratingDetail?.data
                         .filter((item) => item.hidden === false)
                         .map((item, index) => {
+                          console.log("item", item);
                           return (
                             <div className="flex mb-3">
                               <div className="mr-3 ">
                                 <img
-                                  src="../../../../img/User_Circle.png"
+                                  src={item?.order?.user.avatar}
                                   alt="avatar"
                                   style={{ width: "50px", height: "50px" }}
                                 />
@@ -483,21 +484,25 @@ export default function ProductDetail(props) {
                                   )}
                                 </p>
                                 <p> {item.content}</p>
-                                <div className="mt-3 flex ">
-                                  {item?.imageRating?.map((img, index) => {
-                                    return (
-                                      <img
-                                        src={img}
-                                        alt=""
-                                        style={{
-                                          width: "80px",
-                                          height: "80px",
-                                          marginRight: "10px",
-                                        }}
-                                      />
-                                    );
-                                  })}
-                                </div>
+                                {item.imageRating[0] === "" ? (
+                                  ""
+                                ) : (
+                                  <div className="mt-3 flex ">
+                                    {item?.imageRating?.map((img, index) => {
+                                      return (
+                                        <img
+                                          src={img}
+                                          alt=""
+                                          style={{
+                                            width: "80px",
+                                            height: "80px",
+                                            marginRight: "10px",
+                                          }}
+                                        />
+                                      );
+                                    })}
+                                  </div>
+                                )}
                               </div>
                             </div>
                           );

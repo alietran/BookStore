@@ -62,6 +62,7 @@ import OptionRating from "./OptionRating/OptionRating";
 import { getAllRating, updateRating } from "../../../redux/action/ratingAction";
 import DoneIcon from "@mui/icons-material/Done";
 import { useStyles } from "./style";
+import CustomDialog from "../../../components/CustomDialog/CustomDialog";
 
 // ----------------------------------------------------------------------
 
@@ -418,14 +419,14 @@ export default function RatingManager() {
                         </Box>
                       </TableCell>
                       <TableCell align="left"></TableCell>
-                      <Dialog
+                      <CustomDialog
                         open={openConfirm}
-                        // onClose={handleCloseCnfirm}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
+                        handleClose={handleCancel}
+                        dialogSize="xs"
+                        overlayStyle={{ backgroundColor: "transparent" }}
                       >
                         <DialogTitle id="alert-dialog-title">
-                          {"Xóa phiếu nhập"}
+                          {"Duyệt đánh giá"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText id="alert-dialog-description">
@@ -446,7 +447,7 @@ export default function RatingManager() {
                             Đồng ý
                           </Button>
                         </DialogActions>
-                      </Dialog>
+                      </CustomDialog>
                     </TableRow>
                   );
                 })}

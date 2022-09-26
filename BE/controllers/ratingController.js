@@ -46,12 +46,15 @@ const filterObj = (obj, ...allowedField) => {
 exports.createRating = catchAsync(async (req, res, next) => {
   console.log('req', req.body[0].order);
   let arrayItems = [];
+  const itemNoImage = [];
   let count = 0;
   const orderStatus = await Order.findByIdAndUpdate(req.body[0].order, {
     status: 'Đã đánh giá',
   });
   console.log('orderStatus', orderStatus);
   req.body.map(async (item) => {
+    console.log('item.imageRating.length ', item.imageRating.length);
+    console.log('item.imageRating', item.imageRating);
     if (item.imageRating.length > 0) {
       //imageRating base64
       item.imageRating.map(async (image) => {
@@ -94,18 +97,19 @@ exports.createRating = catchAsync(async (req, res, next) => {
         });
         const rating = await Rating.insertMany(a);
         console.log('rating', rating);
-
-        // console.log('req.body[0].imageRating[0]', req.body[0].imageRating[0]);
       });
     } else {
-      const rating = await Rating.insertMany(req.body);
-      res.status(201).json({
-        status: 'success',
-        result: rating.length,
-        data: rating,
-      });
+      itemNoImage.push(item);
+      console.log('itemNoImage', itemNoImage);
+      const rating = await Rating.create(item);
+      console.log('rating', rating);
     }
   });
+   res.status(201).json({
+     status: 'success',
+     result: itemNoImage.length,
+     data: itemNoImage,
+   });
 });
 exports.updateRating = factory.updateOne(Rating);
 exports.bookRatingDetail = catchAsync(async (req, res, next) => {

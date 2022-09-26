@@ -127,6 +127,8 @@ export default function ReceiptManager() {
   const { successCreateReceipt, receiptList, successUpdateReceipt } =
     useSelector((state) => state.ReceiptReducer);
   console.log("receiptList", receiptList);
+  console.log("successCreateReceipt", successCreateReceipt);
+  console.log("successUpdateReceipt", successUpdateReceipt);
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();

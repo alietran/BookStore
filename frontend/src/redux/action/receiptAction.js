@@ -1,4 +1,4 @@
-
+ 
 import receiptAPI from "../../api/receiptAPI";
 
 export const getAllReceipt = () => {
@@ -35,6 +35,7 @@ export const createReceipt = (data) => {
         type: "CREATE_RECEIPT_REQUEST",
       });
       const result = await receiptAPI.createReceipt(data);
+      console.log("result", result );
       dispatch({
         type: "CREATE_RECEIPT_SUCCESS",
         payload: {

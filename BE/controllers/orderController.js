@@ -385,7 +385,7 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
 exports.getAllTicketByUser = catchAsync(async (req, res, next) => {
   // console.log('req.user', typeof req.user.id);
   let order = await Order.find()
-    .populate(['user', 'orderDetail'])  
+    .populate(['user', 'orderDetail'])
     .sort({ createdAt: -1 });
   // console.log('order', order);
   let data = order.filter((item) => item.user.id === req.user.id);

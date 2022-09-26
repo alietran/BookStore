@@ -126,6 +126,18 @@ export const RatingReducer = (state = stateDefault, action) => {
         loadingUpdateRating: false,
       };
     }
+    case "RESET_RATING": {
+      return {
+        ...state,
+        createRatingDetail: "",
+        loadingCreateRatingDetail: false,
+        errorCreateRatingDetail: null,
+
+        loadingUpdateOrder: false,
+        successUpdateOrder: "",
+        errorUpdateOrder: null,
+      };
+    }
     default:
       return { ...state };
   }

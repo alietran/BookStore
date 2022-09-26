@@ -9,7 +9,7 @@ import { updateOrder } from "../../redux/action/orderAction";
 
 export default function OrderShipperDetail() {
   const idOrder = useParams();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const history = useHistory();
   const { orderList } = useSelector((state) => state.OrderReducer);
   console.log("orderList", orderList);
@@ -167,16 +167,28 @@ export default function OrderShipperDetail() {
             ₫
           </p>
         </div>
-
-        <Button
-          variant="contained"
-          sx={{ margin: "20px" }}
-          onClick={() => {
-            handleChangeStatus(idOrder.orderId);
-          }}
-        >
-          Đã giao hàng
-        </Button>
+        {orderDetail[0].status === "Đang vận chuyển" ? (
+          <Button
+            variant="contained"
+            sx={{ margin: "20px" }}
+            onClick={() => {
+              handleChangeStatus(idOrder.orderId);
+            }}
+          >
+            Đã giao hàng
+          </Button>
+        ) : (
+          <Button
+          disabled
+            variant="contained"
+            sx={{ margin: "20px" }}
+            onClick={() => {
+              handleChangeStatus(idOrder.orderId);
+            }}
+          >
+            Đã giao hàng
+          </Button>
+        )}
       </Box>
     </div>
   );

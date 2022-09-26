@@ -109,3 +109,12 @@ export const getAllRating = () => {
       });
   };
 };
+
+
+export const resetRating = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "RESET_RATING",
+    });
+  };
+};

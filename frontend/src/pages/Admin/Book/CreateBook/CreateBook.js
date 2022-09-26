@@ -178,8 +178,9 @@ export default function CreateBook() {
       if (loadingCreateBook) {
         return;
       }
-      dispatch(createBook(data));
 
+      dispatch(createBook(data));
+      
       // resetForm();
     },
   });

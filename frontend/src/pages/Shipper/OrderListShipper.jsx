@@ -23,6 +23,36 @@ import moment from "moment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmailIcon from "@mui/icons-material/Email";
 import PropTypes from "prop-types";
+import Avatar from "@mui/material/Avatar";
+
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+  };
+}
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -109,13 +139,20 @@ export default function OrderListShipper() {
   const dispatch = useDispatch();
   const [valueBottom, setValueBottom] = React.useState(0);
   console.log("valueBottom", valueBottom);
-  const { orderList } = useSelector((state) => state.OrderReducer);
+  const { orderList, successUpdateOrder } = useSelector(
+    (state) => state.OrderReducer
+  );
   const shipper = JSON.parse(localStorage.getItem("shipper"));
   console.log("shipper", shipper);
   useEffect(() => {
     if (orderList === null) dispatch(getOrderList());
   }, [orderList]);
 
+    useEffect(() => {
+      if (successUpdateOrder) {
+        dispatch(getOrderList());
+      }
+    }, [successUpdateOrder]);
   const order = orderList?.data.filter(
     (item) => item.shipper?.id === shipper.user.id
   );
@@ -128,15 +165,15 @@ export default function OrderListShipper() {
     history.push(`/orderListShipper/${id}`);
   };
 
-const handleLogout = ()=>{
-  console.log("1414")
-   dispatch({ type: "LOGOUT_SHIPPER" });
-}
+  const handleLogout = () => {
+    console.log("1414");
+    dispatch({ type: "LOGOUT_SHIPPER" });
+  };
 
   return (
     <div>
       {" "}
-      <div className=" mx-auto text-center bg-white md:w-96 relative h-screen">
+      <div className=" mx-auto text-center bg-white md:w-96 relative h-max">
         {valueBottom === 0 ? (
           <Box>
             {" "}
@@ -187,140 +224,173 @@ const handleLogout = ()=>{
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                  {order?.map((orderDetailShip, index) => {
-                    return (
-                      <Box
-                        orderDetailShip={orderDetailShip}
-                        onClick={() => handleChangeDetail(orderDetailShip?.id)}
-                        sx={{
-                          maxWidth: 580,
-                          padding: "15px",
-                          margin: "15px",
-                          display: "flex",
-                          borderRadius: "10px",
-                          backgroundColor: "#f3f3f3",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <div className="flex justify-center">
-                          {" "}
-                          <div>
+                  {/* <div className="overflow-scroll"> */}
+                  <Box className="overflow-y-auto " sx={{ height: "31.2rem" }}>
+                    {order?.map((orderDetailShip, index) => {
+                      return (
+                        <Box
+                          orderDetailShip={orderDetailShip}
+                          onClick={() =>
+                            handleChangeDetail(orderDetailShip?.id)
+                          }
+                          sx={{
+                            maxWidth: 580,
+                            padding: "15px",
+                            margin: "8px",
+                            display: "flex",
+                            borderRadius: "10px",
+                            backgroundColor: "#f3f3f3",
+                            justifyContent: "space-between",
+                            "&:last-child": {
+                              marginBottom: "80px",
+                            },
+                          }}
+                        >
+                          <div className="flex justify-center">
                             {" "}
-                            <p>#{orderDetailShip?.id}</p>
-                            <p>
-                              {orderDetailShip?.address?.fullName} -{" "}
-                              {orderDetailShip?.address?.phoneNumber}
-                            </p>
+                            <div>
+                              {" "}
+                              <p>#{orderDetailShip?.id}</p>
+                              <p>
+                                {orderDetailShip?.address?.fullName} -{" "}
+                                {orderDetailShip?.address?.phoneNumber}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div>
-                          <p>
-                            {" "}
-                            {orderDetailShip?.totalPrice.toLocaleString()} ₫
-                          </p>
-                          <Label color="primary">
-                            {orderDetailShip?.status}
-                          </Label>
-                        </div>
-                      </Box>
-                    );
-                  })}
+                          <div>
+                            <p>
+                              {" "}
+                              {orderDetailShip?.totalPrice.toLocaleString()} ₫
+                            </p>
+                            <Label color="primary">
+                              {" "}
+                              {orderDetailShip?.status !== "Đang vận chuyển"
+                                ? "Đã giao hàng"
+                                : "Đang vận chuyển"}
+                              {/* {orderDetailShip?.status} */}
+                            </Label>
+                          </div>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                  {/* </div> */}
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  {order
-                    ?.filter((state) => state.status === "Đang vận chuyển")
-                    .map((orderDetailShip, index) => {
-                      return (
-                        <Box
-                          orderDetailShip={orderDetailShip}
-                          onClick={() =>
-                            handleChangeDetail(orderDetailShip?.id)
-                          }
-                          sx={{
-                            maxWidth: 580,
-                            padding: "15px",
-                            margin: "15px",
-                            display: "flex",
-                            borderRadius: "10px",
-                            backgroundColor: "#f3f3f3",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div className="flex justify-center">
-                            {" "}
-                            <div>
+                  <Box className="overflow-y-auto " sx={{ height: "31.2rem" }}>
+                    {order
+                      ?.filter((state) => state.status === "Đang vận chuyển")
+                      ?.map((orderDetailShip, index) => {
+                        return (
+                          <Box
+                            orderDetailShip={orderDetailShip}
+                            onClick={() =>
+                              handleChangeDetail(orderDetailShip?.id)
+                            }
+                            sx={{
+                              maxWidth: 580,
+                              padding: "15px",
+                              margin: "8px",
+                              display: "flex",
+                              borderRadius: "10px",
+                              backgroundColor: "#f3f3f3",
+                              justifyContent: "space-between",
+                              "&:last-child": {
+                                marginBottom: "80px",
+                              },
+                            }}
+                          >
+                            <div className="flex justify-center">
                               {" "}
-                              <p>#{orderDetailShip?.id}</p>
-                              <p>
-                                {orderDetailShip?.address?.fullName} -{" "}
-                                {orderDetailShip?.address?.phoneNumber}
-                              </p>
-                              <p></p>
+                              <div>
+                                {" "}
+                                <p>#{orderDetailShip?.id}</p>
+                                <p>
+                                  {orderDetailShip?.address?.fullName} -{" "}
+                                  {orderDetailShip?.address?.phoneNumber}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div>
-                            <p>
-                              {" "}
-                              {orderDetailShip?.totalPrice.toLocaleString()} ₫
-                            </p>
-                            <Label color="primary">
-                              {orderDetailShip?.status}
-                            </Label>
-                          </div>
-                        </Box>
-                      );
-                    })}
+                            <div>
+                              <p>
+                                {" "}
+                                {orderDetailShip?.totalPrice.toLocaleString()} ₫
+                              </p>
+                              <Label color="primary">
+                                {" "}
+                                {orderDetailShip?.status !== "Đang vận chuyển"
+                                  ? "Đã giao hàng"
+                                  : "Đang vận chuyển"}
+                                {/* {orderDetailShip?.status} */}
+                              </Label>
+                            </div>
+                          </Box>
+                        );
+                      })}
+                  </Box>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                  {order
-                    ?.filter((state) => state.status === "Đã giao hàng")
-                    .map((orderDetailShip, index) => {
-                      return (
-                        <Box
-                          orderDetailShip={orderDetailShip}
-                          onClick={() =>
-                            handleChangeDetail(orderDetailShip?.id)
-                          }
-                          sx={{
-                            maxWidth: 580,
-                            padding: "15px",
-                            margin: "15px",
-                            display: "flex",
-                            borderRadius: "10px",
-                            backgroundColor: "#f3f3f3",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <div className="flex justify-center">
-                            {" "}
-                            <div>
+                  <Box className="overflow-y-auto " sx={{ height: "31.2rem" }}>
+                    {" "}
+                    {order
+                      ?.filter(
+                        (state) =>
+                          state.status !== "Đang xử lý" &&
+                          state.status !== "Đang vận chuyển"
+                      )
+                      .map((orderDetailShip, index) => {
+                        return (
+                          <Box
+                            orderDetailShip={orderDetailShip}
+                            onClick={() =>
+                              handleChangeDetail(orderDetailShip?.id)
+                            }
+                            sx={{
+                              maxWidth: 580,
+                              padding: "15px",
+                              margin: "8px",
+                              display: "flex",
+                              borderRadius: "10px",
+                              backgroundColor: "#f3f3f3",
+                              justifyContent: "space-between",
+                              "&:last-child": {
+                                marginBottom: "80px",
+                              },
+                            }}
+                          >
+                            <div className="flex justify-center">
                               {" "}
-                              <p>#{orderDetailShip?.id}</p>
-                              <p>
-                                {orderDetailShip?.address?.fullName} -{" "}
-                                {orderDetailShip?.address?.phoneNumber}
-                              </p>
+                              <div>
+                                {" "}
+                                <p>#{orderDetailShip?.id}</p>
+                                <p>
+                                  {orderDetailShip?.address?.fullName} -{" "}
+                                  {orderDetailShip?.address?.phoneNumber}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div>
-                            <p>
-                              {" "}
-                              {orderDetailShip?.totalPrice.toLocaleString()} ₫
-                            </p>
-                            <Label color="primary">
-                              {orderDetailShip?.status}
-                            </Label>
-                          </div>
-                        </Box>
-                      );
-                    })}
+                            <div>
+                              <p>
+                                {" "}
+                                {orderDetailShip?.totalPrice.toLocaleString()} ₫
+                              </p>
+                              <Label color="primary">Đã giao hàng</Label>
+                            </div>
+                          </Box>
+                        );
+                      })}
+                  </Box>
                 </TabPanel>
               </Box>
             </Box>
           </Box>
         ) : (
-          <Box sx={{ backgroundColor: "#e7edef" }}>
-            <NavLink to="/shipper" style={{color: "white"}} onClick={handleLogout}>
+          <Box sx={{ backgroundColor: "#e7edef" }} className="h-screen" >
+            <NavLink
+              to="/shipper"
+              style={{ color: "white" }}
+              onClick={handleLogout}
+            >
               {" "}
               <MoreVertIcon className="absolute right-5 top-5 " />
             </NavLink>
@@ -332,20 +402,31 @@ const handleLogout = ()=>{
                 paddingTop: "90px",
               }}
             >
-              {" "}
-              <div className="w-36 h-36 relative m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex">
+              <div className="w-32 h-32 relative m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex  ">
+                <Avatar
+                  {...stringAvatar(shipper?.user.name)}
+                  sx={{
+                    width: 110,
+                    height: 110,
+                    margin: "0 auto",
+                    fontSize: "40px",
+                  }}
+                  // className="w-full h-full object-cover mt-5"
+                />
+              </div>{" "}
+              {/* <div className="w-36 h-36 relative m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex">
                 <label className="w-full h-full outline-none overflow-hidden rounded-full bottom-6 right-1.5 items-center justify-center absolute flex cursor-pointer  ">
                   <span className="overflow-hidden z-10 w-full h-full block  ">
                     <span className=" w-full h-full bg-cover inline-block">
                       <img
                         src="../../../../img/dk.svg"
                         alt="avatar"
-                        className="w-full h-full object-cover mt-5"
+                       
                       />
                     </span>
                   </span>
                 </label>
-              </div>
+              </div> */}
             </Box>
             <Box
               sx={{

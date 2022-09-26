@@ -50,7 +50,7 @@ export default function UserAccount() {
         var today = new Date();
         return value < today;
       }),
-    address: Yup.string().required("*Vui lòng nhập thông tin này"),
+    
   });
   const formik = useFormik({
     enableReinitialize: true,

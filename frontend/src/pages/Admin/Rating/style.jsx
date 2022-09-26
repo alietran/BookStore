@@ -3,13 +3,11 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles(() => {
   return {
     backgroundCellShow: {
-      backgroundColor: "#f8f8f8",
-      "& td": {
-        color: "white",
-      },
+      backgroundColor: "#f5f5f5",
+    
 
       "&:hover": {
-        backgroundColor: "#f8f8f8 !important",
+        backgroundColor: "#f5f5f5 !important",
       },
     },
     backgroundCellHidden: {

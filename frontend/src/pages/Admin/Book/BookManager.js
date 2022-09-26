@@ -89,8 +89,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) =>
-        _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis?.map((el) => el[0]);
@@ -106,26 +105,38 @@ export default function BookManager() {
   //   (state) => state.AuthReducer
   // );
 
+  const { successUpdateReceipt } = useSelector((state) => state.ReceiptReducer);
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  console.log("successUpdateReceipt", successUpdateReceipt);
   useEffect(() => {
     // get list user lần đầu
     if (!bookList) {
       dispatch(getBookList());
     }
     return () => dispatch(resetBookList());
-  }, []);
+  }, [bookList]);
 
   useEffect(() => {
-    if (successCreateBook || successUpdateBook || successDeleteBook) {
+    if (
+      successCreateBook ||
+      successUpdateBook ||
+      successDeleteBook ||
+      successUpdateReceipt
+    ) {
       dispatch(getBookList());
     }
-  }, [successCreateBook, successUpdateBook, successDeleteBook]);
+  }, [
+    successCreateBook,
+    successUpdateBook,
+    successDeleteBook,
+    successUpdateReceipt,
+  ]);
 
   useEffect(() => {
     if (successCreateBook) {
