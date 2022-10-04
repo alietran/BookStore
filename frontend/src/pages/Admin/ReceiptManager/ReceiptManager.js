@@ -291,12 +291,6 @@ export default function ReceiptManager() {
                   } = row;
                   console.log("receiptdetail", receiptdetail);
 
-                  // const amountRender = receiptdetail?.reduce(
-                  //   (collect, item) => {
-                  //     return [...collect, item.amount];
-                  //   }
-                  // );
-                  // console.log("amountRender", amountRender);
                   const isItemSelected = selected.indexOf(_id) !== -1;
                   return (
                     <TableRow

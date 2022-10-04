@@ -12,7 +12,13 @@ router.post('/', authController.protect, receiptController.createReceipt);
 router
   .route('/receiptRevenueStatisticsForWeek')
   .get(receiptController.receiptRevenueStatisticsForWeek);
-
+router
+  .route('/receiptRevenueStatisticsForYear')
+  .get(receiptController.receiptRevenueStatisticsForYear);
+  
+router
+  .route('/receiptRevenueStatisticsForMonth')
+  .get(receiptController.receiptRevenueStatisticsForMonth);
 
 router
   .route('/:id')

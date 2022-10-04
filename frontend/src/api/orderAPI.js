@@ -22,6 +22,12 @@ const orderAPI = {
   getOrderRSForWeek: () => {
     return axiosClient.get("v1/orders/orderRevenueStatisticsForWeek");
   },
+  getOrderRSForYear: () => {
+    return axiosClient.get("v1/orders/orderRevenueStatisticsForYear");
+  },
+  getOrderRSForMonth: () => {
+    return axiosClient.get("v1/orders/orderRevenueStatisticsForMonth");
+  },
 
   getOrderByUser: () => {
     return axiosClient.get("v1/orders/orderList");

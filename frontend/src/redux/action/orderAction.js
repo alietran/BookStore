@@ -129,6 +129,59 @@ export const getOrderRSForWeek = () => {
       });
   };
 };
+export const getOrderRSForMonth = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_RS_FOR_MONTH_REQUEST",
+    });
+    orderAPI
+      .getOrderRSForMonth()
+      .then((result) => {
+        console.log("result3534", result);
+        dispatch({
+          type: "GET_ORDER_RS_FOR_MONTH_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_ORDER_RS_FOR_MONTH_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
+export const getOrderRSForYear = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_RS_FOR_YEAR_REQUEST",
+    });
+    orderAPI
+      .getOrderRSForYear()
+      .then((result) => {
+        dispatch({
+          type: "GET_ORDER_RS_FOR_YEAR_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_ORDER_RS_FOR_YEAR_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+
 
 export const resetOrder = () => {
   return (dispatch) => {

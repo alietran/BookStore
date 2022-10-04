@@ -320,20 +320,28 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     res.status(400).json({ message: err });
   }
 });
+exports.getAllTicketByUser = catchAsync(async (req, res, next) => {
+  // console.log('req.user', typeof req.user.id);
+  let order = await Order.find()
+    .populate(['user', 'orderDetail'])
+    .sort({ createdAt: -1 });
+  // console.log('order', order);
+  let data = order.filter((item) => item.user.id === req.user.id);
+
+  res.status(200).json({
+    status: 'success',
+    result: data.length,
+    data,
+  });
+});
 
 exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
-  // const dayLabel = [];
-
   let dayLabel = [];
   for (var i = 0; i < 7; i++) {
     dayLabel[i] = moment().subtract(i, 'days').format('DD-MM-YYYY');
   }
-
-  // for (let i = 0; i < moment(i, 'e').startOf('week').isoWeekday(i); i--) {
-  //   dayLabel.push(moment().day(i).format('DD-MM-YYYY'));
-  // }
-  console.log('moment().day(-6).toDate()', moment().day(-6).toDate());
-  console.log('123', moment().startOf('week').isoWeekday(8).toDate());
+  // console.log('moment().day(-6).toDate()', moment().day(-6).toDate());
+  // console.log('123', moment().startOf('week').isoWeekday(8).toDate());
 
   let array = await Order.find({
     createdAt: {
@@ -341,6 +349,7 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
       $lt: moment().startOf('week').isoWeekday(8).toDate(),
     },
   }).sort({ createdAt: 1 });
+  // console.log('array', array);
   let result = _(array)
     .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
     .map((value, key) => ({ name: key, orderRevenue: value }))
@@ -364,6 +373,70 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
     }
     return result;
   };
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: result.length,
+      data: result,
+    });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
+  let today = new Date();
+  let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  // moment(firstDay).format('MM-YYYY');
+  // console.log('firstDay', moment(firstDay).format('MM-YYYY'));
+  // var date = new Date();
+  // var month = date.Month();
+  let array = await Order.find().sort({ createdAt: 1 });
+  // console.log('array', array);
+  // let key = new Date()
+  let result = _(array)
+    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+    .map((value, key) => ({
+      // name: moment(new Date(key)).format('MM'),
+      name: key,
+      orderRevenueDay: value,
+    }))
+    .value();
+  let result1 = _(result)
+    .groupBy((x) => moment(x.orderRevenueDay[0].createdAt).format('MM-YYYY'))
+    .map((value, key) => ({
+      // name: moment(new Date(key)).format('MM'),
+      name: key,
+      orderRevenue: value,
+    }))
+    .value();
+  let orderMonth = moment().toDate();
+  console.log(' orderMonth.getMonth()', moment(orderMonth).format('MM-YYYY'));
+  let orderMonthFormat = moment(orderMonth).format('MM-YYYY');
+
+  let orderByMonth = result1.filter((item) => item.name === orderMonthFormat);
+  console.log('orderByMonth', orderByMonth);
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: orderByMonth.length,
+      data: orderByMonth,
+    });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});
+exports.orderRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
+  const d = new Date();
+
+  let array = await Order.find().sort({ createdAt: 1 });
+  console.log('array', array);
+
+  let result = _(array)
+    .groupBy((x) => moment(x.createdAt).format('MM-YYYY'))
+    .map((value, key) => ({ name: key, orderRevenue: value }))
+    .value();
+
   // 👇️ All days in March of 2022
   // console.log(array);
 
@@ -380,19 +453,4 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: err });
   }
-});
-
-exports.getAllTicketByUser = catchAsync(async (req, res, next) => {
-  // console.log('req.user', typeof req.user.id);
-  let order = await Order.find()
-    .populate(['user', 'orderDetail'])
-    .sort({ createdAt: -1 });
-  // console.log('order', order);
-  let data = order.filter((item) => item.user.id === req.user.id);
-
-  res.status(200).json({
-    status: 'success',
-    result: data.length,
-    data,
-  });
 });

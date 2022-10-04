@@ -106,6 +106,58 @@ export const getReceiptRSForWeek = () => {
       });
   };
 };
+export const getReceiptRSForYear = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_RECEIPT_RS_FOR_YEAR_REQUEST",
+    });
+    receiptAPI
+      .getReceiptRSForYear()
+      .then((result) => {
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_YEAR_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_YEAR_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+export const getReceiptRSForMonth = () => {
+  console.log("1233225")
+  return (dispatch) => {
+    dispatch({
+      type: "GET_RECEIPT_RS_FOR_MONTH_REQUEST",
+    });
+    receiptAPI
+      .getReceiptRSForMonth()
+      .then((result) => {
+        console.log("resultresult", result);
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_MONTH_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_RECEIPT_RS_FOR_MONTH_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
 
 export const resetReceiptList = () => {
   return (dispatch) => {

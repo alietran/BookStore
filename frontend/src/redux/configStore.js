@@ -18,6 +18,7 @@ import { OrderReducer } from "./reducer/orderReducer";
 import { OrderDetailReducer } from "./reducer/orderDetailReducer";
 import { PaymentReducer } from "./reducer/paymentReducer";
 import { RatingReducer } from "./reducer/ratingReducer";
+import { LazyReducer } from "./reducer/lazyReducer";
 
 
 
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   OrderDetailReducer,
   PaymentReducer,
   RatingReducer,
+  LazyReducer,
 });
 
 export const store = createStore(rootReducer, applyMiddleware(reduxThunk));

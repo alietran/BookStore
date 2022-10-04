@@ -28,10 +28,10 @@ export default function LoginShipper() {
   };
 
   useEffect(() => {
-    if (loginSuccess) {
-     history.push("/orderListShipper");
+    if (loginSuccess !== null) {
+      history.push("/orderListShipper");
     }
-  });
+  }, [loginSuccess]);
 
   const LoginShipperSchema = yup.object().shape({
     email: yup.string().required("Vui lòng nhập địa chỉ email !"),

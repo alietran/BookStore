@@ -107,7 +107,7 @@ export default function UserManager() {
   // const { enqueueSnackbar } = useSnackbar();
   const { accountList, successUpdateAdmin, successDeleteUser, userRoleList } =
     useSelector((state) => state.AdminReducer);
-  console.log("userRoleList", userRoleList);
+  console.log("accountList", accountList);
   const { successUpdateUser } = useSelector((state) => state.UserReducer);
   const { successCreateAdmin, successUpdateUserCurrent } = useSelector(
     (state) => state.AuthReducer

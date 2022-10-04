@@ -145,6 +145,8 @@ export default function Header() {
     (state) => state.UserReducer
   );
 
+  // useEffect
+
   useEffect(() => {
     if (successUpdateUserCurrent ) {
       setUserLogin(JSON.parse(localStorage.getItem("user")));
@@ -364,7 +366,7 @@ export default function Header() {
                           <NavLink
                             to={`/productDetail/${value?._id}`}
                             className={classes.dataItem}
-                            target="_blank"
+                            // target=""
                             onClick={hanldeChangePage}
                           >
                             <p>{value.name}</p>

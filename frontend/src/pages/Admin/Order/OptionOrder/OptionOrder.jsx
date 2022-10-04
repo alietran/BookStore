@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Option from "../../../../components/OptionDetail&Delete/Option";
 
-export default function OptionOrder({ id, receipt, inventoryStatus }) {
+export default function OptionOrder({ id, order, shipper }) {
   // const { receiptId, bookId } = receipt;
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -29,7 +29,7 @@ export default function OptionOrder({ id, receipt, inventoryStatus }) {
 
   const onClickDelete = (id) => {};
 
-  const onClickDetail = (receipt) => {
+  const onClickDetail = (order) => {
     setOpen(true);
     history.push(`/admin/orders/detail/${id}`);
   };
@@ -42,8 +42,8 @@ export default function OptionOrder({ id, receipt, inventoryStatus }) {
     <Box>
       <Option
         onClickDelete={handleClickConfirm}
-        onClickDetail={(e) => onClickDetail(receipt)}
-        inventoryStatus={inventoryStatus}
+        onClickDetail={(e) => onClickDetail(order)}
+        shipper={shipper}
       ></Option>
 
       <Dialog

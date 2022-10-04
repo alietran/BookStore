@@ -105,7 +105,9 @@ export default function BookManager() {
   //   (state) => state.AuthReducer
   // );
 
-  const { successUpdateReceipt } = useSelector((state) => state.ReceiptReducer);
+  const { successUpdateReceipt, successCreateReceipt } = useSelector(
+    (state) => state.ReceiptReducer
+  );
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -114,13 +116,14 @@ export default function BookManager() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   console.log("successUpdateReceipt", successUpdateReceipt);
+  console.log("successCreateReceipt", successCreateReceipt);
   useEffect(() => {
     // get list user lần đầu
-    if (!bookList) {
+    if (!bookList ) {
       dispatch(getBookList());
     }
     return () => dispatch(resetBookList());
-  }, [bookList]);
+  }, [bookList ]);
 
   useEffect(() => {
     if (

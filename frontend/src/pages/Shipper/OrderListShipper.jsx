@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import Label from "../../components/Label";
 import { styled, alpha } from "@mui/material/styles";
@@ -24,7 +24,8 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EmailIcon from "@mui/icons-material/Email";
 import PropTypes from "prop-types";
 import Avatar from "@mui/material/Avatar";
-
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -80,6 +81,49 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
 }));
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "right",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  "& .MuiPaper-root": {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 80,
+    color:
+      theme.palette.mode === "light"
+        ? "rgb(55, 65, 81)"
+        : theme.palette.grey[300],
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    "& .MuiMenu-list": {
+      padding: "4px 0",
+    },
+    "& .MuiMenuItem-root": {
+      "& .MuiSvgIcon-root": {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      "&:active": {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity
+        ),
+      },
+    },
+  },
+}));
+
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "white",
 
@@ -142,17 +186,32 @@ export default function OrderListShipper() {
   const { orderList, successUpdateOrder } = useSelector(
     (state) => state.OrderReducer
   );
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+     history.push("/shipper");
+    setAnchorEl(null);
+   
+    dispatch({ type: "LOGOUT_SHIPPER" });
+  };
+  // const handleLogout = () => {
+  //   console.log("1414");
+
+  // };
   const shipper = JSON.parse(localStorage.getItem("shipper"));
   console.log("shipper", shipper);
   useEffect(() => {
     if (orderList === null) dispatch(getOrderList());
   }, [orderList]);
 
-    useEffect(() => {
-      if (successUpdateOrder) {
-        dispatch(getOrderList());
-      }
-    }, [successUpdateOrder]);
+  useEffect(() => {
+    if (successUpdateOrder) {
+      dispatch(getOrderList());
+    }
+  }, [successUpdateOrder]);
   const order = orderList?.data.filter(
     (item) => item.shipper?.id === shipper.user.id
   );
@@ -163,11 +222,6 @@ export default function OrderListShipper() {
 
   const handleChangeDetail = (id) => {
     history.push(`/orderListShipper/${id}`);
-  };
-
-  const handleLogout = () => {
-    console.log("1414");
-    dispatch({ type: "LOGOUT_SHIPPER" });
   };
 
   return (
@@ -385,16 +439,28 @@ export default function OrderListShipper() {
             </Box>
           </Box>
         ) : (
-          <Box sx={{ backgroundColor: "#e7edef" }} className="h-screen" >
-            <NavLink
-              to="/shipper"
-              style={{ color: "white" }}
-              onClick={handleLogout}
-            >
-              {" "}
-              <MoreVertIcon className="absolute right-5 top-5 " />
-            </NavLink>
-
+          <Box sx={{ backgroundColor: "#e7edef" }} className="h-screen">
+            {" "}
+            <>
+              <MoreVertIcon
+                onClick={handleClick}
+                className="absolute right-5 top-5 "
+                style={{ color: "white" }}
+              />
+              <StyledMenu
+                id="demo-customized-menu"
+                MenuListProps={{
+                  "aria-labelledby": "demo-customized-button",
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                // onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose} disableRipple>
+                  Đăng xuất
+                </MenuItem>
+              </StyledMenu>
+            </>
             <Box
               sx={{
                 backgroundColor: "#57b159",
@@ -439,7 +505,7 @@ export default function OrderListShipper() {
             >
               <Grid container spacing={2}>
                 <Grid item xs={2}>
-                  <PhoneIcon />
+                  <PersonIcon />
                 </Grid>
                 <Grid item xs={10}>
                   <div className="text-left leading-5">
@@ -460,7 +526,7 @@ export default function OrderListShipper() {
             >
               <Grid container spacing={2}>
                 <Grid item xs={2}>
-                  <PersonIcon />
+                  <PhoneIcon />
                 </Grid>
                 <Grid item xs={10}>
                   <div className="text-left leading-5">

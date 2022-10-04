@@ -10,6 +10,12 @@ router.get('/orderList', authController.protectUser, orderController.getAllTicke
 router
   .route('/orderRevenueStatisticsForWeek')
   .get(orderController.orderRevenueStatisticsForWeek);
+router
+  .route('/orderRevenueStatisticsForYear')
+  .get(orderController.orderRevenueStatisticsForYear);
+router
+  .route('/orderRevenueStatisticsForMonth')
+  .get(orderController.orderRevenueStatisticsForMonth);
 
 router
   .route('/:id')

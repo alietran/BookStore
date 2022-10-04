@@ -2,16 +2,16 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "./style.css"
+// import "swiper/css";
+// import "swiper/css/pagination";
+import  "./css/style.css"
 
 import { Navigation, Pagination,Autoplay } from 'swiper';
 
 export default function Carousel() {
   return (
-    <div>
-      <Swiper
+    <div className="content relative">
+      {/* <Swiper
         spaceBetween={30}
         centeredSlides={true}
         autoplay={{
@@ -41,7 +41,17 @@ export default function Carousel() {
         <SwiperSlide>
           <img className="w-full " src="../img/247158.jpg" />
         </SwiperSlide>
-      </Swiper>
+      </Swiper> */}
+
+      <div className="content__image">
+        <img src="./img/carousel.webp"/>
+      </div>
+      <div className="content__word absolute top">
+        <h3>Tri thức là</h3>
+        <h3>Sức mạnh</h3>
+      
+      <p>Có rất nhiều ...</p>
+      </div>
     </div>
   );
 }

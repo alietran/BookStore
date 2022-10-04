@@ -22,6 +22,15 @@ const stateDefault = {
   loadingOrderRSForWeek: false,
   errorOrderRSForWeek: null,
 
+  orderRSForMonth: null,
+  loadingOrderRSForMonth: false,
+  errorOrderRSForMonth: null,
+
+
+  orderRSForYear: null,
+  loadingOrderRSForYear: false,
+  errorOrderRSForYear: null,
+
   orderByUser: null,
   loadingOrderByUser: false,
   errorOrderByUser: null,
@@ -135,6 +144,48 @@ export const OrderReducer = (state = stateDefault, action) => {
         ...state,
         errorOrderRSForWeek: action.payload.error,
         loadingOrderRSForWeek: false,
+      };
+    }
+    case "GET_ORDER_RS_FOR_MONTH_REQUEST": {
+      return {
+        ...state,
+        loadingOrderRSForMonth: true,
+        errorOrderRSForMonth: null,
+      };
+    }
+    case "GET_ORDER_RS_FOR_MONTH_SUCCESS": {
+      return {
+        ...state,
+        orderRSForMonth: action.payload.data,
+        loadingOrderRSForMonth: false,
+      };
+    }
+    case "GET_ORDER_RS_FOR_MONTH_FAIL": {
+      return {
+        ...state,
+        errorOrderRSForMonth: action.payload.error,
+        loadingOrderRSForMonth: false,
+      };
+    }
+    case "GET_ORDER_RS_FOR_YEAR_REQUEST": {
+      return {
+        ...state,
+        loadingOrderRSForYear: true,
+        errorOrderRSForYear: null,
+      };
+    }
+    case "GET_ORDER_RS_FOR_YEAR_SUCCESS": {
+      return {
+        ...state,
+        orderRSForYear: action.payload.data,
+        loadingOrderRSForYear: false,
+      };
+    }
+    case "GET_ORDER_RS_FOR_YEAR_FAIL": {
+      return {
+        ...state,
+        errorOrderRSForYear: action.payload.error,
+        loadingOrderRSForYear: false,
       };
     }
     case "GET_ORDER_BY_USER_REQUEST": {

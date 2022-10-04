@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route } from "react-router";
 import { NavLink, useHistory } from "react-router-dom";
 import "antd/dist/antd.css";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
 import style from "./AdminTemplate.module.css";
+import ReviewsIcon from "@mui/icons-material/Reviews";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import TheatersIcon from "@mui/icons-material/Theaters";
+import DiscountIcon from "@mui/icons-material/Discount";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import GroupsIcon from "@mui/icons-material/Groups";
+import BookIcon from "@mui/icons-material/Book";
 import { Layout, Menu, Breadcrumb, Dropdown } from "antd";
 import {
   DesktopOutlined,
@@ -145,18 +151,18 @@ const AdminTemplate = (props) => {
               {userLogin.user.idRole.roleName === "Admin" ? (
                 <>
                   {" "}
-                  <Menu.Item key="0" icon={<UserOutlined />}>
+                  <Menu.Item key="0" icon={<EqualizerIcon />}>
                     <NavLink to="/admin/overview">Tổng quan</NavLink>
                   </Menu.Item>
                   <Menu.Item key="1" icon={<UserOutlined />}>
                     <NavLink to="/admin/users">Quản lý người dùng</NavLink>
                   </Menu.Item>
-                  <Menu.Item key="8" icon={<UserOutlined />}>
+                  <Menu.Item key="8" icon={<ReceiptLongIcon />}>
                     <NavLink to="/admin/receipts/list">
                       Quản lý phiếu nhập
                     </NavLink>
                   </Menu.Item>
-                  <Menu.Item key="7" icon={<ReceiptIcon />}>
+                  <Menu.Item key="7" icon={<BookIcon />}>
                     <NavLink to="/admin/books">Sách</NavLink>
                   </Menu.Item>
                   <Menu.Item key="2" icon={<CategoryIcon />}>
@@ -166,19 +172,20 @@ const AdminTemplate = (props) => {
                     <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
                   </Menu.Item>
                   {/* </SubMenu> */}
-                  <Menu.Item key="4" icon={<HailIcon />}>
+
+                  <Menu.Item key="4" icon={<GroupsIcon />}>
                     <NavLink to="/admin/shippers">Shipper</NavLink>
                   </Menu.Item>
                   <Menu.Item key="5" icon={<ReceiptIcon />}>
                     <NavLink to="/admin/authors">Tác giả</NavLink>
                   </Menu.Item>
-                  <Menu.Item key="6" icon={<ReceiptIcon />}>
+                  <Menu.Item key="6" icon={<DiscountIcon />}>
                     <NavLink to="/admin/promotions">Khuyến mãi</NavLink>
                   </Menu.Item>
                   <Menu.Item key="9" icon={<ReceiptIcon />}>
                     <NavLink to="/admin/orders">Đơn hàng</NavLink>
                   </Menu.Item>
-                  <Menu.Item key="10" icon={<ReceiptIcon />}>
+                  <Menu.Item key="10" icon={<ReviewsIcon />}>
                     <NavLink to="/admin/rating">Đánh giá</NavLink>
                   </Menu.Item>
                 </>
@@ -221,7 +228,6 @@ const AdminTemplate = (props) => {
               style={{ padding: 0, backgroundColor: "white " }}
             >
               <div className="text-right pr-10 pt-1">{operations}</div>
-            
             </Header>
             <Content style={{ margin: "20px 16px" }}>
               {/* <Breadcrumb style={{ margin: "16px 0" }}>

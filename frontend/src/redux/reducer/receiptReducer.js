@@ -18,6 +18,14 @@ const stateDefault = {
   receiptRSForWeek: null,
   loadingReceiptRSForWeek: false,
   errorReceiptRSForWeek: null,
+
+  receiptRSForMonth: null,
+  loadingReceiptRSForMonth: false,
+  errorReceiptRSForMonth: null,
+
+  receiptRSForYear: null,
+  loadingReceiptRSForYear: false,
+  errorReceiptRSForYear: null,
 };
 
 export const ReceiptReducer = (state = stateDefault, action) => {
@@ -113,6 +121,48 @@ export const ReceiptReducer = (state = stateDefault, action) => {
         ...state,
         errorReceiptRSForWeek: action.payload.error,
         loadingReceiptRSForWeek: false,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_YEAR_REQUEST": {
+      return {
+        ...state,
+        loadingReceiptRSForYear: true,
+        errorReceiptRSForYear: null,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_YEAR_SUCCESS": {
+      return {
+        ...state,
+        receiptRSForYear: action.payload.data,
+        loadingReceiptRSForYear: false,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_YEAR_FAIL": {
+      return {
+        ...state,
+        errorReceiptRSForYear: action.payload.error,
+        loadingReceiptRSForYear: false,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_MONTH_REQUEST": {
+      return {
+        ...state,
+        loadingReceiptRSForMonth: true,
+        errorReceiptRSForMonth: null,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_MONTH_SUCCESS": {
+      return {
+        ...state,
+        receiptRSForMonth: action.payload.data,
+        loadingReceiptRSForMonth: false,
+      };
+    }
+    case "GET_RECEIPT_RS_FOR_MONTH_FAIL": {
+      return {
+        ...state,
+        errorReceiptRSForMonth: action.payload.error,
+        loadingReceiptRSForMonth: false,
       };
     }
     case "RESET_RECEIPT": {

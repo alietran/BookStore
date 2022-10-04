@@ -281,6 +281,7 @@ export default function OrderManager() {
                     createdAt,
                     paymentMethod,
                     totalPrice,
+                    shipper
                   } = row;
                   const isItemSelected =
                     selected.indexOf(address.fullName) !== -1;
@@ -333,7 +334,7 @@ export default function OrderManager() {
                               : status === "Đã giao hàng"
                               ? "success"
                               : status === "Đã nhận"
-                              ? "success"                             
+                              ? "success"
                               : status === "Đã đánh giá"
                               ? "warning"
                               : "error"
@@ -364,7 +365,7 @@ export default function OrderManager() {
                       </TableCell>
 
                       <TableCell align="center">
-                        <OptionOrder id={_id} order={row} />
+                        <OptionOrder id={_id} order={row} shipper={shipper} />
                       </TableCell>
                     </TableRow>
                   );

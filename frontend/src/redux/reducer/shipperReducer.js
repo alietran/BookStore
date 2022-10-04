@@ -144,7 +144,8 @@ export const ShipperReducer = (state = stateDefault, action) => {
       localStorage.removeItem("shipper");
       localStorage.removeItem("shipper_token");
       return {
-        ...state
+        ...state,
+        loginSuccess:null,
       };
     }
     case "RESET_SHIPPER": {

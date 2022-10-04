@@ -102,3 +102,68 @@ exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
     res.status(400).json({ message: err });
   }
 });
+exports.receiptRevenueStatisticsForMonth = catchAsync(
+  async (req, res, next) => {
+    let today = new Date();
+    let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+    let array = await Receipt.find().sort({ createdAt: 1 });
+   
+    let result = _(array)
+      .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+      .map((value, key) => ({
+      
+        name: key,
+        receiptRevenue: value,
+      }))
+      .value();
+    let result1 = _(result)
+      .groupBy((x) => moment(x.receiptRevenue[0].createdAt).format('MM-YYYY'))
+      .map((value, key) => ({
+        // name: moment(new Date(key)).format('MM'),
+        name: key,
+        receiptRevenue: value,
+      }))
+      .value();
+    let receiptMonth = moment().toDate();
+    console.log(
+      ' receiptMonth.getMonth()',
+      moment(receiptMonth).format('MM-YYYY')
+    );
+    let receiptMonthFormat = moment(receiptMonth).format('MM-YYYY');
+
+    let receiptByMonth = result1.filter(
+      (item) => item.name === receiptMonthFormat
+    );
+    console.log('receiptByMonth', receiptByMonth);
+    try {
+      res.status(200).json({
+        status: 'success',
+        result: receiptByMonth.length,
+        data: receiptByMonth,
+      });
+    } catch (err) {
+      res.status(400).json({ message: err });
+    }
+  }
+);
+
+exports.receiptRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
+  let array = await Receipt.find().sort({ createdAt: 1 });
+    console.log('array', array);
+  let result = _(array)
+    .groupBy((x) => moment(x.createdAt).format('MM-YYYY'))
+    .map((value, key) => ({ name: key, receiptRevenue: value }))
+    .value();
+
+  try {
+    res.status(200).json({
+      status: 'success',
+      result: result.length,
+      data: result,
+    });
+  } catch (err) {
+    res.status(400).json({ message: err });
+  }
+});

@@ -175,17 +175,28 @@ export default function RatingManager() {
     setOrderBy(property);
   };
 
-  const handleAccept = () => {};
-  const handleClick = (event, name) => {
+  const handleClick = (id) => {
+    console.log("id352", id);
     setOpenConfirm(true);
+    dispatch(
+      updateRating(id, {
+        active: true,
+      })
+    );
   };
+  // const handleCloseConfirm = (id) => {
+  //   console.log("id2424", id);
 
+  //   setOpenConfirm(false);
+
+  //   // onClickDelete(id);
+  // };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleClickHideRating = (_id) => {
-    console.log("id", _id);
+    console.log("idwe", _id);
     dispatch(
       updateRating(_id, {
         hidden: true,
@@ -201,17 +212,7 @@ export default function RatingManager() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-  const handleCloseConfirm = (id) => {
-    console.log("id", id);
-    dispatch(
-      updateRating(id, {
-        active: true,
-      })
-    );
-    setOpenConfirm(false);
 
-    // onClickDelete(id);
-  };
   const handleCancel = () => {
     setOpenConfirm(false);
   };
@@ -224,6 +225,7 @@ export default function RatingManager() {
     getComparator(order, orderBy),
     filterName
   );
+  console.log("filteredUsers", filteredUsers);
 
   const isUserNotFound = ratinglist?.result === 0;
 
@@ -294,9 +296,11 @@ export default function RatingManager() {
               {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
+                  console.log("row", row);
                   const {
                     _id,
                     order,
+                    id,
                     active,
                     status,
                     content,
@@ -308,6 +312,7 @@ export default function RatingManager() {
                   } = row;
                   console.log("hidden", "dat_" + hidden);
                   console.log("row", row);
+                  console.log("id12", id);
                   // const isItemSelected =
                   //   selected.indexOf(address.fullName) !== -1;
 
@@ -388,66 +393,96 @@ export default function RatingManager() {
                           {active ? (
                             ""
                           ) : (
-                            <Tooltip
-                              // TransitionComponent={Zoom}
-                              title="Duyệt"
-                              arrow
-                            >
-                              <IconButton
-                                // onClick={onClickDetail}
-                                sx={{
-                                  "&:hover": {
-                                    backgroundColor: "rgba(255, 72, 66, 0.08)",
-                                    padding: "8px",
-                                    borderRadius: "50%",
-                                  },
-                                }}
+                            <>
+                              {" "}
+                              <Tooltip
+                                // TransitionComponent={Zoom}
+                                title="Duyệt"
+                                arrow
                               >
-                                <DoneIcon
-                                  onClick={() => {
-                                    handleClick(_id);
-                                  }}
-                                  className="text-blue-500"
+                                <IconButton
+                                  onClick={() => handleClick(_id)}
                                   sx={{
-                                    fontSize: 32,
-                                    color: "green",
+                                    "&:hover": {
+                                      backgroundColor:
+                                        "rgba(255, 72, 66, 0.08)",
+                                      padding: "8px",
+                                      borderRadius: "50%",
+                                    },
                                   }}
-                                />
-                              </IconButton>
-                            </Tooltip>
-                          )}
-                        </Box>
-                      </TableCell>
-                      <TableCell align="left"></TableCell>
-                      <CustomDialog
-                        open={openConfirm}
-                        handleClose={handleCancel}
-                        dialogSize="xs"
-                        overlayStyle={{ backgroundColor: "transparent" }}
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {"Duyệt đánh giá"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-description">
-                            Bạn chắc chắn duyệt đánh giá này.
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleCancel}>Hủy</Button>
-                          <Button
-                            onClick={() => {
-                              handleCloseConfirm(_id);
-                            }}
-                            autoFocus
-                            sx={{
-                              textTransform: "none !important",
+                                >
+                                  <DoneIcon
+                                    className="text-blue-500"
+                                    sx={{
+                                      fontSize: 32,
+                                      color: "green",
+                                    }}
+                                  />
+                                </IconButton>
+                                {/* <CustomDialog
+                            open={openConfirm}
+                            handleClose={handleCancel}
+                            dialogSize="xs"
+                            overlayStyle={{
+                              backgroundColor: "transparent",
                             }}
                           >
-                            Đồng ý
-                          </Button>
-                        </DialogActions>
-                      </CustomDialog>
+                            <DialogTitle id="alert-dialog-title">
+                              {"Duyệt đánh giá"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Bạn chắc chắn duyệt đánh giá này.
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleCancel}>Hủy</Button>
+                              <Button
+                                onClick={() => {
+                                  handleCloseConfirm(_id);
+                                }}
+                                autoFocus
+                                sx={{
+                                  textTransform: "none !important",
+                                }}
+                              >
+                                Đồng ý
+                              </Button>
+                            </DialogActions>
+                          </CustomDialog> */}
+                              </Tooltip>
+                            </>
+                          )}
+                          {/* {id} */}
+
+                          {/* <Dialog
+                            open={openConfirm}
+                            // onClose={handleCloseCnfirm}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Xóa thể loại"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Bạn chắc chắn muốn xóa NCC này.
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleCancel}>Hủy</Button>
+                              <Button onClick={()=>handleCloseConfirm(id)} autoFocus>
+                                Đồng ý
+                              </Button>
+                            </DialogActions>
+                          </Dialog> */}
+                        </Box>
+                      </TableCell>
+                      
+                      <TableCell align="left">
+                        {" "}
+                       
+                      </TableCell>
                     </TableRow>
                   );
                 })}

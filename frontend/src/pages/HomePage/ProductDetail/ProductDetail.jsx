@@ -85,13 +85,19 @@ export default function ProductDetail(props) {
 
   console.log("errorAddCart", errorAddCart);
 
-  useEffect(() => {
-    dispatch(getDetailBook(id));
-  }, []);
+
 
   useEffect(() => {
+    if (id) {
+      dispatch(getDetailBook(id));
+    }
+  }, [id]);
+
+  useEffect(() => {
+     if (id) {
     dispatch(getRatingDetail(id));
-  }, []);
+     }
+  }, [id]);
 
   console.log("ratingDetail,", ratingDetail);
   //  const ratingMovie = totalReview / totalReviewer;
@@ -101,13 +107,13 @@ export default function ProductDetail(props) {
   
    const ratingMovie = totalReview / ratingDetail?.result;
    console.log("ratingMovie,", ratingMovie);
-  const [imageURL, setImageURL] = useState(successDetailBook?.data.gallery[0]);
+  const [imageURL, setImageURL] = useState(successDetailBook?.data.image);
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
 
   //  console.log("sliderImg", sliderImg);
 
-  console.log("successDetailBook", successDetailBook?.data.gallery[0]);
+  console.log("successDetailBook", successDetailBook?.data.image);
   const bookDetail = successDetailBook?.data;
 
   console.log("bookDetail", bookDetail);
@@ -457,7 +463,7 @@ export default function ProductDetail(props) {
                   <TabPanel value="3">
                     <div>
                       {ratingDetail?.data
-                        .filter((item) => item.hidden === false)
+                        .filter((item) => item.hidden === false && item.active === true )
                         .map((item, index) => {
                           console.log("item", item);
                           return (

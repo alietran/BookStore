@@ -23,6 +23,12 @@ const receiptAPI = {
   getReceiptRSForWeek: () => {
     return axiosClient.get("v1/receipts/receiptRevenueStatisticsForWeek");
   },
+  getReceiptRSForYear: () => {
+    return axiosClient.get("v1/receipts/receiptRevenueStatisticsForYear");
+  },
+  getReceiptRSForMonth: () => {
+    return axiosClient.get("v1/receipts/receiptRevenueStatisticsForMonth");
+  },
 };
 
 export default receiptAPI;
