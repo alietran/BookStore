@@ -1,5 +1,6 @@
 const factory = require('../controllers/handlerFactory');
 const Book = require('../models/Book');
+const OrderDetail = require('../models/OrderDetail');
 const catchAsync = require('../utils/catchAsync');
 const mkdirp = require('mkdirp');
 const multer = require('multer');
@@ -7,6 +8,8 @@ const AppError = require('../utils/appError');
 const fullTextSearch = require('fulltextsearch');
 var fullTextSearchVi = fullTextSearch.vi;
 const cloudinary = require('../utils/cloudinary');
+const moment = require('moment');
+const _ = require('lodash');
 
 const made = mkdirp.sync('./public/img/books');
 
@@ -125,5 +128,53 @@ exports.searchBook = catchAsync(async (req, res, next) => {
       result: records.length,
       data: records,
     });
+  });
+});
+
+exports.latestBook = catchAsync(async (req, res, next) => {
+  let doc = await Book.find()
+    .sort([['_id', -1]])
+    .limit(8);
+
+  res.status(200).json({
+    status: 'success',
+    result: doc.length,
+    data: doc,
+  });
+});
+
+exports.bestSellerBook = catchAsync(async (req, res, next) => {
+  var now = moment();
+  var monday = now.clone().weekday(1);
+  var sunday = now.clone().weekday(7);
+
+  const array = await OrderDetail.find({
+    createdAt: {
+      $gte: monday.format('YYYY-MM-DD'),
+      $lt: sunday.format('YYYY-MM-DD'),
+    },
+  });
+
+  let doc = _(array)
+    .groupBy((x) => x.book.id)
+    .map((value, key) => ({ name: key, book: value }))
+    .value();
+
+  let dat = [];
+
+  doc.map((item, index) => {
+    let quantity = item.book.reduce(
+      (total, item1) => (total += item1.quantity),
+      0
+    );
+
+    dat.push({ book: item.book[0].book, quantity });
+    // return [...item, quantity];
+    // doc[index] = [...doc[index], 'dat'];
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: dat.sort((a, b) => b.quantity - a.quantity).splice(0,4),
   });
 });
