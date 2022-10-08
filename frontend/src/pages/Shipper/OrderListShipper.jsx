@@ -192,9 +192,9 @@ export default function OrderListShipper() {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
-     history.push("/shipper");
+    history.push("/shipper");
     setAnchorEl(null);
-   
+
     dispatch({ type: "LOGOUT_SHIPPER" });
   };
   // const handleLogout = () => {
@@ -316,12 +316,24 @@ export default function OrderListShipper() {
                               {" "}
                               {orderDetailShip?.totalPrice.toLocaleString()} ₫
                             </p>
-                            <Label color="primary">
-                              {" "}
-                              {orderDetailShip?.status !== "Đang vận chuyển"
-                                ? "Đã giao hàng"
-                                : "Đang vận chuyển"}
-                              {/* {orderDetailShip?.status} */}
+                            <Label
+                              variant="ghost"
+                              color={
+                                orderDetailShip?.status === "Đang xử lý"
+                                  ? "default"
+                                  : orderDetailShip?.status ===
+                                    "Đang vận chuyển"
+                                  ? "info"
+                                  : orderDetailShip?.status === "Đã giao hàng"
+                                  ? "success"
+                                  : orderDetailShip?.status === "Đã nhận"
+                                  ? "success"
+                                  : orderDetailShip?.status === "Đã đánh giá"
+                                  ? "warning"
+                                  : "error"
+                              }
+                            >
+                              {orderDetailShip?.status}
                             </Label>
                           </div>
                         </Box>
@@ -370,12 +382,24 @@ export default function OrderListShipper() {
                                 {" "}
                                 {orderDetailShip?.totalPrice.toLocaleString()} ₫
                               </p>
-                              <Label color="primary">
-                                {" "}
-                                {orderDetailShip?.status !== "Đang vận chuyển"
-                                  ? "Đã giao hàng"
-                                  : "Đang vận chuyển"}
-                                {/* {orderDetailShip?.status} */}
+                              <Label
+                                variant="ghost"
+                                color={
+                                  orderDetailShip?.status === "Đang xử lý"
+                                    ? "default"
+                                    : orderDetailShip?.status ===
+                                      "Đang vận chuyển"
+                                    ? "info"
+                                    : orderDetailShip?.status === "Đã giao hàng"
+                                    ? "success"
+                                    : orderDetailShip?.status === "Đã nhận"
+                                    ? "success"
+                                    : orderDetailShip?.status === "Đã đánh giá"
+                                    ? "warning"
+                                    : "error"
+                                }
+                              >
+                                {orderDetailShip?.status}
                               </Label>
                             </div>
                           </Box>

@@ -120,9 +120,10 @@ export default function OrderInfo({ orderDetailList }) {
               <p className="font-semibold">
                 Giảm giá:
                 <span className="ml-6 font-normal">
-                  {orderDetailList &&
-                  orderDetailList[0]?.order?.promotion ?
-                     (orderDetailList[0]?.order.promotion?.price).toLocaleString()
+                  {orderDetailList && orderDetailList[0]?.order?.promotion
+                    ? (
+                        orderDetailList[0]?.order.promotion?.price * 1
+                      ).toLocaleString()
                     : 0}
                 </span>
               </p>

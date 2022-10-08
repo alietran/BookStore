@@ -62,6 +62,155 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
       data: doc,
     });
     console.log('orderDetailList', orderDetailList);
+  } else if (req.body.status === 'Đã giao hàng') {
+    const doc = await Order.findByIdAndUpdate(_id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      return next(new AppError('No document found with that ID', 404));
+    }
+
+    console.log('Doc', doc);
+    await transporter.sendMail({
+      from: `"Đơn hàng #${_id} đã giao hàng thành công" <alietran0211@gmail.com>`, // sender address
+      to: 'ngocdiep710@gmail.com', // list of receivers
+      subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
+      // text: "Hello world?", // plain text body
+      html: `
+          <div>
+              <table width="100%" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0" id="m_7455533599601926697backgroundTable">
+      <tbody>
+      <tr>
+          <td>
+              <table width="600" cellpadding="0" cellspacing="0" border="0" align="center">
+                  <tbody>
+                  <tr>
+                      <td width="100%">
+                          <table bgcolor="#ffffff" width="600" cellpadding="0" cellspacing="0" border="0" align="center">
+                              <tbody>
+                              <tr>
+                                  <td>
+                                      <table width="560" align="center" cellpadding="0" cellspacing="0" border="0">
+                                          <tbody>
+                                          
+                                          <tr>
+                                                    <td align="center"><img src="https://res.cloudinary.com/bookstoremern/image/upload/v1665027528/zypbndetwpvlawbbegz3.png" width="140" height="auto" style="width:25%;height:auto" class="CToWUd" data-bit="iit"></td>
+                                          </tr>
+                                          
+                                          
+                                          
+                                          <tr>
+                                              <td height="10" style="font-size:1px;line-height:1px">&nbsp;</td>
+                                          </tr>
+                                          
+                                          </tbody>
+                                      </table>
+                                  </td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+  <table width="100%" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0" id="m_7455533599601926697backgroundTable">
+    <tbody>
+    <tr>
+        <td>
+            <table width="600" cellpadding="0" cellspacing="0" border="0" align="center">
+                <tbody>
+                <tr>
+                    <td width="100%">
+                        <table bgcolor="#ffffff" width="600" cellpadding="0" cellspacing="0" border="0" align="center">
+                            <tbody>
+                            
+                            <tr>
+                                <td height="10" style="font-size:1px;line-height:1px">&nbsp;</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <table width="560" align="center" cellpadding="0" cellspacing="0" border="0">
+                                        <tbody>
+                                        
+
+<tr>
+    <td style="font-family:Helvetica,arial,sans-serif;font-size:13px;color:#000000;text-align:left;line-height:18px">
+        Xin chào ${doc.user.fullName},
+    </td>
+</tr>
+
+
+    <tr>
+        <td width="100%" height="10" style="font-size:1px;line-height:1px">&nbsp;</td>
+    </tr>
+
+
+<tr>
+    <td style="font-family:Helvetica,arial,sans-serif;font-size:13px;color:#000000;text-align:left;line-height:18px">
+
+        Đơn hàng <a href="http://localhost:3000/orderDetail/${_id}" style="text-decoration:none;color:#ff5722" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">#${_id}</a> của bạn đã được giao thành
+        công ngày. <br><br>
+        Vui lòng đăng nhập BookStore để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong
+        vòng 3 ngày.
+        <br>
+    </td>
+</tr>
+
+
+    <tr>
+        <td width="100%" height="10" style="font-size:1px;line-height:1px">&nbsp;</td>
+    </tr>
+
+
+<tr>
+    <td colspan="2">
+        <table border="0" cellspacing="0" cellpadding="0" align="center">
+            <tbody><tr>
+                <td bgcolor="#EE4D2D" style="padding:8px 30px 8px 30px;border-radius:3px" align="center"><a style="color:#fff; text-decoration:none" href="http://localhost:3000/orderDetail/${_id}">
+                        Đã nhận hàng </a></td>
+            </tr>
+        </tbody></table>
+    </td>
+</tr>
+
+    <tr>
+        <td width="100%" height="10" style="font-size:1px;line-height:1px">&nbsp;</td>
+    </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100%" height="1" bgcolor="#ffffff" style="font-size:1px;line-height:1px">&nbsp;</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+          </div>
+             `,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      result: doc.length,
+      data: doc,
+    });
   } else {
     const doc = await Order.findByIdAndUpdate(_id, req.body, {
       new: true,

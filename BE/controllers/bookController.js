@@ -48,7 +48,7 @@ exports.updateBook = catchAsync(async (req, res, next) => {
 
   // console.log('gallery', gallery);
   let arrayGallery = [];
-  if (gallery.length > 0 && image !== '') {
+  if (gallery?.length > 0 && image !== '') {
     gallery.map(async (item) => {
       // console.log('item ', item);
       const uploadedResponse = await cloudinary.uploader.upload(item, {

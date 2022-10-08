@@ -44,7 +44,10 @@ import {
 } from "../../../redux/action/authorAction";
 import { getOrderList, resetOrder } from "../../../redux/action/orderAction";
 import OptionOrder from "./OptionOrder/OptionOrder";
+
 import Loading from "../../../components/Loading/Loading";
+
+import OrderToolbar from "../../../components/Order/OrderToolbar";
 
 // import Label from "../../components/Label";
 
@@ -53,11 +56,12 @@ import Loading from "../../../components/Loading/Loading";
 const TABLE_HEAD = [
   { id: "id", label: "Sản phẩm", alignRight: false },
   { id: "name", label: "Tên khách hàng", alignRight: false },
+  { id: "phoneNumber", label: "Số điện thoại", alignRight: false },
 
-  { id: "content", label: "Nội dung", alignRight: false },
-  { id: "rating", label: "Số sao", alignRight: false },
-  { id: "date", label: "Ngày đánh giá", alignRight: false },
-  { id: "status", label: "Trạng thái", alignRight: false },
+  { id: "content", label: "Ngày đặt", alignRight: false },
+  { id: "rating", label: "Trạng thái", alignRight: false },
+  { id: "date", label: "Giá tiền", alignRight: false },
+  { id: "status", label: "Thanh toán", alignRight: false },
 
   { id: "option", label: "Thao tác", alignRight: false },
 
@@ -88,15 +92,24 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query) {
+function applySortFilter(array, comparator, query, selectTag) {
   const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  if (query) {
-    return filter(array, (_user) => _user._id.indexOf(query) !== -1);
+  console.log("array", array);
+  if (query && selectTag === "infoUser") {
+    console.log("query", query);
+    return filter(
+      array,
+      (item) =>
+        item.address.fullName.indexOf(query) !== -1 ||
+        item.address.phoneNumber.indexOf(query) !== -1
+    );
+  } else if (query && selectTag === "orderId") {
+    return filter(array, (item) => item.id.indexOf(query) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -122,7 +135,8 @@ export default function OrderManager() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  // const [loading, setLoading] = useState(true)
+  const [selectTag, setSelectTag] = useState("infoUser");
+
   useEffect(() => {
     // get list user lần đầu
     if (!orderList) {
@@ -199,13 +213,17 @@ export default function OrderManager() {
     setFilterName(event.target.value);
   };
 
+  const handleSelectTag = (event) => {
+    setSelectTag(event.target.value);
+  };
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orderList?.result) : 0;
 
   const filteredUsers = applySortFilter(
     orderList?.data,
     getComparator(order, orderBy),
-    filterName
+    filterName,
+    selectTag
   );
 
   const isUserNotFound = orderList?.result === 0;
@@ -255,73 +273,65 @@ export default function OrderManager() {
         {/* <CreateAuthor /> */}
       </Stack>
       <Card>
-        <UserListToolbar
-          numSelected={selected.length}
+        <OrderToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
-          searchName={"Tìm tác giả"}
+          onSelectTag={handleSelectTag}
+          selectTag={selectTag}
         />
         {/* {!loading ? (
           <Loading />
         ) : ( */}
-          <>
-            {" "}
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={orderList?.result}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers
-                    ?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                    .map((row) => {
-                      const {
-                        _id,
-                        address,
-                        status,
-                        createdAt,
-                        paymentMethod,
-                        totalPrice,
-                        shipper,
-                      } = row;
-                      const isItemSelected =
-                        selected.indexOf(address.fullName) !== -1;
+        <>
+          {" "}
+          <TableContainer sx={{ minWidth: 800 }}>
+            <Table>
+              <UserListHead
+                order={order}
+                orderBy={orderBy}
+                headLabel={TABLE_HEAD}
+                rowCount={orderList?.result}
+                numSelected={selected.length}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={handleSelectAllClick}
+              />
+              <TableBody>
+                {filteredUsers
+                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    const {
+                      _id,
+                      address,
+                      status,
+                      createdAt,
+                      paymentMethod,
+                      totalPrice,
+                      shipper,
+                    } = row;
+                    const isItemSelected =
+                      selected.indexOf(address.fullName) !== -1;
+                    return (
+                      <TableRow
+                        hover
+                        key={_id}
+                        tabIndex={-1}
+                        _id="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        <TableCell></TableCell>
+                        <TableCell align="left">{_id}</TableCell>
+                        <TableCell align="left">{address.fullName}</TableCell>
+                        <TableCell align="left">
+                          {address.phoneNumber}
+                        </TableCell>
 
-                      return (
-                        <TableRow
-                          hover
-                          key={_id}
-                          tabIndex={-1}
-                          _id="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) =>
-                                handleClick(event, address.fullName)
-                              }
-                            />
-                          </TableCell>
-                          <TableCell align="left">{_id}</TableCell>
-                          <TableCell align="left">{address.fullName}</TableCell>
-
-                          {/* {/* <TableCell align="left">{name}</TableCell> */}
-                          <TableCell align="left">
-                            {moment(createdAt).format("DD/MM/YYYY")}
-                          </TableCell>
-                          <TableCell align="left">
-                            {/* <Chip
+                        {/* {/* <TableCell align="left">{name}</TableCell> */}
+                        <TableCell align="left">
+                          {moment(createdAt).format("DD/MM/YYYY")}
+                        </TableCell>
+                        <TableCell align="left">
+                          {/* <Chip
                           label={status}
                           color={
                             status === "Đang xử lý"
@@ -331,66 +341,62 @@ export default function OrderManager() {
                               : status === "Đã giao hàng" ? "success" : "error"
                           }
                         /> */}
-                            {/* <Label variant="ghost" color={"success"}>
+                          {/* <Label variant="ghost" color={"success"}>
                           Đã xử lý
                         </Label> */}
-                            <Label
-                              variant="ghost"
-                              color={
-                                status === "Đang xử lý"
-                                  ? "default"
-                                  : status === "Đang vận chuyển"
-                                  ? "info"
-                                  : status === "Đã giao hàng"
-                                  ? "success"
-                                  : status === "Đã nhận"
-                                  ? "success"
-                                  : status === "Đã đánh giá"
-                                  ? "warning"
-                                  : "error"
-                              }
-                            >
-                              {status}
-                            </Label>
+                          <Label
+                            variant="ghost"
+                            color={
+                              status === "Đang xử lý"
+                                ? "default"
+                                : status === "Đang vận chuyển"
+                                ? "info"
+                                : status === "Đã giao hàng"
+                                ? "success"
+                                : status === "Đã nhận"
+                                ? "success"
+                                : status === "Đã đánh giá"
+                                ? "warning"
+                                : "error"
+                            }
+                          >
+                            {status}
+                          </Label>
 
-                            {/* {status === "Đang xử lý" ? (
+                          {/* {status === "Đang xử lý" ? (
                           <Chip label="Đã thanh toán" color="primary" />
                         ) : paymentMethod.resultCode === 1000 ? (
                           <Chip label="Chờ thanh toán" color="warning" />
                         ) : (
                           <Chip label="Đã hủy" color="error" />
                         )} */}
-                          </TableCell>
-                          <TableCell align="left">
-                            {totalPrice.toLocaleString()}
-                          </TableCell>
-                          <TableCell align="left">
-                            {paymentMethod.resultCode === 0 ? (
-                              <Chip label="Đã thanh toán" color="primary" />
-                            ) : paymentMethod.resultCode === 1000 ? (
-                              <Chip label="Chờ thanh toán" color="warning" />
-                            ) : (
-                              <Chip label="Đã hủy" color="error" />
-                            )}
-                          </TableCell>
+                        </TableCell>
+                        <TableCell align="left">
+                          {totalPrice.toLocaleString()}
+                        </TableCell>
+                        <TableCell align="left">
+                          {paymentMethod.resultCode === 0 ? (
+                            <Chip label="Đã thanh toán" color="primary" />
+                          ) : paymentMethod.resultCode === 1000 ? (
+                            <Chip label="Chờ thanh toán" color="warning" />
+                          ) : (
+                            <Chip label="Đã hủy" color="error" />
+                          )}
+                        </TableCell>
 
-                          <TableCell align="center">
-                            <OptionOrder
-                              id={_id}
-                              order={row}
-                              shipper={shipper}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-                {/* {isUserNotFound && (
+                        <TableCell align="center">
+                          <OptionOrder id={_id} order={row} shipper={shipper} />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -399,18 +405,18 @@ export default function OrderManager() {
                 </TableRow>
               </TableBody>
             )} */}
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={orderList?.result}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={orderList?.result}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
         {/* )} */}
       </Card>
     </Container>

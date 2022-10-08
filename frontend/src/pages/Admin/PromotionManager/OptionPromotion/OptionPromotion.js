@@ -100,8 +100,8 @@ export default function OptionPromotion({ id, promotion }) {
       price:promotion.price,
       miniPrice: promotion.miniPrice,
       startDate:
-        moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
-          ? moment(valueDate).format("YYYY-MM-DD")
+        moment(valueDateStart).format("YYYY-MM-DD") !== "Invalid date"
+          ? moment(valueDateStart).format("YYYY-MM-DD")
           : moment(promotion.startDate).format("YYYY-MM-DD"),
       expiryDate:
         moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
@@ -123,7 +123,7 @@ export default function OptionPromotion({ id, promotion }) {
     values.startDate = moment(promotion.startDate)?.format(
       "YYYY-MM-DDTHH:mm:SS"
     );
-  }, [valueDate]);
+  }, [valueDateStart]);
   useEffect(() => {
     values.expiryDate = moment(promotion.expiryDate)?.format(
       "YYYY-MM-DDTHH:mm:SS"

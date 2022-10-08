@@ -73,7 +73,7 @@ const TABLE_HEAD = [
   { id: "date", label: "Nôi dung", alignRight: false },
 
   { id: "total", label: "Số sao", alignRight: false },
-  { id: "status", label: "Ngày đánh giá", alignRight: false },
+  { id: "rating", label: "Ngày đánh giá", alignRight: false },
   { id: "status", label: "Trạng thái", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
@@ -178,19 +178,22 @@ export default function RatingManager() {
   const handleClick = (id) => {
     console.log("id352", id);
     setOpenConfirm(true);
+    // dispatch(
+    //   updateRating(id, {
+    //     active: true,
+    //   })
+    // );
+  };
+  const handleCloseConfirm = (id) => {
+    console.log("dat123", id);
+    setOpenConfirm(false);
+
     dispatch(
       updateRating(id, {
         active: true,
       })
     );
   };
-  // const handleCloseConfirm = (id) => {
-  //   console.log("id2424", id);
-
-  //   setOpenConfirm(false);
-
-  //   // onClickDelete(id);
-  // };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -317,173 +320,146 @@ export default function RatingManager() {
                   //   selected.indexOf(address.fullName) !== -1;
 
                   return (
-                    <TableRow
-                      disabled={true}
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      className={
-                        hidden
-                          ? classes.backgroundCellShow
-                          : classes.backgroundCellHidden
-                      }
-                      // className={hidden ? classes.backgroundCellShow : ""}
-                    >
-                      <TableCell padding="checkbox"></TableCell>
-                      <TableCell align="left">{book?.name}</TableCell>
-                      <TableCell align="left">{order?.user.fullName}</TableCell>
-                      <TableCell align="left">{content}</TableCell>
-                      <TableCell align="left">
-                        <Rating readOnly value={rating} />
-                      </TableCell>
-                      <TableCell align="left">
-                        {" "}
-                        {moment(createdAt).format("DD/MM/YYYY, h:mm a")}
-                      </TableCell>
-                      <TableCell align="left">
-                        {active ? (
-                          <Label variant="ghost" color={"success"}>
-                            Đã duyệt
-                          </Label>
-                        ) : (
-                          <Label variant="ghost" color={"error"}>
-                            Chưa duyệt
-                          </Label>
-                        )}
-                      </TableCell>
-
-                      <TableCell align="center">
-                        <Box className="flex">
-                          <Tooltip
-                            // TransitionComponent={Zoom}
-                            title="Ẩn / Hiện"
-                            arrow
-                          >
-                            <IconButton
-                              // onClick={onClickDetail}
-                              sx={{
-                                "&:hover": {
-                                  backgroundColor: "rgba(255, 72, 66, 0.08)",
-                                  padding: "8px",
-                                  borderRadius: "50%",
-                                },
-                              }}
-                            >
-                              {!hidden ? (
-                                <VisibilityIcon
-                                  onClick={() => {
-                                    handleClickHideRating(_id);
-                                  }}
-                                  className="text-blue-500"
-                                  sx={{
-                                    fontSize: 32,
-                                  }}
-                                />
-                              ) : (
-                                <VisibilityOff
-                                  className="text-blue-500"
-                                  sx={{
-                                    fontSize: 32,
-                                  }}
-                                />
-                              )}
-                            </IconButton>
-                          </Tooltip>
+                    <>
+                      <TableRow
+                        disabled={true}
+                        hover
+                        key={_id}
+                        tabIndex={-1}
+                        _id="checkbox"
+                        className={
+                          hidden
+                            ? classes.backgroundCellShow
+                            : classes.backgroundCellHidden
+                        }
+                        // className={hidden ? classes.backgroundCellShow : ""}
+                      >
+                        <TableCell padding="checkbox"></TableCell>
+                        <TableCell align="left">{book?.name}</TableCell>
+                        <TableCell align="left">
+                          {order?.user.fullName}
+                        </TableCell>
+                        <TableCell align="left">{content}</TableCell>
+                        <TableCell align="left">
+                          <Rating readOnly value={rating} />
+                        </TableCell>
+                        <TableCell align="left">
+                          {" "}
+                          {moment(createdAt).format("DD/MM/YYYY, h:mm a")}
+                        </TableCell>
+                        <TableCell align="left">
                           {active ? (
-                            ""
+                            <Label variant="ghost" color={"success"}>
+                              Đã duyệt
+                            </Label>
                           ) : (
-                            <>
-                              {" "}
-                              <Tooltip
-                                // TransitionComponent={Zoom}
-                                title="Duyệt"
-                                arrow
+                            <Label variant="ghost" color={"error"}>
+                              Chưa duyệt
+                            </Label>
+                          )}
+                        </TableCell>
+
+                        <TableCell align="center">
+                          <Box className="flex">
+                            <Tooltip
+                              // TransitionComponent={Zoom}
+                              title="Ẩn / Hiện"
+                              arrow
+                            >
+                              <IconButton
+                                // onClick={onClickDetail}
+                                sx={{
+                                  "&:hover": {
+                                    backgroundColor: "rgba(255, 72, 66, 0.08)",
+                                    padding: "8px",
+                                    borderRadius: "50%",
+                                  },
+                                }}
                               >
-                                <IconButton
-                                  onClick={() => handleClick(_id)}
-                                  sx={{
-                                    "&:hover": {
-                                      backgroundColor:
-                                        "rgba(255, 72, 66, 0.08)",
-                                      padding: "8px",
-                                      borderRadius: "50%",
-                                    },
-                                  }}
-                                >
-                                  <DoneIcon
+                                {!hidden ? (
+                                  <VisibilityIcon
+                                    onClick={() => {
+                                      handleClickHideRating(_id);
+                                    }}
                                     className="text-blue-500"
                                     sx={{
                                       fontSize: 32,
-                                      color: "green",
                                     }}
                                   />
-                                </IconButton>
-                                {/* <CustomDialog
-                            open={openConfirm}
-                            handleClose={handleCancel}
-                            dialogSize="xs"
-                            overlayStyle={{
-                              backgroundColor: "transparent",
+                                ) : (
+                                  <VisibilityOff
+                                    className="text-blue-500"
+                                    sx={{
+                                      fontSize: 32,
+                                    }}
+                                  />
+                                )}
+                              </IconButton>
+                            </Tooltip>
+                            {active ? (
+                              ""
+                            ) : (
+                              <>
+                                {" "}
+                                <Tooltip
+                                  // TransitionComponent={Zoom}
+                                  title="Duyệt"
+                                  arrow
+                                >
+                                  <IconButton
+                                    onClick={() => handleClick(_id)}
+                                    sx={{
+                                      "&:hover": {
+                                        backgroundColor:
+                                          "rgba(255, 72, 66, 0.08)",
+                                        padding: "8px",
+                                        borderRadius: "50%",
+                                      },
+                                    }}
+                                  >
+                                    <DoneIcon
+                                      className="text-blue-500"
+                                      sx={{
+                                        fontSize: 32,
+                                        color: "green",
+                                      }}
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                              </>
+                            )}
+                          </Box>
+                        </TableCell>
+
+                        <TableCell align="left"> </TableCell>
+                      </TableRow>
+                      <CustomDialog
+                        open={openConfirm}
+                        handleClose={handleCancel}
+                        dialogSize="xs"
+                      >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Duyệt đánh giá"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Bạn chắc chắn duyệt đánh giá này.
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCancel}>Hủy</Button>
+                          <Button
+                            onClick={() => handleCloseConfirm(_id)}
+                            autoFocus
+                            sx={{
+                              textTransform: "none !important",
                             }}
                           >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Duyệt đánh giá"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Bạn chắc chắn duyệt đánh giá này.
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleCancel}>Hủy</Button>
-                              <Button
-                                onClick={() => {
-                                  handleCloseConfirm(_id);
-                                }}
-                                autoFocus
-                                sx={{
-                                  textTransform: "none !important",
-                                }}
-                              >
-                                Đồng ý
-                              </Button>
-                            </DialogActions>
-                          </CustomDialog> */}
-                              </Tooltip>
-                            </>
-                          )}
-                          {/* {id} */}
-
-                          {/* <Dialog
-                            open={openConfirm}
-                            // onClose={handleCloseCnfirm}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Xóa thể loại"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Bạn chắc chắn muốn xóa NCC này.
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleCancel}>Hủy</Button>
-                              <Button onClick={()=>handleCloseConfirm(id)} autoFocus>
-                                Đồng ý
-                              </Button>
-                            </DialogActions>
-                          </Dialog> */}
-                        </Box>
-                      </TableCell>
-                      
-                      <TableCell align="left">
-                        {" "}
-                       
-                      </TableCell>
-                    </TableRow>
+                            Đồng ý
+                          </Button>
+                        </DialogActions>
+                      </CustomDialog>
+                    </>
                   );
                 })}
               {emptyRows > 0 && (

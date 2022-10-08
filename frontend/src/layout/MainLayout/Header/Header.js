@@ -49,6 +49,8 @@ import { getBookList } from "../../../redux/action/bookAction";
 
 export default function Header() {
   const { cateList } = useSelector((state) => state.CateReducer);
+  console.log("cateList",  cateList);
+  
   const { bookList } = useSelector((state) => state.BookReducer);
   const { loginUserSucces } = useSelector((state) => state.UserReducer);
   console.log("loginUserSucces", loginUserSucces);
@@ -69,13 +71,13 @@ export default function Header() {
     return (total = total + item.quantity);
   }, 0);
 
-  const [userLogin, setUserLogin] =  useState(
+  const [userLogin, setUserLogin] = useState(
     JSON.parse(localStorage.getItem("user"))
   );
-    console.log("userLogin", userLogin);
-// useEffect(() => {
+  console.log("userLogin", userLogin);
+  // useEffect(() => {
 
-// }, [userLogin]);
+  // }, [userLogin]);
 
   const hanldeChangePage = () => {
     setFilteredData([]);
@@ -148,7 +150,7 @@ export default function Header() {
   // useEffect
 
   useEffect(() => {
-    if (successUpdateUserCurrent ) {
+    if (successUpdateUserCurrent) {
       setUserLogin(JSON.parse(localStorage.getItem("user")));
     }
   }, [successUpdateUserCurrent]);
