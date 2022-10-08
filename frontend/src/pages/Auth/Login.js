@@ -79,7 +79,7 @@ export default function Login() {
     if (userLogin) {
       //  console.log("userLogin24", userLogin.user.role);
       if (userLogin.user?.idRole.roleName === "Admin") {
-        history.push("/admin/users");
+        history.push("/admin/overview");
       }
       else if (userLogin.user?.idRole.roleName === "NV Kho") {
         history.push("/admin/receipts/list");

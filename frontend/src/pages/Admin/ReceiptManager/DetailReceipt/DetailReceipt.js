@@ -77,7 +77,7 @@ export default function DetailReceipt() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-        mt={7.5}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography

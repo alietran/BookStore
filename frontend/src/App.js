@@ -9,18 +9,20 @@ import AdminTemplate from "./templates/AdminTemplate/AdminTemplate";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import UserManager from "./pages/Admin/UserManager/UserManager";
 import Swal from "sweetalert2";
-import { useEffect, useMemo, useState, Suspense } from "react";
+import { useEffect, useMemo, useState, Suspense, lazy } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import LoginAdmin from "./pages/Auth/Login";
 import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
-import AuthorManager from "./pages/Admin/AuthorManager/AuthorManager";
+
 import { useHistory } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
 
 import AdminRoute from "./guards/AdminRoute";
 import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
+
+
 
 import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
@@ -41,7 +43,7 @@ import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
 import Overview from "./pages/Admin/Overview/Overview";
-import OrderManager from "./pages/Admin/Order/OrderManager";
+// import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
 import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
 import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHistoryDetail";
@@ -54,6 +56,14 @@ import RatingManager from "./pages/Admin/Rating/RatingManager";
 import { useDispatch } from "react-redux";
 import TriggerLoadingLazy from "./components/TriggerLoadingLazy/TriggerLoadingLazy";
 import Loading from "./components/Loading/Loading";
+
+
+const AuthorManager = lazy(() =>
+  import("./pages/Admin/AuthorManager/AuthorManager")
+);
+const OrderManager = lazy(() =>
+  import("./pages/Admin/Order/OrderManager")
+);
 
 function App() {
   const themeOptions = useMemo(

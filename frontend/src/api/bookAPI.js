@@ -25,6 +25,12 @@ const bookAPI = {
     const path = `/v1/books/search-book/?search=${data}`;
     return axiosClient.get(path, data);
   },
+  getSellerBook: ()=>{
+     return axiosClient.get("/v1/books/bestSeller-book");
+  },
+  getLatestBook:()=>{
+    return axiosClient.get("/v1/books/latest-book")
+  }
 };
 
 export default bookAPI;

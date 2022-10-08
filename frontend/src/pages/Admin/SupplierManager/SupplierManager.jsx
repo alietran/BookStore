@@ -222,7 +222,7 @@ export default function SupplierManager() {
       color="text.primary"
       sx={{ "&:hover": { color: "#212B36" } }}
     >
-      Người dùng{" "}
+     Nhà cung cấp
     </Link>,
     <Typography key="3" color="inherit">
       Danh sách
@@ -237,7 +237,7 @@ export default function SupplierManager() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-        mt={7.5}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>

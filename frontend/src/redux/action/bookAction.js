@@ -34,7 +34,7 @@ export const createBook = (data) => {
         type: "CREATE_BOOK_REQUEST",
       });
       const result = await bookAPI.postCreateBook(data);
-        console.log("1231");
+      console.log("1231");
       console.log("result", result);
       dispatch({
         type: "CREATE_BOOK_SUCCESS",
@@ -44,7 +44,7 @@ export const createBook = (data) => {
       });
     } catch (error) {
       console.log("error1211156", error);
-       console.log("235");
+      console.log("235");
       dispatch({
         type: "CREATE_BOOK_FAIL",
         payload: {
@@ -139,27 +139,79 @@ export const deleteBook = (id) => {
   };
 };
 
-export const search = (data)=>{
-   return async (dispatch) => {
-     try {
-       dispatch({
-         type: "SEARCH_BOOK_REQUEST",
-       });
-       const result = await bookAPI.search(data);
-       console.log("result book", result);
-       dispatch({
-         type: "SEARCH_BOOK_SUCCESS",
-         payload: {
-           data: result.data,
-         },
-       });
-     } catch (error) {  console.log("error book", error);
-       dispatch({
-         type: "SEARCH_BOOK_FAIL",
-         payload: {
-           error: error.response?.data.message,
-         },
-       });
-     }
-   };
-}
+export const search = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "SEARCH_BOOK_REQUEST",
+      });
+      const result = await bookAPI.search(data);
+      console.log("result book", result);
+      dispatch({
+        type: "SEARCH_BOOK_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      console.log("error book", error);
+      dispatch({
+        type: "SEARCH_BOOK_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
+
+export const getSellerBook = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_SELLER_BOOK_REQUEST",
+    });
+    bookAPI
+      .getSellerBook()
+      .then((result) => {
+        dispatch({
+          type: "GET_SELLER_BOOK_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_SELLER_BOOK_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+export const getLatestBook = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_LATEST_BOOK_REQUEST",
+    });
+    bookAPI
+      .getLatestBook()
+      .then((result) => {
+        dispatch({
+          type: "GET_LATEST_BOOK_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_LATEST_BOOK_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};

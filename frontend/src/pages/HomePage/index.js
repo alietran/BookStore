@@ -6,20 +6,23 @@ import Subcribe from "./Subscribe/Subcribe";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookList } from "../../redux/action/bookAction";
+import BestSellerBook from "./BestSellerBook/BestSellerBook";
 
 export default function HomePage() {
   const { bookList } = useSelector((state) => state.BookReducer);
   const dispatch = useDispatch();
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getBookList());
-  },[])
+  }, []);
   console.log("booklist", bookList);
   return (
     <div>
       <Carousel />
       <NewProduct />
-      <Subcribe />
+      <BestSellerBook />
+
       <Product />
+      <Subcribe />
     </div>
   );
 }

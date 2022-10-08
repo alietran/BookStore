@@ -147,7 +147,7 @@ const AdminTemplate = (props) => {
                 alt="..."
               />
             </div>
-            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+            <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline">
               {userLogin.user.idRole.roleName === "Admin" ? (
                 <>
                   {" "}

@@ -232,7 +232,7 @@ export default function PromotionManager() {
       color="text.primary"
       sx={{ "&:hover": { color: "#212B36" } }}
     >
-      Người dùng{" "}
+    Khuyến mãi
     </Link>,
     <Typography key="3" color="inherit">
       Danh sách
@@ -247,7 +247,7 @@ export default function PromotionManager() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-        mt={7.5}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>

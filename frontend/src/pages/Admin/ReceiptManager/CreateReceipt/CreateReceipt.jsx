@@ -84,7 +84,7 @@ export default function CreateReceipt() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-        mt={7.5}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>

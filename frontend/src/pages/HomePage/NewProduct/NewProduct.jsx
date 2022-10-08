@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 
 import ProductItem from "../../../components/ProductItem/ProductItem";
@@ -9,106 +9,175 @@ import Slider from "react-slick";
 // Import css files
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import WestIcon from "@mui/icons-material/West";
 import useStyles from "./style";
-import { useSelector } from "react-redux";
-
-
-
+import { useDispatch, useSelector } from "react-redux";
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import EastIcon from "@mui/icons-material/East";
+import { getLatestBook, getSellerBook } from "../../../redux/action/bookAction";
+import { NavLink, useHistory } from "react-router-dom";
+import { useSnackbar } from "notistack";
 export default function NewProduct() {
+  const { errorAddCart } = useSelector((state) => state.CartReducer);
+  const enqueueSnackbar = useSnackbar();
   const classes = useStyles();
-   const { bookList } = useSelector((state) => state.BookReducer);
- 
- 
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const { latestBook } = useSelector((state) => state.BookReducer);
 
-  function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "#b7b6b4",paddingTop:"3px", width: "20px", height: "22px" }}
-      onClick={onClick}
-    />
-  );
+  const handleAddToCart = (product) => {
+    console.log("product", product);
+
+    const cart = {
+      name: product?.name,
+      price: product?.price,
+      image: product?.image,
+      id: product?.id,
+      quantity: 1,
+      warehouse: product?.quantity,
+    };
+    const action = (snackbarId) => (
+      <>
+        <Button
+          variant="contained"
+          className="py-1 px-1 text-xs"
+          sx={{
+            padding: "6px !important",
+            fontSize: "12.5px !important",
+            marginRight: "7px !important",
+          }}
+          onClick={() => {
+            history.push("/cart");
+          }}
+        >
+          Xem giỏ hàng
+        </Button>
+      </>
+    );
+
+    if (product.quantity === 0 || errorAddCart) {
+      // enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+      //   variant: "error",
+      // });
+    } else {
+      // enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+      //   variant: "success",
+      //   autoHideDuration: 1000,
+      //   action,
+      // });
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: {
+          data: cart,
+        },
+      });
+    }
+  };
+  useEffect(() => {
+    if (latestBook === null) {
+      dispatch(getLatestBook());
+    }
+  }, [latestBook]);
+
+  function PrevArrow(props) {
+    const { onClick } = props;
+    return (
+      <WestIcon
+        style={{ left: "-125px" }}
+        onClick={onClick}
+        className={`${classes.Arrow} Arrow`}
+      />
+    );
   }
-  function SamplePrevArrow(props) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "#b7b6b4",paddingTop:"3px", width: "20px", height: "22px" }}
-      onClick={onClick}
-    />
-  );
-}
+  function NextArrow(props) {
+    const { onClick } = props;
+    return (
+      <EastIcon
+        style={{ right: "-125px", height: "30px" }}
+        onClick={onClick}
+        className={`${classes.Arrow} Arrow`}
+      />
+    );
+  }
 
   var settings = {
     // dots: true,
-    nextArrow: <SampleNextArrow />,
-      prevArrow: <SamplePrevArrow />,
-
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    arrow: true,
+    dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 5,
+    slidesToShow: 2,
+    slidesToScroll: 2,
     autoplay: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: true,
-          centerMode: true,
-          centerPadding: "40px",
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          arrows: true,
-          centerMode: true,
-          centerPadding: "40px",
-          slidesToShow: 1,
-        },
-      },
-    ],
   };
   return (
-    <Container className="py-12" maxWidth="lg">
-      <Box className="bg-white  rounded-md">
-        <Typography
-          variant="h5"
-          component="h2"
-          sx={{ padding: "18px 18px 0 18px" }}
-        >
-          Sách mới phát hành
-        </Typography>
-        {/* grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-5 xl:gap-x-7 */}
+    <Container className={` ${classes.bestSell} m-3`} maxWidth="lg">
+      {/* <Box className="bg-white  rounded-md"> */}
+      <Typography
+        variant="h5"
+        component="h2"
+        sx={{ color: "#57b159", marginTop: "15px" }}
+      >
+        Sách mới phát hành
+      </Typography>
 
-        <Box className=" border-t-2 mt-3 px-5 pb-5 ">
-          <Slider {...settings}>
-            {bookList?.data.map((product, index) => (
-              <div>
-                <p className={classes.productNew}>New</p>
-
-                <ProductItem
-                  className={classes.productItem}
-                  product={product}
+      <Box className=" bg-white  grid grid-cols-4 gap-4  sm:grid-cols-2 lg:grid-cols-4">
+        {latestBook?.data.map((product, index) => (
+          <div className="flex  relative">
+            <div
+              className={`group bg-white text-center   duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
+              style={{
+                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                borderRadius: "15px",
+                border: "1px solid white",
+              }}
+            >
+              <div className="absolute -top-3 -right-1 z-10">
+                <img src="./img/new.svg" alt="" height={80} width={80} />
+              </div>
+              <div className="  w-full relative">
+                <img
+                  style={{
+                    height: "200px",
+                    width: "200px",
+                  }}
+                  src={product?.image}
+                  alt="Front of men&#039;s Basic Tee in black."
+                  className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
                 />
               </div>
-            ))}
-       
-          </Slider>
-        </Box>
+              <div className="mt-4 flex  justify-center truncate">
+                {/* <div className=" text-gray-700 text-center"> */}
+                <NavLink
+                  to={`/productDetail/${product?._id}`}
+                  className="truncate"
+                >
+                 
+                  <span aria-hidden="true" className="  text-slate-800 ">
+                    {product?.name}
+                  </span>
+                </NavLink>
+                {/* </div> */}
+              </div>
+              <p className="mt-1 text-sm text-red-500 font-bold text-lg text-center">
+                {product?.price.toLocaleString()} ₫
+              </p>
+              <Button
+                sx={{ width: "150px", cursor: "pointer" }}
+                className="ml-2 mt-3"
+                variant="contained"
+                onClick={() => {
+                  handleAddToCart(product);
+                }}
+              >
+                Thêm vào giỏ
+              </Button>
+              {/* <button>Thêm vào giỏ hàng</button> */}
+            </div>
+          </div>
+        ))}
       </Box>
     </Container>
   );

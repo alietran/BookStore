@@ -192,7 +192,7 @@ export default function OrderDetail() {
           alignItems="center"
           justifyContent="space-between"
           mb={5}
-          mt={7.5}
+          mt={3}
         >
           <Stack spacing={2}>
             <div className="flex justify-between">
@@ -317,7 +317,7 @@ export default function OrderDetail() {
         direction="row"
         alignItems="center"
         justifyContent="right"
-        mt={7.5}
+        mt={3}
         position="fixed"
         bottom={0}
         right={50}

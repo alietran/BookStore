@@ -3,6 +3,14 @@ const stateDefault = {
   loadingBookList: false,
   errorBookList: null,
 
+  bestSellerBook: null,
+  loadingbestSellerBook: false,
+  errorbestSellerBook: null,
+
+  latestBook: null,
+  loadingLatestBook: false,
+  errorLatestBook: null,
+
   loadingCreateBook: false,
   successCreateBook: null,
   errorCreateBook: null,
@@ -18,7 +26,6 @@ const stateDefault = {
   loadingDeleteBook: false,
   successDeleteBook: null,
   errorDeleteBook: null,
-
 
   loadingBookSearch: false,
   bookSearch: null,
@@ -44,7 +51,48 @@ export const BookReducer = (state = stateDefault, action) => {
         loadingBookList: false,
       };
     }
-
+    case "GET_SELLER_BOOK_REQUEST": {
+      return {
+        ...state,
+        loadingbestSellerBook: true,
+        errorbestSellerBook: null,
+      };
+    }
+    case "GET_SELLER_BOOK_SUCCESS": {
+      return {
+        ...state,
+        bestSellerBook: action.payload.data,
+        loadingbestSellerBook: false,
+      };
+    }
+    case "GET_SELLER_BOOK_FAIL": {
+      return {
+        ...state,
+        errorbestSellerBook: action.payload.error,
+        loadingLatestBook: false,
+      };
+    }
+    case "GET_LATEST_BOOK_REQUEST": {
+      return {
+        ...state,
+        loadingLatestBook: true,
+        errorLatestBook: null,
+      };
+    }
+    case "GET_LATEST_BOOK_SUCCESS": {
+      return {
+        ...state,
+        latestBook: action.payload.data,
+        loadingLatestBook: false,
+      };
+    }
+    case "GET_LATEST_BOOK_FAIL": {
+      return {
+        ...state,
+        errorLatestBook: action.payload.error,
+        loadingbestSellerBook: false,
+      };
+    }
     case "CREATE_BOOK_REQUEST": {
       return {
         ...state,

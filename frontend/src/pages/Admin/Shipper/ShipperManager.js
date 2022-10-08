@@ -292,7 +292,7 @@ export default function ShipperManager() {
       color="text.primary"
       sx={{ "&:hover": { color: "#212B36" } }}
     >
-      Người dùng{" "}
+    Shipper
     </Link>,
     <Typography key="3" color="inherit">
       Danh sách
@@ -307,11 +307,11 @@ export default function ShipperManager() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-        mt={7.5}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-            Thể loại
+           Shipper
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -507,7 +507,6 @@ export default function ShipperManager() {
                                                 <OptionOrder
                                                   id={_id}
                                                   order={row}
-                                                  
                                                 />
                                               </TableCell>
                                             </TableRow>

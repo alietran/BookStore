@@ -14,5 +14,5 @@ export default function TriggerLoadingLazy() {
     };
   }, []);
 
-  return <div>TriggerLoadingLazy</div>;
+  return <div></div>;
 }

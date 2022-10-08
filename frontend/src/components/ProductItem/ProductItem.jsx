@@ -1,9 +1,72 @@
+import { Button } from "@mui/material";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
+import useStyles from "./style";
+
 
 export default function ProductItem({ product }) {
+  const classes = useStyles()
+   const dispatch = useDispatch();
+   const history = useHistory();
+   const { errorAddCart } = useSelector((state) => state.CartReducer);
+   const handleAddToCart = (product) => {
+     console.log("product", product);
+
+     const cart = {
+       name: product?.name,
+       price: product?.price,
+       image: product?.image,
+       id: product?.id,
+       quantity: 1,
+       warehouse: product?.quantity,
+     };
+     const action = (snackbarId) => (
+       <>
+         <Button
+           variant="contained"
+           className="py-1 px-1 text-xs"
+           sx={{
+             padding: "6px !important",
+             fontSize: "12.5px !important",
+             marginRight: "7px !important",
+           }}
+           onClick={() => {
+             history.push("/cart");
+           }}
+         >
+           Xem giỏ hàng
+         </Button>
+       </>
+     );
+
+     if (product.quantity === 0 || errorAddCart) {
+       // enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+       //   variant: "error",
+       // });
+     } else {
+       // enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+       //   variant: "success",
+       //   autoHideDuration: 1000,
+       //   action,
+       // });
+       dispatch({
+         type: "ADD_TO_CART",
+         payload: {
+           data: cart,
+         },
+       });
+     }
+   };
   return (
-    <div className="group bg-white relative shadow hover:shadow-2xl duration-500 px-3 py-4 mt-6 mx-4 mb-5">
+    <div
+      className={`group bg-white text-center relative  duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
+      style={{
+        boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+        borderRadius: "15px",
+        border: "1px solid white",
+      }}
+    >
       <div className="  w-full relative">
         <img
           style={{
@@ -18,17 +81,25 @@ export default function ProductItem({ product }) {
       <div className="mt-4 flex  justify-center truncate">
         {/* <div className=" text-gray-700 text-center"> */}
         <NavLink to={`/productDetail/${product?._id}`} className="truncate">
-          <span
-            aria-hidden="true"
-            className="absolute inset-0  text-slate-800 "
-          ></span>
-          {product?.name}
+          <span aria-hidden="true" className="  text-slate-800 ">
+            {product?.name}
+          </span>
         </NavLink>
         {/* </div> */}
       </div>
       <p className="mt-1 text-sm text-red-500 font-bold text-lg text-center">
         {product?.price.toLocaleString()} ₫
       </p>
+      <Button
+        sx={{ width: "150px", cursor: "pointer" }}
+        className="ml-2 mt-3"
+        variant="contained"
+        onClick={() => {
+          handleAddToCart(product);
+        }}
+      >
+        Thêm vào giỏ
+      </Button>
       {/* <button>Thêm vào giỏ hàng</button> */}
     </div>
   );
