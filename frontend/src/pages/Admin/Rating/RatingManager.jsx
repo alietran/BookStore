@@ -63,6 +63,7 @@ import { getAllRating, updateRating } from "../../../redux/action/ratingAction";
 import DoneIcon from "@mui/icons-material/Done";
 import { useStyles } from "./style";
 import CustomDialog from "../../../components/CustomDialog/CustomDialog";
+import Loading from "../../../components/Loading/Loading";
 
 // ----------------------------------------------------------------------
 
@@ -119,7 +120,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function RatingManager() {
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { ratinglist, updateRatingSuccess } = useSelector(
+  const { ratinglist, updateRatingSuccess, loadingRatingList } = useSelector(
     (state) => state.RatingReducer
   );
 
@@ -132,14 +133,16 @@ export default function RatingManager() {
     successUpdateAuthor,
     successDeleteAuthor,
   } = useSelector((state) => state.AuthorReducer);
-  const { orderList } = useSelector((state) => state.OrderReducer);
-  console.log("orderList", orderList);
+  const { orderList, } = useSelector((state) => state.OrderReducer);
+
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
   useEffect(() => {
-    if (!ratinglist) dispatch(getAllRating());
+    if (ratinglist === null) dispatch(getAllRating());
+ 
   }, [ratinglist]);
+  console.log("ratinglist", ratinglist);
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -149,6 +152,7 @@ export default function RatingManager() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const classes = useStyles();
+
   useEffect(() => {
     if (updateRatingSuccess) {
       dispatch(getAllRating());
@@ -264,7 +268,7 @@ export default function RatingManager() {
         alignItems="center"
         justifyContent="space-between"
         mb={5}
-       mt={3}
+        mt={3}
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
@@ -285,129 +289,97 @@ export default function RatingManager() {
         />
 
         <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={ratinglist?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              // onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  console.log("row", row);
-                  const {
-                    _id,
-                    order,
-                    id,
-                    active,
-                    status,
-                    content,
-                    book,
-                    createdAt,
-                    rating,
-                    imageRating,
-                    hidden,
-                  } = row;
-                  console.log("hidden", "dat_" + hidden);
-                  console.log("row", row);
-                  console.log("id12", id);
-                  // const isItemSelected =
-                  //   selected.indexOf(address.fullName) !== -1;
+          {loadingRatingList ? (
+            <Loading />
+          ) : (
+            <>
+              {" "}
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={ratinglist?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  // onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      console.log("row", row);
+                      const {
+                        _id,
+                        order,
+                        id,
+                        active,
+                        status,
+                        content,
+                        book,
+                        createdAt,
+                        rating,
+                        imageRating,
+                        hidden,
+                      } = row;
+                      console.log("hidden", "dat_" + hidden);
+                      console.log("row", row);
+                      console.log("id12", id);
+                      // const isItemSelected =
+                      //   selected.indexOf(address.fullName) !== -1;
 
-                  return (
-                    <>
-                      <TableRow
-                        disabled={true}
-                        hover
-                        key={_id}
-                        tabIndex={-1}
-                        _id="checkbox"
-                        className={
-                          hidden
-                            ? classes.backgroundCellShow
-                            : classes.backgroundCellHidden
-                        }
-                        // className={hidden ? classes.backgroundCellShow : ""}
-                      >
-                        <TableCell padding="checkbox"></TableCell>
-                        <TableCell align="left">{book?.name}</TableCell>
-                        <TableCell align="left">
-                          {order?.user.fullName}
-                        </TableCell>
-                        <TableCell align="left">{content}</TableCell>
-                        <TableCell align="left">
-                          <Rating readOnly value={rating} />
-                        </TableCell>
-                        <TableCell align="left">
-                          {" "}
-                          {moment(createdAt).format("DD/MM/YYYY, h:mm a")}
-                        </TableCell>
-                        <TableCell align="left">
-                          {active ? (
-                            <Label variant="ghost" color={"success"}>
-                              Đã duyệt
-                            </Label>
-                          ) : (
-                            <Label variant="ghost" color={"error"}>
-                              Chưa duyệt
-                            </Label>
-                          )}
-                        </TableCell>
+                      return (
+                        <>
+                          <TableRow
+                            disabled={true}
+                            hover
+                            key={_id}
+                            tabIndex={-1}
+                            _id="checkbox"
+                            className={
+                              hidden
+                                ? classes.backgroundCellShow
+                                : classes.backgroundCellHidden
+                            }
+                            // className={hidden ? classes.backgroundCellShow : ""}
+                          >
+                            <TableCell padding="checkbox"></TableCell>
+                            <TableCell align="left">{book?.name}</TableCell>
+                            <TableCell align="left">
+                              {order?.user.fullName}
+                            </TableCell>
+                            <TableCell align="left">{content}</TableCell>
+                            <TableCell align="left">
+                              <Rating readOnly value={rating} />
+                            </TableCell>
+                            <TableCell align="left">
+                              {" "}
+                              {moment(createdAt).format("DD/MM/YYYY, h:mm a")}
+                            </TableCell>
+                            <TableCell align="left">
+                              {active ? (
+                                <Label variant="ghost" color={"success"}>
+                                  Đã duyệt
+                                </Label>
+                              ) : (
+                                <Label variant="ghost" color={"error"}>
+                                  Chưa duyệt
+                                </Label>
+                              )}
+                            </TableCell>
 
-                        <TableCell align="center">
-                          <Box className="flex">
-                            <Tooltip
-                              // TransitionComponent={Zoom}
-                              title="Ẩn / Hiện"
-                              arrow
-                            >
-                              <IconButton
-                                // onClick={onClickDetail}
-                                sx={{
-                                  "&:hover": {
-                                    backgroundColor: "rgba(255, 72, 66, 0.08)",
-                                    padding: "8px",
-                                    borderRadius: "50%",
-                                  },
-                                }}
-                              >
-                                {!hidden ? (
-                                  <VisibilityIcon
-                                    onClick={() => {
-                                      handleClickHideRating(_id);
-                                    }}
-                                    className="text-blue-500"
-                                    sx={{
-                                      fontSize: 32,
-                                    }}
-                                  />
-                                ) : (
-                                  <VisibilityOff
-                                    className="text-blue-500"
-                                    sx={{
-                                      fontSize: 32,
-                                    }}
-                                  />
-                                )}
-                              </IconButton>
-                            </Tooltip>
-                            {active ? (
-                              ""
-                            ) : (
-                              <>
-                                {" "}
+                            <TableCell align="center">
+                              <Box className="flex">
                                 <Tooltip
                                   // TransitionComponent={Zoom}
-                                  title="Duyệt"
+                                  title="Ẩn / Hiện"
                                   arrow
                                 >
                                   <IconButton
-                                    onClick={() => handleClick(_id)}
+                                    // onClick={onClickDetail}
                                     sx={{
                                       "&:hover": {
                                         backgroundColor:
@@ -417,58 +389,101 @@ export default function RatingManager() {
                                       },
                                     }}
                                   >
-                                    <DoneIcon
-                                      className="text-blue-500"
-                                      sx={{
-                                        fontSize: 32,
-                                        color: "green",
-                                      }}
-                                    />
+                                    {!hidden ? (
+                                      <VisibilityIcon
+                                        onClick={() => {
+                                          handleClickHideRating(_id);
+                                        }}
+                                        className="text-blue-500"
+                                        sx={{
+                                          fontSize: 32,
+                                        }}
+                                      />
+                                    ) : (
+                                      <VisibilityOff
+                                        className="text-blue-500"
+                                        sx={{
+                                          fontSize: 32,
+                                        }}
+                                      />
+                                    )}
                                   </IconButton>
                                 </Tooltip>
-                              </>
-                            )}
-                          </Box>
-                        </TableCell>
+                                {active ? (
+                                  ""
+                                ) : (
+                                  <>
+                                    {" "}
+                                    <Tooltip
+                                      // TransitionComponent={Zoom}
+                                      title="Duyệt"
+                                      arrow
+                                    >
+                                      <IconButton
+                                        onClick={() => handleClick(_id)}
+                                        sx={{
+                                          "&:hover": {
+                                            backgroundColor:
+                                              "rgba(255, 72, 66, 0.08)",
+                                            padding: "8px",
+                                            borderRadius: "50%",
+                                          },
+                                        }}
+                                      >
+                                        <DoneIcon
+                                          className="text-blue-500"
+                                          sx={{
+                                            fontSize: 32,
+                                            color: "green",
+                                          }}
+                                        />
+                                      </IconButton>
+                                    </Tooltip>
+                                  </>
+                                )}
+                              </Box>
+                            </TableCell>
 
-                        <TableCell align="left"> </TableCell>
-                      </TableRow>
-                      <CustomDialog
-                        open={openConfirm}
-                        handleClose={handleCancel}
-                        dialogSize="xs"
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {"Duyệt đánh giá"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-description">
-                            Bạn chắc chắn duyệt đánh giá này.
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleCancel}>Hủy</Button>
-                          <Button
-                            onClick={() => handleCloseConfirm(_id)}
-                            autoFocus
-                            sx={{
-                              textTransform: "none !important",
-                            }}
+                            <TableCell align="left"> </TableCell>
+                          </TableRow>
+                          <CustomDialog
+                            open={openConfirm}
+                            handleClose={handleCancel}
+                            dialogSize="xs"
                           >
-                            Đồng ý
-                          </Button>
-                        </DialogActions>
-                      </CustomDialog>
-                    </>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                            <DialogTitle id="alert-dialog-title">
+                              {"Duyệt đánh giá"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Bạn chắc chắn duyệt đánh giá này.
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleCancel}>Hủy</Button>
+                              <Button
+                                onClick={() => handleCloseConfirm(_id)}
+                                autoFocus
+                                sx={{
+                                  textTransform: "none !important",
+                                }}
+                              >
+                                Đồng ý
+                              </Button>
+                            </DialogActions>
+                          </CustomDialog>
+                        </>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </>
+          )}
         </TableContainer>
 
         <TablePagination

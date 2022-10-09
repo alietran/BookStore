@@ -95,9 +95,9 @@ export default function OrderDetail() {
     }
   }, [shipperList]);
   useEffect(() => {
-   
+    if (!orderDetailList) {
       dispatch(getAllDetailOrder());
-    
+    }
   }, [orderDetailList]);
 
   const [shipper, setShipper] = useState();
@@ -185,7 +185,11 @@ export default function OrderDetail() {
   return (
     <>
       <Container
-        sx={{ paddingRight: "0px !important", paddingLeft: "0px !important" }}
+        sx={{
+          paddingRight: "0px !important",
+          paddingLeft: "0px !important",
+          marginBottom: "50px",
+        }}
       >
         <Stack
           direction="row"
@@ -304,13 +308,7 @@ export default function OrderDetail() {
         </Stack>
 
         <Box sx={{ width: "100%", typography: "body1" }}>
-          <OrderInfo
-            // receiptDetailList={successDetailReceipt?.data.receiptId.supplierId}
-            // totalPriceReceiptDetail={
-            //   successDetailReceipt?.data.totalPriceReceiptDetail
-            // }
-            orderDetailList={orderDetailList}
-          />
+          <OrderInfo orderDetailList={orderDetailList} />
         </Box>
       </Container>
       <Stack
@@ -325,7 +323,7 @@ export default function OrderDetail() {
           backgroundColor: "white",
           left: "200px",
           width: "87%",
-          height: "14%",
+          height: "8%",
         }}
       >
         <Button

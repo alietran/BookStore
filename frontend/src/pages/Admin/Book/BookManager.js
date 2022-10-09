@@ -38,6 +38,7 @@ import {
 import CreateBook from "./CreateBook/CreateBook";
 import OptionBook from "./OptionBook/OptionBook";
 import { getBookList, resetBookList } from "../../../redux/action/bookAction";
+import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
 
@@ -98,16 +99,20 @@ function applySortFilter(array, comparator, query) {
 export default function BookManager() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { successDeleteBook, bookList, successCreateBook, successUpdateBook } =
-    useSelector((state) => state.BookReducer);
+  const {
+    successDeleteBook,
+    bookList,
+    successCreateBook,
+    successUpdateBook,
+    loadingBookList,
+  } = useSelector((state) => state.BookReducer);
   // console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
 
-  const { successUpdateReceipt, successCreateReceipt } = useSelector(
-    (state) => state.ReceiptReducer
-  );
+  const { successUpdateReceipt, successCreateReceipt } =
+    useSelector((state) => state.ReceiptReducer);
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -119,11 +124,11 @@ export default function BookManager() {
   console.log("successCreateReceipt", successCreateReceipt);
   useEffect(() => {
     // get list user lần đầu
-    if (!bookList ) {
+    if (!bookList) {
       dispatch(getBookList());
     }
     return () => dispatch(resetBookList());
-  }, [bookList ]);
+  }, [bookList]);
 
   useEffect(() => {
     if (
@@ -263,79 +268,86 @@ export default function BookManager() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
+        {loadingBookList ? (
+          <Loading />
+        ) : (
+          <>
+            {" "}
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={bookList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const {
+                        _id,
+                        name,
+                        desc,
+                        price,
+                        quantity,
+                        bookCover,
+                        totalPage,
+                        publisher,
+                        issuer,
+                        size,
+                      } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={bookList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const {
-                    _id,
-                    name,
-                    desc,
-                    price,
-                    quantity,
-                    bookCover,
-                    totalPage,
-                    publisher,
-                    issuer,
-                    size,
-                  } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, name)}
+                            />
+                          </TableCell>
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{price}</TableCell>
+                          <TableCell
+                            align="left"
+                            dangerouslySetInnerHTML={{ __html: desc }}
+                          ></TableCell>
 
-                      <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">{price}</TableCell>
-                      <TableCell
-                        align="left"
-                        dangerouslySetInnerHTML={{ __html: desc }}
-                      ></TableCell>
+                          <TableCell align="left">{quantity}</TableCell>
 
-                      <TableCell align="left">{quantity}</TableCell>
+                          <TableCell align="left">{totalPage}</TableCell>
+                          <TableCell align="left">{publisher}</TableCell>
+                          <TableCell align="left">{issuer}</TableCell>
+                          <TableCell align="left">{size}</TableCell>
 
-                      <TableCell align="left">{totalPage}</TableCell>
-                      <TableCell align="left">{publisher}</TableCell>
-                      <TableCell align="left">{issuer}</TableCell>
-                      <TableCell align="left">{size}</TableCell>
-
-                      <TableCell align="center">
-                        <OptionBook id={_id} book={row} />
-                      </TableCell>
+                          <TableCell align="center">
+                            <OptionBook id={_id} book={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -344,18 +356,19 @@ export default function BookManager() {
                 </TableRow>
               </TableBody>
             )} */}
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={bookList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={bookList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

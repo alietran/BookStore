@@ -42,6 +42,7 @@ import {
   getAuthorList,
   resetAuthorList,
 } from "../../../redux/action/authorAction";
+import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
 
@@ -103,6 +104,7 @@ export default function AuthorManager() {
     successCreateAuthor,
     successUpdateAuthor,
     successDeleteAuthor,
+    loadingAuthorList,
   } = useSelector((state) => state.AuthorReducer);
   // console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
@@ -252,57 +254,64 @@ export default function AuthorManager() {
           onFilterName={handleFilterByName}
           searchName={"Tìm tác giả"}
         />
+        {loadingAuthorList ? (
+          <Loading />
+        ) : (
+          <>
+            {" "}
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={authorList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const { _id, name, phoneNumber, email, active } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={authorList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, phoneNumber, email, active } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, name)}
+                            />
+                          </TableCell>
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
+                          <TableCell align="left">{_id}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
 
-                      <TableCell align="left">{_id}</TableCell>
-                      <TableCell align="left">{name}</TableCell>
-
-                      <TableCell align="center">
-                        <OptionAuthor id={_id} author={row} />
-                      </TableCell>
+                          <TableCell align="center">
+                            <OptionAuthor id={_id} author={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -311,18 +320,19 @@ export default function AuthorManager() {
                 </TableRow>
               </TableBody>
             )} */}
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={authorList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={authorList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

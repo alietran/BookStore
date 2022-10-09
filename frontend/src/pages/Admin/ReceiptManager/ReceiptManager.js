@@ -35,6 +35,7 @@ import UserListHead from "../../../components/user/UserListHead";
 import OptionAuthor from "../AuthorManager/OptionAuthor/OptionAuthor";
 import OptionReceipt from "./OptionReceipt/OptionReceipt";
 import { getAllDetailReceipt } from "../../../redux/action/receiptDetailAction";
+import Loading from "../../../components/Loading/Loading";
 
 const breadcrumbs = [
   <Link
@@ -124,8 +125,12 @@ export default function ReceiptManager() {
   // chỉ hiện thông báo alert nhập kho 1 lần cho dù nhập 2 sp
   const [alertSuccessUpdateReceipt, setAlertSuccessUpdateReceipt] =
     useState(false);
-  const { successCreateReceipt, receiptList, successUpdateReceipt } =
-    useSelector((state) => state.ReceiptReducer);
+  const {
+    successCreateReceipt,
+    receiptList,
+    successUpdateReceipt,
+    loadingReceiptList,
+  } = useSelector((state) => state.ReceiptReducer);
   console.log("receiptList", receiptList);
   console.log("successCreateReceipt", successCreateReceipt);
   console.log("successUpdateReceipt", successUpdateReceipt);
@@ -264,121 +269,121 @@ export default function ReceiptManager() {
           onFilterName={handleFilterByName}
           searchName={"Tìm tác giả"}
         />
+        {loadingReceiptList ? (
+          <Loading />
+        ) : (
+          <>
+            {" "}
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  // order={order}
+                  // orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={receiptList?.result}
+                  // numSelected={selected.length}
+                  // onRequestSort={handleRequestSort}
+                  // onSelectAllClick={handleSelectAllClick}
+                />
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              // order={order}
-              // orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={receiptList?.result}
-              // numSelected={selected.length}
-              // onRequestSort={handleRequestSort}
-              // onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const {
-                    _id,
-                    totalPriceReceipt,
-                    adminId: { fullName },
-                    supplierId: { name },
-                    inventoryStatus,
-                    createdAt,
-                    receiptdetail,
-                  } = row;
-                  console.log("receiptdetail", receiptdetail);
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const {
+                        _id,
+                        totalPriceReceipt,
+                        adminId: { fullName },
+                        supplierId: { name },
+                        inventoryStatus,
+                        createdAt,
+                        receiptdetail,
+                      } = row;
+                      console.log("receiptdetail", receiptdetail);
 
-                  const isItemSelected = selected.indexOf(_id) !== -1;
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox"></TableCell>
+                      const isItemSelected = selected.indexOf(_id) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox"></TableCell>
 
-                      <TableCell align="left">{_id}</TableCell>
-                      <TableCell align="center">{name}</TableCell>
-                      <TableCell align="center">
-                        {totalPriceReceipt.toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}{" "}
-                      </TableCell>
-                      <TableCell align="center">{fullName}</TableCell>
-                      <TableCell align="center">
-                        {moment(createdAt).format("YYYY-MM-DD")}
-                      </TableCell>
+                          <TableCell align="left">{_id}</TableCell>
+                          <TableCell align="center">{name}</TableCell>
+                          <TableCell align="center">
+                            {totalPriceReceipt.toLocaleString("it-IT", {
+                              style: "currency",
+                              currency: "VND",
+                            })}{" "}
+                          </TableCell>
+                          <TableCell align="center">{fullName}</TableCell>
+                          <TableCell align="center">
+                            {moment(createdAt).format("YYYY-MM-DD")}
+                          </TableCell>
 
-                      <TableCell align="center">
-                        {inventoryStatus ? (
-                          <Chip label="Đã nhập kho" color="success" />
-                        ) : (
-                          <Chip label="Chưa nhập kho" color="warning" />
-                        )}
-                      </TableCell>
+                          <TableCell align="center">
+                            {inventoryStatus ? (
+                              <Chip label="Đã nhập kho" color="success" />
+                            ) : (
+                              <Chip label="Chưa nhập kho" color="warning" />
+                            )}
+                          </TableCell>
 
-                      <TableCell align="center">
-                        <OptionReceipt
-                          id={_id}
-                          receipt={receiptdetail}
-                          inventoryStatus={inventoryStatus}
-                        />
-                      </TableCell>
-                      <TableCell align="center">
-                        {!inventoryStatus ? (
-                          <Button
-                            variant="contained"
-                            sx={{
-                              margin: "10px",
-                              textTransform: "none !important",
-                            }}
-                            onClick={(e) =>
-                              onClickInventory(_id, receiptdetail)
-                            }
-                          >
-                            Nhập kho
-                          </Button>
-                        ) : (
-                          ""
-                        )}
-                      </TableCell>
+                          <TableCell align="center">
+                            <OptionReceipt
+                              id={_id}
+                              receipt={receiptdetail}
+                              inventoryStatus={inventoryStatus}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            {!inventoryStatus ? (
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  margin: "10px",
+                                  textTransform: "none !important",
+                                }}
+                                onClick={(e) =>
+                                  onClickInventory(_id, receiptdetail)
+                                }
+                              >
+                                Nhập kho
+                              </Button>
+                            ) : (
+                              ""
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                   
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )} */}
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={receiptList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={receiptList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

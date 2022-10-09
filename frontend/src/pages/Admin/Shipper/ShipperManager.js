@@ -47,6 +47,7 @@ import { getOrderList } from "../../../redux/action/orderAction";
 // import OptionCategory from "./OptionCategory/OptionCategory";
 import moment from "moment";
 import OptionOrder from "../Order/OptionOrder/OptionOrder";
+import Loading from "../../../components/Loading/Loading";
 // import Label from "../../components/Label";
 
 // ----------------------------------------------------------------------
@@ -125,11 +126,8 @@ export default function ShipperManager() {
     successUpdateShipper,
     errorUpdateShipper,
     successDeleteShipper,
+    loadingShipperList,
   } = useSelector((state) => state.ShipperReducer);
-  // console.log("successDeleteCate", successDeleteCate);
-  // const { successUpdateUserCurrent } = useSelector(
-  //   (state) => state.AuthReducer
-  // );
 
   const [page, setPage] = useState(0);
   const [page1, setPage1] = useState(0);
@@ -141,7 +139,9 @@ export default function ShipperManager() {
   const [rowsPerPage1, setRowsPerPage1] = useState(5);
   const [open, setOpen] = useState(false);
   const { orderList } = useSelector((state) => state.OrderReducer);
-   let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
+   let { orderDetailList } = useSelector(
+     (state) => state.OrderDetailReducer
+   );
   const [list, setList] = useState();
   console.log("orderList", orderList);
 
@@ -311,7 +311,7 @@ export default function ShipperManager() {
       >
         <Stack spacing={2}>
           <Typography variant="h4" gutterBottom>
-           Shipper
+            Shipper
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -325,8 +325,8 @@ export default function ShipperManager() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
-
-        <TableContainer sx={{ minWidth: 800 }}>
+        {loadingShipperList ? <Loading /> : <>
+          <TableContainer sx={{ minWidth: 800 }}>
           <Table>
             <UserListHead
               order={order}
@@ -561,6 +561,10 @@ export default function ShipperManager() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        </>
+        }
+
+      
       </Card>
     </Container>
   );

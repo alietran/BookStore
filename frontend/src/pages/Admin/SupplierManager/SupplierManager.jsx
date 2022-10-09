@@ -38,6 +38,7 @@ import {
 } from "../../../redux/action/supplierAction";
 import OptionSupplier from "./OptionSupplier/OptionSupplier";
 import CreateSupplier from "./CreateSupplier/CreateSupplier";
+import Loading from "../../../components/Loading/Loading";
 // import OptionCategory from "./OptionCategory/OptionCategory";
 // import CreateCategory from "./CreateCategory/CreateCategory";
 
@@ -102,6 +103,7 @@ export default function SupplierManager() {
     successUpdateSupplier,
     successDeleteSupplier,
     successCreateSupplier,
+    loadingSupplierList,
   } = useSelector((state) => state.SupplierReducer);
 
   console.log("successCreateSupplier", successCreateSupplier);
@@ -255,46 +257,52 @@ export default function SupplierManager() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
+        {loadingSupplierList ? (
+          <Loading />
+        ) : (
+          <>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={supplierList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const { _id, name, phoneNumber, address } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={supplierList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, phoneNumber, address } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, name)}
+                            />
+                          </TableCell>
+                          <TableCell align="left">{_id}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{phoneNumber}</TableCell>
+                          <TableCell align="left">{address}</TableCell>
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
-                      <TableCell align="left">{_id}</TableCell>
-                      <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">{phoneNumber}</TableCell>
-                      <TableCell align="left">{address}</TableCell>
-
-                      {/* {filteredUsers
+                          {/* {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row1) => {
                     
@@ -309,19 +317,19 @@ export default function SupplierManager() {
                       );
                 })} */}
 
-                      <TableCell align="center">
-                        <OptionSupplier id={_id} supplier={row} />
-                      </TableCell>
+                          <TableCell align="center">
+                            <OptionSupplier id={_id} supplier={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -330,18 +338,20 @@ export default function SupplierManager() {
                 </TableRow>
               </TableBody>
             )} */}
-          </Table>
-        </TableContainer>
+              </Table>
+            </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={supplierList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={supplierList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

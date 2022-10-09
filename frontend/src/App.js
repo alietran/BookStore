@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import { useEffect, useMemo, useState, Suspense, lazy } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import LoginAdmin from "./pages/Auth/Login";
-import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
+// import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
 
 import { useHistory } from "react-router-dom";
@@ -27,13 +27,13 @@ import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
 import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
 import SupplierManager from "./pages/Admin/SupplierManager/SupplierManager";
-import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
-import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
-import BookManager from "./pages/Admin/Book/BookManager";
+// import ShipperManager from "./pages/Admin/Shipper/ShipperManager";
+// import PromotionManager from "./pages/Admin/PromotionManager/PromotionManager";
+// import BookManager from "./pages/Admin/Book/BookManager";
 
 import Checkout from "./pages/HomePage/Checkout";
 
-import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
+// import ReceiptManager from "./pages/Admin/ReceiptManager/ReceiptManager";
 import CreateReceipt from "./pages/Admin/ReceiptManager/CreateReceipt/CreateReceipt";
 import ProductDetail from "./pages/HomePage/ProductDetail/ProductDetail";
 
@@ -42,28 +42,54 @@ import Cart from "./pages/HomePage/Cart/Cart";
 import PaymentMethod from "./pages/HomePage/Checkout/PaymentMethod/PaymentMethod";
 import PaymentManager from "./pages/Admin/PaymentManager/PaymentManager";
 import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
-import Overview from "./pages/Admin/Overview/Overview";
+// import Overview from "./pages/Admin/Overview/Overview";
 // import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
-import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
+// import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
 import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHistoryDetail";
 import LoginShipper from "./pages/Shipper/LoginShipper";
 import OrderListShipper from "./pages/Shipper/OrderListShipper";
 import Search from "./pages/HomePage/Search/Search";
 import WarehouseRoute from "./guards/WarehouseRoute";
 import OrderShipperDetail from "./pages/Shipper/OrderShipperDetail";
-import RatingManager from "./pages/Admin/Rating/RatingManager";
+// import RatingManager from "./pages/Admin/Rating/RatingManager";
 import { useDispatch } from "react-redux";
 import TriggerLoadingLazy from "./components/TriggerLoadingLazy/TriggerLoadingLazy";
-import Loading from "./components/Loading/Loading";
+// import Loading from "./components/Loading/Loading";
 
 
-const AuthorManager = lazy(() =>
-  import("./pages/Admin/AuthorManager/AuthorManager")
-);
+// const AuthorManager = lazy(() =>
+//   import("./pages/Admin/AuthorManager/AuthorManager")
+// );
 const OrderManager = lazy(() =>
   import("./pages/Admin/Order/OrderManager")
 );
+const PromotionManager = lazy(() =>
+  import("./pages/Admin/PromotionManager/PromotionManager")
+);
+const AuthorManager = lazy(() =>
+  import("./pages/Admin/AuthorManager/AuthorManager")
+);
+const CategoryManager = lazy(() =>
+  import("./pages/Admin/CategoryManager/CategoryManager")
+);
+const ShipperManager = lazy(() =>
+  import("./pages/Admin/Shipper/ShipperManager")
+);
+const BookManager = lazy(() =>
+  import("./pages/Admin/Book/BookManager")
+);
+const ReceiptManager = lazy(() =>
+  import("./pages/Admin/ReceiptManager/ReceiptManager")
+);
+const UserInfo = lazy(() =>
+  import("./pages/Admin/UserManager/UserManager")
+);
+const Overview = lazy(() => import("./pages/Admin/Overview/Overview"));
+
+
+
+const RatingManager = lazy(() => import("./pages/Admin/Rating/RatingManager"));
 
 function App() {
   const themeOptions = useMemo(
@@ -126,7 +152,7 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Loading />{" "}
+        {/* <Loading />{" "} */}
         <Suspense fallback={<TriggerLoadingLazy />} >
           <Switch>
             <Route

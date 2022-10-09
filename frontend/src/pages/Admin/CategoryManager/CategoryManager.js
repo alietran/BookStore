@@ -37,6 +37,7 @@ import {
 } from "../../../redux/action/categoryAction";
 import OptionCategory from "./OptionCategory/OptionCategory";
 import CreateCategory from "./CreateCategory/CreateCategory";
+import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
 
@@ -93,8 +94,13 @@ function applySortFilter(array, comparator, query) {
 export default function CategoryManager() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const { cateList, successCreateCate, successUpdateCate, successDeleteCate } =
-    useSelector((state) => state.CateReducer);
+  const {
+    cateList,
+    successCreateCate,
+    successUpdateCate,
+    successDeleteCate,
+    loadingCateList,
+  } = useSelector((state) => state.CateReducer);
   console.log("successDeleteCate", successDeleteCate);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -209,7 +215,7 @@ export default function CategoryManager() {
       color="text.primary"
       sx={{ "&:hover": { color: "#212B36" } }}
     >
-     Thể loại
+      Thể loại
     </Link>,
     <Typography key="3" color="inherit">
       Danh sách
@@ -242,51 +248,59 @@ export default function CategoryManager() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
+        {loadingCateList ? (
+          <Loading />
+        ) : (
+          <>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={cateList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const { _id, name, parentCateId } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={cateList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, parentCateId } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, name)}
+                            />
+                          </TableCell>
+                          <TableCell align="left">{_id}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">
+                            {parentCateId === "0"
+                              ? "Thư mục cha"
+                              : filteredUsers
+                                  .filter(
+                                    (item) => item.id === row.parentCateId
+                                  )
+                                  .map((item) => <span>{item.name}</span>)}
+                          </TableCell>
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
-                      <TableCell align="left">{_id}</TableCell>
-                      <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">
-                        {parentCateId === "0"
-                          ? "Thư mục cha"
-                          : filteredUsers
-                              .filter((item) => item.id === row.parentCateId)
-                              .map((item) => <span>{item.name}</span>)}
-                      </TableCell>
-
-                      {/* {filteredUsers
+                          {/* {filteredUsers
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row1) => {
                     
@@ -301,19 +315,19 @@ export default function CategoryManager() {
                       );
                 })} */}
 
-                      <TableCell align="center">
-                        <OptionCategory id={_id} theCategory={row} />
-                      </TableCell>
+                          <TableCell align="center">
+                            <OptionCategory id={_id} theCategory={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -322,18 +336,20 @@ export default function CategoryManager() {
                 </TableRow>
               </TableBody>
             )} */}
-          </Table>
-        </TableContainer>
+              </Table>
+            </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={cateList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={cateList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

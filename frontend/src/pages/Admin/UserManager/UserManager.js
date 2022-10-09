@@ -42,6 +42,7 @@ import Label from "../../../components/Label";
 import OptionUser from "./OptionUser/OptionUser";
 import CreateUser from "./CreateUser/CreateUser";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
 
@@ -105,8 +106,13 @@ export default function UserManager() {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   // const { enqueueSnackbar } = useSnackbar();
-  const { accountList, successUpdateAdmin, successDeleteUser, userRoleList } =
-    useSelector((state) => state.AdminReducer);
+  const {
+    accountList,
+    successUpdateAdmin,
+    successDeleteUser,
+    userRoleList,
+    loadingAccountList,
+  } = useSelector((state) => state.AdminReducer);
   console.log("accountList", accountList);
   const { successUpdateUser } = useSelector((state) => state.UserReducer);
   const { successCreateAdmin, successUpdateUserCurrent } = useSelector(
@@ -311,110 +317,110 @@ export default function UserManager() {
               onFilterRole={handleFilterByRole}
               filterList={userRoleList?.data}
             />
+            {loadingAccountList ? (
+              <Loading />
+            ) : (
+              <>
+                {" "}
+                <TableContainer sx={{ minWidth: 800 }}>
+                  <Table>
+                    <UserListHead
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={accountList?.result}
+                      numSelected={selected.length}
+                      onRequestSort={handleRequestSort}
+                      onSelectAllClick={handleSelectAllClick}
+                    />
+                    <TableBody>
+                      {filteredUsers
+                        ?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((row) => {
+                          const {
+                            _id,
+                            fullName,
+                            idRole: { roleName },
+                            avatar,
+                            email,
+                            phoneNumber,
+                            active,
+                          } = row;
+                          const isItemSelected = selected.indexOf(_id) !== -1;
 
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={accountList?.result}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers
-                    ?.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                    .map((row) => {
-                      const {
-                        _id,
-                        fullName,
-                        idRole: { roleName },
-                        avatar,
-                        email,
-                        phoneNumber,
-                        active,
-                      } = row;
-                      const isItemSelected = selected.indexOf(_id) !== -1;
-
-                      return (
-                        <TableRow
-                          hover
-                          key={_id}
-                          tabIndex={-1}
-                          _id="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, _id)}
-                            />
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              spacing={2}
+                          return (
+                            <TableRow
+                              hover
+                              key={_id}
+                              tabIndex={-1}
+                              _id="checkbox"
+                              selected={isItemSelected}
+                              aria-checked={isItemSelected}
                             >
-                              <Avatar alt={fullName} src={avatar} />
-                              <Typography variant="subtitle2" noWrap>
-                                {fullName}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{phoneNumber}</TableCell>
-                          <TableCell align="left capitalize">
-                            {roleName}
-                          </TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(!active && "error") || "success"}
-                            >
-                              {changeActive(active)}
-                            </Label>
-                          </TableCell>
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  checked={isItemSelected}
+                                  onChange={(event) => handleClick(event, _id)}
+                                />
+                              </TableCell>
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                padding="none"
+                              >
+                                <Stack
+                                  direction="row"
+                                  alignItems="center"
+                                  spacing={2}
+                                >
+                                  <Avatar alt={fullName} src={avatar} />
+                                  <Typography variant="subtitle2" noWrap>
+                                    {fullName}
+                                  </Typography>
+                                </Stack>
+                              </TableCell>
+                              <TableCell align="left">{email}</TableCell>
+                              <TableCell align="left">{phoneNumber}</TableCell>
+                              <TableCell align="left capitalize">
+                                {roleName}
+                              </TableCell>
+                              <TableCell align="left">
+                                <Label
+                                  variant="ghost"
+                                  color={(!active && "error") || "success"}
+                                >
+                                  {changeActive(active)}
+                                </Label>
+                              </TableCell>
 
-                          <TableCell align="right">
-                            <OptionUser id={_id} User={row} />
-                          </TableCell>
+                              <TableCell align="right">
+                                <OptionUser id={_id} User={row} />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                          <TableCell colSpan={6} />
                         </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-                {/* {isUserNotFound && (
-              <TableBody>
-                <TableRow>
-                  <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                   
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )} */}
-              </Table>
-            </TableContainer>
-
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={accountList?.result}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={accountList?.result}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </>
+            )}
           </TabPanel>
           <TabPanel
             value="2"

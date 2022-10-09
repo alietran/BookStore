@@ -47,7 +47,7 @@ export const SupplierReducer = (state = stateDefault, action) => {
       return {
         ...state,
         supplierList: action.payload.data,
-        errorSupplierList: false,
+        loadingSupplierList: false,
       };
     }
     case "GET_SUPPLIER_FAIL": {

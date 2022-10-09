@@ -25,11 +25,16 @@ import {
 } from "@mui/material";
 import { getBookList } from "../../../redux/action/bookAction";
 import { getPromotionList } from "../../../redux/action/promotionAction";
+import { getAllAccount } from "../../../redux/action/adminAction";
+import Loading from "../../../components/Loading/Loading";
 export default function Overview() {
   const dispatch = useDispatch();
-  const { orderRSForWeek, orderRSForYear, orderRSForMonth } = useSelector(
-    (state) => state.OrderReducer
-  );
+  const {
+    orderRSForWeek,
+    orderRSForYear,
+    orderRSForMonth,
+    loadingOrderRSForYear,
+  } = useSelector((state) => state.OrderReducer);
   const { promotionList } = useSelector((state) => state.PromotionReducer);
 
   console.log("promotionList", promotionList);
@@ -61,6 +66,12 @@ export default function Overview() {
     }
     //  return () => dispatch(resetReceiptList());
   }, [receiptList]);
+  useEffect(() => {
+    if (!accountList?.data) {
+      dispatch(getAllAccount());
+    }
+    //  return () => dispatch(resetReceiptList());
+  }, [accountList]);
 
   useEffect(() => {
     let revenueYear = listChartItemYear?.reduce(
@@ -634,112 +645,116 @@ export default function Overview() {
           </Grid>
         </Box>
       </div>
-      <Box
-        sx={{
-          minWidth: 120,
-          boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px",
-          padding: "20px",
-          display: "flex",
-        }}
-      >
-        <div className="w-3/4">
-          <h2 className="text-center text-2xl">Thống kê doanh thu</h2>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Thống kê</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={option}
-              label="Thống kê"
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Tuần trước</MenuItem>
-              <MenuItem value={20}>Tháng</MenuItem>
-              <MenuItem value={30}>Năm</MenuItem>
-            </Select>
-          </FormControl>
-          <div id="chart" style={{ width: "100%" }}>
-            <ReactApexChart
-              options={state.options}
-              series={state.series}
-              type="bar"
-              height={430}
-            />
+      {loadingOrderRSForYear ? (
+        <Loading />
+      ) : (
+        <Box
+          sx={{
+            minWidth: 120,
+            boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px",
+            padding: "20px",
+            display: "flex",
+          }}
+        >
+          <div className="w-3/4">
+            <h2 className="text-center text-2xl">Thống kê doanh thu</h2>
+            <FormControl>
+              <InputLabel id="demo-simple-select-label">Thống kê</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={option}
+                label="Thống kê"
+                onChange={handleChange}
+              >
+                <MenuItem value={10}>Tuần trước</MenuItem>
+                <MenuItem value={20}>Tháng</MenuItem>
+                <MenuItem value={30}>Năm</MenuItem>
+              </Select>
+            </FormControl>
+            <div id="chart" style={{ width: "100%" }}>
+              <ReactApexChart
+                options={state.options}
+                series={state.series}
+                type="bar"
+                height={430}
+              />
+            </div>
           </div>
-        </div>
-        <div className="w-1/4 flex flex-col justify-center items-center text-center">
-          <Box
-            sx={{
-              background: "white",
-              height: "auto",
-              width: "220px",
-              borderRadius: "10px",
-              padding: "5px",
-              boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-            }}
-          >
-            <Grid item xs={8}>
-              <div className="leading-5 text-center ">
-                {" "}
-                <Typography
-                  variant="h4"
-                  className="m-0"
-                  sx={{ fontWeight: "normal" }}
-                >
-                  Doanh thu
-                </Typography>
-                <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                  {option === 30
-                    ? revenueYear?.toLocaleString("vi-VI")
-                    : option === 20
-                    ? revenueMonth?.toLocaleString("vi-VI")
-                    : revenueWeek.toLocaleString("vi-VI")}
-                  đ
-                </Typography>
-              </div>
-            </Grid>
-          </Box>
-          <Box
-            sx={{
-              background: "white",
-              height: "auto",
-              width: "220px",
-              borderRadius: "10px",
-              padding: "5px",
-              marginTop: "30px",
-              // marginBottom: "10px",
-              boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-            }}
-          >
-            <Grid item xs={8}>
-              <div className=" leading-5 text-center">
-                {" "}
-                {/* <div>
+          <div className="w-1/4 flex flex-col justify-center items-center text-center">
+            <Box
+              sx={{
+                background: "white",
+                height: "auto",
+                width: "220px",
+                borderRadius: "10px",
+                padding: "5px",
+                boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+              }}
+            >
+              <Grid item xs={8}>
+                <div className="leading-5 text-center ">
+                  {" "}
+                  <Typography
+                    variant="h4"
+                    className="m-0"
+                    sx={{ fontWeight: "normal" }}
+                  >
+                    Doanh thu
+                  </Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                    {option === 30
+                      ? revenueYear?.toLocaleString("vi-VI")
+                      : option === 20
+                      ? revenueMonth?.toLocaleString("vi-VI")
+                      : revenueWeek.toLocaleString("vi-VI")}
+                    đ
+                  </Typography>
+                </div>
+              </Grid>
+            </Box>
+            <Box
+              sx={{
+                background: "white",
+                height: "auto",
+                width: "220px",
+                borderRadius: "10px",
+                padding: "5px",
+                marginTop: "30px",
+                // marginBottom: "10px",
+                boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+              }}
+            >
+              <Grid item xs={8}>
+                <div className=" leading-5 text-center">
+                  {" "}
+                  {/* <div>
                   <img
                     src="./img/cost.png"
                     alt=""
                   />
                 </div> */}
-                <Typography
-                  variant="h4"
-                  className="m-0"
-                  sx={{ fontWeight: "normal" }}
-                >
-                  Chi phí
-                </Typography>
-                <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                  {option === 30
-                    ? costYear?.toLocaleString("vi-VI")
-                    : option === 20
-                    ? costMonth?.toLocaleString("vi-VI")
-                    : costWeek.toLocaleString("vi-VI")}
-                  đ
-                </Typography>
-              </div>
-            </Grid>
-          </Box>
-        </div>
-      </Box>
+                  <Typography
+                    variant="h4"
+                    className="m-0"
+                    sx={{ fontWeight: "normal" }}
+                  >
+                    Chi phí
+                  </Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                    {option === 30
+                      ? costYear?.toLocaleString("vi-VI")
+                      : option === 20
+                      ? costMonth?.toLocaleString("vi-VI")
+                      : costWeek.toLocaleString("vi-VI")}
+                    đ
+                  </Typography>
+                </div>
+              </Grid>
+            </Box>
+          </div>
+        </Box>
+      )}
     </div>
   );
 }

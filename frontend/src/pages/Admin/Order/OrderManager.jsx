@@ -123,7 +123,9 @@ export default function OrderManager() {
     successUpdateAuthor,
     successDeleteAuthor,
   } = useSelector((state) => state.AuthorReducer);
-  const { orderList } = useSelector((state) => state.OrderReducer);
+  const { orderList, loadingOrderList } = useSelector(
+    (state) => state.OrderReducer
+  );
   console.log("orderList", orderList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
@@ -136,7 +138,7 @@ export default function OrderManager() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selectTag, setSelectTag] = useState("infoUser");
-
+  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     // get list user lần đầu
     if (!orderList) {
@@ -146,7 +148,11 @@ export default function OrderManager() {
     return () => dispatch(resetOrder());
   }, []);
 
-  // console.log("loading",loading)
+  //  useEffect(() => {
+  //    if (orderList?.result !== 0) setLoading(false);
+  //  }, [orderList]);
+  //   console.log("loading",loading)
+
   useEffect(() => {
     if (successCreateAuthor || successUpdateAuthor || successDeleteAuthor) {
       dispatch(getAuthorList());
@@ -279,59 +285,62 @@ export default function OrderManager() {
           onSelectTag={handleSelectTag}
           selectTag={selectTag}
         />
-        {/* {!loading ? (
+        {loadingOrderList ? (
           <Loading />
-        ) : ( */}
-        <>
-          {" "}
-          <TableContainer sx={{ minWidth: 800 }}>
-            <Table>
-              <UserListHead
-                order={order}
-                orderBy={orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={orderList?.result}
-                numSelected={selected.length}
-                onRequestSort={handleRequestSort}
-                onSelectAllClick={handleSelectAllClick}
-              />
-              <TableBody>
-                {filteredUsers
-                  ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const {
-                      _id,
-                      address,
-                      status,
-                      createdAt,
-                      paymentMethod,
-                      totalPrice,
-                      shipper,
-                    } = row;
-                    const isItemSelected =
-                      selected.indexOf(address.fullName) !== -1;
-                    return (
-                      <TableRow
-                        hover
-                        key={_id}
-                        tabIndex={-1}
-                        _id="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell></TableCell>
-                        <TableCell align="left">{_id}</TableCell>
-                        <TableCell align="left">{address.fullName}</TableCell>
-                        <TableCell align="left">
-                          {address.phoneNumber}
-                        </TableCell>
+        ) : (
+          <>
+            {" "}
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={orderList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const {
+                        _id,
+                        address,
+                        status,
+                        createdAt,
+                        paymentMethod,
+                        totalPrice,
+                        shipper,
+                      } = row;
+                      const isItemSelected =
+                        selected.indexOf(address.fullName) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell></TableCell>
+                          <TableCell align="left">{_id}</TableCell>
+                          <TableCell align="left">{address.fullName}</TableCell>
+                          <TableCell align="left">
+                            {address.phoneNumber}
+                          </TableCell>
 
-                        {/* {/* <TableCell align="left">{name}</TableCell> */}
-                        <TableCell align="left">
-                          {moment(createdAt).format("DD/MM/YYYY")}
-                        </TableCell>
-                        <TableCell align="left">
-                          {/* <Chip
+                          {/* {/* <TableCell align="left">{name}</TableCell> */}
+                          <TableCell align="left">
+                            {moment(createdAt).format("DD/MM/YYYY")}
+                          </TableCell>
+                          <TableCell align="left">
+                            {/* <Chip
                           label={status}
                           color={
                             status === "Đang xử lý"
@@ -341,62 +350,66 @@ export default function OrderManager() {
                               : status === "Đã giao hàng" ? "success" : "error"
                           }
                         /> */}
-                          {/* <Label variant="ghost" color={"success"}>
+                            {/* <Label variant="ghost" color={"success"}>
                           Đã xử lý
                         </Label> */}
-                          <Label
-                            variant="ghost"
-                            color={
-                              status === "Đang xử lý"
-                                ? "default"
-                                : status === "Đang vận chuyển"
-                                ? "info"
-                                : status === "Đã giao hàng"
-                                ? "success"
-                                : status === "Đã nhận"
-                                ? "success"
-                                : status === "Đã đánh giá"
-                                ? "warning"
-                                : "error"
-                            }
-                          >
-                            {status}
-                          </Label>
+                            <Label
+                              variant="ghost"
+                              color={
+                                status === "Đang xử lý"
+                                  ? "default"
+                                  : status === "Đang vận chuyển"
+                                  ? "info"
+                                  : status === "Đã giao hàng"
+                                  ? "success"
+                                  : status === "Đã nhận"
+                                  ? "success"
+                                  : status === "Đã đánh giá"
+                                  ? "warning"
+                                  : "error"
+                              }
+                            >
+                              {status}
+                            </Label>
 
-                          {/* {status === "Đang xử lý" ? (
+                            {/* {status === "Đang xử lý" ? (
                           <Chip label="Đã thanh toán" color="primary" />
                         ) : paymentMethod.resultCode === 1000 ? (
                           <Chip label="Chờ thanh toán" color="warning" />
                         ) : (
                           <Chip label="Đã hủy" color="error" />
                         )} */}
-                        </TableCell>
-                        <TableCell align="left">
-                          {totalPrice.toLocaleString()}
-                        </TableCell>
-                        <TableCell align="left">
-                          {paymentMethod.resultCode === 0 ? (
-                            <Chip label="Đã thanh toán" color="primary" />
-                          ) : paymentMethod.resultCode === 1000 ? (
-                            <Chip label="Chờ thanh toán" color="warning" />
-                          ) : (
-                            <Chip label="Đã hủy" color="error" />
-                          )}
-                        </TableCell>
+                          </TableCell>
+                          <TableCell align="left">
+                            {totalPrice.toLocaleString()}
+                          </TableCell>
+                          <TableCell align="left">
+                            {paymentMethod.resultCode === 0 ? (
+                              <Chip label="Đã thanh toán" color="primary" />
+                            ) : paymentMethod.resultCode === 1000 ? (
+                              <Chip label="Chờ thanh toán" color="warning" />
+                            ) : (
+                              <Chip label="Đã hủy" color="error" />
+                            )}
+                          </TableCell>
 
-                        <TableCell align="center">
-                          <OptionOrder id={_id} order={row} shipper={shipper} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-              {/* {isUserNotFound && (
+                          <TableCell align="center">
+                            <OptionOrder
+                              id={_id}
+                              order={row}
+                              shipper={shipper}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -405,19 +418,19 @@ export default function OrderManager() {
                 </TableRow>
               </TableBody>
             )} */}
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={orderList?.result}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </>
-        {/* )} */}
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={orderList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

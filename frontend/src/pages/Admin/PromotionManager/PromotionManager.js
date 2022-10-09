@@ -45,6 +45,7 @@ import CreatePromotion from "./CreatePromotion/CreatePromotion";
 import OptionPromotion from "./OptionPromotion/OptionPromotion";
 import { getPromotionList } from "../../../redux/action/promotionAction";
 import moment from "moment";
+import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
 
@@ -111,6 +112,7 @@ export default function PromotionManager() {
     successCreatePromotion,
     successUpdatePromotion,
     successDeletePromotion,
+    loadingPromotionList,
   } = useSelector((state) => state.PromotionReducer);
 
   const [page, setPage] = useState(0);
@@ -265,86 +267,93 @@ export default function PromotionManager() {
           filterName={filterName}
           onFilterName={handleFilterByName}
         />
+        {loadingPromotionList ? (
+          <Loading />
+        ) : (
+          <>
+            {" "}
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={promotionList?.result}
+                  // numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const {
+                        _id,
+                        title,
+                        code,
+                        price,
+                        miniPrice,
+                        startDate,
+                        expiryDate,
+                        activeCode,
+                      } = row;
+                      const isItemSelected = selected.indexOf(title) !== -1;
+                      return (
+                        <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, title)}
+                            />
+                          </TableCell>
 
-        <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={promotionList?.result}
-              // numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const {
-                    _id,
-                    title,
-                    code,
-                    price,
-                    miniPrice,
-                    startDate,
-                    expiryDate,
-                    activeCode,
-                  } = row;
-                  const isItemSelected = selected.indexOf(title) !== -1;
-                  return (
-                    <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, title)}
-                        />
-                      </TableCell>
+                          <TableCell align="left">{title}</TableCell>
 
-                      <TableCell align="left">{title}</TableCell>
-
-                      <TableCell align="left">
-                        {(price * 1).toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}{" "}
-                        /{" "}
-                        {(miniPrice * 1).toLocaleString("it-IT", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </TableCell>
-                      {/* <TableCell align="left">{price_discount}</TableCell> */}
-                      <TableCell align="left">
-                        {moment(startDate)?.format("YYYY-MM-DD")}
-                      </TableCell>
-                      <TableCell align="left">
-                        {moment(expiryDate)?.format("YYYY-MM-DD")}
-                      </TableCell>
-                      <TableCell align="left">{code}</TableCell>
-                      {/* <TableCell align="left">{activeCode}</TableCell> */}
-                      <TableCell align="left">
-                        {activeCode === "Sắp diễn ra" ? (
-                          <Chip label="Sắp diễn ra" color="warning" />
-                        ) : activeCode === "Đang diễn ra" ? (
-                          <Chip label="Đang diễn ra" color="success" />
-                        ) : (
-                          <Chip label="Kết thúc" color="error" />
-                        )}
-                      </TableCell>
-                      <TableCell align="center">
-                        <OptionPromotion id={_id} promotion={row} />
-                      </TableCell>
+                          <TableCell align="left">
+                            {(price * 1).toLocaleString("it-IT", {
+                              style: "currency",
+                              currency: "VND",
+                            })}{" "}
+                            /{" "}
+                            {(miniPrice * 1).toLocaleString("it-IT", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </TableCell>
+                          {/* <TableCell align="left">{price_discount}</TableCell> */}
+                          <TableCell align="left">
+                            {moment(startDate)?.format("YYYY-MM-DD")}
+                          </TableCell>
+                          <TableCell align="left">
+                            {moment(expiryDate)?.format("YYYY-MM-DD")}
+                          </TableCell>
+                          <TableCell align="left">{code}</TableCell>
+                          {/* <TableCell align="left">{activeCode}</TableCell> */}
+                          <TableCell align="left">
+                            {activeCode === "Sắp diễn ra" ? (
+                              <Chip label="Sắp diễn ra" color="warning" />
+                            ) : activeCode === "Đang diễn ra" ? (
+                              <Chip label="Đang diễn ra" color="success" />
+                            ) : (
+                              <Chip label="Kết thúc" color="error" />
+                            )}
+                          </TableCell>
+                          <TableCell align="center">
+                            <OptionPromotion id={_id} promotion={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-            {/* {isUserNotFound && (
+                  )}
+                </TableBody>
+                {/* {isUserNotFound && (
               <TableBody>
                 <TableRow>
                   <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -353,18 +362,19 @@ export default function PromotionManager() {
                 </TableRow>
               </TableBody>
             )} */}
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={promotionList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={promotionList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

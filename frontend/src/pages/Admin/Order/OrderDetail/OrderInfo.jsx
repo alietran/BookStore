@@ -37,7 +37,7 @@ export default function OrderInfo({ orderDetailList }) {
   ];
 
   return (
-    <Box>
+    <Box >
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4} sx={{ marginBottom: "50px" }}>
           <Typography variant="h6" sx={{ marginLeft: 1, marginBottom: 2 }}>
@@ -79,19 +79,7 @@ export default function OrderInfo({ orderDetailList }) {
                       orderDetailList[0]?.order.address?.city}
                 </span>
               </p>
-              {/* <p className="font-semibold">
-                Tổng tiền:{" "}
-                <span className="ml-6 font-normal">
-                  {orderDetailList &&
-                    orderDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
-                      "it-IT",
-                      {
-                        style: "currency",
-                        currency: "VND",
-                      }
-                    )}
-                </span>
-              </p> */}
+             
             </div>
           </Card>
         </Grid>
@@ -138,19 +126,7 @@ export default function OrderInfo({ orderDetailList }) {
                 </span>
               </p>
 
-              {/* <p className="font-semibold">
-                Tổng tiền:{" "}
-                <span className="ml-6 font-normal">
-                  {orderDetailList &&
-                    orderDetailList[0]?.receiptId.totalPriceReceipt?.toLocaleString(
-                      "it-IT",
-                      {
-                        style: "currency",
-                        currency: "VND",
-                      }
-                    )}
-                </span>
-              </p> */}
+             
             </div>
           </Card>
         </Grid>
