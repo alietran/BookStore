@@ -62,7 +62,6 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-
 const rows = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
@@ -85,8 +84,6 @@ export default function ProductDetail(props) {
 
   console.log("errorAddCart", errorAddCart);
 
-
-
   useEffect(() => {
     if (id) {
       dispatch(getDetailBook(id));
@@ -94,9 +91,9 @@ export default function ProductDetail(props) {
   }, [id]);
 
   useEffect(() => {
-     if (id) {
-    dispatch(getRatingDetail(id));
-     }
+    if (id) {
+      dispatch(getRatingDetail(id));
+    }
   }, [id]);
 
   console.log("ratingDetail,", ratingDetail);
@@ -104,9 +101,9 @@ export default function ProductDetail(props) {
   const totalReview = ratingDetail?.data.reduce((total, item) => {
     return total + item.rating;
   }, 0);
-  
-   const ratingMovie = totalReview / ratingDetail?.result;
-   console.log("ratingMovie,", ratingMovie);
+
+  const ratingMovie = totalReview / ratingDetail?.result;
+  console.log("ratingMovie,", ratingMovie);
   const [imageURL, setImageURL] = useState(successDetailBook?.data.image);
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
@@ -237,7 +234,8 @@ export default function ProductDetail(props) {
                     <div className="box__content-left--img">
                       <div className={classes.img__box}>
                         <div className={classes.img__content}>
-                          <img src={imageURL ? imageURL : bookDetail?.image} />
+                          {/* <img src={imageURL ? imageURL : bookDetail?.image} /> */}
+                          <img src={bookDetail?.image} alt="" />
                         </div>
                       </div>
                       <div className={classes["img__library"]}>
@@ -312,50 +310,31 @@ export default function ProductDetail(props) {
                         {bookDetail?.quantity > 0 ? "Còn hàng " : "Hết hàng"}
                       </Label>
                     </div>
-                    {/* <div className="content__title-discount">
-                      Chọn mã giảm giá
-                    </div>
-
-                    <div className={classes.content__discount}>
-                      <div className={classes["content__discount-gift"]}>
-                        <img
-                          style={{ width: "40px", height: "40px" }}
-                          src="../../../../img/svgexport-15.svg"
-                          alt="gift-icon"
-                        />
-                      </div>
-                      <div className={classes["content__discount-box"]}>
-                        <div className={classes["box-title"]}>
-                          <span className="box-title-price">Giảm giá</span> off
+                    {bookDetail?.quantity === 0 ? (
+                      " "
+                    ) : (
+                      <>
+                        {" "}
+                        <div className={classes.content__button}>
+                          <Button
+                            onClick={handleBuy}
+                            variant="contained"
+                            className={`${classes["content__button--buy"]} ${classes.buttonAction}`}
+                          >
+                            Mua Ngay
+                          </Button>
+                          <button
+                            onClick={handleAddToCart}
+                            className={`${classes["content__button--add"]} ${classes.buttonAction}   `}
+                          >
+                            Thêm vào giỏ
+                          </button>
                         </div>
-                        <div className={classes["box-expiryDay"]}>
-                          <div className="box-expiryDay-day">
-                            Ngày hết hạn: 27/7/2022
-                          </div>
-                          <div className={classes["box-expiryDay-apply"]}>
-                            Áp dụng
-                          </div>
+                        <div className="content__line">
+                          <div className="line"></div>
                         </div>
-                      </div>
-                    </div> */}
-                    <div className={classes.content__button}>
-                      <Button
-                        onClick={handleBuy}
-                        variant="contained"
-                        className={`${classes["content__button--buy"]} ${classes.buttonAction}`}
-                      >
-                        Mua Ngay
-                      </Button>
-                      <button
-                        onClick={handleAddToCart}
-                        className={`${classes["content__button--add"]} ${classes.buttonAction}   `}
-                      >
-                        Thêm vào giỏ
-                      </button>
-                    </div>
-                    <div className="content__line">
-                      <div className="line"></div>
-                    </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -462,59 +441,69 @@ export default function ProductDetail(props) {
                   </TabPanel>
                   <TabPanel value="3">
                     <div>
-                      {ratingDetail?.data
-                        .filter((item) => item.hidden === false && item.active === true )
-                        .map((item, index) => {
-                          console.log("item", item);
-                          return (
-                            <div className="flex mb-3">
-                              <div className="mr-3 ">
-                                <img
-                                  src={item?.order?.user.avatar}
-                                  alt="avatar"
-                                  style={{ width: "50px", height: "50px" }}
-                                />
-                              </div>
-                              <div className="leading-6">
-                                <p className="mb-2">
-                                  {item?.order?.user?.fullName}
-                                </p>
-                                <Rating
-                                  readOnly
-                                  value={item.rating}
-                                  size={"medium"}
-                                />
-                                <p className="text-slate-300">
-                                  {moment(item.createdAt).format(
-                                    "DD/MM/YYYY, h:mm a"
-                                  )}
-                                </p>
-                                <p> {item.content}</p>
-                                {item.imageRating[0] === "" ? (
-                                  ""
-                                ) : (
-                                  <div className="mt-3 flex ">
-                                    {item?.imageRating?.map((img, index) => {
-                                      return (
-                                        <img
-                                          src={img}
-                                          alt=""
-                                          style={{
-                                            width: "80px",
-                                            height: "80px",
-                                            marginRight: "10px",
-                                          }}
-                                        />
-                                      );
-                                    })}
+                      {ratingDetail?.result === 0 ? (
+                        <p>Hiện chưa có đánh giá nào </p>
+                      ) : (
+                        <>
+                          {ratingDetail?.data
+                            .filter(
+                              (item) =>
+                                item.hidden === false && item.active === true
+                            )
+                            .map((item, index) => {
+                              console.log("item", item);
+                              return (
+                                <div className="flex mb-3">
+                                  <div className="mr-3 ">
+                                    <img
+                                      src={item?.order?.user.avatar}
+                                      alt="avatar"
+                                      style={{ width: "50px", height: "50px" }}
+                                    />
                                   </div>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-
-                      <hr />
+                                  <div className="leading-6">
+                                    <p className="mb-2">
+                                      {item?.order?.user?.fullName}
+                                    </p>
+                                    <Rating
+                                      readOnly
+                                      value={item.rating}
+                                      size={"medium"}
+                                    />
+                                    <p className="text-slate-300">
+                                      {moment(item.createdAt).format(
+                                        "DD/MM/YYYY, h:mm a"
+                                      )}
+                                    </p>
+                                    <p> {item.content}</p>
+                                    {item.imageRating[0] === "" ? (
+                                      ""
+                                    ) : (
+                                      <div className="mt-3 flex ">
+                                        {item?.imageRating?.map(
+                                          (img, index) => {
+                                            return (
+                                              <img
+                                                src={img}
+                                                alt=""
+                                                style={{
+                                                  width: "80px",
+                                                  height: "80px",
+                                                  marginRight: "10px",
+                                                }}
+                                              />
+                                            );
+                                          }
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          <hr />
+                        </>
+                      )}
                     </div>
                   </TabPanel>
                 </TabContext>

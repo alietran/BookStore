@@ -3,7 +3,7 @@ import React from 'react'
 export default function Loading() {
   return (
     <div style={{display: "flex", justifyContent:"center",alignItem:"center",margin:"20px 0"}}>
-      <img src="/img/data_1755_animated-loading-gif-28.gif" alt="" height={300} width={300}/>
+      <img src="/img/data_1755_animated-loading-gif-28.gif" alt="" height={200} width={200}/>
     </div>
   );
 }
