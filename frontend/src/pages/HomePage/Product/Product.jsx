@@ -29,12 +29,13 @@ export default function Product() {
 
     return () => dispatch(resetCateList());
   }, []);
+  console.log("cateList", cateList);
   useEffect(() => {
     if (!bookList) {
       dispatch(getBookList());
     }
   }, [bookList]);
-  console.log("bookList", bookList);
+
   cateList?.data
     .filter((item) => item.parentCateId === "62e806e426eedb6fb416b127")
     .map((item1, index) => {
@@ -104,62 +105,21 @@ export default function Product() {
               <Tab label="Item Three" {...a11yProps(2)} /> */}
             </Tabs>
           </Box>
-          <TabPanel value={value} index={0}>
-            <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
-              {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách kinh tế")
-                .map((sachKT, index) => {
-                  // console.log("sachKT", sachKT);
-                  return <ProductItem product={sachKT} />;
-                })}
-            </Box>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
-              {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách tiểu thuyết")
-                .map((sachKT, index) => {
-                  // console.log("sachKT", sachKT);
-                  return <ProductItem product={sachKT} />;
-                })}
-            </Box>
-          </TabPanel>
-
-          <TabPanel value={value} index={2}>
-            <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
-              {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách kỹ năng sống")
-                .map((sachKT, index) => {
-                  // console.log("sachKT", sachKT);
-                  return <ProductItem product={sachKT} />;
-                })}
-            </Box>
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
-              {bookList?.data
-                .filter(
-                  (item) => item?.idCate.name === "Sách Kiến Thức Tổng Hợp"
-                )
-                .map((sachKTTT, index) => {
-                  // if (!sachKTTT) {
-                  //   return "Không có sách nào";
-                  // } // return <ProductItem product={sachKT} />;
-                  // else
-                  return <ProductItem product={sachKTTT} />;
-                })}
-            </Box>
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
-              {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách văn học")
-                .map((sachKT, index) => {
-                  // console.log("sachKT", sachKT);
-                  return <ProductItem product={sachKT} />;
-                })}
-            </Box>
-          </TabPanel>
+          {cateList1.map((itemCate, index) => {
+            return (
+              <TabPanel value={value} index={index}>
+                {/* <p> {index}</p> */}
+                <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
+                  {bookList?.data
+                    .filter((item) => item?.idCate.name === itemCate.name)
+                    .map((sachKT, index) => {
+                      // console.log("sachKT", sachKT);
+                      return <ProductItem product={sachKT} />;
+                    })}
+                </Box>
+              </TabPanel>
+            );
+          })}
         </Box>
       </Container>
     </div>
