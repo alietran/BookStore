@@ -270,7 +270,7 @@ export default function ProductDetail(props) {
                   </div>
                   <div className={classes["box__content-right"]}>
                     <div className="content__title">
-                      <h1>{bookDetail?.name}</h1>
+                      <h1 className="font-bold">{bookDetail?.name}</h1>
                       <div className="content__trademark flex">
                         <Rating
                           value={ratingMovie.toFixed(1)}

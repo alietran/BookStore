@@ -124,10 +124,11 @@ export default function Product() {
                 })}
             </Box>
           </TabPanel>
+
           <TabPanel value={value} index={2}>
             <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
               {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách thiếu nhi")
+                .filter((item) => item?.idCate.name === "Sách kỹ năng sống")
                 .map((sachKT, index) => {
                   // console.log("sachKT", sachKT);
                   return <ProductItem product={sachKT} />;
@@ -137,30 +138,28 @@ export default function Product() {
           <TabPanel value={value} index={3}>
             <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
               {bookList?.data
-                .filter((item) => item?.idCate.name === "Sách kỹ năng sống")
-                .map((sachKT, index) => {
-                  
-                  // console.log("sachKT", sachKT);
-                  return <ProductItem product={sachKT} />;
+                .filter(
+                  (item) => item?.idCate.name === "Sách Kiến Thức Tổng Hợp"
+                )
+                .map((sachKTTT, index) => {
+                  // if (!sachKTTT) {
+                  //   return "Không có sách nào";
+                  // } // return <ProductItem product={sachKT} />;
+                  // else
+                  return <ProductItem product={sachKTTT} />;
                 })}
             </Box>
           </TabPanel>
           <TabPanel value={value} index={4}>
             <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
               {bookList?.data
-                .filter(
-                  (item) => item?.idCate.name === "Sách kiến thức tổng hợp"
-                )
-                .map((sachKTTT, index) => {
-                  if (!sachKTTT) {
-                    return "Không có sách nào";
-                  } // return <ProductItem product={sachKT} />;
-                
-                  else return <ProductItem product={sachKTTT} />;
+                .filter((item) => item?.idCate.name === "Sách văn học")
+                .map((sachKT, index) => {
+                  // console.log("sachKT", sachKT);
+                  return <ProductItem product={sachKT} />;
                 })}
             </Box>
           </TabPanel>
-     
         </Box>
       </Container>
     </div>

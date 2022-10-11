@@ -297,6 +297,7 @@ export default function BookManager() {
                         desc,
                         price,
                         quantity,
+                        image,
                         bookCover,
                         totalPage,
                         publisher,
@@ -321,10 +322,17 @@ export default function BookManager() {
                             />
                           </TableCell>
 
-                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">
+                            {/* <div className="flex">
+                              {" "}
+                              <img src={image} alt="" /> */}
+                              <p>{name}</p>{" "}
+                            {/* </div> */}
+                          </TableCell>
                           <TableCell align="left">{price}</TableCell>
                           <TableCell
                             align="left"
+                            className="line-clamp-4"
                             dangerouslySetInnerHTML={{ __html: desc }}
                           ></TableCell>
 

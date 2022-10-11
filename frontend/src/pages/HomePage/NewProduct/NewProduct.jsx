@@ -132,6 +132,7 @@ export default function NewProduct() {
                 boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
                 borderRadius: "15px",
                 border: "1px solid white",
+                width:"230px",
               }}
             >
               <div className="absolute -top-3 -right-1 z-10">
@@ -148,20 +149,23 @@ export default function NewProduct() {
                   className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
                 />
               </div>
+
               <div className="mt-4 flex  justify-center truncate">
                 {/* <div className=" text-gray-700 text-center"> */}
                 <NavLink
                   to={`/productDetail/${product?._id}`}
                   className="truncate"
                 >
-                 
-                  <span aria-hidden="true" className="  text-slate-800 ">
+                  <span
+                    aria-hidden="true"
+                    className=" truncate text-slate-800 "
+                  >
                     {product?.name}
                   </span>
                 </NavLink>
                 {/* </div> */}
               </div>
-              <p className="mt-1 text-sm text-red-500 font-bold text-lg text-center">
+              <p className="mt-1  text-red-500 font-bold text-lg text-center">
                 {product?.price.toLocaleString()} ₫
               </p>
               <Button

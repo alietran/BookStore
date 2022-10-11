@@ -191,7 +191,8 @@ export default function OptionBook({ id, book }) {
   };
 
   const onClickDelete = (id) => {
-    dispatch(deleteBook(book._id));
+    
+    dispatch(deleteBook(id));
   };
   return (
     <Box>
@@ -212,7 +213,7 @@ export default function OptionBook({ id, book }) {
         <DialogTitle id="alert-dialog-title">{"Xóa thể loại"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Bạn chắc chắn muốn xóa thể loại này.
+            Bạn chắc chắn muốn xóa sách này.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

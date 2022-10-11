@@ -173,7 +173,19 @@ export default function BestSellerBook() {
                   }}
                   className="px-10 flex flex-col"
                 >
-                  <h3 className=" ml-2">{product?.book?.name}</h3>
+                  <div className="mt-4 flex  justify-center truncate">
+                    {/* <div className=" text-gray-700 text-center"> */}
+                    <NavLink
+                      to={`/productDetail/${product?.book?._id}`}
+                      className="truncate"
+                    >
+                      <h3 aria-hidden="true" className="  text-slate-800 ">
+                        {product?.book?.name}
+                      </h3>
+                    </NavLink>
+                    {/* </div> */}
+                  </div>
+                  {/* <h3 className=" ml-2">{product?.book?.name}</h3> */}
                   <p className="text-red-500 font-bold ml-2 text-lg mb-0">
                     {product?.book?.price.toLocaleString()} đ
                   </p>

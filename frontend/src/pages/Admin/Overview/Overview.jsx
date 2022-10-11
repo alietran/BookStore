@@ -34,14 +34,21 @@ export default function Overview() {
     orderRSForYear,
     orderRSForMonth,
     loadingOrderRSForYear,
+    loadingOrderRSForMonth,
+    loadingOrderRSForWeek,
   } = useSelector((state) => state.OrderReducer);
   const { promotionList } = useSelector((state) => state.PromotionReducer);
 
   console.log("promotionList", promotionList);
   // const { orderRSForYear } = useSelector((state) => state.OrderReducer);
-  const { receiptRSForWeek, receiptRSForYear, receiptRSForMonth } = useSelector(
-    (state) => state.ReceiptReducer
-  );
+  const {
+    receiptRSForWeek,
+    receiptRSForYear,
+    receiptRSForMonth,
+    loadingReceiptRSForWeek,
+    loadingReceiptRSForMonth,
+    loadingReceiptRSForYear,
+  } = useSelector((state) => state.ReceiptReducer);
   const { accountList } = useSelector((state) => state.AdminReducer);
   const [listReceiptItem, setListReceiptItem] = useState([]);
   const [listChartItem, setListChartItem] = useState([]);
@@ -496,7 +503,7 @@ export default function Overview() {
       },
     },
   };
-
+  console.log("listChartItemMonth", listChartItemMonth);
   return (
     <div>
       <div style={{ width: "100%", marginBottom: "20px" }}>
@@ -645,7 +652,12 @@ export default function Overview() {
           </Grid>
         </Box>
       </div>
-      {loadingOrderRSForYear ? (
+      {loadingOrderRSForYear ||
+      loadingOrderRSForMonth ||
+      loadingReceiptRSForWeek ||
+      loadingReceiptRSForMonth ||
+      loadingReceiptRSForYear ||
+      loadingOrderRSForWeek ? (
         <Loading />
       ) : (
         <Box
