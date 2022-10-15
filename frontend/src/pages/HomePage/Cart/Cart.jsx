@@ -23,9 +23,11 @@ export default function Cart() {
   console.log("user", user);
   const { discount, miniPrice } = useSelector((state) => state.CartReducer);
   const [totalCart, setTotalCart] = useState(0);
+ 
+  const [itemCart, setItemCart] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-
+  let idCard = "";
   console.log("miniPrice", typeof miniPrice);
   console.log("discount", discount);
 
@@ -133,17 +135,10 @@ export default function Cart() {
       });
     }
   };
-  const handleClickConfirm = () => {
+  const handleClickConfirm = (id) => {
+    console.log("handleClickConfirm", id);
+    setItemCart(id);
     setOpenConfirm(true);
-  };
-  const handleDelete = (maSP) => {
-    console.log("maSP", maSP);
-    dispatch({
-      type: "REMOVE_ITEM",
-      payload: {
-        maSP,
-      },
-    });
   };
 
   const hadleClickMinus = (maSP, tangGiam) => {
@@ -170,10 +165,25 @@ export default function Cart() {
   const handleCancel = () => {
     setOpenConfirm(false);
   };
-
-  const handleCloseConfirm = (id) => {
+  //  const handleDelete = (maSP) => {
+  //    console.log("maSP", maSP);
+  //    dispatch({
+  //      type: "REMOVE_ITEM",
+  //      payload: {
+  //        maSP,
+  //      },
+  //    });
+  //  };
+  const handleCloseConfirm = () => {
+    console.log("item Confirm", idCard);
+    // console.log("id235", item);
+    dispatch({
+      type: "REMOVE_ITEM",
+      payload: {
+        maSP: itemCart,
+      },
+    });
     setOpenConfirm(false);
-    handleDelete(id);
   };
 
   return (
@@ -244,7 +254,9 @@ export default function Cart() {
                             >
                               <img
                                 style={{ width: "100px", height: "80px" }}
-                                src={item.image}Giảm giá
+                                src={item.image}
+                                Giảm
+                                giá
                                 alt=""
                               />
                             </NavLink>
@@ -338,10 +350,34 @@ export default function Cart() {
 
                             <div
                               className={`${classes.delete} text-blue-600 `}
-                              onClick={handleClickConfirm}
+                              onClick={() => handleClickConfirm(item.id)}
                             >
                               Xóa
                             </div>
+                            <CustomDialog
+                              open={openConfirm}
+                              handleClose={handleCancel}
+                              dialogSize="xs"
+                              overlayStyle={{ backgroundColor: "transparent" }}
+                            >
+                              <DialogTitle id="alert-dialog-title">
+                                {"Xóa sản phẩm"}
+                              </DialogTitle>
+                              <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                  Bạn chắc chắn muốn xóa sản phẩm này.
+                                </DialogContentText>
+                              </DialogContent>
+                              <DialogActions>
+                                <Button onClick={handleCancel}>Hủy</Button>
+                                <Button
+                                  onClick={() => handleCloseConfirm(item.id)}
+                                  autoFocus
+                                >
+                                  Đồng ý
+                                </Button>
+                              </DialogActions>
+                            </CustomDialog>
                           </div>
 
                           <div
@@ -354,30 +390,6 @@ export default function Cart() {
                           </div>
                         </div>
                       </div>
-                      <CustomDialog
-                        open={openConfirm}
-                        handleClose={handleCancel}
-                        dialogSize="xs"
-                        overlayStyle={{ backgroundColor: "transparent" }}
-                      >
-                        <DialogTitle id="alert-dialog-title">
-                          {"Xóa sản phẩm"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-description">
-                            Bạn chắc chắn muốn xóa sản phẩm này.
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleCancel}>Hủy</Button>
-                          <Button
-                            onClick={() => handleCloseConfirm(item.id)}
-                            autoFocus
-                          >
-                            Đồng ý
-                          </Button>
-                        </DialogActions>
-                      </CustomDialog>
                     </div>
                   ))}
                 </div>

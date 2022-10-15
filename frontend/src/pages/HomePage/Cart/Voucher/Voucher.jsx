@@ -136,7 +136,13 @@ export default function Voucher({ totalPrice }) {
 
   const classes = useStyles();
   return (
-    <div>
+    <div
+      style={{
+        boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+        borderRadius: "15px",
+        border: "1px solid white",
+      }}
+    >
       <div className={classes["cart__wrapper-content--info"]}>
         <h4>Khuyến mãi</h4>
         <div className={classes.info__voucher}>

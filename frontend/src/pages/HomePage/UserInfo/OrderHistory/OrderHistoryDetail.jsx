@@ -73,6 +73,9 @@ export default function OrderHistoryDetail() {
             paddingLeft: "0px !important",
             backgroundColor: "white",
             margin: "30px auto",
+            boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+            borderRadius: "15px",
+            border: "1px solid white",
           }}
         >
           {orderByUser?.map((orderDetail, index) => {

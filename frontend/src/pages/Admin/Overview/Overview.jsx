@@ -373,7 +373,7 @@ export default function Overview() {
         yearItem[ItemOrder].y = getTotalPrice(item);
       }
       yearItem = [...yearItem];
-      console.log("yearItem123", yearItem);
+      // console.log("yearItem123", yearItem);
       return setListChartItemYear(yearItem);
     });
   };

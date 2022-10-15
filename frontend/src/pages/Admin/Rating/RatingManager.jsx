@@ -133,14 +133,13 @@ export default function RatingManager() {
     successUpdateAuthor,
     successDeleteAuthor,
   } = useSelector((state) => state.AuthorReducer);
-  const { orderList, } = useSelector((state) => state.OrderReducer);
+  const { orderList } = useSelector((state) => state.OrderReducer);
 
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
   useEffect(() => {
     if (ratinglist === null) dispatch(getAllRating());
- 
   }, [ratinglist]);
   console.log("ratinglist", ratinglist);
 
@@ -179,14 +178,8 @@ export default function RatingManager() {
     setOrderBy(property);
   };
 
-  const handleClick = (id) => {
-    console.log("id352", id);
+  const handleClick = () => {
     setOpenConfirm(true);
-    // dispatch(
-    //   updateRating(id, {
-    //     active: true,
-    //   })
-    // );
   };
   const handleCloseConfirm = (id) => {
     console.log("dat123", id);
@@ -202,14 +195,15 @@ export default function RatingManager() {
     setPage(newPage);
   };
 
-  const handleClickHideRating = (_id) => {
-    console.log("idwe", _id);
-    dispatch(
-      updateRating(_id, {
-        hidden: true,
-      })
-    );
-  };
+ const handleClickHideRating = (_id, hidden) => {
+   console.log("idwe", _id);
+   dispatch(
+     updateRating(_id, {
+      
+       hidden: !hidden,
+     })
+   );
+ };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -375,7 +369,7 @@ export default function RatingManager() {
                               <Box className="flex">
                                 <Tooltip
                                   // TransitionComponent={Zoom}
-                                  title="Ẩn / Hiện"
+                                  title={!hidden ? "Ẩn" : "Hiện"}
                                   arrow
                                 >
                                   <IconButton
@@ -392,7 +386,7 @@ export default function RatingManager() {
                                     {!hidden ? (
                                       <VisibilityIcon
                                         onClick={() => {
-                                          handleClickHideRating(_id);
+                                          handleClickHideRating(_id, hidden);
                                         }}
                                         className="text-blue-500"
                                         sx={{
@@ -402,6 +396,9 @@ export default function RatingManager() {
                                     ) : (
                                       <VisibilityOff
                                         className="text-blue-500"
+                                        onClick={() => {
+                                          handleClickHideRating(_id, hidden);
+                                        }}
                                         sx={{
                                           fontSize: 32,
                                         }}
@@ -420,7 +417,6 @@ export default function RatingManager() {
                                       arrow
                                     >
                                       <IconButton
-                                        onClick={() => handleClick(_id)}
                                         sx={{
                                           "&:hover": {
                                             backgroundColor:
@@ -431,6 +427,7 @@ export default function RatingManager() {
                                         }}
                                       >
                                         <DoneIcon
+                                          onClick={handleClick}
                                           className="text-blue-500"
                                           sx={{
                                             fontSize: 32,

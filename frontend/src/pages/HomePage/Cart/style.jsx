@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     position: "relative",
     padding: "8px",
-    color: "rgb(51, 51, 51)",
+    color: "#00ab55",
     textDecoration: "none",
     backgroundColor: "rgb(255, 255, 255)",
     pointerEvents: "auto",
@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
       width: "16px",
       height: "16px",
       display: "inline-block",
+    },
+    "&:hover": {
+      color: "#03a051",
     },
   },
   breadcrumbsName: {
@@ -79,7 +82,12 @@ const useStyles = makeStyles((theme) => ({
   "cart__wrapper-content": {
     display: "flex",
     marginBottom: "24px",
+    marginRight: "20px",
+    boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+    borderRadius: "15px",
+    border: "1px solid white",
   },
+
   "cart__wrapper--main": {
     boxSizing: "border-box",
     margin: 0,
@@ -111,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   amount: {},
   "box__content-name": {
     display: "flex",
-    
+    maxWidth: "700px",
   },
   center: {
     display: "flex",
@@ -121,14 +129,14 @@ const useStyles = makeStyles((theme) => ({
   "box__content-name-product": {
     fontSize: "15px",
     marginLeft: "20px",
-    textAlign:"center",
-    color:"black",
-    "&:hover":{
-       color:"green"
-    }
+    textAlign: "center",
+    color: "black",
+    "&:hover": {
+      color: "green",
+    },
   },
-  bookName : {
-    marginBottom:"0"
+  bookName: {
+    marginBottom: "0",
   },
   "box__content-name-img": {
     borderStyle: "solid",
@@ -154,7 +162,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "end",
     display: "flex",
     flexDirection: "column",
-    paddingBottom: "30px !important" ,
+    paddingBottom: "30px !important",
   },
   "box__content-quantity": {
     display: "flex",
@@ -236,11 +244,10 @@ const useStyles = makeStyles((theme) => ({
   quantityValue: {
     backgroundColor: "rgb(248, 248, 252)",
     textAlign: "center",
-   
+
     fontSize: "0.8125rem",
     fontWeight: 500,
     color: "rgb(67, 70, 87)",
-   
   },
 
   apply: {
@@ -267,8 +274,11 @@ const useStyles = makeStyles((theme) => ({
   },
   "cart__wrapper-content--payment": {
     background: "white",
-    borderRadius: "8px",
+   
     margin: "20px 0",
+    boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+    borderRadius: "15px",
+    border: "1px solid white",
   },
   "info-payment": {
     display: "flex",

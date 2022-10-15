@@ -192,9 +192,9 @@ export default function Header() {
       //   }
       // }
 
-      console.log("cateListFilter", cateListFilter);
+      // console.log("cateListFilter", cateListFilter);
       // console.log("groupBy", groupBy);
-      console.log("array", array);
+      // console.log("array", array);
       // console.log("index", index);[[...]]
       array.push({
         // key: `'${index}'`,
@@ -233,7 +233,7 @@ export default function Header() {
       //   });
       // }
     });
-  console.log("array", array);
+  // console.log("array", array);
   const menuDashboard = (
     <Menu>
       <Menu.Item key="0">

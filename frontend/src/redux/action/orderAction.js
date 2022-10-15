@@ -68,7 +68,7 @@ export const updateOrder = (id, data) => {
         },
       });
     } catch (error) {
-      console.log("error", error);
+  
       dispatch({
         type: "UPDATE_ORDER_FAIL",
         payload: {

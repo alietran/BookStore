@@ -5,7 +5,7 @@ import {
   getOrderByUser,
   updateOrder,
 } from "../../../../redux/action/orderAction";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -24,7 +24,7 @@ import {
 import Swal from "sweetalert2";
 import { Box } from "@mui/material";
 export default function OrderHistory() {
-  const { orderByUser, successUpdateOrder } = useSelector(
+  const { orderByUser, successUpdateOrder, orderList } = useSelector(
     (state) => state.OrderReducer
   );
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -47,28 +47,30 @@ export default function OrderHistory() {
   }, []);
 
   useEffect(() => {
-    if (successUpdateOrder) dispatch(getOrderByUser());
-    return () => dispatch(resetRating());
+    if (orderList === null) dispatch(getOrderByUser());
+  }, [orderList]);
+
+  useEffect(() => {
+    if (successUpdateOrder !== null) dispatch(getOrderByUser());
   }, [successUpdateOrder]);
 
   useEffect(() => {
     if (createRatingDetail) {
       dispatch(getOrderByUser());
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Cám ơn bạn đã đánh giá",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      // Swal.fire({
+      //   position: "center",
+      //   icon: "success",
+      //   title: "Cám ơn bạn đã đánh giá",
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // });
     }
   }, [createRatingDetail]);
 
   // createRatingDetail;
   const [open, setOpen] = React.useState(false);
-
-  const handleDoneOrder = (order) => {
-    console.log("order", order);
+const [openDelete, setOpenDelete] = React.useState(false);
+  const handleDoneOrder = () => {
     setOpenConfirm(true);
     // dispatch(
     //   updateOrder(order.id, {
@@ -76,6 +78,12 @@ export default function OrderHistory() {
     //   })
     // );
   };
+    const handleCloseDelete = () => {
+      setOpenDelete(false);
+    };
+   const handleClickOpenDelete = () => {
+     setOpenDelete(true);
+   };
   const handleConfirm = (order) => {
     dispatch(
       updateOrder(order.id, {
@@ -95,6 +103,12 @@ export default function OrderHistory() {
     //     status: "Đã đánh giá",
     //   })
     // );
+     Swal.fire({
+       icon: "success",
+       title: "Thành công",
+       text: "Đánh giá của bạn đang chờ duyệt, vui lòng đợi!",
+     });
+
   };
 
   console.log("orderByUser", orderByUser);
@@ -126,7 +140,7 @@ export default function OrderHistory() {
           status: "Đã hủy",
         })
       );
-      setOpen(false);
+    setOpenDelete(false);
     }
 
     dispatch(
@@ -134,7 +148,7 @@ export default function OrderHistory() {
         status: "Đã hủy",
       })
     );
-    setOpen(false);
+   setOpenDelete(false);
   };
   const handleClickOpen = (id) => {
     setOpen(true);
@@ -166,6 +180,9 @@ export default function OrderHistory() {
               backgroundColor: "white",
               marginTop: "20px",
               padding: "20px",
+              boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+              borderRadius: "15px",
+              border: "1px solid white",
             }}
           >
             <div className="flex ">
@@ -182,29 +199,37 @@ export default function OrderHistory() {
               return (
                 <div>
                   {" "}
-                  <div className="flex justify-between py-3">
-                    <div className="flex">
-                      <div>
+                  <NavLink
+                    to={`/productDetail/${detail.book.id}`}
+                    className="truncate"
+                  >
+                    {" "}
+                    <div className="flex justify-between py-3">
+                      <div className="flex">
+                        <div>
+                          {" "}
+                          <img
+                            src={detail.book.image}
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                              marginRight: "5px",
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-black">{detail.book.name}</p>
+                          <p className="text-black">
+                            Số lượng: {detail.quantity}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-red-500">
                         {" "}
-                        <img
-                          src={detail.book.image}
-                          style={{
-                            width: "80px",
-                            height: "80px",
-                            marginRight: "5px",
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <p>{detail.book.name}</p>
-                        <p>Số lượng: {detail.quantity}</p>
-                      </div>
+                        {detail.book.price.toLocaleString()}
+                      </p>
                     </div>
-                    <p className="text-red-500">
-                      {" "}
-                      {detail.book.price.toLocaleString()}
-                    </p>
-                  </div>
+                  </NavLink>
                 </div>
               );
             })}
@@ -276,14 +301,53 @@ export default function OrderHistory() {
                 Xem chi tiết
               </Button>
               {order.status === "Đang xử lý" ? (
-                <Button
-                  color="error"
-                  variant="outlined"
-                  style={{ marginLeft: "10px" }}
-                  onClick={() => handleClickCancel(order)}
-                >
-                  Hủy
-                </Button>
+                <>
+                  {" "}
+                  <Button
+                    color="error"
+                    variant="outlined"
+                    style={{ marginLeft: "10px" }}
+                    onClick={
+                      () => handleClickOpenDelete(order.id)
+                      // handleClickCancel(order)
+                    }
+                  >
+                    Hủy
+                  </Button>
+                  <CustomDialog
+                    open={openDelete}
+                    handleClose={handleCloseDelete}
+                    dialogSize="sm"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Hủy đơn hàng"}
+                    </DialogTitle>
+                    <DialogContent>
+                      Bạn chắc chắn muốn hủy đơn hàng này?
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={handleCloseDelete}
+                        sx={{ textTransform: "none !important" }}
+                        // className="normal-case "
+                      >
+                        Hủy bỏ
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          handleClickCancel(order);
+                        }}
+                        sx={{ textTransform: "none !important" }}
+                        autoFocus
+                      >
+                        Đồng ý
+                      </Button>
+                    </DialogActions>
+                  </CustomDialog>
+                </>
               ) : (
                 ""
               )}

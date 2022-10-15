@@ -39,13 +39,13 @@ export default function Product() {
   cateList?.data
     .filter((item) => item.parentCateId === "62e806e426eedb6fb416b127")
     .map((item1, index) => {
-      console.log("item1", item1);
+      // console.log("item1", item1);
       cateList1.push({
         id: item1._id,
         name: item1.name,
       });
     });
-  console.log("cateList1", cateList1);
+  // console.log("cateList1", cateList1);
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
 

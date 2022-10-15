@@ -3,11 +3,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import useStyles from "./style";
-
+import { useSnackbar } from "notistack";
 export default function ProductItem({ product }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar(); 
   const { errorAddCart } = useSelector((state) => state.CartReducer);
   const handleAddToCart = (product) => {
     console.log("product", product);
@@ -40,15 +41,15 @@ export default function ProductItem({ product }) {
     );
 
     if (product.quantity === 0 || errorAddCart) {
-      // enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
-      //   variant: "error",
-      // });
+      enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+        variant: "error",
+      });
     } else {
-      // enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
-      //   variant: "success",
-      //   autoHideDuration: 1000,
-      //   action,
-      // });
+      enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+        variant: "success",
+        autoHideDuration: 1000,
+        action,
+      });
       dispatch({
         type: "ADD_TO_CART",
         payload: {
@@ -58,15 +59,16 @@ export default function ProductItem({ product }) {
     }
   };
   return (
-    <NavLink to={`/productDetail/${product?._id}`}>
-      <div
-        className={`group bg-white text-center relative  duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
-        style={{
-          boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
-          borderRadius: "15px",
-          border: "1px solid white",
-        }}
-      >
+    <div
+      className={`group bg-white text-center relative  duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
+      style={{
+        boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+        borderRadius: "15px",
+        border: "1px solid white",
+      }}
+    >
+      <NavLink to={`/productDetail/${product?._id}`}>
+        {" "}
         <div className="  w-full relative">
           <img
             style={{
@@ -80,7 +82,7 @@ export default function ProductItem({ product }) {
         </div>
         <div className="mt-4 flex  justify-center truncate">
           {/* <div className=" text-gray-700 text-center"> */}
-          <span aria-hidden="true" className="  text-slate-800 ">
+          <span aria-hidden="true" className=" truncate text-slate-800 ">
             {product?.name}
           </span>
           {/* </div> */}
@@ -88,18 +90,19 @@ export default function ProductItem({ product }) {
         <p className="mt-1 text-sm text-red-500 font-bold text-lg text-center">
           {product?.price.toLocaleString()} ₫
         </p>
-        <Button
-          sx={{ width: "150px", cursor: "pointer" }}
-          className="ml-2 mt-3"
-          variant="contained"
-          onClick={() => {
-            handleAddToCart(product);
-          }}
-        >
-          Thêm vào giỏ
-        </Button>
-        {/* <button>Thêm vào giỏ hàng</button> */}
-      </div>
-    </NavLink>
+      </NavLink>
+
+      <Button
+        sx={{ width: "150px", cursor: "pointer" }}
+        className="ml-2 mt-3"
+        variant="contained"
+        onClick={() => {
+          handleAddToCart(product);
+        }}
+      >
+        Thêm vào giỏ
+      </Button>
+      {/* <button>Thêm vào giỏ hàng</button> */}
+    </div>
   );
 }

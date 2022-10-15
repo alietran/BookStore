@@ -173,11 +173,9 @@ export default function BestSellerBook() {
                   }}
                   className="px-10 flex flex-col"
                 >
-                  <div className="mt-4 flex  justify-center truncate">
+                  <div className="mt-4 flex truncate">
                     {/* <div className=" text-gray-700 text-center"> */}
-                    <NavLink
-                      to={`/productDetail/${product?.book?._id}`}
-                    >
+                    <NavLink to={`/productDetail/${product?.book?._id}`}>
                       <h3 aria-hidden="true" className="  text-slate-800 ">
                         {product?.book?.name}
                       </h3>
@@ -189,7 +187,7 @@ export default function BestSellerBook() {
                     {product?.book?.price.toLocaleString()} đ
                   </p>
                   <div
-                    className=" line-clamp-4 leading-6 text-left ml-2 "
+                    className={`line-clamp-4 leading-6 text-left ml-2 ${classes.paragraph}`}
                     dangerouslySetInnerHTML={{ __html: product?.book?.desc }}
                   ></div>
 

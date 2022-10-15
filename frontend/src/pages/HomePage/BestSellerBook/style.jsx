@@ -42,5 +42,10 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
+  paragraph: {
+    "& p": {
+      display: "inline",
+    },
+  },
 }));
 export default useStyles;

@@ -99,7 +99,7 @@ function applySortFilter(array, comparator, query, selectTag) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  console.log("array", array);
+  // console.log("array", array);
   if (query && selectTag === "infoUser") {
     console.log("query", query);
     return filter(
@@ -123,7 +123,7 @@ export default function OrderManager() {
     successUpdateAuthor,
     successDeleteAuthor,
   } = useSelector((state) => state.AuthorReducer);
-  const { orderList, loadingOrderList } = useSelector(
+  const { orderList, loadingOrderList, successUpdateOrder } = useSelector(
     (state) => state.OrderReducer
   );
   console.log("orderList", orderList);
@@ -147,7 +147,14 @@ export default function OrderManager() {
     // setLoading(false);
     return () => dispatch(resetOrder());
   }, []);
-
+  useEffect(() => {
+    // get list user lần đầu
+    if (successUpdateOrder === null) {
+      dispatch(getOrderList());
+    }
+    // setLoading(false);
+    return () => dispatch(resetOrder());
+  }, [successUpdateOrder]);
   //  useEffect(() => {
   //    if (orderList?.result !== 0) setLoading(false);
   //  }, [orderList]);

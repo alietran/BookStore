@@ -127,95 +127,105 @@ export default function Checkout() {
       <Container maxWidth="lg">
         <div className={classes["cart__wrapper-breadcrumbs"]}>
           <div className={classes.breadcrumbsIcon}>
-            <Link className={classes.breadcrumbsIconLink} to={"/"}>
+            <NavLink className={classes.breadcrumbsIconLink} to="/">
               <HomeIcon />
-            </Link>
+            </NavLink>
             <span className="css-rhmj3t pl-2"> &gt; </span>
           </div>
-          <div className={classes.breadcrumbsName}>
-            <NavLink className={classes.breadcrumbsLink} to={"/cart"}>
+          <div className={classes.breadcrumbsIcon}>
+            <NavLink className={classes.breadcrumbsIconLink} to={"/cart"}>
               Giỏ hàng
             </NavLink>
             <span className="css-rhmj3t pl-2 pr-2"> &gt; </span>
           </div>
-          <div className={classes.breadcrumbsName}>
-            <NavLink className={`${classes.breadcrumbsLink} `} to={"/"}>
+          <div className={classes.breadcrumbsIcon}>
+            <NavLink className={`${classes.breadcrumbsIconLink} `} to={"/"}>
               Thanh toán
             </NavLink>
           </div>
         </div>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={8}>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-              }}
-            >
-              <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                  >
-                    <Tab
-                      sx={{
-                        flexDirection: "row",
-                        textTransform: "none !important",
-                      }}
-                      label="Nhận hàng tại nhà"
-                      value="1"
-                    />
-                  </TabList>
-                </Box>
-                <TabPanel value="1">
-                  <Address />
-                </TabPanel>
-              </TabContext>
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                marginTop: "20px",
+            <div
+              style={{
+                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                borderRadius: "15px",
+                border: "1px solid white",
                 padding: "10px",
               }}
             >
-              <h3>Ghi chú cho đơn hàng</h3>
-              <TextField
-                fullWidth
-                notched="true"
-                autoFocus="false"
-                size="small"
-                type="text"
-                label="Nhập thông tin ghi chú cho nhà bán hàng"
-                className="header__navigationBar-text "
+              {" "}
+              <Box
                 sx={{
-                  backgroundColor: "transparent",
-                  outline: "none !important",
-                  border: "none !important",
-                  "&:hover": {
-                    border: "none",
-                    outline: "none",
-                  },
+                  width: "100%",
+                  typography: "body1",
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
                 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                marginTop: "20px",
-              }}
-            >
-              <PaymentMethod />
-            </Box>
+              >
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
+                    >
+                      <Tab
+                        sx={{
+                          flexDirection: "row",
+                          textTransform: "none !important",
+                        }}
+                        label="Nhận hàng tại nhà"
+                        value="1"
+                      />
+                    </TabList>
+                  </Box>
+                  <TabPanel value="1">
+                    <Address />
+                  </TabPanel>
+                </TabContext>
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  marginTop: "20px",
+                  padding: "10px",
+                }}
+              >
+                <h3>Ghi chú cho đơn hàng</h3>
+                <TextField
+                  fullWidth
+                  notched="true"
+                  autoFocus="false"
+                  size="small"
+                  type="text"
+                  label="Nhập thông tin ghi chú cho nhà bán hàng"
+                  className="header__navigationBar-text "
+                  sx={{
+                    backgroundColor: "transparent",
+                    outline: "none !important",
+                    border: "none !important",
+                    "&:hover": {
+                      border: "none",
+                      outline: "none",
+                    },
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  backgroundColor: "#fff",
+                  borderRadius: "10px",
+                  marginTop: "20px",
+                }}
+              >
+                <PaymentMethod />
+              </Box>
+            </div>
           </Grid>
           <Grid item xs={4}>
             <Box
@@ -223,12 +233,15 @@ export default function Checkout() {
                 width: "100%",
                 typography: "body1",
                 backgroundColor: "#fff",
-                borderRadius: "10px",
+               
+                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                borderRadius: "15px",
+                border: "1px solid white",
               }}
             >
-              <div class="cart__wrapper-content--right">
+              <div className="cart__wrapper-content--right">
                 <div
-                  class="cart__wrapper-content--info"
+                  className="cart__wrapper-content--info"
                   style={{ padding: "10px 0" }}
                 >
                   <Typography
@@ -239,12 +252,12 @@ export default function Checkout() {
                     Thông tin đơn hàng
                   </Typography>
                   {cart.map((item, index) => (
-                    <div class="info-voucher flex px-4">
-                      <div class={classes["info-text"]}>
+                    <div className="info-voucher flex px-4">
+                      <div className={classes["info-text"]}>
                         <img src={item.image} alt="" />
                       </div>
-                      <div class={classes["info-product"]}>
-                        <p>{item.name}</p>
+                      <div className={classes["info-product"]}>
+                        <p className="leading-5">{item.name}</p>
                         <p>Số lượng: {item.quantity}</p>
                         <p className="text-red-500">
                           {item.price.toLocaleString()} ₫
@@ -260,9 +273,12 @@ export default function Checkout() {
                 width: "100%",
                 typography: "body1",
                 backgroundColor: "#fff",
-                borderRadius: "10px",
+
                 padding: "10px",
                 marginTop: "20px",
+                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                borderRadius: "15px",
+                border: "1px solid white",
               }}
             >
               <div className={classes["cart__wrapper-content--payment"]}>

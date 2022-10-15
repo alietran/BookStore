@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     position: "relative",
     padding: "8px",
-    color: "rgb(51, 51, 51)",
+    color: "#00ab55",
     textDecoration: "none",
     backgroundColor: "rgb(255, 255, 255)",
     pointerEvents: "auto",
@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
       width: "16px",
       height: "16px",
       display: "inline-block",
+    },
+    "&:hover": {
+      color: "#03a051",
     },
   },
   breadcrumbsName: {
@@ -82,15 +85,15 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: "1px",
     opacity: 1,
     backgroundColor: "transparent",
-    height: "60px",
+    height: "100px",
     padding: "0rem 0.75rem",
     display: "flex",
-
+    margin: "10px 0",
     alignItems: "center",
     borderColor: "rgb(228, 229, 240)",
     "& img": {
-      height: "40px !important",
-      width: "40px !important",
+      height: "60px !important",
+      width: "60px !important",
     },
   },
   "info-product": {

@@ -183,29 +183,7 @@ export default function ProductDetail(props) {
 
   const classes = useStyles();
 
-  const breadcrumbs = [
-    <Link
-      underline="hover"
-      key="1"
-      href="/admin/dashboard"
-      color="text.primary"
-      sx={{ "&:hover": { color: "#212B36" } }}
-    >
-      Trang chủ
-    </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      href="/admin/users/account"
-      color="text.primary"
-      sx={{ "&:hover": { color: "#212B36" } }}
-    >
-      Người dùng{" "}
-    </Link>,
-    <Typography key="3" color="inherit">
-      Danh sách
-    </Typography>,
-  ];
+
   return (
     <Box classNameName="m-5">
       <Container maxWidth="lg">
