@@ -177,7 +177,6 @@ export default function BestSellerBook() {
                     {/* <div className=" text-gray-700 text-center"> */}
                     <NavLink
                       to={`/productDetail/${product?.book?._id}`}
-                      className="truncate"
                     >
                       <h3 aria-hidden="true" className="  text-slate-800 ">
                         {product?.book?.name}

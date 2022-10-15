@@ -289,7 +289,7 @@ export default function ProductDetail(props) {
                         <p>Tác Giả: {bookDetail?.authorId.name}</p>
                         <p>Thể loại: {bookDetail?.idCate.name}</p>
                         <p>Nhà xuất bản: {bookDetail?.publisher}</p>
-                        <p>Nhà phát hành:{bookDetail?.issuer}</p>
+                        <p>Nhà phát hành:{bookDetail?.issuer?.name}</p>
                       </div>
                     </div>
                     <div className="content__price">
@@ -418,8 +418,10 @@ export default function ProductDetail(props) {
                         <td>{bookDetail?.authorId.name}</td>
                       </tr>
                       <tr>
-                        <td className="font-bold  text-center">NXB</td>
-                        <td>{bookDetail?.issuer}</td>
+                        <td className="font-bold  text-center">
+                          Nhà phát hành
+                        </td>
+                        <td>{bookDetail?.issuer?.name}</td>
                       </tr>
                       <tr>
                         <td className="font-bold  text-center">Kích thước</td>
@@ -434,7 +436,7 @@ export default function ProductDetail(props) {
                         <td>{bookDetail?.bookCover}</td>
                       </tr>
                       <tr>
-                        <td className="font-bold">Nhà phát hành</td>
+                        <td className="font-bold">NXB</td>
                         <td>{bookDetail?.publisher}</td>
                       </tr>
                     </table>

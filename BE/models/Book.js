@@ -44,13 +44,13 @@ const bookSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Category',
     },
+    issuer: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Supplier',
+    },
+    
     authorId: { type: mongoose.Schema.ObjectId, ref: 'Author' },
 
-    issuer: {
-      type: String,
-      required: [true, 'Please tell us issuer'],
-      trim: true,
-    },
     size: {
       type: String,
       required: [true, 'Please tell us size'],
@@ -73,9 +73,13 @@ const bookSchema = new mongoose.Schema(
 bookSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'idCate',
-  }).populate({
-    path: 'authorId',
-  });
+  })
+    .populate({
+      path: 'issuer',
+    })
+    .populate({
+      path: 'authorId',
+    });
   next();
 });
 

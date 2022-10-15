@@ -126,60 +126,57 @@ export default function NewProduct() {
       <Box className=" bg-white  grid grid-cols-4 gap-4  sm:grid-cols-2 lg:grid-cols-4">
         {latestBook?.data.map((product, index) => (
           <div className="flex  relative">
-            <div
-              className={`group bg-white text-center   duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
-              style={{
-                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
-                borderRadius: "15px",
-                border: "1px solid white",
-                width:"230px",
-              }}
-            >
-              <div className="absolute -top-3 -right-1 z-10">
-                <img src="./img/new.svg" alt="" height={80} width={80} />
-              </div>
-              <div className="  w-full relative">
-                <img
-                  style={{
-                    height: "200px",
-                    width: "200px",
-                  }}
-                  src={product?.image}
-                  alt="Front of men&#039;s Basic Tee in black."
-                  className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
-                />
-              </div>
+            <NavLink to={`/productDetail/${product?._id}`} >
+              <div
+                className={`group bg-white text-center   duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
+                style={{
+                  boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                  borderRadius: "15px",
+                  border: "1px solid white",
+                  width: "230px",
+                }}
+              >
+                <div className="absolute -top-3 -right-1 z-10">
+                  <img src="./img/new.svg" alt="" height={80} width={80} />
+                </div>
+                <div className="  w-full relative">
+                  <img
+                    style={{
+                      height: "200px",
+                      width: "200px",
+                    }}
+                    src={product?.image}
+                    alt="Front of men&#039;s Basic Tee in black."
+                    className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
+                  />
+                </div>
 
-              <div className="mt-4 flex  justify-center truncate">
-                {/* <div className=" text-gray-700 text-center"> */}
-                <NavLink
-                  to={`/productDetail/${product?._id}`}
-                  className="truncate"
-                >
+                <div className="mt-4 flex  justify-center truncate">
+                  {/* <div className=" text-gray-700 text-center"> */}
                   <span
                     aria-hidden="true"
                     className=" truncate text-slate-800 "
                   >
                     {product?.name}
                   </span>
-                </NavLink>
-                {/* </div> */}
+                  {/* </div> */}
+                </div>
+                <p className="mt-1  text-red-500 font-bold text-lg text-center">
+                  {product?.price.toLocaleString()} ₫
+                </p>
+                <Button
+                  sx={{ width: "150px", cursor: "pointer" }}
+                  className="ml-2 mt-3"
+                  variant="contained"
+                  onClick={() => {
+                    handleAddToCart(product);
+                  }}
+                >
+                  Thêm vào giỏ
+                </Button>
+                {/* <button>Thêm vào giỏ hàng</button> */}
               </div>
-              <p className="mt-1  text-red-500 font-bold text-lg text-center">
-                {product?.price.toLocaleString()} ₫
-              </p>
-              <Button
-                sx={{ width: "150px", cursor: "pointer" }}
-                className="ml-2 mt-3"
-                variant="contained"
-                onClick={() => {
-                  handleAddToCart(product);
-                }}
-              >
-                Thêm vào giỏ
-              </Button>
-              {/* <button>Thêm vào giỏ hàng</button> */}
-            </div>
+            </NavLink>
           </div>
         ))}
       </Box>

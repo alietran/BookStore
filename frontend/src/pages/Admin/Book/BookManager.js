@@ -340,7 +340,7 @@ export default function BookManager() {
 
                           <TableCell align="left">{totalPage}</TableCell>
                           <TableCell align="left">{publisher}</TableCell>
-                          <TableCell align="left">{issuer}</TableCell>
+                          <TableCell align="left">{issuer.name}</TableCell>
                           <TableCell align="left">{size}</TableCell>
 
                           <TableCell align="center">

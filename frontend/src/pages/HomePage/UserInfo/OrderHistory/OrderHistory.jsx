@@ -44,7 +44,7 @@ export default function OrderHistory() {
   const [item, setItem] = useState("");
   useEffect(() => {
     if (orderByUser === null) dispatch(getOrderByUser());
-  }, [orderByUser]);
+  }, []);
 
   useEffect(() => {
     if (successUpdateOrder) dispatch(getOrderByUser());

@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Dialog,
@@ -34,6 +35,10 @@ import {
   getAuthorList,
   resetAuthorList,
 } from "../../../../redux/action/authorAction";
+import {
+  getSupplierList,
+  resetSupplierList,
+} from "../../../../redux/action/supplierAction";
 
 export default function CreateBook() {
   // const { loadingCreateCate, successCreateCate } = useSelector(
@@ -44,6 +49,7 @@ export default function CreateBook() {
   const [isReadyCreateCate, setIsReadyCreateCate] = useState(false);
   const { cateList } = useSelector((state) => state.CateReducer);
   const { authorList } = useSelector((state) => state.AuthorReducer);
+  const { supplierList } = useSelector((state) => state.SupplierReducer);
   const dispatch = useDispatch();
   const [cate, setCate] = useState("");
   const [open, setOpen] = useState(false);
@@ -58,11 +64,14 @@ export default function CreateBook() {
   const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
   const [srcImage, setSrcImage] = useState(null);
   const [images, setImages] = useState([]);
-
   const [childrenCate, setChildrencate] = useState(10);
   const [author, setAuthor] = useState(10);
+  const [issuer, setIssuer] = useState("");
   const handleChangeAuthor = (event) => {
     setAuthor(event.target.value);
+  };
+  const handleChangeIssuer = (event) => {
+    setIssuer(event.target.value);
   };
   const handleChangeChildrenCate = (event) => {
     setChildrencate(event.target.value);
@@ -73,6 +82,14 @@ export default function CreateBook() {
       dispatch(getCateList());
     }
     return () => dispatch(resetCateList());
+  }, []);
+
+  useEffect(() => {
+    // get list user lần đầu
+    if (!supplierList) {
+      dispatch(getSupplierList());
+    }
+    return () => dispatch(resetSupplierList());
   }, []);
 
   useEffect(() => {
@@ -97,7 +114,7 @@ export default function CreateBook() {
   };
 
   const [imageFiles, setImageFiles] = useState([]);
-
+  console.log("supplierList", supplierList);
   const handleChangeFileGallery = (e) => {
     let files = e.target.files;
     const validImageFiles = [];
@@ -148,11 +165,10 @@ export default function CreateBook() {
     name: Yup.string().required("*Vui lòng nhập thông tin này"),
     desc: Yup.string().required("*Vui lòng nhập thông tin này"),
     price: Yup.string().required("*Vui lòng nhập thông tin này"),
-    // quantity: Yup.string().required("*Vui lòng nhập thông tin này"),
+    issuer: Yup.string().required("*Vui lòng nhập thông tin này"),
     bookCover: Yup.string().required("*Vui lòng nhập thông tin này"),
     totalPage: Yup.string().required("*Vui lòng nhập thông tin này"),
     publisher: Yup.string().required("*Vui lòng nhập thông tin này"),
-    issuer: Yup.string().required("*Vui lòng nhập thông tin này"),
     size: Yup.string().required("*Vui lòng nhập thông tin này"),
     idCate: Yup.string().required("*Vui lòng nhập thông tin này"),
   });
@@ -166,7 +182,7 @@ export default function CreateBook() {
       bookCover: "",
       totalPage: "",
       publisher: "",
-      issuer: "",
+      issuer,
       size: "",
       image: "",
       gallery: "",
@@ -180,9 +196,8 @@ export default function CreateBook() {
       }
       console.log("data", data);
       dispatch(createBook(data));
-     resetForm();
-     setOpen(false);
-
+      resetForm();
+      setOpen(false);
     },
   });
 
@@ -388,14 +403,35 @@ export default function CreateBook() {
                     error={Boolean(touched.publisher && errors.publisher)}
                     helperText={touched.publisher && errors.publisher}
                   />
-                  <TextField
+                  <FormControl
                     fullWidth
-                    autoComplete="issuer"
-                    label="Nhà phát hành"
-                    {...getFieldProps("issuer")}
                     error={Boolean(touched.issuer && errors.issuer)}
-                    helperText={touched.issuer && errors.issuer}
-                  />
+                  >
+                    <InputLabel id="select">Chọn nhà phát hành</InputLabel>
+                    <Select
+                      value={issuer}
+                      label="Chọn nhà phát hành"
+                      onChange={handleChangeIssuer}
+                      {...getFieldProps("issuer")}
+                    >
+                      {supplierList?.data?.map((issuer) => (
+                        <MenuItem
+                          value={issuer._id} // giá trị sẽ được đẩy lên
+                          key={issuer._id}
+                        >
+                          {issuer.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <ErrorMessage
+                      name="issuer"
+                      render={(msg) => (
+                        <span className="text-red-600 text-xs mt-1 ml-3">
+                          {msg}
+                        </span>
+                      )}
+                    />
+                  </FormControl>
                   <FormControl
                     fullWidth
                     error={Boolean(touched.authorId && errors.authorId)}

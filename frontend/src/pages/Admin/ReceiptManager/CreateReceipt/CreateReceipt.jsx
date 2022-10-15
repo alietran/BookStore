@@ -124,7 +124,7 @@ export default function CreateReceipt() {
             {activeStep === 1 && <BookInfo />}
             {activeStep === 2 && <div></div>}
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              {activeStep !== 0 && (
+              {/* {activeStep !== 0 && (
                 <Button
                   color="inherit"
                   disabled={activeStep === 0}
@@ -133,8 +133,15 @@ export default function CreateReceipt() {
                 >
                   Back
                 </Button>
-              )}
-
+              )} */}
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               {activeStep !== steps.length - 1 ? (
                 <Button

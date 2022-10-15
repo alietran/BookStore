@@ -14,15 +14,16 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import LoginAdmin from "./pages/Auth/Login";
 // import CategoryManager from "./pages/Admin/CategoryManager/CategoryManager";
 import SubCategoryManager from "./pages/Admin/SubCategoryManager/SubCategoryManager";
-
+import CryptoJS from "crypto-js";
+import sha256 from "crypto-js/sha256";
+import hmacSHA256 from "crypto-js/hmac-sha256";
+import Hex from "crypto-js/enc-hex";
 import { useHistory } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import HomePage from "./pages/HomePage";
 
 import AdminRoute from "./guards/AdminRoute";
 import CreateUser from "./pages/Admin/UserManager/CreateUser/CreateUser";
-
-
 
 import UserAccount from "./pages/Admin/Account";
 import Login from "./pages/Login";
@@ -45,7 +46,7 @@ import ConfirmOrder from "./pages/HomePage/Checkout/ConfirmOrder/ConfirmOrder";
 // import Overview from "./pages/Admin/Overview/Overview";
 // import OrderManager from "./pages/Admin/Order/OrderManager";
 import OrderDetail from "./pages/Admin/Order/OrderDetail/OrderDetail";
-// import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
+import UserInfo from "./pages/HomePage/UserInfo/UserInfo";
 import OrderHistoryDetail from "./pages/HomePage/UserInfo/OrderHistory/OrderHistoryDetail";
 import LoginShipper from "./pages/Shipper/LoginShipper";
 import OrderListShipper from "./pages/Shipper/OrderListShipper";
@@ -57,13 +58,10 @@ import { useDispatch } from "react-redux";
 import TriggerLoadingLazy from "./components/TriggerLoadingLazy/TriggerLoadingLazy";
 // import Loading from "./components/Loading/Loading";
 
-
 // const AuthorManager = lazy(() =>
 //   import("./pages/Admin/AuthorManager/AuthorManager")
 // );
-const OrderManager = lazy(() =>
-  import("./pages/Admin/Order/OrderManager")
-);
+const OrderManager = lazy(() => import("./pages/Admin/Order/OrderManager"));
 const PromotionManager = lazy(() =>
   import("./pages/Admin/PromotionManager/PromotionManager")
 );
@@ -76,18 +74,14 @@ const CategoryManager = lazy(() =>
 const ShipperManager = lazy(() =>
   import("./pages/Admin/Shipper/ShipperManager")
 );
-const BookManager = lazy(() =>
-  import("./pages/Admin/Book/BookManager")
-);
+const BookManager = lazy(() => import("./pages/Admin/Book/BookManager"));
 const ReceiptManager = lazy(() =>
   import("./pages/Admin/ReceiptManager/ReceiptManager")
 );
-const UserInfo = lazy(() =>
-  import("./pages/Admin/UserManager/UserManager")
-);
+// const UserInfo = lazy(() =>
+//   import("./pages/Admin/UserManager/UserManager")
+// );
 const Overview = lazy(() => import("./pages/Admin/Overview/Overview"));
-
-
 
 const RatingManager = lazy(() => import("./pages/Admin/Rating/RatingManager"));
 
@@ -104,6 +98,8 @@ function App() {
   );
   const history = useHistory();
   const dispatch = useDispatch();
+  const secretKey = "2083a81b8586094aa6f24c3b5ce89998";
+
   const theme = createTheme(themeOptions);
   theme.components = componentsOverride(theme);
   const [user, setUser] = useState(null);
@@ -134,6 +130,16 @@ function App() {
             });
             localStorage.setItem("user", JSON.stringify(resObject));
             localStorage.setItem("token", resObject.token);
+
+            const hmacDigest = Hex.stringify(
+              hmacSHA256(resObject.user.email, secretKey)
+            );
+
+            window.$crisp.push([
+              "set",
+              "user:email",
+              [resObject.user.email, hmacDigest],
+            ]);
           } else {
             // Swal.fire({
             //   icon: "error",
@@ -153,7 +159,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         {/* <Loading />{" "} */}
-        <Suspense fallback={<TriggerLoadingLazy />} >
+        <Suspense fallback={<TriggerLoadingLazy />}>
           <Switch>
             <Route
               exact

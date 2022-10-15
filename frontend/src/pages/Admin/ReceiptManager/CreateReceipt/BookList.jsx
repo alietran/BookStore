@@ -42,13 +42,13 @@ export default function BookList() {
   const [isReadyChooseSupplier, setIsReadyChooseSupplier] = useState(false);
   const [selected, setSelected] = useState([]);
   const [selectedBookList, setSelectedBookList] = useState([]);
-  const [filterName, setFilterName] = useState("");
   console.log("bookList", bookList);
   const [supplier, setSupplier] = React.useState("");
-  console.log(supplier);
+  console.log("supplier", supplier);
 
   const handleChange = (event) => {
     setSupplier(event.target.value);
+    setChooseSupplier(false);
   };
   useEffect(() => {
     dispatch(getBookList());
@@ -132,7 +132,6 @@ export default function BookList() {
     });
   }, [selectedBookList]);
 
-
   const handleSubmit = () => {
     setChooseSupplier(true);
     setIsReadyChooseSupplier(false);
@@ -167,24 +166,17 @@ export default function BookList() {
 
   const filteredUsers = applySortFilter(
     bookList?.data,
-    getComparator(order, orderBy),
-    filterName
+    getComparator(order, orderBy)
   );
 
-  function applySortFilter(array, comparator, query) {
+  function applySortFilter(array, comparator) {
     const stabilizedThis = array?.map((el, index) => [el, index]);
     stabilizedThis?.sort((a, b) => {
       const order = comparator(a[0], b[0]);
       if (order !== 0) return order;
       return a[1] - b[1];
     });
-    if (query) {
-      return filter(
-        array,
-        (_user) =>
-          _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
-      );
-    }
+
     return stabilizedThis?.map((el) => el[0]);
   }
 
@@ -245,6 +237,7 @@ export default function BookList() {
               <TableBody>
                 {filteredUsers
                   ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((item) => item.issuer.id === supplier)
                   .map((row) => {
                     const { _id, name, image, authorId } = row;
                     const isItemSelected = selected.indexOf(_id) !== -1;

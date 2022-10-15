@@ -28,6 +28,7 @@
     "apexcharts": "^3.35.5",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
+    "crypto-js": "^4.1.1",
     "firebase": "^9.9.1",
     "formik": "^2.2.9",
     "fs-extra": "^10.1.0",
