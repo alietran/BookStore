@@ -126,6 +126,7 @@ export default function RatingManager() {
 
   console.log("updateRatingSuccess", updateRatingSuccess);
   const dispatch = useDispatch();
+  const [idConfirm, setIdConfirm] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const {
     // authorList,
@@ -178,15 +179,17 @@ export default function RatingManager() {
     setOrderBy(property);
   };
 
-  const handleClick = () => {
+  const handleClick = (id) => {
+    console.log("idas", id);
+    setIdConfirm(id);
     setOpenConfirm(true);
   };
-  const handleCloseConfirm = (id) => {
-    console.log("dat123", id);
+  const handleCloseConfirm = () => {
+    console.log("idConfirm", idConfirm);
     setOpenConfirm(false);
 
     dispatch(
-      updateRating(id, {
+      updateRating(idConfirm, {
         active: true,
       })
     );
@@ -195,15 +198,14 @@ export default function RatingManager() {
     setPage(newPage);
   };
 
- const handleClickHideRating = (_id, hidden) => {
-   console.log("idwe", _id);
-   dispatch(
-     updateRating(_id, {
-      
-       hidden: !hidden,
-     })
-   );
- };
+  const handleClickHideRating = (_id, hidden) => {
+    console.log("idwe", _id);
+    dispatch(
+      updateRating(_id, {
+        hidden: !hidden,
+      })
+    );
+  };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -417,6 +419,7 @@ export default function RatingManager() {
                                       arrow
                                     >
                                       <IconButton
+                                        onClick={() => handleClick(_id)}
                                         sx={{
                                           "&:hover": {
                                             backgroundColor:
@@ -427,7 +430,7 @@ export default function RatingManager() {
                                         }}
                                       >
                                         <DoneIcon
-                                          onClick={handleClick}
+                                          // onClick={() => handleClick(_id)}
                                           className="text-blue-500"
                                           sx={{
                                             fontSize: 32,
@@ -443,32 +446,6 @@ export default function RatingManager() {
 
                             <TableCell align="left"> </TableCell>
                           </TableRow>
-                          <CustomDialog
-                            open={openConfirm}
-                            handleClose={handleCancel}
-                            dialogSize="xs"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Duyệt đánh giá"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                Bạn chắc chắn duyệt đánh giá này.
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleCancel}>Hủy</Button>
-                              <Button
-                                onClick={() => handleCloseConfirm(_id)}
-                                autoFocus
-                                sx={{
-                                  textTransform: "none !important",
-                                }}
-                              >
-                                Đồng ý
-                              </Button>
-                            </DialogActions>
-                          </CustomDialog>
                         </>
                       );
                     })}
@@ -492,6 +469,30 @@ export default function RatingManager() {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+        <CustomDialog
+          open={openConfirm}
+          handleClose={handleCancel}
+          dialogSize="xs"
+        >
+          <DialogTitle id="alert-dialog-title">{"Duyệt đánh giá"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Bạn chắc chắn duyệt đánh giá này.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel}>Hủy</Button>
+            <Button
+              onClick={() => handleCloseConfirm()}
+              autoFocus
+              sx={{
+                textTransform: "none !important",
+              }}
+            >
+              Đồng ý
+            </Button>
+          </DialogActions>
+        </CustomDialog>
       </Card>
     </Container>
   );

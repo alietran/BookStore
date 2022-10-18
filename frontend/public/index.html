@@ -43,21 +43,27 @@
   <!-- **LƯU Ý: ** Người dùng đăng nhập thành công vào phải load lại trang để chạy vào lệnh script này, người dùng khách vãng lai thì không cần load lại trang  -->
   <script type="text/javascript">
     let userLogin = JSON.parse(localStorage.getItem("user"))
-    // Tạo ra token cho user đã login, mỗi user login thì chỉ tồn tại 1 token
-    const crisp_token_id_user = `token_${userLogin?.user._id}`
-    // Tạo ra token cho khách vãng lai. Mỗi khách vãng sẽ tồn tại ngẫu nhiên 1 tiken
-    const crisp_token_id_guest = `token_${Math.floor(100000000000 + Math.random() * 900000000000)}`
-    $crisp = [];
-    // Mỗi người dùng đăng nhập muốn lưu lại tin nhắn đã chat với admin thì phải có 1 token để lưu lại trạng thái đó. Khi đăng xuất , đăng nhập lại sẽ vãn lưu lại tin nhắn cũ 
-    // Nếu khách vãng lai thì không cần lưu lại tin nhắn đó
-    if (userLogin) {
-      CRISP_TOKEN_ID = crisp_token_id_user
-    } else {
-      CRISP_TOKEN_ID = crisp_token_id_guest
-    }
-    // CRISP_WEBSITE_ID lấy từ trang https://app.crisp.chat/ của bạn
-    CRISP_WEBSITE_ID = '3ba0460f-baca-48af-a9b9-5078882113af';
-    (function () { d = document; s = d.createElement('script'); s.src = '//client.crisp.chat/l.js'; s.async = 1; d.getElementsByTagName('head')[0].appendChild(s); })();
+    console.log("userLogin34", userLogin)
+    // if(userLogin.user.idRole.roleName !== "Admin"  || userLogin.user.idRole.roleName !== "Shipper"  || !userLogin ) {
+       // Tạo ra token cho user đã login, mỗi user login thì chỉ tồn tại 1 token
+      const crisp_token_id_user = `token_${userLogin?.user._id}`
+      // Tạo ra token cho khách vãng lai. Mỗi khách vãng sẽ tồn tại ngẫu nhiên 1 tiken
+      const crisp_token_id_guest = `token_${Math.floor(100000000000 + Math.random() * 900000000000)}`
+      $crisp = [];
+      // Mỗi người dùng đăng nhập muốn lưu lại tin nhắn đã chat với admin thì phải có 1 token để lưu lại trạng thái đó. Khi đăng xuất , đăng nhập lại sẽ vãn lưu lại tin nhắn cũ 
+      // Nếu khách vãng lai thì không cần lưu lại tin nhắn đó
+      if (userLogin) {
+        CRISP_TOKEN_ID = crisp_token_id_user
+      } else {
+        CRISP_TOKEN_ID = crisp_token_id_guest
+      }
+      // CRISP_WEBSITE_ID lấy từ trang https://app.crisp.chat/ của bạn
+      // CRISP_WEBSITE_ID = '3ba0460f-baca-48af-a9b9-5078882113af';
+      CRISP_WEBSITE_ID = '04ca693d-e6a6-47ed-9472-7bc4076f418e';
+      (function () { d = document; s = d.createElement('script'); s.src = '//client.crisp.chat/l.js'; s.async = 1; d.getElementsByTagName('head')[0].appendChild(s); })();
+    // }
+
+   
   </script>
 
 </head>

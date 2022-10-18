@@ -23,7 +23,7 @@ export default function Cart() {
   console.log("user", user);
   const { discount, miniPrice } = useSelector((state) => state.CartReducer);
   const [totalCart, setTotalCart] = useState(0);
- 
+
   const [itemCart, setItemCart] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -187,12 +187,12 @@ export default function Cart() {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#f8f8f8", padding: "20px 0" }}>
       <div className={classes.container}>
         <div className="cart__wrapper ">
           <div className={classes["cart__wrapper-breadcrumbs"]}>
             <div className={classes.breadcrumbsIcon}>
-              <Link className={classes.breadcrumbsIconLink} to={"/"}>
+              <Link className={classes.breadcrumbsIconLink} href={"/"}>
                 <HomeIcon />
               </Link>
               <span className="css-rhmj3t pl-2"> &gt; </span>
@@ -207,12 +207,177 @@ export default function Cart() {
             <div className={classes["cart__wrapper-content"]}>
               <div className={classes["cart__wrapper-content--main"]}>
                 <div className={classes["cart__wrapper-content--left"]}>
-                  <div className={classes["cart__wrapper-content--box"]}>
+                  <table >
+                    <tr
+                      style={{
+                        display: "grid ",
+                        gridTemplateColumns: "12% 40% 10% 30% 10%",
+                        padding: "15px 15px 10px 15px",
+                        alignItems: "center",
+                      }}
+                    >
+                      {" "}
+                      <th>
+                        {" "}
+                        <img
+                          style={{ width: "100px", height: "60px" }}
+                          src="../../../../img/logo_white.png"
+                          alt=""
+                        />
+                      </th>
+                      <th>SAM BOOKSTORE</th>
+                      <th>Giá </th>
+                      <th className="text-center">Số lượng</th>
+                      <th>Tổng tiền</th>
+                    </tr>
+                    {cart.length === 0 ? (
+                      <div>
+                        <img src="./img/cart1.png" height={200} widtd={200} />
+                      </div>
+                    ) : (
+                      <>
+                        {" "}
+                        {cart?.map((item, index) => (
+                          <tr
+                            style={{
+                              display: "grid ",
+                              gridTemplateColumns: "12% 40% 10% 30% 10%",
+                              padding: "15px 15px 10px 15px",
+                              textAlign: "center",
+                            }}
+                          >
+                            {" "}
+                            <td>
+                              {" "}
+                              <img
+                                style={{ widtd: "100px", height: "80px" }}
+                                src={item.image}
+                                Giảm
+                                giá
+                                alt=""
+                              />
+                            </td>
+                            <td>
+                              {" "}
+                              <NavLink
+                                className={classes["box__content-name-product"]}
+                                to={`/productDetail/${item.id}`}
+                              >
+                                {item.name}
+                              </NavLink>
+                            </td>
+                            <td>
+                              <p style={{ fontWeight: "600" }}>
+                                {" "}
+                                {item.price.toLocaleString()}{" "}
+                              </p>{" "}
+                            </td>
+                            <td
+                              style={{ width: "38%", marginLeft: "70px" }}
+                              className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity} text-center`}
+                            >
+                              <div
+                                className={
+                                  classes["box__content-quantity-detail"]
+                                }
+                              >
+                                <button
+                                  className="plusItem "
+                                  onClick={() =>
+                                    hadleClickMinus(item.id, false)
+                                  }
+                                  disabled={item.quantity === 1 ? true : false}
+                                >
+                                  <span>-</span>
+                                </button>
+
+                                <input
+                                  onKeyPress={(event) => {
+                                    if (!/[0-9]/.test(event.key)) {
+                                      event.preventDefault();
+                                    }
+                                  }}
+                                  style={{ width: "30px" }}
+                                  type="text"
+                                  name="quantity"
+                                  className={classes.quantityValue}
+                                  value={
+                                    item.quantity ? item.quantity : quantity
+                                  }
+                                  onChange={
+                                    (e) => handleChangeQuantity(item, e)
+                                    // setQuantity(2)
+                                  }
+
+                                  // // type="number"
+                                />
+
+                                <button
+                                  className="dashItem"
+                                  onClick={(e) =>
+                                    hadleClickPlus(item.id, true, item)
+                                  }
+                                >
+                                  <span>+</span>
+                                </button>
+                              </div>
+
+                              <div
+                                className={`${classes.delete} text-blue-600 `}
+                                onClick={() => handleClickConfirm(item.id)}
+                              >
+                                Xóa
+                              </div>
+                              <CustomDialog
+                                open={openConfirm}
+                                handleClose={handleCancel}
+                                dialogSize="xs"
+                                overlayStyle={{
+                                  backgroundColor: "transparent",
+                                }}
+                              >
+                                <DialogTitle id="alert-dialog-title">
+                                  {"Xóa sản phẩm"}
+                                </DialogTitle>
+                                <DialogContent>
+                                  <DialogContentText id="alert-dialog-description">
+                                    Bạn chắc chắn muốn xóa sản phẩm này.
+                                  </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                  <Button onClick={handleCancel}>Hủy</Button>
+                                  <Button
+                                    onClick={() => handleCloseConfirm(item.id)}
+                                    autoFocus
+                                  >
+                                    Đồng ý
+                                  </Button>
+                                </DialogActions>
+                              </CustomDialog>
+                            </td>
+                            <td>
+                              <p
+                                style={{
+                                  fontWeight: "600",
+                                  color: "#1435c3",
+                                }}
+                              >
+                                {" "}
+                                {(item.price * item.quantity).toLocaleString()}
+                              </p>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    )}
+                  </table>
+
+                  {/* <div className={classes["cart__wrapper-content--box"]}>
                     <div className={classes.box__content}>
                       <div className={classes["box__content-name"]}>
                         <NavLink className={`${classes.center}`} to={"/"}>
                           <img
-                            style={{ width: "120px", height: "50px" }}
+                            style={{ widtd: "120px", height: "50px" }}
                             src="../../../../img/logo_white.png"
                             alt=""
                           />
@@ -240,158 +405,186 @@ export default function Cart() {
                       </div>
                     </div>
                   </div>
-                  {cart?.map((item, index) => (
+                  {cart.lengtd === 0 ? (
                     <div>
+                      <img src="./img/cart1.png" height={200} widtd={200} />
+                    </div>
+                  ) : (
+                    <>
                       {" "}
-                      <div
-                        className={`${classes["cart__wrapper-content--box"]}`}
-                      >
-                        <div className={`${classes.box__content} `}>
-                          <div className={classes["box__content-name"]}>
-                            <NavLink
-                              className={` ${classes.center}`}
-                              to={`/productDetail/${item.id}`}
-                            >
-                              <img
-                                style={{ width: "100px", height: "80px" }}
-                                src={item.image}
-                                Giảm
-                                giá
-                                alt=""
-                              />
-                            </NavLink>
-                            <NavLink
-                              className={classes["box__content-name-product"]}
-                              to={`/productDetail/${item.id}`}
-                            >
-                              {item.name}
-                            </NavLink>
-                          </div>
+                      {cart?.map((item, index) => (
+                        <div>
+                          {" "}
                           <div
-                            className={`${classes["box__content-unitPrice"]} ${classes.center}`}
+                            className={`${classes["cart__wrapper-content--box"]} `}
                           >
-                            <p style={{ fontWeight: "600" }}>
-                              {" "}
-                              {item.price.toLocaleString()}{" "}
-                            </p>
-                          </div>
-                          <div
-                            className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity}`}
-                          >
-                            <div
-                              className={
-                                classes["box__content-quantity-detail"]
-                              }
-                            >
-                              <button
-                                className="plusItem"
-                                onClick={() => hadleClickMinus(item.id, false)}
-                                disabled={item.quantity === 1 ? true : false}
-                              >
-                                <span>
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size="16"
-                                    color="textPrimary"
-                                    height="16"
-                                    width="16"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      clip-rule="evenodd"
-                                      d="M3.25 12C3.25 11.5858 3.58579 11.25 4 11.25H20C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75H4C3.58579 12.75 3.25 12.4142 3.25 12Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
-                                </span>
-                              </button>
-                              <input
-                                style={{ width: "30px" }}
-                                type="number"
-                                name="quantity"
-                                className={classes.quantityValue}
-                                value={item.quantity ? item.quantity : quantity}
-                                onChange={
-                                  (e) => handleChangeQuantity(item, e)
-                                  // setQuantity(2)
-                                }
-
-                                // // type="number"
-                              />
-
-                              <button
-                                className="dashItem"
-                                onClick={(e) =>
-                                  hadleClickPlus(item.id, true, item)
-                                }
-                              >
-                                <span>
-                                  <svg
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    size="16"
-                                    color="textPrimary"
-                                    height="16"
-                                    width="16"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      clip-rule="evenodd"
-                                      d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
-                                      fill="#82869E"
-                                    ></path>
-                                  </svg>
-                                </span>
-                              </button>
-                            </div>
-
-                            <div
-                              className={`${classes.delete} text-blue-600 `}
-                              onClick={() => handleClickConfirm(item.id)}
-                            >
-                              Xóa
-                            </div>
-                            <CustomDialog
-                              open={openConfirm}
-                              handleClose={handleCancel}
-                              dialogSize="xs"
-                              overlayStyle={{ backgroundColor: "transparent" }}
-                            >
-                              <DialogTitle id="alert-dialog-title">
-                                {"Xóa sản phẩm"}
-                              </DialogTitle>
-                              <DialogContent>
-                                <DialogContentText id="alert-dialog-description">
-                                  Bạn chắc chắn muốn xóa sản phẩm này.
-                                </DialogContentText>
-                              </DialogContent>
-                              <DialogActions>
-                                <Button onClick={handleCancel}>Hủy</Button>
-                                <Button
-                                  onClick={() => handleCloseConfirm(item.id)}
-                                  autoFocus
+                            <div className={`${classes.box__content} `}>
+                              <div className={classes["box__content-name"]}>
+                                <NavLink
+                                  className={` ${classes.center}`}
+                                  to={`/productDetail/${item.id}`}
                                 >
-                                  Đồng ý
-                                </Button>
-                              </DialogActions>
-                            </CustomDialog>
-                          </div>
+                                  <img
+                                    style={{ widtd: "100px", height: "80px" }}
+                                    src={item.image}
+                                    Giảm
+                                    giá
+                                    alt=""
+                                  />
+                                </NavLink>
+                                <NavLink
+                                  className={
+                                    classes["box__content-name-product"]
+                                  }
+                                  to={`/productDetail/${item.id}`}
+                                >
+                                  {item.name}
+                                </NavLink>
+                              </div>
+                              <div
+                                className={`${classes["box__content-unitPrice"]} ${classes.center}`}
+                              >
+                                <p style={{ fontWeight: "600" }}>
+                                  {" "}
+                                  {item.price.toLocaleString()}{" "}
+                                </p>
+                              </div>
+                              <div
+                                className={`${classes["box__content-quantity"]} ${classes.center} ${classes.quantity}`}
+                              >
+                                <div
+                                  className={
+                                    classes["box__content-quantity-detail"]
+                                  }
+                                >
+                                  <button
+                                    className="plusItem "
+                                    onClick={() =>
+                                      hadleClickMinus(item.id, false)
+                                    }
+                                    disabled={
+                                      item.quantity === 1 ? true : false
+                                    }
+                                  >
+                                    <span>
+                                      <svg
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        size="16"
+                                        color="textPrimary"
+                                        height="16"
+                                        widtd="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <patd
+                                          fill-rule="evenodd"
+                                          clip-rule="evenodd"
+                                          d="M3.25 12C3.25 11.5858 3.58579 11.25 4 11.25H20C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75H4C3.58579 12.75 3.25 12.4142 3.25 12Z"
+                                          fill="#82869E"
+                                        ></patd>
+                                      </svg>
+                                    </span>
+                                  </button>
+                                  <input
+                                    style={{ widtd: "30px" }}
+                                    type="number"
+                                    name="quantity"
+                                    className={classes.quantityValue}
+                                    value={
+                                      item.quantity ? item.quantity : quantity
+                                    }
+                                    onChange={
+                                      (e) => handleChangeQuantity(item, e)
+                                      // setQuantity(2)
+                                    }
 
-                          <div
-                            className={`${classes["box__content-quantity"]} ${classes.center}`}
-                          >
-                            <p style={{ fontWeight: "600", color: "#1435c3" }}>
-                              {" "}
-                              {(item.price * item.quantity).toLocaleString()}
-                            </p>
+                                    // // type="number"
+                                  />
+
+                                  <button
+                                    className="dashItem"
+                                    onClick={(e) =>
+                                      hadleClickPlus(item.id, true, item)
+                                    }
+                                  >
+                                    <span>
+                                      <svg
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        size="16"
+                                        color="textPrimary"
+                                        height="16"
+                                        widtd="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <patd
+                                          fill-rule="evenodd"
+                                          clip-rule="evenodd"
+                                          d="M12.75 4C12.75 3.58579 12.4142 3.25 12 3.25C11.5858 3.25 11.25 3.58579 11.25 4V11.25H4C3.58579 11.25 3.25 11.5858 3.25 12C3.25 12.4142 3.58579 12.75 4 12.75H11.25V20C11.25 20.4142 11.5858 20.75 12 20.75C12.4142 20.75 12.75 20.4142 12.75 20V12.75H20C20.4142 12.75 20.75 12.4142 20.75 12C20.75 11.5858 20.4142 11.25 20 11.25H12.75V4Z"
+                                          fill="#82869E"
+                                        ></patd>
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </div>
+
+                                <div
+                                  className={`${classes.delete} text-blue-600 `}
+                                  onClick={() => handleClickConfirm(item.id)}
+                                >
+                                  Xóa
+                                </div>
+                                <CustomDialog
+                                  open={openConfirm}
+                                  handleClose={handleCancel}
+                                  dialogSize="xs"
+                                  overlayStyle={{
+                                    backgroundColor: "transparent",
+                                  }}
+                                >
+                                  <DialogTitle id="alert-dialog-title">
+                                    {"Xóa sản phẩm"}
+                                  </DialogTitle>
+                                  <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                      Bạn chắc chắn muốn xóa sản phẩm này.
+                                    </DialogContentText>
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button onClick={handleCancel}>Hủy</Button>
+                                    <Button
+                                      onClick={() =>
+                                        handleCloseConfirm(item.id)
+                                      }
+                                      autoFocus
+                                    >
+                                      Đồng ý
+                                    </Button>
+                                  </DialogActions>
+                                </CustomDialog>
+                              </div>
+
+                              <div
+                                className={`${classes["box__content-quantity"]} ${classes.center}`}
+                              >
+                                <p
+                                  style={{
+                                    fontWeight: "600",
+                                    color: "#1435c3",
+                                  }}
+                                >
+                                  {" "}
+                                  {(
+                                    item.price * item.quantity
+                                  ).toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      ))}
+                    </>
+                  )} */}
                 </div>
               </div>
             </div>

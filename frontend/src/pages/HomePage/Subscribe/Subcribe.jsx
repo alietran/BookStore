@@ -16,8 +16,8 @@ export default function Subcribe() {
             <h1 className='text-2xl uppercase'>Tin tức và cập nhật mới</h1>
             <p>Chúng tôi rất thích nếu bạn đăng ký nhận bản tin của chúng tôi! Bạn cũng sẽ thích nó.</p>
             <div className="newsletter__box">
-              <input type="email" value="" name="email" className="email" placeholder="Your email address" required="" />
-              <button type="submit">Subscribe</button>
+              <input type="email" value="" name="email" className="email" placeholder="Địa chỉ email của bạn" required="" />
+              <button type="submit">Đăng ký</button>
             </div>
           </div>
 

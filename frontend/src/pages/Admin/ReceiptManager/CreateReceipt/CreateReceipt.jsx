@@ -148,11 +148,11 @@ export default function CreateReceipt() {
                   onClick={handleNext}
                   disabled={selectedBook ? false : true}
                 >
-                  {activeStep !== steps.length - 1 && "Next"}
+                  {activeStep !== steps.length - 1 && "Tiếp"}
                 </Button>
               ) : (
                 <Button onClick={handleSubmitReceipt}>
-                  {activeStep === steps.length - 1 && "Finish"}
+                  {activeStep === steps.length - 1 && "Hoàn thành"}
                 </Button>
               )}
             </Box>

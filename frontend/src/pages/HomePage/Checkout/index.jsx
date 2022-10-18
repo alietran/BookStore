@@ -123,241 +123,248 @@ export default function Checkout() {
   }, [successCreateOrder]);
 
   return (
-    <Box className="m-5">
-      <Container maxWidth="lg">
-        <div className={classes["cart__wrapper-breadcrumbs"]}>
-          <div className={classes.breadcrumbsIcon}>
-            <NavLink className={classes.breadcrumbsIconLink} to="/">
-              <HomeIcon />
-            </NavLink>
-            <span className="css-rhmj3t pl-2"> &gt; </span>
+    <Box style={{ backgroundColor: "#f8f8f8", padding: "20px 0" }}>
+      <Box className="m-5">
+        <Container maxWidth="lg">
+          <div className={classes["cart__wrapper-breadcrumbs"]}>
+            <div className={classes.breadcrumbsIcon}>
+              <NavLink className={classes.breadcrumbsIconLink} to="/">
+                <HomeIcon />
+              </NavLink>
+              <span className="css-rhmj3t pl-2"> &gt; </span>
+            </div>
+            <div className={classes.breadcrumbsIcon}>
+              <NavLink className={classes.breadcrumbsIconLink} to={"/cart"}>
+                Giỏ hàng
+              </NavLink>
+              <span className="css-rhmj3t pl-2 pr-2"> &gt; </span>
+            </div>
+            <div className={classes.breadcrumbsIcon}>
+              <NavLink className={`${classes.breadcrumbsIconLink} `} to={"/"}>
+                Thanh toán
+              </NavLink>
+            </div>
           </div>
-          <div className={classes.breadcrumbsIcon}>
-            <NavLink className={classes.breadcrumbsIconLink} to={"/cart"}>
-              Giỏ hàng
-            </NavLink>
-            <span className="css-rhmj3t pl-2 pr-2"> &gt; </span>
-          </div>
-          <div className={classes.breadcrumbsIcon}>
-            <NavLink className={`${classes.breadcrumbsIconLink} `} to={"/"}>
-              Thanh toán
-            </NavLink>
-          </div>
-        </div>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={8}>
-            <div
-              style={{
-                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
-                borderRadius: "15px",
-                border: "1px solid white",
-                padding: "10px",
-              }}
-            >
-              {" "}
-              <Box
-                sx={{
-                  width: "100%",
-                  typography: "body1",
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                }}
-              >
-                <TabContext value={value}>
-                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList
-                      onChange={handleChange}
-                      aria-label="lab API tabs example"
-                    >
-                      <Tab
-                        sx={{
-                          flexDirection: "row",
-                          textTransform: "none !important",
-                        }}
-                        label="Nhận hàng tại nhà"
-                        value="1"
-                      />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="1">
-                    <Address />
-                  </TabPanel>
-                </TabContext>
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  typography: "body1",
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  marginTop: "20px",
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Grid item xs={8}>
+              <div
+                style={{
+                  backgroundColor:"white",
+                  boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                  borderRadius: "15px",
+                  border: "1px solid white",
                   padding: "10px",
                 }}
               >
-                <h3>Ghi chú cho đơn hàng</h3>
-                <TextField
-                  fullWidth
-                  notched="true"
-                  autoFocus="false"
-                  size="small"
-                  type="text"
-                  label="Nhập thông tin ghi chú cho nhà bán hàng"
-                  className="header__navigationBar-text "
+                {" "}
+                <Box
                   sx={{
-                    backgroundColor: "transparent",
-                    outline: "none !important",
-                    border: "none !important",
-                    "&:hover": {
-                      border: "none",
-                      outline: "none",
-                    },
+                    width: "100%",
+                    typography: "body1",
+                    backgroundColor: "#fff",
+                    borderRadius: "10px",
                   }}
-                />
+                >
+                  <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                        onChange={handleChange}
+                        aria-label="lab API tabs example"
+                      >
+                        <Tab
+                          sx={{
+                            flexDirection: "row",
+                            textTransform: "none !important",
+                          }}
+                          label="Nhận hàng tại nhà"
+                          value="1"
+                        />
+                      </TabList>
+                    </Box>
+                    <TabPanel value="1">
+                      <Address />
+                    </TabPanel>
+                  </TabContext>
+                </Box>
+                <Box
+                  sx={{
+                    width: "100%",
+                    typography: "body1",
+                    backgroundColor: "#fff",
+                    borderRadius: "10px",
+                    marginTop: "20px",
+                    padding: "10px",
+                  }}
+                >
+                  <h3>Ghi chú cho đơn hàng</h3>
+                  <TextField
+                    fullWidth
+                    notched="true"
+                    autoFocus="false"
+                    size="small"
+                    type="text"
+                    label="Nhập thông tin ghi chú cho nhà bán hàng"
+                    className="header__navigationBar-text "
+                    sx={{
+                      backgroundColor: "transparent",
+                      outline: "none !important",
+                      border: "none !important",
+                      "&:hover": {
+                        border: "none",
+                        outline: "none",
+                      },
+                    }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    width: "100%",
+                    typography: "body1",
+                    backgroundColor: "#fff",
+                    borderRadius: "10px",
+                    marginTop: "20px",
+                  }}
+                >
+                  <PaymentMethod />
+                </Box>
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+              <Box
+                sx={{
+                  width: "100%",
+                  typography: "body1",
+                  backgroundColor: "#fff",
+
+                  boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                  borderRadius: "15px",
+                  border: "1px solid white",
+                }}
+              >
+                <div className="cart__wrapper-content--right">
+                  <div
+                    className="cart__wrapper-content--info"
+                    style={{ padding: "10px 0" }}
+                  >
+                    <Typography
+                      component="div"
+                      variant="subtitle1"
+                      sx={{ marginBottom: "10px", padding: "0 20px 0 20px" }}
+                    >
+                      Thông tin đơn hàng
+                    </Typography>
+                    {cart.map((item, index) => (
+                      <div className="info-voucher flex px-4">
+                        <div className={classes["info-text"]}>
+                          <img src={item.image} alt="" />
+                        </div>
+                        <div className={classes["info-product"]}>
+                          <p className="leading-5">{item.name}</p>
+                          <p>Số lượng: {item.quantity}</p>
+                          <p className="text-red-500">
+                            {item.price.toLocaleString()} ₫
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </Box>
               <Box
                 sx={{
                   width: "100%",
                   typography: "body1",
                   backgroundColor: "#fff",
-                  borderRadius: "10px",
+
+                  padding: "10px",
                   marginTop: "20px",
+                  boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+                  borderRadius: "15px",
+                  border: "1px solid white",
                 }}
               >
-                <PaymentMethod />
-              </Box>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#fff",
-               
-                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
-                borderRadius: "15px",
-                border: "1px solid white",
-              }}
-            >
-              <div className="cart__wrapper-content--right">
-                <div
-                  className="cart__wrapper-content--info"
-                  style={{ padding: "10px 0" }}
-                >
-                  <Typography
-                    component="div"
-                    variant="subtitle1"
-                    sx={{ marginBottom: "10px", padding: "0 20px 0 20px" }}
-                  >
-                    Thông tin đơn hàng
-                  </Typography>
-                  {cart.map((item, index) => (
-                    <div className="info-voucher flex px-4">
-                      <div className={classes["info-text"]}>
-                        <img src={item.image} alt="" />
-                      </div>
-                      <div className={classes["info-product"]}>
-                        <p className="leading-5">{item.name}</p>
-                        <p>Số lượng: {item.quantity}</p>
-                        <p className="text-red-500">
-                          {item.price.toLocaleString()} ₫
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#fff",
-
-                padding: "10px",
-                marginTop: "20px",
-                boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
-                borderRadius: "15px",
-                border: "1px solid white",
-              }}
-            >
-              <div className={classes["cart__wrapper-content--payment"]}>
-                <div className={classes["cart__wrapper-content--info"]}>
-                  <h4 className="text-xl">Thanh toán</h4>
-                  <div className={classes["info-payment"]}>
-                    <table className={classes["payment-tab"]}>
-                      <tbody>
-                        <tr>
-                          <td>Tạm tính </td>
+                <div className={classes["cart__wrapper-content--payment"]}>
+                  <div className={classes["cart__wrapper-content--info"]}>
+                    <h4 className="text-xl">Thanh toán</h4>
+                    <div className={classes["info-payment"]}>
+                      <table className={classes["payment-tab"]}>
+                        <tbody>
+                          <tr>
+                            <td>Tạm tính </td>
+                            <td>
+                              <span> {totalPrice.toLocaleString()} ₫</span>
+                            </td>
+                          </tr>
+                          <td>Khuyến mãi </td>
                           <td>
-                            <span> {totalPrice.toLocaleString()} ₫</span>
-                          </td>
-                        </tr>
-                        <td>Khuyến mãi </td>
-                        <td>
-                          <span>
-                            {discount ? discount.toLocaleString() : 0}{" "}
-                          </span>
-                          {/* {(1 * total)?.toLocaleString()} */}
-                        </td>
-                        <tr>
-                          <td>Phí vận chuyển </td>
-                          <td>
-                            <span>Miễn phí</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Tổng tiền </td>
-                          <td>
-                            <span
-                              style={{
-                                color: "red",
-                                fontSize: "18px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {total < miniPrice
-                                ? (total - 0).toLocaleString()
-                                : (total - discount).toLocaleString()}{" "}
-                              ₫
+                            <span>
+                              {discount ? discount.toLocaleString() : 0}{" "}
                             </span>
+                            {/* {(1 * total)?.toLocaleString()} */}
                           </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div className="items-end">(Đã bao gồm thuế)</div>
+                          <tr>
+                            <td>Phí vận chuyển </td>
+                            <td>
+                              <span>Miễn phí</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Tổng tiền </td>
+                            <td>
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontSize: "18px",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {total < miniPrice
+                                  ? (total - 0).toLocaleString()
+                                  : (total - discount).toLocaleString()}{" "}
+                                ₫
+                              </span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div className="items-end">(Đã bao gồm thuế)</div>
+                    </div>
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!address ? true : false}
+                      variant="contained"
+                      sx={{
+                        marginTop: "15px",
+                        color: "#fff",
+                        width: "100%",
+                        border: "none",
+                        padding: "10px",
+                        fontWeight: 500,
+                        borderRadius: "5px",
+                        // backgroundColor: "#1435c3",
+                      }}
+                    >
+                      THANH TOÁN
+                    </Button>
                   </div>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={!address ? true : false}
-                    variant="contained"
-                    sx={{
-                      marginTop: "15px",
-                      color: "#fff",
-                      width: "100%",
-                      border: "none",
-                      padding: "10px",
-                      fontWeight: 500,
-                      borderRadius: "5px",
-                      // backgroundColor: "#1435c3",
-                    }}
-                  >
-                    THANH TOÁN
-                  </Button>
                 </div>
-              </div>
 
-              <a
-                ref={checkoutLinkRef}
-                style={{ display: "none" }}
-                href={linkMoMo}
-              >
-                checkout momo
-              </a>
-            </Box>
+                <a
+                  ref={checkoutLinkRef}
+                  style={{ display: "none" }}
+                  href={linkMoMo}
+                >
+                  checkout momo
+                </a>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
     </Box>
   );
 }

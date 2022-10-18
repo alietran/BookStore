@@ -45,6 +45,7 @@ import Loading from "../../../components/Loading/Loading";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: "image", label: "Hình ảnh", alignRight: false },
   { id: "name", label: "Tên sách", alignRight: false },
   { id: "price", label: "Giá", alignRight: false },
   { id: "desc", label: "Mô tả", alignRight: false },
@@ -323,11 +324,10 @@ export default function BookManager() {
                           </TableCell>
 
                           <TableCell align="left">
-                            {/* <div className="flex">
-                              {" "}
-                              <img src={image} alt="" /> */}
-                              <p>{name}</p>{" "}
-                            {/* </div> */}
+                            <img src={image} alt="hinh anh"/>
+                          </TableCell>
+                          <TableCell align="left">
+                            <p>{name}</p>{" "}
                           </TableCell>
                           <TableCell align="left">{price}</TableCell>
                           <TableCell

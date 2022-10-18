@@ -101,7 +101,7 @@ export default function Overview() {
       (total, item) => (total += item.y),
       0
     );
-    // console.log("revenueYear", revenueYear);
+    console.log("revenueWeek", revenueWeek);
     setRevenueWeek(revenueWeek);
 
     let costWeek = listReceiptItem?.reduce(
@@ -110,7 +110,7 @@ export default function Overview() {
     );
     // console.log("revenueYear", revenueYear);
     setCostWeek(costWeek);
-  }, [listReceiptItem]);
+  }, [listReceiptItem, ]);
 
   useEffect(() => {
     let revenueMonth = listChartItemMonth?.reduce(
@@ -373,7 +373,7 @@ export default function Overview() {
         yearItem[ItemOrder].y = getTotalPrice(item);
       }
       yearItem = [...yearItem];
-      // console.log("yearItem123", yearItem);
+      console.log("yearItem123", yearItem);
       return setListChartItemYear(yearItem);
     });
   };
@@ -518,7 +518,7 @@ export default function Overview() {
                   width: "100%",
                   borderRadius: "10px",
                   padding: "20px",
-                  marginTop: "90px",
+              
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -553,7 +553,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-                  marginTop: "90px",
+              
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -588,7 +588,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-                  marginTop: "90px",
+              
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -623,7 +623,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-                  marginTop: "90px",
+              
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}

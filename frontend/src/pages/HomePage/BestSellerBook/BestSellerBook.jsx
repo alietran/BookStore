@@ -19,7 +19,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
 export default function BestSellerBook() {
   const { errorAddCart } = useSelector((state) => state.CartReducer);
-  const enqueueSnackbar = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();

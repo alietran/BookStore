@@ -79,18 +79,21 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid rgb(224, 224, 224)",
     borderRadius: "9999px",
   },
+
   "cart__wrapper-content": {
     display: "flex",
     marginBottom: "24px",
     marginRight: "20px",
     boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
     borderRadius: "15px",
+    backgroundColor: "white",
     border: "1px solid white",
   },
 
   "cart__wrapper--main": {
     boxSizing: "border-box",
     margin: 0,
+
     minWidth: 0,
     width: "75.6%",
     marginRight: "16px",
@@ -100,8 +103,8 @@ const useStyles = makeStyles((theme) => ({
     background: "white",
   },
   "cart__wrapper-content--left": {
-    marginRight: "20px",
     width: "800px",
+    // borderRadius:"10px",
   },
   "cart__wrapper-content--box": {
     display: "flex",
@@ -179,10 +182,7 @@ const useStyles = makeStyles((theme) => ({
       color: "red",
     },
   },
-  "box__content-quantity-detail": {
-    display: "flex",
-    paddingBottom: "5px",
-  },
+
   "cart__wrapper-content--right": {
     boxSizing: "border-box",
     margin: 0,
@@ -214,7 +214,7 @@ const useStyles = makeStyles((theme) => ({
   },
   "box__content-quantity-detail": {
     display: "flex",
-    paddingBottom: "5px",
+    // paddingBottom: "5px",
     backgroundColor: "#f8f8f8",
     // .disabled {
     //   border: 1px solid #999999;
@@ -236,7 +236,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   quantity: {
-    alignItems: "end",
+    // alignItems: "end",
     display: "flex",
     flexDirection: "column",
     paddingBottom: "30px",
@@ -274,7 +274,8 @@ const useStyles = makeStyles((theme) => ({
   },
   "cart__wrapper-content--payment": {
     background: "white",
-   
+    position: "relative",
+
     margin: "20px 0",
     boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
     borderRadius: "15px",

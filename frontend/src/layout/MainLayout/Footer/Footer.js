@@ -1,8 +1,9 @@
 import { Container } from '@mui/material';
-import React from 'react'
+import React, { useEffect } from 'react'
 import useStyles from "./style";
 export default function Footer() {
      const style = useStyles();
+     
   return (
     <div>
       <footer className={`${style.footer}`}>
@@ -26,8 +27,8 @@ export default function Footer() {
             </div>
             <div className="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-3">
               <div className="space-y-4">
-                <h3 className="tracking-wide text-black uppercase dark:text-coolGray-50">
-                  BOOKSY
+                <h3 className="tracking-wide font-bold text-black uppercase dark:text-coolGray-50">
+                  SAM BOOKSTORE
                 </h3>
                 <ul className={`${style.textColor}`}>
                   <li>
@@ -43,7 +44,7 @@ export default function Footer() {
                 </ul>
               </div>
               <div className="space-y-4">
-                <h3 className="uppercase dark:text-coolGray-50 text-black">
+                <h3 className="uppercase font-bold dark:text-coolGray-50 text-black">
                   Điều khoản sử dụng
                 </h3>
                 <ul className={`${style.textColor}`}>

@@ -142,7 +142,7 @@ const AdminTemplate = (props) => {
           <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
             <div className="logo p-4 ">
               <img
-                src="/img/logo_black.png"
+                src="/img/logo_black (2).png"
                 className="h-12 w-full"
                 alt="..."
               />
