@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -123,6 +124,12 @@ export default function OrderHistoryDetail() {
                           </span>
                         </span>
                       </Typography>
+                      <p className="mt-5">
+                        Ngày nhận:{" "}
+                        {moment(orderDetail.updatedAt).format(
+                          "DD/MM/YYYY, h:mm a"
+                        )}
+                      </p>
                     </div>
                   </Stack>
                   <CustomizedSteppers orderDetail={orderDetail} />

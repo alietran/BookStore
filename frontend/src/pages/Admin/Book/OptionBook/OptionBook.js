@@ -140,7 +140,7 @@ export default function OptionBook({ id, book }) {
       bookCover: book.bookCover,
       totalPage: book.totalPage,
       publisher: book.publisher,
-      issuer: book.issuer,
+      issuer: book.issuer.name,
       size: book.size,
       authorId: book.authorId._id,
     },

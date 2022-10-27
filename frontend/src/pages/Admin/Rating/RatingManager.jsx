@@ -112,8 +112,9 @@ function applySortFilter(array, comparator, query) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("array42343", array);
   if (query) {
-    return filter(array, (_user) => _user._id.indexOf(query) !== -1);
+    return filter(array, (_user) => _user.book.name.toLowerCase().indexOf(query.toLowerCase()) !== -1)
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -281,7 +282,7 @@ export default function RatingManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
-          searchName={"Tìm tác giả"}
+          searchLabelName={"Tìm đánh giá"}
         />
 
         <TableContainer sx={{ minWidth: 800 }}>

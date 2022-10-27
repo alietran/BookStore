@@ -57,10 +57,9 @@ export default function DetailReceipt() {
   const dispatch = useDispatch();
   const params = useParams();
 
-  receiptDetailList = receiptDetailList?.data.filter(
-    (item) => item.receiptId.id === params.receiptId
+  receiptDetailList = receiptDetailList?.data?.filter(
+    (item) => item.receiptId?.id === params.receiptId
   );
-
   useEffect(function () {
     dispatch(getAllDetailReceipt());
     // return () => {

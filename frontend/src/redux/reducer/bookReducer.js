@@ -30,6 +30,10 @@ const stateDefault = {
   loadingBookSearch: false,
   bookSearch: null,
   errorBookSearch: null,
+
+  loadingBookPrice: false,
+  bookPrice: null,
+  errorBookPrice: null,
 };
 
 export const BookReducer = (state = stateDefault, action) => {
@@ -72,6 +76,27 @@ export const BookReducer = (state = stateDefault, action) => {
         loadingLatestBook: false,
       };
     }
+    // case "GET_BOOK_PRICE_REQUEST": {
+    //   return {
+    //     ...state,
+    //     loadingBookPrice: true,
+    //     errorBookPrice: null,
+    //   };
+    // }
+    // case "GET_BOOK_PRICE_SUCCESS": {
+    //   return {
+    //     ...state,
+    //     bookPrice: action.payload.data,
+    //     loadingBookPrice: false,
+    //   };
+    // }
+    // case "GET_BOOK_PRICE_FAIL": {
+    //   return {
+    //     ...state,
+    //     errorBookPrice: action.payload.error,
+    //     loadingLatestBook: false,
+    //   };
+    // }
     case "GET_LATEST_BOOK_REQUEST": {
       return {
         ...state,

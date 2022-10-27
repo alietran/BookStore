@@ -348,7 +348,7 @@ export default function Checkout() {
                         // backgroundColor: "#1435c3",
                       }}
                     >
-                      THANH TOÁN
+                      ĐẶT MUA
                     </Button>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ import {
   getOrderRSForWeek,
   getOrderRSForYear,
 } from "../../../redux/action/orderAction";
-import moment from "moment";
+import moment, { months } from "moment";
 import {
   getAllReceipt,
   getReceiptRSForMonth,
@@ -23,6 +23,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+
 import { getBookList } from "../../../redux/action/bookAction";
 import { getPromotionList } from "../../../redux/action/promotionAction";
 import { getAllAccount } from "../../../redux/action/adminAction";
@@ -49,6 +50,7 @@ export default function Overview() {
     loadingReceiptRSForMonth,
     loadingReceiptRSForYear,
   } = useSelector((state) => state.ReceiptReducer);
+  const _ = require("lodash");
   const { accountList } = useSelector((state) => state.AdminReducer);
   const [listReceiptItem, setListReceiptItem] = useState([]);
   const [listChartItem, setListChartItem] = useState([]);
@@ -101,16 +103,16 @@ export default function Overview() {
       (total, item) => (total += item.y),
       0
     );
-    console.log("revenueWeek", revenueWeek);
-    setRevenueWeek(revenueWeek);
 
+    setRevenueWeek(revenueWeek);
+    console.log("revenueWeek", revenueWeek);
     let costWeek = listReceiptItem?.reduce(
       (total, item) => (total += item.y),
       0
     );
     // console.log("revenueYear", revenueYear);
     setCostWeek(costWeek);
-  }, [listReceiptItem, ]);
+  }, [listReceiptItem, revenueWeek]);
 
   useEffect(() => {
     let revenueMonth = listChartItemMonth?.reduce(
@@ -124,10 +126,10 @@ export default function Overview() {
       (total, item) => (total += item.y),
       0
     );
-    // console.log("revenueYear", revenueYear);
+    console.log("revenueMonth", revenueMonth);
     setCostMonth(costMonth);
-  }, [listReceiptItemMonth]);
-  console.log("revenueMonth", revenueMonth);
+  }, [listReceiptItemMonth, listChartItemMonth]);
+  // console.log("revenueMonth", revenueMonth);
 
   const { orderList } = useSelector((state) => state.OrderReducer);
   useEffect(() => {
@@ -149,6 +151,7 @@ export default function Overview() {
   let monthItem = [];
   let yearItem = [];
   let monthReceiptItem = [];
+  let monthOrderItem = [];
   // let monthReceiptLabel = [];
 
   const dayReceipt = [];
@@ -168,7 +171,10 @@ export default function Overview() {
     "12-2022",
   ];
   let labelMonth = [];
+  let labelName = [];
   let monthStatic = [];
+  let monthStaticOrder = [];
+  let monthStaticReceipt = [];
 
   const totalOrder = orderList?.data?.reduce((total, item) => {
     return (total += item.totalPrice);
@@ -192,7 +198,7 @@ export default function Overview() {
     moment(a, "DD-MM-YYYY").diff(moment(b, "DD-MM-YYYY"))
   );
 
-  console.log("monthLabel", monthStatic);
+  // console.log("monthLabel", monthStatic);
   // console.log("monthLabel",monthLabel);
   useEffect(() => {
     if (!receiptRSForWeek) {
@@ -235,33 +241,85 @@ export default function Overview() {
   }, [receiptRSForMonth]);
 
   // monthLabel.map((label, item) => labelMonth.push(label.name));
+
+  // receiptRSForMonth !== null &&
+  //   receiptRSForMonth[0]?.receiptRevenue?.map(
+  //     (item, index) => {
+  //       console.log("item3534", item);
+  //       monthStatic.push(item);
+  //     }
+  //     // labelMonth = monthLabel.name
+  //   );
+
+  // orderRSForMonth !== null &&
+  //   orderRSForMonth[0]?.orderRevenue?.map(
+  //     (item, index) => {
+  //       console.log("item", item);
+  //       const Index = monthStatic.findIndex(
+  //         (item1) => item1.name === item.name
+  //       );
+  //       console.log("Index", Index);
+  //       // if (Index !== -1) {
+  //         // monthStatic.push(item);
+  //       // }
+  //       monthStatic[item] = {...item.orderRevenueDay};
+  //       // console.log("itemMonth", item);
+  //       //  monthStatic.push(item.orderRevenueDay);
+  //     } // labelMonth = monthStatic.name
+  //   );
+
+  // // labelMonth;
+
+  // monthStatic.filter((day)=>day !==  ).map((item, index) =>
+  //     // if()
+  // labelMonth.push(item.name));
+  // labelMonth.sort((a, b) =>
+  //   moment(a, "DD-MM-YYYY").diff(moment(b, "DD-MM-YYYY"))
+  // );
+  //  console.log("labelMonth", labelMonth);
+  // // console.log("orderRevenue", orderRSForMonth[0]?.orderRevenue);
+  // console.log("monthStaticReceipt", monthStaticReceipt);
+  // console.log("monthStatictet", monthStatic);
+
   receiptRSForMonth !== null &&
     receiptRSForMonth[0]?.receiptRevenue?.map(
-      (item, index) => monthStatic.push(item)
+      (item, index) => {
+        console.log("item3534", item);
+        monthStatic.push(item);
+        monthStaticReceipt.push(item);
+      }
       // labelMonth = monthLabel.name
     );
   orderRSForMonth !== null &&
-    orderRSForMonth[0]?.orderRevenue?.map(
-      (item, index) => monthStatic.push(item)
-      // labelMonth = monthStatic.name
-    );
-  // labelMonth;
-  monthStatic.map((item, index) => labelMonth.push(item.name));
-  labelMonth.sort((a, b) =>
+    orderRSForMonth[0]?.orderRevenue?.map((item, index) => {
+      monthStatic.push(item);
+      monthStaticOrder.push(item);
+    });
+
+
+  console.log("monthStaticReceipt", monthStaticReceipt);
+  console.log("monthStaticOrder", monthStaticOrder);
+
+  labelMonth = _.uniqBy(monthStatic, "name");
+  console.log("labelMonth", labelMonth);
+  labelMonth.map((item, index) => {
+    labelName.push(item.name);
+  });
+  console.log("labelName", labelName);
+  labelName.sort((a, b) =>
     moment(a, "DD-MM-YYYY").diff(moment(b, "DD-MM-YYYY"))
   );
 
-  console.log("monthStaticqr", monthStatic);
-  console.log("labelMonth", labelMonth);
+  console.log("monthStatic", monthStatic);
 
   const getItemReceiptMonth = () => {
-    for (let i = 0; i < monthStatic.length; i++) {
-      monthReceiptItem.push({ x: monthStatic[i].name, y: 0 });
+    for (let i = 0; i < labelMonth.length; i++) {
+      monthReceiptItem.push({ x: labelMonth[i].name, y: 0 });
     }
     console.log("monthReceiptItem35254", monthReceiptItem);
     receiptRSForMonth !== null &&
       receiptRSForMonth[0]?.receiptRevenue?.map((item, index) => {
-        console.log("monthItemrử", monthItem);
+        // console.log("monthItemrử", monthItem);
         const ItemOrder = monthReceiptItem?.findIndex(
           (item1) => item1.x === item.name
         );
@@ -274,7 +332,7 @@ export default function Overview() {
         monthReceiptItem.sort((a, b) =>
           moment(a.x, "DD-MM-YYYY").diff(moment(b.x, "DD-MM-YYYY"))
         );
-        console.log("listReceiptItemMonth", monthReceiptItem);
+        console.log("monthReceiptItem35", monthReceiptItem);
         return setListReceiptItemMonth(monthReceiptItem.sort());
       });
   };
@@ -379,9 +437,11 @@ export default function Overview() {
   };
 
   const getItemSoldMonth = () => {
-    for (let i = 0; i < monthStatic.length; i++) {
-      monthItem.push({ x: monthStatic[i].name, y: 0 });
+    for (let i = 0; i < labelMonth.length; i++) {
+      monthItem.push({ x: labelMonth[i].name, y: 0 });
     }
+    // console.log("monthLabel", monthLabel);
+    console.log("monthStatic43", monthItem);
     orderRSForMonth !== null &&
       orderRSForMonth[0]?.orderRevenue?.map((item, index) => {
         const ItemOrder = monthItem?.findIndex(
@@ -499,7 +559,7 @@ export default function Overview() {
       xaxis: {
         // option === 30 ? yearLabel : dayLabel
         categories:
-          option === 30 ? yearLabel : option === 20 ? labelMonth : dayLabel,
+          option === 30 ? yearLabel : option === 20 ? labelName : dayLabel,
       },
     },
   };
@@ -518,7 +578,7 @@ export default function Overview() {
                   width: "100%",
                   borderRadius: "10px",
                   padding: "20px",
-              
+
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -553,7 +613,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-              
+
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -588,7 +648,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-              
+
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}
@@ -623,7 +683,7 @@ export default function Overview() {
                   width: "280px",
                   borderRadius: "10px",
                   padding: "20px",
-              
+
                   marginBottom: "10px",
                   boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
                 }}

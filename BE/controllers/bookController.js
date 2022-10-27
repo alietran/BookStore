@@ -131,6 +131,29 @@ exports.searchBook = catchAsync(async (req, res, next) => {
   });
 });
 
+// exports.filterBookByPrice = catchAsync(async (req, res, next) => {
+//   const { minPrice, maxPrice } = req.body;
+//   console.log('valuePrice', req.body);
+//   console.log('value', minPrice);
+ 
+//   let array = await Book.find({
+//     price: {
+//       $gte: Number(minPrice * 1000),
+//       $lte: Number(maxPrice * 1000),
+//     },
+//   }).sort({ createdAt: 1 });
+
+
+//   res.status(200).json({
+//     status: 'success',
+//     data: array,
+//     // .map((book,index)=>{
+//     //   return book.price
+//     // }),
+//     length: array.length
+//   });
+// });
+
 exports.latestBook = catchAsync(async (req, res, next) => {
   let doc = await Book.find()
     .sort([['_id', -1]])
@@ -179,6 +202,6 @@ exports.bestSellerBook = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: dat.sort((a, b) => b.quantity - a.quantity).splice(0,4),
+    data: dat.sort((a, b) => b.quantity - a.quantity).splice(0, 4),
   });
 });

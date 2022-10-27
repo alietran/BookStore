@@ -106,11 +106,11 @@ function applySortFilter(array, comparator, query) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("array34", array);
   if (query) {
     return filter(
       array,
-      (_user) =>
-        _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis?.map((el) => el[0]);
@@ -324,247 +324,257 @@ export default function ShipperManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          searchLabelName={"Tìm người giao hàng"}
         />
-        {loadingShipperList ? <Loading /> : <>
-          <TableContainer sx={{ minWidth: 800 }}>
-          <Table>
-            <UserListHead
-              order={order}
-              orderBy={orderBy}
-              headLabel={TABLE_HEAD}
-              rowCount={shipperList?.result}
-              numSelected={selected.length}
-              onRequestSort={handleRequestSort}
-              onSelectAllClick={handleSelectAllClick}
-            />
-            <TableBody>
-              {filteredUsers
-                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  const { _id, name, phoneNumber, email, active } = row;
-                  const isItemSelected = selected.indexOf(name) !== -1;
+        {loadingShipperList ? (
+          <Loading />
+        ) : (
+          <>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={shipperList?.result}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {filteredUsers
+                    ?.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                    .map((row) => {
+                      const { _id, name, phoneNumber, email, active } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
 
-                  return (
-                    <TableRow
-                      hover
-                      key={_id}
-                      tabIndex={-1}
-                      _id="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={(event) => handleClick(event, name)}
-                        />
-                      </TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          key={_id}
+                          tabIndex={-1}
+                          _id="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onChange={(event) => handleClick(event, name)}
+                            />
+                          </TableCell>
 
-                      <TableCell align="left">{name}</TableCell>
-                      <TableCell align="left">{email}</TableCell>
-                      <TableCell align="left">{phoneNumber}</TableCell>
-                      <TableCell align="left">
-                        <Label
-                          variant="ghost"
-                          color={(!active && "error") || "success"}
-                        >
-                          {changeActive(active)}
-                        </Label>
-                      </TableCell>
-                      <TableCell align="center">
-                        {" "}
-                        <VisibilityIcon
-                          onClick={() => handleList(_id)}
-                          className="text-blue-500"
-                          sx={{
-                            fontSize: 32,
-                          }}
-                        />
-                        <Dialog
-                          fullWidth={true}
-                          maxWidth="lg"
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="responsive-dialog-title"
-                        >
-                          <DialogTitle id="responsive-dialog-title">
-                            Danh sách đơn hàng
-                          </DialogTitle>
-                          <DialogContent>
-                            <Container
-                              sx={{
-                                paddingRight: "0px !important",
-                                paddingLeft: "0px !important",
-                              }}
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{phoneNumber}</TableCell>
+                          <TableCell align="left">
+                            <Label
+                              variant="ghost"
+                              color={(!active && "error") || "success"}
                             >
-                              <Card>
-                                <TableContainer sx={{ minWidth: 800 }}>
-                                  <Table>
-                                    <UserListHead
-                                      order={order}
-                                      orderBy={orderBy}
-                                      headLabel={TABLE_HEAD_SHIPPER}
-                                      rowCount={list?.length}
-                                      numSelected={selected.length}
-                                      onRequestSort={handleRequestSort}
-                                      onSelectAllClick={handleSelectAllClick}
-                                    />
-                                    <TableBody>
-                                      {filteredShipper
-                                        ?.slice(
-                                          page1 * rowsPerPage1,
-                                          page1 * rowsPerPage1 + rowsPerPage1
-                                        )
-                                        .map((row) => {
-                                          const {
-                                            _id,
-                                            address,
-                                            status,
-                                            createdAt,
-                                            paymentMethod,
-                                            totalPrice,
-                                          } = row;
-                                          const isItemSelected =
-                                            selected.indexOf(
-                                              address.fullName
-                                            ) !== -1;
+                              {changeActive(active)}
+                            </Label>
+                          </TableCell>
+                          <TableCell align="center">
+                            {" "}
+                            <VisibilityIcon
+                              onClick={() => handleList(_id)}
+                              className="text-blue-500"
+                              sx={{
+                                fontSize: 32,
+                              }}
+                            />
+                            <Dialog
+                              fullWidth={true}
+                              maxWidth="lg"
+                              open={open}
+                              onClose={handleClose}
+                              aria-labelledby="responsive-dialog-title"
+                            >
+                              <DialogTitle id="responsive-dialog-title">
+                                Danh sách đơn hàng
+                              </DialogTitle>
+                              <DialogContent>
+                                <Container
+                                  sx={{
+                                    paddingRight: "0px !important",
+                                    paddingLeft: "0px !important",
+                                  }}
+                                >
+                                  <Card>
+                                    <TableContainer sx={{ minWidth: 800 }}>
+                                      <Table>
+                                        <UserListHead
+                                          order={order}
+                                          orderBy={orderBy}
+                                          headLabel={TABLE_HEAD_SHIPPER}
+                                          rowCount={list?.length}
+                                          numSelected={selected.length}
+                                          onRequestSort={handleRequestSort}
+                                          onSelectAllClick={
+                                            handleSelectAllClick
+                                          }
+                                        />
+                                        <TableBody>
+                                          {filteredShipper
+                                            ?.slice(
+                                              page1 * rowsPerPage1,
+                                              page1 * rowsPerPage1 +
+                                                rowsPerPage1
+                                            )
+                                            .map((row) => {
+                                              const {
+                                                _id,
+                                                address,
+                                                status,
+                                                createdAt,
+                                                paymentMethod,
+                                                totalPrice,
+                                              } = row;
+                                              const isItemSelected =
+                                                selected.indexOf(
+                                                  address.fullName
+                                                ) !== -1;
 
-                                          return (
-                                            <TableRow
-                                              hover
-                                              key={_id}
-                                              tabIndex={-1}
-                                              _id="checkbox"
-                                              selected={isItemSelected}
-                                              aria-checked={isItemSelected}
-                                            >
-                                              <TableCell padding="checkbox">
-                                                <Checkbox
-                                                  checked={isItemSelected}
-                                                  onChange={(event) =>
-                                                    handleClick(
-                                                      event,
-                                                      address?.fullName
-                                                    )
-                                                  }
-                                                />
-                                              </TableCell>
-                                              <TableCell align="left">
-                                                {_id}
-                                              </TableCell>
-                                              <TableCell align="left">
-                                                {address.fullName}
-                                              </TableCell>
-
-                                              <TableCell align="left">
-                                                {moment(createdAt).format(
-                                                  "DD/MM/YYYY"
-                                                )}
-                                              </TableCell>
-                                              <TableCell align="left">
-                                                <Label
-                                                  variant="ghost"
-                                                  color={
-                                                    status === "Đang xử lý"
-                                                      ? "warning"
-                                                      : status ===
-                                                        "Đang vận chuyển"
-                                                      ? "info"
-                                                      : status ===
-                                                        "Đã giao hàng"
-                                                      ? "success"
-                                                      : "error"
-                                                  }
+                                              return (
+                                                <TableRow
+                                                  hover
+                                                  key={_id}
+                                                  tabIndex={-1}
+                                                  _id="checkbox"
+                                                  selected={isItemSelected}
+                                                  aria-checked={isItemSelected}
                                                 >
-                                                  {status}
-                                                </Label>
-                                              </TableCell>
-                                              <TableCell align="left">
-                                                {totalPrice.toLocaleString()}
-                                              </TableCell>
-                                              <TableCell align="left">
-                                                {paymentMethod.resultCode ===
-                                                0 ? (
-                                                  <Chip
-                                                    label="Đã thanh toán"
-                                                    color="primary"
-                                                  />
-                                                ) : paymentMethod.resultCode ===
-                                                  1000 ? (
-                                                  <Chip
-                                                    label="Chờ thanh toán"
-                                                    color="warning"
-                                                  />
-                                                ) : (
-                                                  <Chip
-                                                    label="Đã hủy"
-                                                    color="error"
-                                                  />
-                                                )}
-                                              </TableCell>
+                                                  <TableCell padding="checkbox">
+                                                    <Checkbox
+                                                      checked={isItemSelected}
+                                                      onChange={(event) =>
+                                                        handleClick(
+                                                          event,
+                                                          address?.fullName
+                                                        )
+                                                      }
+                                                    />
+                                                  </TableCell>
+                                                  <TableCell align="left">
+                                                    {_id}
+                                                  </TableCell>
+                                                  <TableCell align="left">
+                                                    {address.fullName}
+                                                  </TableCell>
 
-                                              <TableCell align="center">
-                                                <OptionOrder
-                                                  id={_id}
-                                                  order={row}
-                                                />
-                                              </TableCell>
+                                                  <TableCell align="left">
+                                                    {moment(createdAt).format(
+                                                      "DD/MM/YYYY"
+                                                    )}
+                                                  </TableCell>
+                                                  <TableCell align="left">
+                                                    <Label
+                                                      variant="ghost"
+                                                      color={
+                                                        status === "Đang xử lý"
+                                                          ? "warning"
+                                                          : status ===
+                                                            "Đang vận chuyển"
+                                                          ? "info"
+                                                          : status ===
+                                                            "Đã giao hàng"
+                                                          ? "success"
+                                                          : "error"
+                                                      }
+                                                    >
+                                                      {status}
+                                                    </Label>
+                                                  </TableCell>
+                                                  <TableCell align="left">
+                                                    {totalPrice.toLocaleString()}
+                                                  </TableCell>
+                                                  <TableCell align="left">
+                                                    {paymentMethod.resultCode ===
+                                                    0 ? (
+                                                      <Chip
+                                                        label="Đã thanh toán"
+                                                        color="primary"
+                                                      />
+                                                    ) : paymentMethod.resultCode ===
+                                                      1000 ? (
+                                                      <Chip
+                                                        label="Chờ thanh toán"
+                                                        color="warning"
+                                                      />
+                                                    ) : (
+                                                      <Chip
+                                                        label="Đã hủy"
+                                                        color="error"
+                                                      />
+                                                    )}
+                                                  </TableCell>
+
+                                                  <TableCell align="center">
+                                                    <OptionOrder
+                                                      id={_id}
+                                                      order={row}
+                                                    />
+                                                  </TableCell>
+                                                </TableRow>
+                                              );
+                                            })}
+                                          {emptyRows > 0 && (
+                                            <TableRow
+                                              style={{ height: 53 * emptyRows }}
+                                            >
+                                              <TableCell colSpan={6} />
                                             </TableRow>
-                                          );
-                                        })}
-                                      {emptyRows > 0 && (
-                                        <TableRow
-                                          style={{ height: 53 * emptyRows }}
-                                        >
-                                          <TableCell colSpan={6} />
-                                        </TableRow>
-                                      )}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                          )}
+                                        </TableBody>
+                                      </Table>
+                                    </TableContainer>
 
-                                <TablePagination
-                                  rowsPerPageOptions={[5, 10, 25]}
-                                  component="div"
-                                  count={list?.length}
-                                  rowsPerPage={rowsPerPage1}
-                                  page={page1}
-                                  onPageChange={handleChangePage1}
-                                  onRowsPerPageChange={handleChangeRowsPerPage1}
-                                />
-                              </Card>
-                            </Container>
-                          </DialogContent>
-                        </Dialog>
-                      </TableCell>
-                      <TableCell align="center">
-                        <OptionShipper id={_id} shipper={row} />
-                      </TableCell>
+                                    <TablePagination
+                                      rowsPerPageOptions={[5, 10, 25]}
+                                      component="div"
+                                      count={list?.length}
+                                      rowsPerPage={rowsPerPage1}
+                                      page={page1}
+                                      onPageChange={handleChangePage1}
+                                      onRowsPerPageChange={
+                                        handleChangeRowsPerPage1
+                                      }
+                                    />
+                                  </Card>
+                                </Container>
+                              </DialogContent>
+                            </Dialog>
+                          </TableCell>
+                          <TableCell align="center">
+                            <OptionShipper id={_id} shipper={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={shipperList?.result}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        </>
-        }
-
-      
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={shipperList?.result}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Card>
     </Container>
   );

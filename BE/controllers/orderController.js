@@ -540,7 +540,12 @@ exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
   // console.log('firstDay', moment(firstDay).format('MM-YYYY'));
   // var date = new Date();
   // var month = date.Month();
-  let array = await Order.find().sort({ createdAt: 1 });
+  const a = 'Đã nhận';
+  const b = 'Đã đánh giá';
+  let array = await Order.find({
+    $or : [{status: 'Đã nhận'}, {status: 'Đã đánh giá'}]
+    // status: 'Đã đánh giá',
+  }).sort({ createdAt: 1 });
   // console.log('array', array);
   // let key = new Date()
   let result = _(array)

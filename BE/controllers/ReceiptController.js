@@ -76,8 +76,6 @@ exports.updateReceipt = catchAsync(async (req, res, next) => {
     result: doc.length,
     data: doc,
   });
-
-  
 });
 
 exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
@@ -86,6 +84,8 @@ exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
       $gte: moment().day(-6).toDate(),
       $lt: moment().startOf('week').isoWeekday(8).toDate(),
     },
+
+    inventoryStatus: true,
   }).sort({ createdAt: 1 });
   let result = _(array)
     .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
@@ -107,13 +107,15 @@ exports.receiptRevenueStatisticsForMonth = catchAsync(
     let today = new Date();
     let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
     let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  
-    let array = await Receipt.find().sort({ createdAt: 1 });
-   
+
+    let array = await Receipt.find({
+      inventoryStatus: true,
+      // updatedAt,
+    }).sort({ createdAt: 1 });
+
     let result = _(array)
       .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
       .map((value, key) => ({
-      
         name: key,
         receiptRevenue: value,
       }))
@@ -150,8 +152,10 @@ exports.receiptRevenueStatisticsForMonth = catchAsync(
 );
 
 exports.receiptRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
-  let array = await Receipt.find().sort({ createdAt: 1 });
-    console.log('array', array);
+  let array = await Receipt.find({
+    inventoryStatus: true,
+  }).sort({ createdAt: 1 });
+  console.log('array', array);
   let result = _(array)
     .groupBy((x) => moment(x.createdAt).format('MM-YYYY'))
     .map((value, key) => ({ name: key, receiptRevenue: value }))

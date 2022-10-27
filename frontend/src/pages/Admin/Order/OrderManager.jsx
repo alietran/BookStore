@@ -54,7 +54,7 @@ import OrderToolbar from "../../../components/Order/OrderToolbar";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "id", label: "Sản phẩm", alignRight: false },
+  { id: "id", label: "Mã đơn hàng", alignRight: false },
   { id: "name", label: "Tên khách hàng", alignRight: false },
   { id: "phoneNumber", label: "Số điện thoại", alignRight: false },
 
@@ -402,6 +402,7 @@ export default function OrderManager() {
 
                           <TableCell align="center">
                             <OptionOrder
+                              hidden={true}
                               id={_id}
                               order={row}
                               shipper={shipper}

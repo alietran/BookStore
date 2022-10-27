@@ -5,7 +5,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PropTypes from "prop-types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 export default function Option(props) {
-  const { onClickDelete, onClickDetail, inventoryStatus, shipper } = props;
+  const { onClickDelete, onClickDetail, inventoryStatus, shipper, hidden } = props;
+  console.log("hidden", hidden);
   return (
     <Box className="flex">
       <Tooltip TransitionComponent={Zoom} title="Chi tiết" arrow>
@@ -27,7 +28,8 @@ export default function Option(props) {
           />
         </IconButton>
       </Tooltip>
-      {(!inventoryStatus || shipper) && (
+      {/* shipper */}
+      {(!inventoryStatus  && !hidden) && (
         <Tooltip TransitionComponent={Zoom} title="Xoá" arrow>
           <IconButton
             onClick={onClickDelete}

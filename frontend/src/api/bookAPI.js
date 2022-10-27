@@ -30,7 +30,10 @@ const bookAPI = {
   },
   getLatestBook:()=>{
     return axiosClient.get("/v1/books/latest-book")
-  }
+  },
+  // filterByPrice:(value)=>{
+  //   return axiosClient.post("/v1/books/filterByPrice",value)
+  // }
 };
 
 export default bookAPI;

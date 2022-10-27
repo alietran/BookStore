@@ -26,6 +26,32 @@ export const getBookList = () => {
       });
   };
 };
+// export const getBookByPrice = (value) => {
+//   return (dispatch) => {
+//     dispatch({
+//       type: "GET_BOOK_PRICE_REQUEST",
+//     });
+//     bookAPI
+//       .filterByPrice(value)
+//       .then((result) => {
+//         console.log("result1234324234", result);
+//         dispatch({
+//           type: "GET_BOOK_PRICE_SUCCESS",
+//           payload: {
+//             data: result.data,
+//           },
+//         });
+//       })
+//       .catch((error) => {
+//         dispatch({
+//           type: "GET_BOOK_PRICE_FAIL",
+//           payload: {
+//             error: error,
+//           },
+//         });
+//       });
+//   };
+// };
 
 export const createBook = (data) => {
   return async (dispatch) => {

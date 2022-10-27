@@ -105,11 +105,12 @@ function applySortFilter(array, comparator, query) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  // console.log("array", array);
   if (query) {
     return filter(
       array,
       (_user) =>
-        _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.supplierId.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis?.map((el) => el[0]);
@@ -131,9 +132,7 @@ export default function ReceiptManager() {
     successUpdateReceipt,
     loadingReceiptList,
   } = useSelector((state) => state.ReceiptReducer);
-  console.log("receiptList", receiptList);
-  console.log("successCreateReceipt", successCreateReceipt);
-  console.log("successUpdateReceipt", successUpdateReceipt);
+
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
@@ -223,6 +222,7 @@ export default function ReceiptManager() {
         quantity: item.amount,
         inventoryStatus: true,
         bookId: item.bookId.id,
+        updatedAt: moment().format(),
       };
       console.log("dat123123");
       setAlertSuccessUpdateReceipt(true);
@@ -267,7 +267,7 @@ export default function ReceiptManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
-          searchName={"Tìm tác giả"}
+          searchLabelName={"Tìm phiếu nhập"}
         />
         {loadingReceiptList ? (
           <Loading />
@@ -277,13 +277,13 @@ export default function ReceiptManager() {
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
-                  // order={order}
-                  // orderBy={orderBy}
+                  order={order}
+                  orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={receiptList?.result}
-                  // numSelected={selected.length}
-                  // onRequestSort={handleRequestSort}
-                  // onSelectAllClick={handleSelectAllClick}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
                 />
 
                 <TableBody>

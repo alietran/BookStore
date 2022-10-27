@@ -17,13 +17,13 @@ import {
   Link,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-// import ReactHtmlParser from 'react-html-parser';
+
 import { Link as RouterLink } from "react-router-dom";
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import plusFill from "@iconify/icons-eva/plus-fill";
-// import UserListToolbar from "../../components/user";
+import _truncate from "lodash/truncate";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersList, resetUserList } from "../../../redux/action/adminAction";
 // import UserListToolbar from "../../components/user/UserListToolbar";
@@ -41,7 +41,7 @@ import { getBookList, resetBookList } from "../../../redux/action/bookAction";
 import Loading from "../../../components/Loading/Loading";
 
 // import Label from "../../components/Label";
-
+import Truncate from "react-truncate-html";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -88,10 +88,12 @@ function applySortFilter(array, comparator, query) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("query435", query);
+  console.log("arra34535y", array);
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user?.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis?.map((el) => el[0]);
@@ -121,8 +123,7 @@ export default function BookManager() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  console.log("successUpdateReceipt", successUpdateReceipt);
-  console.log("successCreateReceipt", successCreateReceipt);
+ 
   useEffect(() => {
     // get list user lần đầu
     if (!bookList) {
@@ -268,6 +269,7 @@ export default function BookManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          searchLabelName={"Tìm sách"}
         />
         {loadingBookList ? (
           <Loading />
@@ -324,7 +326,7 @@ export default function BookManager() {
                           </TableCell>
 
                           <TableCell align="left">
-                            <img src={image} alt="hinh anh"/>
+                            <img src={image} alt="hinh anh" />
                           </TableCell>
                           <TableCell align="left">
                             <p>{name}</p>{" "}
@@ -332,9 +334,16 @@ export default function BookManager() {
                           <TableCell align="left">{price}</TableCell>
                           <TableCell
                             align="left"
-                            className="line-clamp-4"
-                            dangerouslySetInnerHTML={{ __html: desc }}
-                          ></TableCell>
+                            // className="line-clamp-1  "
+                            // dangerouslySetInnerHTML={{ __html: desc }}
+                          >
+                            <Truncate
+                              lines={3}
+                              dangerouslySetInnerHTML={{
+                                __html: desc,
+                              }}
+                            />
+                          </TableCell>
 
                           <TableCell align="left">{quantity}</TableCell>
 

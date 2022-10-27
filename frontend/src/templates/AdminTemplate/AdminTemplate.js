@@ -172,7 +172,6 @@ const AdminTemplate = (props) => {
                     <NavLink to="/admin/suppliers">Nhà cung cấp</NavLink>
                   </Menu.Item>
                   {/* </SubMenu> */}
-
                   <Menu.Item key="4" icon={<GroupsIcon />}>
                     <NavLink to="/admin/shippers">Shipper</NavLink>
                   </Menu.Item>
@@ -212,6 +211,9 @@ const AdminTemplate = (props) => {
                 <>
                   <Menu.Item key="7" icon={<ReceiptIcon />}>
                     <NavLink to="/admin/books">Sách</NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="9" icon={<ReceiptIcon />}>
+                    <NavLink to="/admin/orders">Đơn hàng</NavLink>
                   </Menu.Item>
                 </>
               ) : (

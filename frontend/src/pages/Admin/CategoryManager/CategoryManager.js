@@ -81,11 +81,12 @@ function applySortFilter(array, comparator, query) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("array", array);
   if (query) {
     return filter(
       array,
       (_user) =>
-        _user.fullName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis?.map((el) => el[0]);
@@ -247,6 +248,7 @@ export default function CategoryManager() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          searchLabelName={"Tìm thể loại"}
         />
         {loadingCateList ? (
           <Loading />

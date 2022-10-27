@@ -29,7 +29,7 @@ import { getAllDetailOrder } from "../../../../redux/action/orderDetailAction";
 import OrderInfo from "./OrderInfo";
 import { getShipperList } from "../../../../redux/action/shipperAction";
 import { useInsertionEffect } from "react";
-
+import moment from "moment";
 import Label from "../../../../components/Label";
 // import Info from "./Info";
 import Dialog from "@mui/material/Dialog";
@@ -105,7 +105,7 @@ export default function OrderDetail() {
   const history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
-  console.log("shipper13", shipper);
+
   orderDetailList = orderDetailList?.data?.filter(
     // params.orderId là app ghi sao thì điền vào
     (item) => item.order.id === params.orderId
@@ -114,7 +114,7 @@ export default function OrderDetail() {
     setShipper(event.target.value);
     // getAllDetailOrder()
   };
-
+  console.log("orderDetailListưqrr", orderDetailList);
   useEffect(() => {
     if (successUpdateOrder) {
       // enqueueSnackbar("Đơn hàng đang được vận chuyển!", { variant: "success" });
@@ -198,8 +198,8 @@ export default function OrderDetail() {
           mb={5}
           mt={3}
         >
-          <Stack spacing={2}>
-            <div className="flex justify-between">
+          <Stack spacing={2} className="w-full">
+            <div className="flex justify-between ">
               <Typography
                 variant="h4"
                 gutterBottom
@@ -229,26 +229,6 @@ export default function OrderDetail() {
                     >
                       {orderDetailList && orderDetailList[0]?.order?.status}
                     </Label>
-                    {/* <Chip
-                      label={
-                        orderDetailList && orderDetailList[0]?.order.status
-                      }
-                      color={
-                        orderDetailList &&
-                        orderDetailList[0]?.order.status === "Đang xử lý"
-                          ? "warning"
-                          : orderDetailList &&
-                            orderDetailList[0]?.order.status ===
-                              "Đang vận chuyển"
-                          ? "info"
-                          : orderDetailList &&
-                            orderDetailList[0]?.order.status === "Đã giao hàng"
-                          ? "success"
-                          : "error"
-                      }
-                      sx={{ fontSize: 18, fontWeight: 600 }}
-                    /> */}
-                    {/* )} */}
                   </span>
                 </span>
               </Typography>
@@ -303,8 +283,23 @@ export default function OrderDetail() {
           </Typography> */}
             </Stack>
           ) : (
-            ""
+            <p className="text-right justify-end text-sm mt-4">
+              Ngày nhận:{" "}
+              {orderDetailList && moment(
+                orderDetailList[0]?.order.updatedAt
+              ).format("DD/MM/YYYY, h:mm a")}
+            </p>
           )}
+          {/* {orderDetailList && orderDetailList[0]?.order.updatedAt ? (
+            <p className="text-right justify-end text-sm mt-4">
+              Ngày nhận:{" "}
+              {moment(orderDetailList[0]?.order.updatedAt).format(
+                "DD/MM/YYYY, h:mm a"
+              )}
+            </p>
+          ) : (
+            ""
+          )} */}
         </Stack>
 
         <Box sx={{ width: "100%", typography: "body1" }}>

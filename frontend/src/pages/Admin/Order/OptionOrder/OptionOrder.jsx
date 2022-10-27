@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Option from "../../../../components/OptionDetail&Delete/Option";
 
-export default function OptionOrder({ id, order, shipper }) {
+export default function OptionOrder({ id, order, shipper,hidden }) {
   // const { receiptId, bookId } = receipt;
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -44,6 +44,7 @@ export default function OptionOrder({ id, order, shipper }) {
         onClickDelete={handleClickConfirm}
         onClickDetail={(e) => onClickDetail(order)}
         shipper={shipper}
+        hidden={hidden}
       ></Option>
 
       <Dialog
