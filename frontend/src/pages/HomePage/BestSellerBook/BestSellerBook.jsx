@@ -63,15 +63,15 @@ export default function BestSellerBook() {
     );
 
     if (bookDetail.quantity === 0 || errorAddCart) {
-      // enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
-      //   variant: "error",
-      // });
+      enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
+        variant: "error",
+      });
     } else {
-      // enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
-      //   variant: "success",
-      //   autoHideDuration: 1000,
-      //   action,
-      // });
+      enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+        variant: "success",
+        autoHideDuration: 1000,
+        action,
+      });
       dispatch({
         type: "ADD_TO_CART",
         payload: {

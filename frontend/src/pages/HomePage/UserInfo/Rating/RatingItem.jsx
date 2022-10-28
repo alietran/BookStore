@@ -15,6 +15,7 @@ const labels = {
 export default function RatingItem({ productItem }) {
   const { rating } = useSelector((state) => state.RatingReducer);
   console.log("productItem", productItem);
+  const [flag, setFlag] = useState(false);
   const imageTypeRegex = /image\/(png|jpg|jpeg)/gm;
   const [imageFiles, setImageFiles] = useState([]);
   const [images, setImages] = useState([]);
@@ -85,6 +86,25 @@ export default function RatingItem({ productItem }) {
 
   const [value, setValue] = useState(3);
   const [desc, setDesc] = useState();
+  useEffect(() => {
+    if (desc && value) {
+      setFlag(true)
+       dispatch({
+         type: "CHANGE_FLAG",
+         data: flag,
+       });
+    }
+    else {
+       setFlag(false);
+       dispatch({
+         type: "CHANGE_FLAG",
+         data: flag,
+       });
+    }
+      
+
+   
+  }, [desc, value]);
   const handleChangeRating = (event, newValue) => {
     setValue(newValue);
     console.log("productItem", productItem);

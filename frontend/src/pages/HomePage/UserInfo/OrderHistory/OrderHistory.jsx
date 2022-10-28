@@ -28,10 +28,10 @@ export default function OrderHistory() {
     (state) => state.OrderReducer
   );
   const [openConfirm, setOpenConfirm] = useState(false);
-  const { rating, createRatingDetail } = useSelector(
+  const { rating, createRatingDetail,flag } = useSelector(
     (state) => state.RatingReducer
   );
-  console.log("createRatingDetail", createRatingDetail);
+  console.log("flag", flag);
   const [hadRating, setHadRating] = useState(true);
   const handleCancel = () => {
     setOpenConfirm(false);
@@ -41,6 +41,7 @@ export default function OrderHistory() {
   console.log("orderByUser", orderByUser);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [idItem, setIdItem] = useState("");
   const [item, setItem] = useState("");
   useEffect(() => {
     if (orderByUser === null) dispatch(getOrderByUser());
@@ -81,10 +82,13 @@ const [openDelete, setOpenDelete] = React.useState(false);
     const handleCloseDelete = () => {
       setOpenDelete(false);
     };
-   const handleClickOpenDelete = () => {
+   const handleClickOpenDelete = (id) => {
+    console.log("#53",id)
      setOpenDelete(true);
+     setIdItem(id)
    };
   const handleConfirm = (order) => {
+
     dispatch(
       updateOrder(order.id, {
         status: "Đã nhận",
@@ -135,16 +139,17 @@ const [openDelete, setOpenDelete] = React.useState(false);
         console.log("Error:", data?.messages);
       }
     } else {
+         console.log("idItem", idItem);
       dispatch(
-        updateOrder(order.id, {
+        updateOrder(idItem, {
           status: "Đã hủy",
         })
       );
     setOpenDelete(false);
     }
-
+    console.log("idItem", idItem);
     dispatch(
-      updateOrder(order.id, {
+      updateOrder(idItem, {
         status: "Đã hủy",
       })
     );
@@ -400,6 +405,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
           </Button>
           <Button
             variant="contained"
+            disabled={ flag ? false : true}
             onClick={handlePushRating}
             sx={{ textTransform: "none !important" }}
             autoFocus

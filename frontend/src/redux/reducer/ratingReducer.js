@@ -18,6 +18,8 @@ const stateDefault = {
   ratinglist: null,
   loadingRatingList: false,
   errorRatingList: null,
+
+  flag:null
 };
 
 export const RatingReducer = (state = stateDefault, action) => {
@@ -49,6 +51,10 @@ export const RatingReducer = (state = stateDefault, action) => {
       }
 
       return { ...state };
+    }
+    case "CHANGE_FLAG": {
+     
+      return { ...state, flag: action.data };
     }
     case "PUSH_RATING": {
       // console.log("rating25", action.payload.data);

@@ -1,8 +1,14 @@
 import {
+  Button,
   Card,
   Container,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   Link,
+  Rating,
   Stack,
   Table,
   TableBody,
@@ -12,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Label from "../../../../components/Label";
@@ -21,13 +27,20 @@ import { getOrderByUser } from "../../../../redux/action/orderAction";
 import CustomizedSteppers from "../../CustomStep/CustomizedSteppers";
 import useStyles from "./style";
 import HomeIcon from "@mui/icons-material/Home";
+import { getAllRating } from "../../../../redux/action/ratingAction";
+import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
 
 export default function OrderHistoryDetail() {
   const classes = useStyles();
   const id = useParams();
+  const [openConfirm, setOpenConfirm] = useState(false);
   const dispatch = useDispatch();
   let { orderByUser } = useSelector((state) => state.OrderReducer);
-  console.log("orderByUser", orderByUser);
+  let { ratinglist } = useSelector((state) => state.RatingReducer);
+  let userLogin = JSON.parse(localStorage.getItem("user"));
+  console.log("userLogin3545", userLogin);
+  console.log("id", id);
+
   const TABLE_HEAD = [
     { id: "product", label: "Sản phẩm", alignRight: false },
     { id: "price", label: "Giá", alignRight: false },
@@ -40,8 +53,21 @@ export default function OrderHistoryDetail() {
     }
   }, [orderByUser]);
 
+  useEffect(() => {
+    if (!ratinglist) {
+      dispatch(getAllRating());
+    }
+  }, [ratinglist]);
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
+  console.log("ratinglist", ratinglist);
   orderByUser = orderByUser?.filter((item) => item.id === id.receiptId);
-
+  console.log("orderByUser", orderByUser);
+  const ratingItem = ratinglist?.data.filter(
+    (item) => item.order._id === id.receiptId
+  );
+  console.log("ratingItem", ratingItem);
   return (
     <div>
       <Container>
@@ -77,6 +103,7 @@ export default function OrderHistoryDetail() {
             boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
             borderRadius: "15px",
             border: "1px solid white",
+            position: "relative",
           }}
         >
           {orderByUser?.map((orderDetail, index) => {
@@ -124,12 +151,18 @@ export default function OrderHistoryDetail() {
                           </span>
                         </span>
                       </Typography>
-                      <p className="mt-5">
-                        Ngày nhận:{" "}
-                        {moment(orderDetail.updatedAt).format(
-                          "DD/MM/YYYY, h:mm a"
-                        )}
-                      </p>
+                      {orderByUser &&
+                      (orderByUser[0]?.status === "Đã nhận" ||
+                        orderByUser[0]?.status === "Đã đánh giá") ? (
+                        <p className="mt-5">
+                          Ngày nhận:{" "}
+                          {moment(orderDetail.updatedAt).format(
+                            "DD/MM/YYYY, h:mm a"
+                          )}
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Stack>
                   <CustomizedSteppers orderDetail={orderDetail} />
@@ -329,6 +362,79 @@ export default function OrderHistoryDetail() {
               );
             }
           })}
+          {orderByUser && orderByUser[0]?.status === "Đã đánh giá" ? (
+            <div className="flex justify-end mr-8 mb-4">
+              <Button variant="outlined" onClick={() => setOpenConfirm(true)}>
+                Xem đánh giá
+              </Button>
+            </div>
+          ) : (
+            " "
+          )}
+
+          {ratingItem && (
+            <CustomDialog
+              open={openConfirm}
+              handleClose={handleCancel}
+              dialogSize="xs"
+              overlayStyle={{
+                backgroundColor: "transparent",
+              }}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Xem đánh giá"}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  <div className="flex mb-3">
+                    <div className="mr-3 ">
+                      <img
+                        src={userLogin?.user?.avatar}
+                        alt="avatar"
+                        style={{ width: "50px", height: "50px" }}
+                      />
+                    </div>
+                    <div className="leading-6">
+                      <p className="mb-2">{userLogin?.user?.fullName}</p>
+                      <Rating
+                        readOnly
+                        value={ratingItem[0]?.rating}
+                        size={"medium"}
+                      />
+                      <p className="text-slate-300">
+                        {moment(ratingItem[0]?.createdAt).format(
+                          "DD/MM/YYYY, h:mm a"
+                        )}
+                      </p>
+                      <p> {ratingItem[0]?.content}</p>
+                      {ratingItem[0]?.imageRating[0] === "" ? (
+                        ""
+                      ) : (
+                        <div className="mt-3 flex ">
+                          {ratingItem[0]?.imageRating?.map((img, index) => {
+                            return (
+                              <img
+                                src={img}
+                                alt=""
+                                style={{
+                                  width: "80px",
+                                  height: "80px",
+                                  marginRight: "10px",
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCancel}>OK</Button>
+              </DialogActions>
+            </CustomDialog>
+          )}
         </Container>
       </Container>
     </div>
