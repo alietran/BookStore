@@ -23,6 +23,7 @@ import { createOrder, updateOrder } from "../../../redux/action/orderAction";
 import paymentAPI from "../../../api/paymentAPI";
 import { useSnackbar } from "notistack";
 import HomeIcon from "@mui/icons-material/Home";
+import Paypal from "./PaymentMethod/paypal";
 export default function Checkout() {
   const classes = useStyles();
   const history = useHistory();
@@ -61,23 +62,22 @@ export default function Checkout() {
     // return [...order1, { productId: item.id, quantity: item.quantity }];
     orderItem.push({ productId: item.id, quantity: item.quantity })
   );
-
+  let order = {
+    totalPrice: totalPrice - discount,
+    items: orderItem,
+    address: address,
+    paymentMethod: {
+      name: payment,
+      resultCode: 1000,
+      message:
+        "Giao dịch đã được khởi tạo, chờ người dùng xác nhận thanh toán.",
+      orderId: "",
+    },
+    notes: "",
+    discount,
+    promotion: voucherId,
+  };
   const handleSubmit = async () => {
-    let order = {
-      totalPrice: totalPrice - discount,
-      items: orderItem,
-      address: address,
-      paymentMethod: {
-        name: payment,
-        resultCode: 1000,
-        message:
-          "Giao dịch đã được khởi tạo, chờ người dùng xác nhận thanh toán.",
-        orderId: "",
-      },
-      notes: "",
-      discount,
-      promotion: voucherId,
-    };
     localStorage.setItem("order", JSON.stringify(order));
     if (payment === "Thanh toán bằng ví MoMo") {
       const { data } = await paymentAPI.createMoMoPayment({
@@ -153,7 +153,7 @@ export default function Checkout() {
             <Grid item xs={8}>
               <div
                 style={{
-                  backgroundColor:"white",
+                  backgroundColor: "white",
                   boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
                   borderRadius: "15px",
                   border: "1px solid white",
@@ -333,23 +333,30 @@ export default function Checkout() {
                       </table>
                       <div className="items-end">(Đã bao gồm thuế)</div>
                     </div>
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={!address ? true : false}
-                      variant="contained"
-                      sx={{
-                        marginTop: "15px",
-                        color: "#fff",
-                        width: "100%",
-                        border: "none",
-                        padding: "10px",
-                        fontWeight: 500,
-                        borderRadius: "5px",
-                        // backgroundColor: "#1435c3",
-                      }}
-                    >
-                      ĐẶT MUA
-                    </Button>
+                    {payment === "Thanh toán bằng Paypal" ? (
+                      <div className="mt-3">
+                        {" "}
+                        <Paypal order={order} />
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={!address ? true : false}
+                        variant="contained"
+                        sx={{
+                          marginTop: "15px",
+                          color: "#fff",
+                          width: "100%",
+                          border: "none",
+                          padding: "10px",
+                          fontWeight: 500,
+                          borderRadius: "5px",
+                          // backgroundColor: "#1435c3",
+                        }}
+                      >
+                        THANH TOÁN
+                      </Button>
+                    )}
                   </div>
                 </div>
 

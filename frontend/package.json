@@ -18,6 +18,7 @@
     "@mui/material": "^5.10.1",
     "@mui/styles": "^5.9.1",
     "@mui/x-date-pickers": "^5.0.0-beta.2",
+    "@paypal/react-paypal-js": "^7.8.1",
     "@tabler/icons": "^1.76.0",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@testing-library/jest-dom": "^5.16.4",

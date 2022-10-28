@@ -80,12 +80,13 @@ export default function Address() {
     }
   }, [addressList]);
 
- 
-
   useEffect(() => {
     let addressItem = addressList?.data.filter((item) => item.isDefault);
     console.log("addressItem123", addressItem);
+
     if (addressItem) {
+    localStorage.setItem("address", JSON.stringify(addressItem[0]));
+
       dispatch({
         type: "ORDER_ADDRESS",
         payload: {
@@ -456,13 +457,7 @@ export default function Address() {
               </div>
               <p className="m-0">{item.phoneNumber}</p>
               <p style={{ color: "#999999", margin: 0 }}>
-                {item.address +
-                  ", " +
-                  item.ward +
-                  ", " +
-                  item.district +
-                  ", " +
-                  item.city}
+                {`${item.address}, ${item.ward}, ${item.city}`}
               </p>
 
               {/* <div>

@@ -173,8 +173,8 @@ exports.bestSellerBook = catchAsync(async (req, res, next) => {
   //   let today = new Date();
   // let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
   // let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  console.log('monday', monday);
-  console.log('sunday', sunday);
+  console.log('monday', moment().day(-6).toDate());
+  console.log('sunday', moment().startOf('week').isoWeekday(8).toDate());
   const array = await OrderDetail.find({
     createdAt: {
       $gte: moment().day(-6).toDate(),
@@ -188,8 +188,10 @@ exports.bestSellerBook = catchAsync(async (req, res, next) => {
     .value();
 
   let dat = [];
+    console.log('doc',  doc);
 
   doc.map((item, index) => {
+    console.log('item',  item);
     let quantity = item.book.reduce(
       (total, item1) => (total += item1.quantity),
       0

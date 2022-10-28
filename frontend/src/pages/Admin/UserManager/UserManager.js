@@ -113,7 +113,10 @@ export default function UserManager() {
     userRoleList,
     loadingAccountList,
   } = useSelector((state) => state.AdminReducer);
-  console.log("accountList", accountList);
+  console.log(
+    "accountList?.data?.filter((item) => !item.active).length",
+    accountList?.data?.filter((item) => item.active).length
+  );
   const { successUpdateUser } = useSelector((state) => state.UserReducer);
   const { successCreateAdmin, successUpdateUserCurrent } = useSelector(
     (state) => state.AuthReducer
@@ -444,18 +447,20 @@ export default function UserManager() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={accountList?.result}
+                  rowCount={
+                    accountList?.data?.filter((item) => item.active).length
+                  }
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers
+                    ?.filter((row) => row.active)
                     ?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                    .filter((row) => row.active)
                     .map((row) => {
                       const {
                         _id,
@@ -536,7 +541,7 @@ export default function UserManager() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={accountList?.result}
+              count={accountList?.data?.filter((item) => item.active).length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
@@ -572,12 +577,12 @@ export default function UserManager() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {filteredUsers?.filter((row) => !row.active)
                     ?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                    .filter((row) => !row.active)
+                  
                     .map((row) => {
                       const {
                         _id,
@@ -658,7 +663,7 @@ export default function UserManager() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={accountList?.result}
+              count={accountList?.data?.filter((item) => !item.active).length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
