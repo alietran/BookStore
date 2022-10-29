@@ -583,7 +583,7 @@ exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
 exports.orderRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
   const d = new Date();
 
-  let array = await Order.find().sort({ createdAt: 1 });
+  let array = await Order.find({$or : [{status: 'Đã nhận'}, {status: 'Đã đánh giá'}]}).sort({ createdAt: 1 });
   console.log('array', array);
 
   let result = _(array)

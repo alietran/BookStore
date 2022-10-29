@@ -263,7 +263,7 @@ export default function ShipperManager() {
   };
   const isUserNotFound = shipperList?.result === 0;
    orderDetailList = orderDetailList?.data.filter(
-      (item) => item.order.id === params.orderId
+      (item) => item?.order?.id === params.orderId
     );
   const handleList = (_id) => {
     console.log("id", typeof _id);

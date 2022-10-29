@@ -13,7 +13,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import useStyles from "./style";
-
+import moment from "moment";
 import RatingItem from "../Rating/RatingItem";
 import CustomDialog from "../../../../components/CustomDialog/CustomDialog";
 import paymentAPI from "../../../../api/paymentAPI";
@@ -28,6 +28,7 @@ export default function OrderHistory() {
     (state) => state.OrderReducer
   );
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [doneConfirm, setDoneConfirm] = useState("");
   const { rating, createRatingDetail,flag } = useSelector(
     (state) => state.RatingReducer
   );
@@ -71,8 +72,10 @@ export default function OrderHistory() {
   // createRatingDetail;
   const [open, setOpen] = React.useState(false);
 const [openDelete, setOpenDelete] = React.useState(false);
-  const handleDoneOrder = () => {
+  const handleDoneOrder = (id) => {
+    console.log("54645",id)
     setOpenConfirm(true);
+    setDoneConfirm(id)
     // dispatch(
     //   updateOrder(order.id, {
     //     status: "Đã nhận",
@@ -90,8 +93,9 @@ const [openDelete, setOpenDelete] = React.useState(false);
   const handleConfirm = (order) => {
 
     dispatch(
-      updateOrder(order.id, {
+      updateOrder(doneConfirm, {
         status: "Đã nhận",
+        receiveDay: moment().format(),
       })
     );
     setOpenConfirm(false);
@@ -268,7 +272,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
                   {" "}
                   <Button
                     variant="contained"
-                    onClick={handleDoneOrder}
+                    onClick={()=>handleDoneOrder(order.id)}
                     sx={{ marginRight: "10px" }}
                   >
                     Đã nhận

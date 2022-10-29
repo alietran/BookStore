@@ -48,6 +48,7 @@ const orderSchema = new mongoose.Schema(
         default: true,
       },
     },
+    receiveDay:{type:Date},
     status: {
       type: String,
       default: 'Đang xử lý',

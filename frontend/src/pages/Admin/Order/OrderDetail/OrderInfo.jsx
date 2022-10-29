@@ -37,7 +37,7 @@ export default function OrderInfo({ orderDetailList }) {
   ];
 
   return (
-    <Box >
+    <Box>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4} sx={{ marginBottom: "50px" }}>
           <Typography variant="h6" sx={{ marginLeft: 1, marginBottom: 2 }}>
@@ -79,7 +79,6 @@ export default function OrderInfo({ orderDetailList }) {
                       orderDetailList[0]?.order.address?.city}
                 </span>
               </p>
-             
             </div>
           </Card>
         </Grid>
@@ -125,8 +124,6 @@ export default function OrderInfo({ orderDetailList }) {
                     : 0}
                 </span>
               </p>
-
-             
             </div>
           </Card>
         </Grid>
@@ -190,7 +187,7 @@ export default function OrderInfo({ orderDetailList }) {
               rowCount={orderDetailList?.result}
             />
             <TableBody>
-              {orderDetailList
+              {orderDetailList && orderDetailList
                 ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 ?.map((row) => {
                   const { book, _id, quantity, price } = row;

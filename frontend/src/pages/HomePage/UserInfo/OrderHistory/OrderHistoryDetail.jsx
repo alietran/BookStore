@@ -65,7 +65,7 @@ export default function OrderHistoryDetail() {
   orderByUser = orderByUser?.filter((item) => item.id === id.receiptId);
   console.log("orderByUser", orderByUser);
   const ratingItem = ratinglist?.data.filter(
-    (item) => item.order._id === id.receiptId
+    (item) => item?.order?._id === id.receiptId
   );
   console.log("ratingItem", ratingItem);
   return (
@@ -154,6 +154,37 @@ export default function OrderHistoryDetail() {
                       {orderByUser &&
                       (orderByUser[0]?.status === "Đã nhận" ||
                         orderByUser[0]?.status === "Đã đánh giá") ? (
+                        <div>
+                          <p className=" text-sm mt-4">
+                            Ngày đặt:{" "}
+                            {moment(
+                              orderByUser[0]?.orderDetail[0].createdAt
+                            ).format("h:mm a DD/MM/YYYY ")}
+                          </p>
+                          <p className=" text-sm mt-4">
+                            Ngày nhận:{" "}
+                            {moment(
+                              orderByUser[0]?.receiveDay
+                            ).format("h:mm a DD/MM/YYYY")}
+                          </p>
+                        </div>
+                      ) : (
+                        orderByUser &&
+                        (orderByUser[0]?.order?.status !== "Đã nhận" ||
+                          orderByUser[0]?.order?.status !== "Đã đánh giá") && (
+                          <div>
+                            <p className=" text-sm mt-4">
+                              Ngày đặt:{" "}
+                              {moment(orderByUser[0]?.order?.createdAt).format(
+                                "h:mm a DD/MM/YYYY"
+                              )}
+                            </p>
+                          </div>
+                        )
+                      )}
+                      {/* {orderByUser &&
+                      (orderByUser[0]?.status === "Đã nhận" ||
+                        orderByUser[0]?.status === "Đã đánh giá") ? (
                         <p className="mt-5">
                           Ngày nhận:{" "}
                           {moment(orderDetail.updatedAt).format(
@@ -162,7 +193,7 @@ export default function OrderHistoryDetail() {
                         </p>
                       ) : (
                         ""
-                      )}
+                      )} */}
                     </div>
                   </Stack>
                   <CustomizedSteppers orderDetail={orderDetail} />

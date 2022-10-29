@@ -77,7 +77,8 @@ export default function OrderDetail() {
   let { shipperList } = useSelector((state) => state.ShipperReducer);
 
   const { enqueueSnackbar } = useSnackbar();
-  console.log("shipperList", shipperList);
+  
+
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -99,22 +100,36 @@ export default function OrderDetail() {
       dispatch(getAllDetailOrder());
     }
   }, [orderDetailList]);
-
+console.log("orderDetailList3534", orderDetailList);
   const [shipper, setShipper] = useState();
   console.log("shipper", shipper);
   const history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
+  // const [orderDetailItem, setOrderDetailItem] = useState(orderDetailList);
+  // useEffect(() => {
+  //   if (orderDetailList) {
+  //     let orderDetailListCopy = orderDetailList?.data?.filter(
+  //       // params.orderId là app ghi sao thì điền vào
+  //       (item) => item.order.id === params.orderId
+  //     );
+  //     setOrderDetailItem(orderDetailListCopy);
+  //   }
+  // }, [orderDetailList]);
 
   orderDetailList = orderDetailList?.data?.filter(
     // params.orderId là app ghi sao thì điền vào
-    (item) => item.order.id === params.orderId
+    (item) => item?.order?.id === params.orderId
   );
+
+  // console.log("orderDetailList343", orderDetailItem);
+  // console.log("orderDetailList[0]", orderDetailList[0]);
+  console.log("orderDetailList3454", orderDetailList);
   const handleChangeShipper = (event) => {
     setShipper(event.target.value);
     // getAllDetailOrder()
   };
-  console.log("orderDetailListưqrr", orderDetailList);
+
   useEffect(() => {
     if (successUpdateOrder) {
       // enqueueSnackbar("Đơn hàng đang được vận chuyển!", { variant: "success" });
@@ -138,7 +153,7 @@ export default function OrderDetail() {
       orderDetailList[0]?.order?.paymentMethod?.name ===
       "Thanh toán bằng ví MoMo"
     ) {
-      console.log("orderDetailList[0]", orderDetailList[0]);
+      
 
       const { data } = await paymentAPI.refundMoMoPayment({
         // _id: idShowtime,
@@ -198,7 +213,7 @@ export default function OrderDetail() {
           mb={5}
           mt={3}
         >
-          <Stack spacing={2} className="w-full">
+          <Stack spacing={2} className="w-9/12">
             <div className="flex justify-between ">
               <Typography
                 variant="h4"
@@ -237,59 +252,102 @@ export default function OrderDetail() {
             <Breadcrumbs separator="›" aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
+            {orderDetailList &&
+            (orderDetailList[0]?.order?.status === "Đã nhận" ||
+              orderDetailList[0]?.order?.status === "Đã đánh giá") ? (
+              <div>
+                <p className=" text-sm mt-4">
+                  Ngày đặt:{" "}
+                  {moment(orderDetailList[0]?.order?.createdAt).format(
+                    "h:mm a DD/MM/YYYY "
+                  )}
+                </p>
+                <p className=" text-sm mt-4">
+                  Ngày nhận:{" "}
+                  {moment(orderDetailList[0]?.order.receiveDay).format(
+                    "h:mm a DD/MM/YYYY"
+                  )}
+                </p>
+              </div>
+            ) : (
+              orderDetailList &&
+              (orderDetailList[0]?.order?.status !== "Đã nhận" ||
+                orderDetailList[0]?.order?.status !== "Đã đánh giá") && (
+                <div>
+                  <p className=" text-sm mt-4">
+                    Ngày đặt:{" "}
+                    {moment(orderDetailList[0]?.order?.createdAt).format(
+                      "h:mm a DD/MM/YYYY"
+                    )}
+                  </p>
+                </div>
+              )
+            )}
           </Stack>
           {/* {orderDetailList && orderDetailList[0]?.order?.status} */}
+
           {orderDetailList &&
-          orderDetailList[0]?.order?.status === "Đang xử lý" ? (
-            <Stack
-              spacing={2}
-              direction="row"
-              alignItems="right"
-              sx={{ width: "33%" }}
-            >
-              <FormControl fullWidth>
-                <InputLabel id="gender">Shipper</InputLabel>
-                <Select
-                  labelId="shipper"
-                  id="shipper"
-                  value={shipper}
-                  name="shipper"
-                  label="Shipper"
-                  onChange={handleChangeShipper}
-                  // {...getFieldProps("gender")}
-                >
-                  {shipperList?.data.map((shipper, index) => {
-                    console.log("shipper", shipper);
-                    return (
-                      <MenuItem value={shipper.id}>{shipper.name}</MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-              <Button
-                variant="contained"
-                sx={{ width: " 34%" }}
-                onClick={() => hanldeSubmit(shipper)}
+            orderDetailList[0]?.order?.status === "Đang xử lý" && (
+              <Stack
+                spacing={2}
+                direction="row"
+                alignItems="right"
+                sx={{ width: "33%" }}
               >
-                Giao hàng
-              </Button>
-              {/* <Typography
-            variant="h5"
-            gutterBottom
-            className="font-normal text-gray-900 text-right "
-            sx={{ fontWeight: "400 !important" }}
-          >
-            Shipper:{" "}
-          </Typography> */}
-            </Stack>
-          ) : (
+                <FormControl fullWidth>
+                  <InputLabel id="gender">Shipper</InputLabel>
+                  <Select
+                    labelId="shipper"
+                    id="shipper"
+                    value={shipper}
+                    name="shipper"
+                    label="Shipper"
+                    onChange={handleChangeShipper}
+                    // {...getFieldProps("gender")}
+                  >
+                    {shipperList?.data.map((shipper, index) => {
+                      console.log("shipper", shipper);
+                      return (
+                        <MenuItem value={shipper.id}>{shipper.name}</MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+                <Button
+                  variant="contained"
+                  sx={{ width: " 34%" }}
+                  onClick={() => hanldeSubmit(shipper)}
+                >
+                  Giao hàng
+                </Button>
+              </Stack>
+            )}
+
+          {/* <div className="">
+            {" "}
             <p className="text-right justify-end text-sm mt-4">
-              Ngày nhận:{" "}
-              {orderDetailList && moment(
-                orderDetailList[0]?.order.updatedAt
-              ).format("DD/MM/YYYY, h:mm a")}
+              Ngày đặt:{" "}
+              {orderDetailList &&
+                orderDetailList[0] &&
+                moment(orderDetailList[0]?.order?.createdAt).format(
+                  "DD/MM/YYYY"
+                )}
             </p>
-          )}
+            {orderDetailList[0] &&
+            (orderDetailList[0]?.order?.status === "Đã nhận" ||
+              orderDetailList[0]?.order?.status === "Đã đánh giá") ? (
+              <p className="text-right justify-end text-sm mt-4">
+                Ngày nhận:{" "}
+                {orderDetailList &&
+                  moment(orderDetailList[0]?.order?.updatedAt).format(
+                    "DD/MM/YYYY"
+                  )}
+              </p>
+            ) : (
+              ""
+            )}
+          </div> */}
+
           {/* {orderDetailList && orderDetailList[0]?.order.updatedAt ? (
             <p className="text-right justify-end text-sm mt-4">
               Ngày nhận:{" "}
