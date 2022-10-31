@@ -67,10 +67,14 @@ export default function Search() {
   const dispatch = useDispatch();
   const data = useLocation().search;
   const name = new URLSearchParams(data).get("search");
+  const [valueMin, setValueMin] = React.useState();
+  const [valueMax, setValueMax] = React.useState();
   const [value1, setValue1] = React.useState([50, 300]);
+
   const bookPrice = bookSearch?.data.filter(
     (item) =>
-      Number(value1[0]*1000) <= item.price && item.price <= Number(value1[1] * 1000)
+      Number(value1[0] * 1000) <= item.price &&
+      item.price <= Number(value1[1] * 1000)
   );
   console.log("bookPrice", bookPrice);
 
@@ -94,6 +98,23 @@ export default function Search() {
       setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
     }
   };
+  const hanleChangeMin = (e) => {
+    setValueMin(e.target.value);
+    // console.log("35235", Number((e.target.value).substring(1)));
+    setValue1([Number(e.target.value.substring(1)), value1[1]]);
+  };
+  const hanleChangeMax = (e) => {
+    setValueMax(e.target.value);
+    setValue1([value1[0], Number(e.target.value.substring(1))]);
+  };
+
+  // useEffect(() => {
+  //   console.log("valueMin", valueMin);
+  //   console.log("valueMax", valueMax);
+  //   setValue1([valueMin, valueMax]);
+  // }, [valueMax, valueMin]);
+  console.log("value1355", value1);
+
   useEffect(() => {
     console.log("name", name);
   }, [name]);
@@ -155,8 +176,11 @@ export default function Search() {
                     Từ
                   </InputLabel>
                   <BootstrapInput
+                    onChange={hanleChangeMin}
                     defaultValue="0"
-                    value={`${formatter.format(value1[0])}`}
+                    value={
+                      valueMin ? valueMin : `${formatter.format(value1[0])}`
+                    }
                     id="bootstrap-input"
                   />
                 </FormControl>
@@ -171,7 +195,10 @@ export default function Search() {
                   {/* {value1.split(",")} */}
                   <BootstrapInput
                     defaultValue="500.000"
-                    value={`${formatter.format(value1[1])}`}
+                    onChange={hanleChangeMax}
+                    value={
+                      valueMax ? valueMax : `${formatter.format(value1[1])}`
+                    }
                     id="bootstrap-input"
                   />
                 </FormControl>
