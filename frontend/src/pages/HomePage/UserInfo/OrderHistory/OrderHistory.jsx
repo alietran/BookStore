@@ -85,10 +85,10 @@ const [openDelete, setOpenDelete] = React.useState(false);
     const handleCloseDelete = () => {
       setOpenDelete(false);
     };
-   const handleClickOpenDelete = (id) => {
-    console.log("#53",id)
+   const handleClickOpenDelete = (order) => {
+    console.log("#53",order)
      setOpenDelete(true);
-     setIdItem(id)
+     setIdItem(order)
    };
   const handleConfirm = (order) => {
 
@@ -120,22 +120,22 @@ const [openDelete, setOpenDelete] = React.useState(false);
   };
 
   console.log("orderByUser", orderByUser);
-  const handleClickCancel = async (order) => {
-    console.log("order", order);
-    console.log("order.id", order.id);
-    if (order?.paymentMethod?.name === "Thanh toán bằng ví MoMo") {
+  const handleClickCancel = async () => {
+    console.log("order", idItem);
+    console.log("order.id", idItem.id);
+    if (idItem?.paymentMethod?.name === "Thanh toán bằng ví MoMo") {
       // console.log("orderDetailList[0]", orderDetailList[0]);
 
       const { data } = await paymentAPI.refundMoMoPayment({
         // _id: idShowtime,
-        amount: order.totalPrice,
-        transId: Number(order.paymentMethod.transId),
+        amount: idItem.totalPrice,
+        transId: Number(idItem.paymentMethod.transId),
       });
       console.log("123data", data);
       if (data?.resultCode == 0) {
         dispatch(
-          updateOrder(order.id, {
-            status: "Đang xử lý",
+          updateOrder(idItem.id, {
+            status: "Đã huỷ",
           })
         );
         setOpen(false);
@@ -143,17 +143,17 @@ const [openDelete, setOpenDelete] = React.useState(false);
         console.log("Error:", data?.messages);
       }
     } else {
-         console.log("idItem", idItem);
+      console.log("idItem", idItem);
       dispatch(
         updateOrder(idItem, {
           status: "Đã hủy",
         })
       );
-    setOpenDelete(false);
+      setOpenDelete(false);
     }
     console.log("idItem", idItem);
     dispatch(
-      updateOrder(idItem, {
+      updateOrder(idItem.id, {
         status: "Đã hủy",
       })
     );
@@ -317,7 +317,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
                     variant="outlined"
                     style={{ marginLeft: "10px" }}
                     onClick={
-                      () => handleClickOpenDelete(order.id)
+                      () => handleClickOpenDelete(order)
                       // handleClickCancel(order)
                     }
                   >
@@ -346,9 +346,9 @@ const [openDelete, setOpenDelete] = React.useState(false);
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={() => {
-                          handleClickCancel(order);
-                        }}
+                        onClick={
+                          handleClickCancel
+                        }
                         sx={{ textTransform: "none !important" }}
                         autoFocus
                       >

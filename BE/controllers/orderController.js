@@ -40,7 +40,7 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
     }
 
     let orderDetail = await OrderDetail.find();
-
+    console.log('req.params.id', req.params.id);
     orderDetailList = orderDetail.filter(
       (item) => item.order.id === req.params.id
     );
@@ -305,7 +305,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 
             await transporter.sendMail({
               from: `"Thông báo xác nhận đơn hàng #${_id}" <alietran0211@gmail.com>`, // sender address
-              to: 'ngocdiep710@gmail.com', // list of receivers
+              to: `${address.email}`, // list of receivers
               subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
               // text: "Hello world?", // plain text body
               html: `
@@ -543,7 +543,7 @@ exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
   const a = 'Đã nhận';
   const b = 'Đã đánh giá';
   let array = await Order.find({
-    $or : [{status: 'Đã nhận'}, {status: 'Đã đánh giá'}]
+    $or: [{ status: 'Đã nhận' }, { status: 'Đã đánh giá' }],
     // status: 'Đã đánh giá',
   }).sort({ createdAt: 1 });
   // console.log('array', array);
@@ -583,7 +583,9 @@ exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
 exports.orderRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
   const d = new Date();
 
-  let array = await Order.find({$or : [{status: 'Đã nhận'}, {status: 'Đã đánh giá'}]}).sort({ createdAt: 1 });
+  let array = await Order.find({
+    $or: [{ status: 'Đã nhận' }, { status: 'Đã đánh giá' }],
+  }).sort({ createdAt: 1 });
   console.log('array', array);
 
   let result = _(array)
