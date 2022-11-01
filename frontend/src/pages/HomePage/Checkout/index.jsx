@@ -123,7 +123,7 @@ export default function Checkout() {
   }, [successCreateOrder]);
 
   return (
-    <Box style={{ backgroundColor: "#f8f8f8", padding: "20px 0" }}>
+    <Box style={{ backgroundColor: "#f8f8f8", padding: "80px 0" }}>
       <Box className="m-5">
         <Container maxWidth="lg">
           <div className={classes["cart__wrapper-breadcrumbs"]}>

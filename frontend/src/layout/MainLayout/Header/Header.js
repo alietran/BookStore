@@ -270,10 +270,14 @@ export default function Header() {
   console.log("cateList", cateList);
   return (
     <div className="bg-white">
-      <Container maxWidth="xl">
-        <Popover className="relative bg-white ">
-          <div className=" mx-auto px-4 sm:px-6 text-sm">
-            <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
+      <Container
+        maxWidth="xl "
+        className="fixed z-20 w-full p-2"
+        style={{ padding: 0 }}
+      >
+        <Popover className=" bg-white  ">
+          <div className=" mx-auto text-sm">
+            <div className="flex justify-between py-2 items-center px-4 md:justify-start md:space-x-10">
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <NavLink to="/">
                   <img
@@ -369,9 +373,15 @@ export default function Header() {
                             to={`/productDetail/${value?._id}`}
                             className={classes.dataItem}
                             // target=""
+                            sx={{ paddingTop: "5px" }}
                             onClick={hanldeChangePage}
                           >
-                            <p>{value.name}</p>
+                            <p
+                              className="truncate"
+                              style={{ paddingTop: "10px" }}
+                            >
+                              {value.name}
+                            </p>
                           </NavLink>
                         );
                       })}
@@ -416,7 +426,7 @@ export default function Header() {
                           />
                         ) : (
                           <img
-                            src="../../../../img/user.png"
+                            src="http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
                             alt="avatar"
                             className="rounded-full"
                           />

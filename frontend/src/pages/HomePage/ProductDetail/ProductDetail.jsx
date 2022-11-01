@@ -81,7 +81,7 @@ export default function ProductDetail(props) {
   const { successDetailBook } = useSelector((state) => state.BookReducer);
   const { enqueueSnackbar } = useSnackbar();
   const { errorAddCart } = useSelector((state) => state.CartReducer);
-
+  const [phoneNumberFormat, setFormatPhone] = useState();
   console.log("errorAddCart", errorAddCart);
 
   useEffect(() => {
@@ -107,8 +107,8 @@ export default function ProductDetail(props) {
   const [imageURL, setImageURL] = useState(successDetailBook?.data.image);
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
-
-  //  console.log("sliderImg", sliderImg);
+  const userLogin = JSON.parse(localStorage.getItem("user"));
+  console.log("userLogin", userLogin);
 
   console.log("successDetailBook", successDetailBook?.data.image);
   const bookDetail = successDetailBook?.data;
@@ -177,17 +177,23 @@ export default function ProductDetail(props) {
     }
   };
 
+  const changeNumber = (phone) => {
+    let formated_phone =
+      phone.substring(0, 3) + +phone.substring(3, 6) + "xxxx";
+
+    console.log("formated_phone", formated_phone);
+  };
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const classes = useStyles();
 
-
   return (
-    <Box classNameName="m-5">
+    <Box classNameName="m-5 ">
       <Container maxWidth="lg">
-        <div className="productDetail__wrapper py-4">
+        <div className="productDetail__wrapper py-16">
           <div className={classes["productDetail__wrapper-breadcrumbs"]}>
             <div className={classes.breadcrumbsIcon}>
               <Link className={classes.breadcrumbsIconLink} href="/">
@@ -320,7 +326,7 @@ export default function ProductDetail(props) {
             <div className={classes["productDetail__wrapper-content--right"]}>
               <div className={classes["productDetail__wrapper-content--info"]}>
                 <div className={classes["info-policy"]}>
-                  <h4>Chính sách kinh doanh</h4>
+                  <h4 className="font-bold">Chính sách kinh doanh</h4>
                   <div className="info-policy--ship flex my-3">
                     <div className="ship-img">
                       <img src="../../../../img/svgexport-25.svg" alt="" />
@@ -436,14 +442,28 @@ export default function ProductDetail(props) {
                                 <div className="flex mb-3">
                                   <div className="mr-3 ">
                                     <img
-                                      src={item?.order?.user.avatar}
+                                      src={
+                                        item?.order
+                                          ? item?.order?.user.avatar
+                                          : "http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
+                                      }
                                       alt="avatar"
                                       style={{ width: "50px", height: "50px" }}
                                     />
                                   </div>
                                   <div className="leading-6">
                                     <p className="mb-2">
-                                      {item?.order?.user?.fullName}
+                                      {item?.order
+                                        ? item?.order?.user?.fullName
+                                        : userLogin?.user.phoneNumber.substring(
+                                            0,
+                                            3
+                                          ) +
+                                          userLogin?.user.phoneNumber.substring(
+                                            3,
+                                            6
+                                          ) +
+                                          "xxxx"}
                                     </p>
                                     <Rating
                                       readOnly

@@ -85,6 +85,10 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 0,
     width: "75.6%",
     marginRight: "16px",
+    boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+    borderRadius: "15px",
+    backgroundColor: "white",
+    border: "1px solid white",
   },
   "productDetail__wrapper-content--box": {
     padding: "24px",
@@ -125,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "8px",
     justifyContent: "center",
     width: "100%",
-    height:"300px"
+    height: "300px",
   },
   img__library: {
     display: "flex",
@@ -265,11 +269,16 @@ const useStyles = makeStyles((theme) => ({
     color: "seagreen",
     fontWeight: 600,
   },
-  "productDetail__wrapper-content--right--right": {
+  "productDetail__wrapper-content--right": {
     boxSizing: "border-box",
     margin: 0,
     minWidth: 0,
     width: "24.4%",
+    boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+    borderRadius: "15px",
+    backgroundColor: "white",
+    border: "1px solid white",
+    height: "200px",
   },
   "productDetail__wrapper-content--info": {
     padding: "16px",
@@ -287,8 +296,12 @@ const useStyles = makeStyles((theme) => ({
   },
   "productDetail__wrapper-desc": {
     background: "white",
-    borderRadius: "0.5rem",
+   
     padding: "10px 16px",
+    // boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+    // borderRadius: "15px",
+    // backgroundColor: "white",
+    // border: "1px solid white",
   },
   desc__title: {
     paddingLeft: "1rem",

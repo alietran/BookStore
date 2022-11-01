@@ -61,30 +61,34 @@ export default function LoginShipper() {
     getFieldProps,
   } = formik;
   return (
-    <div className="pt-24 h-screen mx-auto text-center bg-white md:w-96">
+    <div className="px-3 h-screen mx-auto text-center bg-white md:w-96">
       <Box
         sx={{
           maxWidth: 580,
-          margin: "auto",
+          // margin: "auto",
           display: "flex",
           minHeight: "20vh",
+          height:"100%",
           flexDirection: "column",
           justifyContent: "center",
           // padding: theme.spacing(12, 0),
+          boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+          borderRadius: "15px",
+          border: "1px solid white",
         }}
       >
-        <Box className="flex center mt-12 mx-auto">
+        <Box className="flex center mt-6 mb-4 mx-auto">
           <img
             src="../../../../img/User_Circle.png"
             alt=""
             style={{ width: "80px", height: "80px" }}
           />
         </Box>
-        <Typography variant="h4" gutterBottom className="text-center my-2">
+        <Typography variant="h4" gutterBottom className="text-center mb-12" sx={{marginBottom: "20px"}}>
           Đăng nhập
         </Typography>
         <FormikProvider value={formik}>
-          <Form className="p-3">
+          <Form className="px-4">
             <Stack spacing={3} sx={{ marginBottom: "20px" }}>
               {/* error */}
               <TextField

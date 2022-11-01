@@ -68,6 +68,7 @@ export default function UserInfo() {
             borderBottom: 1,
             borderColor: "divider",
             backgroundColor: "white",
+            paddingTop:"80px"
           }}
         >
           <Tabs

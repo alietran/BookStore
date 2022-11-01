@@ -129,3 +129,11 @@ export const deletePromotion = (id) => {
     }
   };
 };
+
+export const resetPromotion = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "RESET_PROMOTION",
+    });
+  };
+};

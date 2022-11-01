@@ -187,7 +187,7 @@ export default function Cart() {
   };
 
   return (
-    <div style={{ backgroundColor: "#f8f8f8", padding: "20px 0" }}>
+    <div style={{ backgroundColor: "#f8f8f8", padding: "80px 0" }}>
       <div className={classes.container}>
         <div className="cart__wrapper ">
           <div className={classes["cart__wrapper-breadcrumbs"]}>

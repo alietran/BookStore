@@ -63,7 +63,11 @@ export const PromotionReducer = (state = stateDefault, action) => {
     }
 
     case "GET_DETAIL_PROMOTION_REQUEST": {
-      return { ...state, loadingDetailPromotion: true, errorDetailPromotion: null };
+      return {
+        ...state,
+        loadingDetailPromotion: true,
+        errorDetailPromotion: null,
+      };
     }
     case "GET_DETAIL_PROMOTION_SUCCESS": {
       return {
@@ -81,7 +85,11 @@ export const PromotionReducer = (state = stateDefault, action) => {
     }
 
     case "UPDATE_PROMOTION_REQUEST": {
-      return { ...state, loadingUpdatePromotion: true, errorUpdatePromotion: null };
+      return {
+        ...state,
+        loadingUpdatePromotion: true,
+        errorUpdatePromotion: null,
+      };
     }
     case "UPDATE_PROMOTION_SUCCESS": {
       return {
@@ -98,7 +106,11 @@ export const PromotionReducer = (state = stateDefault, action) => {
       };
     }
     case "DELETE_PROMOTION_REQUEST": {
-      return { ...state, loadingDeletePromotion: true, errorDeletePromotion: null };
+      return {
+        ...state,
+        loadingDeletePromotion: true,
+        errorDeletePromotion: null,
+      };
     }
     case "DELETE_PROMOTION_SUCCESS": {
       return {
@@ -124,11 +136,12 @@ export const PromotionReducer = (state = stateDefault, action) => {
         successCreatePromotion: "",
         errorCreatePromotion: null,
 
-        loadingUpdatePromotion: "",
-        successUpdatePromotion: null,
+        loadingUpdatePromotion: false,
+        successUpdatePromotion: "",
         errorUpdatePromotion: null,
       };
     }
+
     default:
       return { ...state };
   }

@@ -225,9 +225,16 @@ export default function OrderListShipper() {
   };
 
   return (
-    <div>
+    <div className="h-full">
       {" "}
-      <div className=" mx-auto text-center bg-white md:w-96 relative h-max">
+      <div
+        className=" mx-auto text-center bg-white md:w-96 relative "
+        style={{
+          boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
+          borderRadius: "15px",
+          border: "1px solid white",
+        }}
+      >
         {valueBottom === 0 ? (
           <Box>
             {" "}

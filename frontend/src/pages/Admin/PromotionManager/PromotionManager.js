@@ -43,7 +43,7 @@ import {
 } from "../../../redux/action/authorAction";
 import CreatePromotion from "./CreatePromotion/CreatePromotion";
 import OptionPromotion from "./OptionPromotion/OptionPromotion";
-import { getPromotionList } from "../../../redux/action/promotionAction";
+import { getPromotionList, resetPromotion } from "../../../redux/action/promotionAction";
 import moment from "moment";
 import Loading from "../../../components/Loading/Loading";
 
@@ -128,7 +128,7 @@ export default function PromotionManager() {
     if (!promotionList) {
       dispatch(getPromotionList());
     }
-    return () => dispatch(resetAuthorList());
+    return () => dispatch(resetPromotion());
   }, []);
 
   useEffect(() => {
