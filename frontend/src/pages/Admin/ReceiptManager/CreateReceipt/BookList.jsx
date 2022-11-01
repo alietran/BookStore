@@ -236,8 +236,9 @@ export default function BookList() {
               />
               <TableBody>
                 {filteredUsers
+                  ?.filter((item) => item.issuer.id === supplier)
                   ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((item) => item.issuer.id === supplier)
+
                   .map((row) => {
                     const { _id, name, image, authorId } = row;
                     const isItemSelected = selected.indexOf(_id) !== -1;
@@ -279,7 +280,9 @@ export default function BookList() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={bookList?.result}
+            count={
+              bookList?.data?.filter((item) => item.issuer.id === supplier).length
+            }
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

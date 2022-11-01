@@ -209,9 +209,6 @@ const AdminTemplate = (props) => {
               )}
               {userLogin.user.idRole.roleName === "NV Bán Hàng" ? (
                 <>
-                  <Menu.Item key="7" icon={<ReceiptIcon />}>
-                    <NavLink to="/admin/books">Sách</NavLink>
-                  </Menu.Item>
                   <Menu.Item key="9" icon={<ReceiptIcon />}>
                     <NavLink to="/admin/orders">Đơn hàng</NavLink>
                   </Menu.Item>
