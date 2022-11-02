@@ -12,19 +12,31 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-start",
     fontSize: " 0.875rem",
-    marginBottom:0
+    marginBottom: 0,
   },
   address__detail: {
     borderRadius: "4px",
     display: "inline-block",
     userSelect: "none",
-    border: "1px solid rgb(20, 53, 195)",
+    // border: "1px solid rgb(20, 53, 195)",
+    border: "1px solid rgb(224, 224, 224)",
+
     backgroundColor: "rgb(255, 255, 255)",
     padding: " 0.5rem 1.25rem",
     position: "relative",
     overflow: "hidden",
     cursor: "pointer",
     height: "110px",
+    transition: "all 0.2s",
+    "&:hover": {
+      background: " rgb(243, 243, 243)",
+    },
+  },
+  address__detail__hover: {
+    border: "1px solid rgb(20, 53, 195) !important",
+    "&:hover": {
+      background: "transparent !important",
+    },
   },
   menu__item: {
     width: "100% !important",

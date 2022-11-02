@@ -250,20 +250,49 @@ export default function Checkout() {
                     className="cart__wrapper-content--info"
                     style={{ padding: "10px 0" }}
                   >
-                    <Typography
-                      component="div"
-                      variant="subtitle1"
-                      sx={{ marginBottom: "10px", padding: "0 20px 0 20px" }}
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      Thông tin đơn hàng
-                    </Typography>
+                      <Typography
+                        component="div"
+                        variant="subtitle1"
+                        sx={{ marginBottom: "10px", padding: "0 20px 0 20px" }}
+                      >
+                        Thông tin đơn hàng
+                      </Typography>
+                      <Link
+                        underline="hover"
+                        color="info.main"
+                        href="/cart"
+                        sx={{
+                          marginRight: 1,
+                          fontSize: 14,
+                          fontWeight: 500,
+                          "&:hover": {
+                            color: "rgb(2, 77, 188)",
+                          },
+                        }}
+                      >
+                        Chỉnh sửa
+                      </Link>
+                    </Box>
                     {cart.map((item, index) => (
                       <div className="info-voucher flex px-4">
                         <div className={classes["info-text"]}>
                           <img src={item.image} alt="" />
                         </div>
                         <div className={classes["info-product"]}>
-                          <p className="leading-5">{item.name}</p>
+                          <Link
+                            underline="none"
+                            href={`/productDetail/${item.id}`}
+                            target="_blank"
+                            sx={{
+                              color: "#000",
+                              "&:hover": { color: "rgb(20, 53, 195)" },
+                            }}
+                          >
+                            <p className="leading-5 text-sm">{item.name}</p>
+                          </Link>
                           <p>Số lượng: {item.quantity}</p>
                           <p className="text-red-500">
                             {item.price.toLocaleString()} ₫
@@ -324,7 +353,9 @@ export default function Checkout() {
                               >
                                 {total < miniPrice
                                   ? (total - 0).toLocaleString()
-                                  : (total - discount).toLocaleString()}{" "}
+                                  : (
+                                      totalPrice - discount
+                                    ).toLocaleString()}{" "}
                                 ₫
                               </span>
                             </td>

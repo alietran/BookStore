@@ -22,16 +22,15 @@ export default function PaymentMethod() {
 
   useEffect(() => {
     let payment = paymentList?.data.filter((item) => item.isDefault);
-    
-   if(payment){
-     dispatch({
-       type: "ORDER_PAYMENT",
-       payload: {
-         data: payment[0].name,
-       
-       },
-     });
-   }
+
+    if (payment) {
+      dispatch({
+        type: "ORDER_PAYMENT",
+        payload: {
+          data: payment[0].name,
+        },
+      });
+    }
   }, [paymentList]);
 
   const handlePayment = (item, index) => {
@@ -52,7 +51,6 @@ export default function PaymentMethod() {
         type: "ORDER_PAYMENT",
         payload: {
           data: item.name,
-        
         },
       });
     }, 200);
@@ -71,7 +69,11 @@ export default function PaymentMethod() {
         {paymentList?.data.map((item, index) => {
           return (
             <div
-              className={classes.address__detail}
+              className={
+                item.isDefault
+                  ? `${classes.address__detail} ${classes.address__detail__hover}`
+                  : `${classes.address__detail}`
+              }
               onClick={(e) => handlePayment(item, index)}
             >
               <div className="">

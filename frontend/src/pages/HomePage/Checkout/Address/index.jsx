@@ -85,7 +85,7 @@ export default function Address() {
     console.log("addressItem123", addressItem);
 
     if (addressItem) {
-    localStorage.setItem("address", JSON.stringify(addressItem[0]));
+      localStorage.setItem("address", JSON.stringify(addressItem[0]));
 
       dispatch({
         type: "ORDER_ADDRESS",
@@ -429,7 +429,12 @@ export default function Address() {
         {addressList?.data.map((item, index) => {
           return (
             <div
-              className={classes.address__detail}
+              className={
+                item.isDefault
+                  ? `${classes.address__detail} ${classes.address__detail__hover}`
+                  : `${classes.address__detail}`
+              }
+              // className={classes.address__detail}
               onClick={(e) => handleAddress(item, index)}
             >
               <div className={classes.address__option}>

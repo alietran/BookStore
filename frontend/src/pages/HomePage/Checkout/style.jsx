@@ -99,7 +99,12 @@ const useStyles = makeStyles((theme) => ({
   "info-product": {
     marginLeft: "20px",
     flex: "0 0 70%",
-    lineHeight: 0.8,
+    lineHeight: 1.7,
+    display: "grid",
+    alignContent: "center",
+    "& p": {
+      marginBottom: "0px !important",
+    },
   },
   "payment-tab": {
     width: "100%",
