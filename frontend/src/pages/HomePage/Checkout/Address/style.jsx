@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   address__detail__hover: {
-    border: "1px solid rgb(20, 53, 195) !important",
+    border: "1px solid rgb(0,171, 85) !important",
     "&:hover": {
       background: "transparent !important",
     },
@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
     height: "0px",
     borderStyle: "solid",
     borderWidth: "0px 36px 36px 0px",
-    borderColor: "transparent rgb(20, 53, 195) transparent transparent",
+    borderColor: "transparent rgb(0, 171,85) transparent transparent",
   },
   checked: {
     display: "flex",

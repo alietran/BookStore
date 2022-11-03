@@ -27,7 +27,8 @@ export default function UserAccount() {
   const [gender, setGender] = useState("Nam");
   const dispatch = useDispatch();
   // const { userLogin } = useSelector((state) => state.AuthReducer);
-  const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  // const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  const loginUserSucces = JSON.parse(localStorage.getItem("user"));
   // const
 
   const [srcImage, setSrcImage] = useState(loginUserSucces?.user.avatar);
@@ -50,7 +51,6 @@ export default function UserAccount() {
         var today = new Date();
         return value < today;
       }),
-    
   });
   const formik = useFormik({
     enableReinitialize: true,
@@ -118,7 +118,7 @@ export default function UserAccount() {
           <div className="grid grid-cols-5 gap-4">
             <div className="col-span-2">
               <div className="text-center z-0 py-9 px-8 mt-20">
-                <div className="w-36 h-36 m-auto rounded-full p-2 border-2 border-dashed border-gray-200 flex">
+                <div className="w-36 h-36 m-auto rounded-full p-5 border-2 border-dashed border-gray-200 flex">
                   <label className="w-full h-full outline-none overflow-hidden rounded-full items-center justify-center relative flex cursor-pointer">
                     <input
                       accept="image/*"
@@ -131,11 +131,20 @@ export default function UserAccount() {
                     />
                     <span className="overflow-hidden z-10 w-full h-full block">
                       <span className=" w-full h-full bg-cover inline-block">
-                        <img
-                          src={srcImage}
-                          alt="avatar"
-                          className="w-full h-full object-cover"
-                        />
+                        {!loginUserSucces?.user.email ? (
+                          <img
+                            src="http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
+                            alt="avatar"
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <img
+                            src={srcImage}
+                            alt="avatar"
+                          
+                            className="w-full h-full object-cover-6"
+                          />
+                        )}
                       </span>
                     </span>
                   </label>
@@ -177,7 +186,7 @@ export default function UserAccount() {
                   <TextField
                     fullWidth
                     autoComplete="code"
-                    disabled={loginUserSucces?.user.phoneUID}
+                    disabled={loginUserSucces?.user.phoneNumber}
                     label="Số điện thoại"
                     InputLabelProps={{
                       shrink: true,

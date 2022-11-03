@@ -289,7 +289,7 @@ export default function Search() {
             }}
           >
             <FormLabel id="demo-controlled-radio-buttons-group">
-              Danh mục
+            Thể loại
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-controlled-radio-buttons-group"
@@ -327,11 +327,11 @@ export default function Search() {
                 control={<Radio />}
                 label="Truyện cười"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 value="62f5cbc2ffedca4704adb15d"
                 control={<Radio />}
                 label="Truyện ngôn tình"
-              />
+              /> */}
               <FormControlLabel
                 value="62f5cbcfffedca4704adb160"
                 control={<Radio />}

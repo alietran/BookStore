@@ -455,11 +455,11 @@ export default function ProductDetail(props) {
                                     <p className="mb-2">
                                       {item?.order
                                         ? item?.order?.user?.fullName
-                                        : userLogin?.user.phoneNumber.substring(
+                                        :  item?.order?.user?.phoneNumber.substring(
                                             0,
                                             3
                                           ) +
-                                          userLogin?.user.phoneNumber.substring(
+                                           item?.order?.user?.phoneNumber.substring(
                                             3,
                                             6
                                           ) +

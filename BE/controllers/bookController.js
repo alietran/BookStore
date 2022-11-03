@@ -170,17 +170,21 @@ exports.bestSellerBook = catchAsync(async (req, res, next) => {
   var now = moment();
   var monday = moment().day(-6).toDate();
   var sunday = moment().startOf('week').isoWeekday(8).toDate();
+ let today = new Date();
+  let firstDay = moment().startOf('month');
+  let lastDayOfMonth = moment().endOf('month');
   //   let today = new Date();
   // let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
   // let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  console.log('monday', moment().day(-6).toDate());
-  console.log('sunday', moment().startOf('week').isoWeekday(8).toDate());
+  console.log('firstDay', firstDay);
+  console.log('lastDayOfMonth', lastDayOfMonth);
   const array = await OrderDetail.find({
     createdAt: {
-      $gte: moment().day(-6).toDate(),
-      $lte: moment().startOf('week').isoWeekday(8).toDate(),
+      $gte: moment(firstDay, 'DD-MM-YYYY hh:mm'),
+      $lte: moment(lastDayOfMonth, 'DD-MM-YYYY '),
     },
   });
+  console.log('moment', moment(firstDay, 'DD-MM-YYYY hh:mm'));
 
   let doc = _(array)
     .groupBy((x) => x.book.id)
@@ -189,6 +193,7 @@ exports.bestSellerBook = catchAsync(async (req, res, next) => {
 
   let dat = [];
     console.log('doc',  doc);
+  
 
   doc.map((item, index) => {
     console.log('item',  item);

@@ -49,10 +49,10 @@ import { getBookList } from "../../../redux/action/bookAction";
 
 export default function Header() {
   const { cateList } = useSelector((state) => state.CateReducer);
-  console.log("cateList",  cateList);
-  
+  console.log("cateList", cateList);
+
   const { bookList } = useSelector((state) => state.BookReducer);
-  const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  const loginUserSucces  = JSON.parse(localStorage.getItem("user"))
   console.log("loginUserSucces", loginUserSucces);
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
@@ -424,32 +424,30 @@ export default function Header() {
                             alt="avatar"
                             className="rounded-full"
                           />
-                        ) : (
+                        ) : loginUserSucces?.user?.phoneUID ? (
                           <img
                             src="http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
                             alt="avatar"
                             className="rounded-full"
                           />
+                        ) : (
+                          <NavLink
+                            to="/login"
+                            className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
+                          >
+                            Đăng nhập
+                          </NavLink>
                         )}
                       </div>
                     </Dropdown>
                   </div>
                 ) : (
-                  <Box>
-                    <NavLink
-                      to="/login"
-                      className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
-                    >
-                      Đăng nhập
-                    </NavLink>
-                    {/* <NavLink
-                      to="#"
-                      className="ml-8 whitespace-nowrap inline-flex items-center justify-center duration-700  px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:text-white bg-red-500 hover:bg-red-600"
-                      onClick={logout}
-                    >
-                      Đăng ký
-                    </NavLink> */}
-                  </Box>
+                  <NavLink
+                    to="/login"
+                    className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
+                  >
+                    Đăng nhập
+                  </NavLink>
                 )}
               </div>
             </div>
