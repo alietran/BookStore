@@ -41,6 +41,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useSnackbar } from "notistack";
 import {
+  getOrderList,
   resetCreateOrder,
   resetOrder,
   updateOrder,
@@ -60,7 +61,7 @@ const breadcrumbs = [
   <Link
     underline="hover"
     key="2"
-    href="/admin/receipts/list"
+    href="/admin/orders"
     color="text.primary"
     sx={{ "&:hover": { color: "#212B36" } }}
   >
@@ -73,12 +74,21 @@ const breadcrumbs = [
 
 export default function OrderDetail() {
   let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
-  let { successUpdateOrder } = useSelector((state) => state.OrderReducer);
+  let { successUpdateOrder, orderList } = useSelector(
+    (state) => state.OrderReducer
+  );
   let { shipperList } = useSelector((state) => state.ShipperReducer);
 
   const { enqueueSnackbar } = useSnackbar();
   
-
+  useEffect(() => {
+    // get list user lần đầu
+    if (!orderList) {
+      dispatch(getOrderList());
+    }
+    // setLoading(false);
+    return () => dispatch(resetOrder());
+  }, [ successUpdateOrder]);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -314,6 +324,7 @@ console.log("orderDetailList3534", orderDetailList);
                   </Select>
                 </FormControl>
                 <Button
+                disabled={shipper ? false : true}
                   variant="contained"
                   sx={{ width: " 34%" }}
                   onClick={() => hanldeSubmit(shipper)}

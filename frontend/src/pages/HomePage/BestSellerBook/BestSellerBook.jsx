@@ -104,16 +104,51 @@ export default function BestSellerBook() {
   }
 
   var settings = {
-    // dots: true,
+    // // dots: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    arrow: true,
+
+    // arrow: true,
+    // // dots: true,
+    // infinite: true,
+    // speed: 500,
+    // slidesToShow: 2,
+    // slidesToScroll: 2,
+    autoplay: true,
     // dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 2,
     slidesToScroll: 2,
-    autoplay: true,
+    initialSlide: 0,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+          nextArrow: <NextArrow />,
+          prevArrow: <PrevArrow />,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
   return (
     <Container className={` ${classes.bestSell}`} maxWidth="lg">
@@ -123,7 +158,7 @@ export default function BestSellerBook() {
         component="h2"
         sx={{ color: "#57b159", marginTop: "15px" }}
       >
-        Sách bán chạy trong tuần
+        Sách bán chạy trong tháng
       </Typography>
 
       <Box className=" bg-white rounded-md ">
@@ -149,11 +184,13 @@ export default function BestSellerBook() {
                     {" "}
                     <div className="  w-full ">
                       <img
-                        style={{
-                          height: "210px",
-                          maxWidth: "195px",
-                        }}
+                        // style={{
+                        //   height: "210px",
+                        //   maxWidth: "195px",
+                        // }}
                         src={product?.book?.image}
+                        className="h-48 w-44 py-3 lg:h-52 lg:w-48"
+                        alt=""
                       />
                     </div>
                   </NavLink>

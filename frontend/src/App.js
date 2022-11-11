@@ -86,6 +86,11 @@ const Overview = lazy(() => import("./pages/Admin/Overview/Overview"));
 const RatingManager = lazy(() => import("./pages/Admin/Rating/RatingManager"));
 
 function App() {
+ 
+  // useEffect(() => {
+  
+  // }, [userLogin]);
+  
   const themeOptions = useMemo(
     () => ({
       palette,

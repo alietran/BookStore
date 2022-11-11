@@ -79,7 +79,8 @@ export default function OrderToolbar({
               label="    "
             >
               <MenuItem value={`infoUser`}>Thông tin khách hàng</MenuItem>
-              <MenuItem value={`orderId`}>Mã đơn hàng</MenuItem>
+           
+              <MenuItem value={`createdDate`}>Ngày đặt</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -109,7 +110,7 @@ export default function OrderToolbar({
               value={filterName}
               onChange={onFilterName}
               label="    "
-              placeholder={"Nhập mã đơn hàng"}
+              placeholder={"Nhập ngày đặt"}
               startAdornment={
                 <InputAdornment position="start">
                   <Box

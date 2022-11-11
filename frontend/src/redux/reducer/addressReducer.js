@@ -18,6 +18,10 @@ const stateDefault = {
   loadingUpdateAddress: false,
   successUpdateAddress: null,
   errorUpdateAddress: null,
+
+  loadingDeleteAddress: false,
+  successDeleteAddress: null,
+  errorDeleteAddress: null,
 };
 
 export const AddressReducer = (state = stateDefault, action) => {
@@ -111,6 +115,23 @@ export const AddressReducer = (state = stateDefault, action) => {
         ...state,
         errorUpdateAddress: action.payload.error,
         loadingUpdateAddress: false,
+      };
+    }
+    case "DELETE_ADDRESS_REQUEST": {
+      return { ...state, loadingDeleteAddress: true, errorDeleteAddress: null };
+    }
+    case "DELETE_ADDRESS_SUCCESS": {
+      return {
+        ...state,
+        successDeleteAddress: action.payload.data,
+        loadingDeleteAddress: false,
+      };
+    }
+    case "DELETE_ADDRESS_FAIL": {
+      return {
+        ...state,
+        errorDeleteAddress: action.payload.error,
+        loadingDeleteAddress: false,
       };
     }
 

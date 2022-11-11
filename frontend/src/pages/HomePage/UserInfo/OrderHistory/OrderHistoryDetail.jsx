@@ -70,7 +70,7 @@ export default function OrderHistoryDetail() {
   console.log("ratingItem", ratingItem);
   return (
     <div>
-      <Container>
+      <Container sx={{ paddingTop: "70px" }}>
         <div className={classes["productDetail__wrapper-breadcrumbs"]}>
           <div className={classes.breadcrumbsIcon}>
             <Link className={classes.breadcrumbsIconLink} href="/">
@@ -163,9 +163,9 @@ export default function OrderHistoryDetail() {
                           </p>
                           <p className=" text-sm mt-4">
                             Ngày nhận:{" "}
-                            {moment(
-                              orderByUser[0]?.receiveDay
-                            ).format("h:mm a DD/MM/YYYY")}
+                            {moment(orderByUser[0]?.receiveDay).format(
+                              "h:mm a DD/MM/YYYY"
+                            )}
                           </p>
                         </div>
                       ) : (
@@ -417,48 +417,66 @@ export default function OrderHistoryDetail() {
               </DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  <div className="flex mb-3">
-                    <div className="mr-3 ">
-                      <img
-                        src={userLogin?.user?.avatar}
-                        alt="avatar"
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    </div>
-                    <div className="leading-6">
-                      <p className="mb-2">{userLogin?.user?.fullName}</p>
-                      <Rating
-                        readOnly
-                        value={ratingItem[0]?.rating}
-                        size={"medium"}
-                      />
-                      <p className="text-slate-300">
-                        {moment(ratingItem[0]?.createdAt).format(
-                          "DD/MM/YYYY, h:mm a"
-                        )}
-                      </p>
-                      <p> {ratingItem[0]?.content}</p>
-                      {ratingItem[0]?.imageRating[0] === "" ? (
-                        ""
-                      ) : (
-                        <div className="mt-3 flex ">
-                          {ratingItem[0]?.imageRating?.map((img, index) => {
-                            return (
-                              <img
-                                src={img}
-                                alt=""
-                                style={{
-                                  width: "80px",
-                                  height: "80px",
-                                  marginRight: "10px",
-                                }}
-                              />
-                            );
-                          })}
+                  {ratingItem?.map((rating, index) => {
+                    return (
+                      <div>
+                        <div className="flex mb-3 mt-2">
+                          <img
+                            src={rating.book.image}
+                            alt=""
+                            width={50}
+                            height={20}
+                          />
+                          <p>{rating.book.name}</p>
                         </div>
-                      )}
-                    </div>
-                  </div>
+                        <hr/>
+                        <div className="flex mb-3 mt-2">
+                          <div className="mr-3 ">
+                            <img
+                              src={userLogin?.user?.avatar}
+                              alt="avatar"
+                              style={{ width: "50px", height: "50px" }}
+                            />
+                          </div>
+                          <div className="leading-6">
+                            <p className="mb-2">{userLogin?.user?.fullName}</p>
+                            <Rating
+                              readOnly
+                              value={rating.rating}
+                              size={"medium"}
+                            />
+                            <p className="text-slate-300">
+                              {moment(rating?.createdAt).format(
+                                "DD/MM/YYYY, h:mm a"
+                              )}
+                            </p>
+                            <p> {rating?.content}</p>
+                            {rating?.imageRating[0] === "" ? (
+                              ""
+                            ) : (
+                              <div className="mt-3 flex ">
+                                {rating?.imageRating?.map((img, index) => {
+                                  return (
+                                    <img
+                                    className="mb-3"
+                                      src={img}
+                                      alt=""
+                                      style={{
+                                        width: "80px",
+                                        height: "80px",
+                                        marginRight: "10px",
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  
+                  })}
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

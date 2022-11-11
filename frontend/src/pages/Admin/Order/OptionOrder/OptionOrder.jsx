@@ -11,9 +11,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Option from "../../../../components/OptionDetail&Delete/Option";
+import { updateOrder } from "../../../../redux/action/orderAction";
 
-export default function OptionOrder({ id, order, shipper,hidden }) {
+export default function OptionOrder({ id, order, shipper, hidden }) {
   // const { receiptId, bookId } = receipt;
+
   const [open, setOpen] = useState(false);
   const [openConfirm, setOpenConfirm] = useState(false);
   const dispatch = useDispatch();
@@ -31,6 +33,11 @@ export default function OptionOrder({ id, order, shipper,hidden }) {
 
   const onClickDetail = (order) => {
     setOpen(true);
+    dispatch(
+      updateOrder(id, {
+        isSeen: true,
+      })
+    );
     history.push(`/admin/orders/detail/${id}`);
   };
 

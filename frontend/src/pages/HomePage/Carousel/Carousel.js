@@ -21,7 +21,7 @@ export default function Carousel() {
     slidesToScroll: 1,
   };
   return (
-    <div className="content relative overflow-hidden ">
+    <div className="content relative overflow-hidden pt-16">
       {/* <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -61,15 +61,15 @@ export default function Carousel() {
             <div className="content__image">
               <img src="./img/carousel.webp" />
             </div>
-            <div className="absolute top-44 left-48 w-4/12">
+            <div className="absolute top-6 left-12 w-4/12  lg:top-44 lg:left-48 lg:w-4/12">
               <h3
-                className="text-6xl font-bold leading-6 content__word"
+                className=" text-xs lg:text-6xl font-bold leading-3 lg:leading-6 content__word"
                 style={{ color: "#57b159" }}
               >
                 Tri thức là
               </h3>
               <h3
-                className="text-5xl font-bold"
+                className="text-sx lg:text-5xl font-bold"
                 style={{
                   color: "black",
                 }}
@@ -81,10 +81,11 @@ export default function Carousel() {
                   content: "",
                   borderBottom: "5px solid #57b159",
                   width: "40%",
-                  marginBottom: "24px",
+                  // marginBottom: "24px",
                 }}
+                className=" mb-2 lg:mb-6"
               ></div>
-              <p className="text-lg">
+              <p className="truncate text-xs lg:text-lg lg:whitespace-normal">
                 Tất cả những gì con người làm, nghĩ hoặc trở thành được bảo tồn
                 một cách kỳ diệu trên những trang sách
               </p>
@@ -97,15 +98,15 @@ export default function Carousel() {
             <div className="content__image">
               <img src="./img/slider1-2.jpg.webp" />
             </div>
-            <div className="absolute top-44 left-48  w-4/12">
+            <div className="absolute top-6 left-12 w-4/12  lg:top-44 lg:left-48 lg:w-4/12">
               <h3
-                className="text-6xl font-bold leading-6 content__word"
+                className=" text-xs lg:text-6xl font-bold leading-3 lg:leading-6 content__word"
                 style={{ color: "#57b159" }}
               >
                 Tri thức là
               </h3>
               <h3
-                className="text-5xl font-bold"
+                className="text-sx lg:text-5xl font-bold"
                 style={{
                   color: "black",
                 }}
@@ -117,10 +118,11 @@ export default function Carousel() {
                   content: "",
                   borderBottom: "5px solid #57b159",
                   width: "40%",
-                  marginBottom: "24px",
+                  // marginBottom: "24px",
                 }}
+                className=" mb-2 lg:mb-6"
               ></div>
-              <p className="text-lg">
+              <p className="truncate text-xs lg:text-lg lg:whitespace-normal">
                 Tất cả những gì con người làm, nghĩ hoặc trở thành được bảo tồn
                 một cách kỳ diệu trên những trang sách
               </p>
@@ -133,15 +135,15 @@ export default function Carousel() {
             <div className="content__image">
               <img src="./img/slider1-3.jpg.webp" />
             </div>
-            <div className="absolute top-44 left-48  w-4/12">
+            <div className="absolute top-6 left-12 w-4/12  lg:top-44 lg:left-48 lg:w-4/12">
               <h3
-                className="text-6xl font-bold leading-6 content__word"
+                className=" text-xs lg:text-6xl font-bold leading-3 lg:leading-6 content__word"
                 style={{ color: "#57b159" }}
               >
                 Tri thức là
               </h3>
               <h3
-                className="text-5xl font-bold"
+                className="text-sx lg:text-5xl font-bold"
                 style={{
                   color: "black",
                 }}
@@ -153,10 +155,11 @@ export default function Carousel() {
                   content: "",
                   borderBottom: "5px solid #57b159",
                   width: "40%",
-                  marginBottom: "24px",
+                  // marginBottom: "24px",
                 }}
+                className=" mb-2 lg:mb-6"
               ></div>
-              <p className="text-lg">
+              <p className="truncate text-xs lg:text-lg lg:whitespace-normal">
                 Tất cả những gì con người làm, nghĩ hoặc trở thành được bảo tồn
                 một cách kỳ diệu trên những trang sách
               </p>

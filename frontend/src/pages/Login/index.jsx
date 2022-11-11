@@ -149,7 +149,7 @@ export default function Login() {
       <div className="text-center p-20 rounded-lg max-w-4xl bg-white my-4 mx-auto">
         <div className="w-3/5 my-0 mx-auto">
           <div>
-            <h5 className="text-xl">Chào mừng bạn đến với BookSotre</h5>
+            <h5 className="text-xl">Chào mừng bạn đến với Sam BookStore</h5>
             <Button
               fullWidth
               size="large"

@@ -94,8 +94,10 @@ export default function Product() {
           <Box>
             <Tabs
               value={value}
-              onChange={handleChange}
-              aria-label="basic tabs example"
+              onChange={handleChange}             
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
             >
               {cateList1.map((item, index) => {
                 return <Tab label={item.name} {...a11yProps({ index })} />;
@@ -109,7 +111,7 @@ export default function Product() {
             return (
               <TabPanel value={value} index={index}>
                 {/* <p> {index}</p> */}
-                <Box className=" grid grid-cols-5 gap-y-10  sm:grid-cols-2 lg:grid-cols-5">
+                <Box className=" bg-white  grid md:grid-cols-4 gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-5">
                   {bookList?.data
                     .filter((item) => item?.idCate.name === itemCate.name)
                     .map((sachKT, index) => {

@@ -116,7 +116,7 @@ export default function ConfirmOrder() {
     color: theme.palette.text.secondary,
   }));
   return (
-    <Container>
+    <Container style={{ padding: "80px 0" }}>
       <Box
         sx={{
           width: "80%",
@@ -271,7 +271,6 @@ export default function ConfirmOrder() {
                 >
                   Xác nhận
                 </Button>
-                
               </Grid>
             </Grid>
           </Item>

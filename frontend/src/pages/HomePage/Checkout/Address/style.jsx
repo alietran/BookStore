@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid rgb(224, 224, 224)",
 
     backgroundColor: "rgb(255, 255, 255)",
-    padding: " 0.5rem 1.25rem",
+    padding: " 0.5rem 0.75rem",
     position: "relative",
     overflow: "hidden",
     cursor: "pointer",

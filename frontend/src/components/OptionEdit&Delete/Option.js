@@ -3,9 +3,10 @@ import React from "react";
 import Zoom from "@mui/material/Zoom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PropTypes from "prop-types";
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 export default function Option(props) {
-  const { onClickDelete, onClickEdit } = props;
+  const { onClickDelete, onClickEdit, activeIconDelete } = props;
+
   return (
     <Box className="flex">
       <Tooltip TransitionComponent={Zoom} title="Chỉnh sửa" arrow>
@@ -27,25 +28,27 @@ export default function Option(props) {
           />
         </IconButton>
       </Tooltip>
-      <Tooltip TransitionComponent={Zoom} title="Xoá" arrow>
-        <IconButton
-          onClick={onClickDelete}
-          sx={{
-            "&:hover": {
-              backgroundColor: "rgba(255, 72, 66, 0.08)",
-              padding: "8px",
-              borderRadius: "50%",
-            },
-          }}
-        >
-          <DeleteForeverIcon
-            className="text-red-500"
+      {!activeIconDelete && (
+        <Tooltip TransitionComponent={Zoom} title="Xoá" arrow>
+          <IconButton
+            onClick={onClickDelete}
             sx={{
-              fontSize: 32,
+              "&:hover": {
+                backgroundColor: "rgba(255, 72, 66, 0.08)",
+                padding: "8px",
+                borderRadius: "50%",
+              },
             }}
-          />
-        </IconButton>
-      </Tooltip>
+          >
+            <DeleteForeverIcon
+              className="text-red-500"
+              sx={{
+                fontSize: 32,
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+      )}
     </Box>
   );
 }
@@ -53,4 +56,5 @@ export default function Option(props) {
 Option.propTypes = {
   onClickDelete: PropTypes.func.isRequired,
   onClickEdit: PropTypes.func.isRequired,
+  activeIconDelete: PropTypes.bool,
 };

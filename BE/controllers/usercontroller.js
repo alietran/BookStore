@@ -26,7 +26,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
       if (!userOTP) {
         newUser = new User({
           active: true,
-          avatar: '',
+          avatar: 'http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100',
           dateOfBirth: '',
           email: '',
           fullName: '',

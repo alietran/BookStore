@@ -38,6 +38,15 @@ export default function Checkout() {
 
   console.log("payment", payment);
   console.log("addressItem", addressItem);
+
+  // const a =   { name: {ho:"Le", ten:"DAt"} },
+    
+  // const {ho,ten} = a.name 
+
+  
+  // console.log(("ten", a));
+
+
   const [linkMoMo, setLinkMoMo] = useState("");
   const checkoutLinkRef = useRef();
   const { enqueueSnackbar } = useSnackbar();

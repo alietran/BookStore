@@ -108,8 +108,8 @@ function applySortFilter(array, comparator, query, selectTag) {
         item.address.fullName.indexOf(query) !== -1 ||
         item.address.phoneNumber.indexOf(query) !== -1
     );
-  } else if (query && selectTag === "orderId") {
-    return filter(array, (item) => item.id.indexOf(query) !== -1);
+  } else if (query && selectTag === "createdDate") {
+    return filter(array, (item) => item.createdAt.indexOf(query) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -145,8 +145,9 @@ export default function OrderManager() {
       dispatch(getOrderList());
     }
     // setLoading(false);
-    return () => dispatch(resetOrder());
-  }, []);
+    // return () => dispatch(resetOrder());
+  }, [orderList]);
+  
   useEffect(() => {
     // get list user lần đầu
     if (successUpdateOrder === null) {

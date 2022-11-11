@@ -4,6 +4,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -20,11 +22,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
-
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { LoadingButton } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createAddress,
+  deleteAddress,
   getAddressList,
   getDetailAddress,
   getListProvinces,
@@ -44,6 +47,7 @@ export default function Address() {
   console.log("addressList", addressList);
   console.log("successDetailAddress", successDetailAddress);
   const classes = useStyles();
+  const [openConfirm, setOpenConfirm] = useState(false);
   const dispatch = useDispatch();
   const [openEdit, setOpenEdit] = useState(false);
   const [listCity, setListCity] = useState("");
@@ -53,8 +57,13 @@ export default function Address() {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   let [addressIsChoose, setAddressIsChoose] = React.useState("");
+  const [addressId, setAddressId] = useState();
   const handleChangeFullName = (e) => {
     setFullName(e.target.value);
+  };
+  const handleClickConfirm = (id) => {
+    setOpenConfirm(true);
+    setAddressId(id);
   };
   const handleChangePhoneNumber = (e) => {
     setPhoneNumber(e.target.value);
@@ -68,7 +77,11 @@ export default function Address() {
   // const [city, setCity] = useState("");
   // const [district, setDistrict] = useState("");
   // const [ward, setWard] = useState("");
-
+  const handleCloseConfirm = () => {
+    // setOpenConfirm(false);
+    dispatch(deleteAddress(addressId));
+  };
+console.log("addressId",addressId);
   useEffect(() => {
     if (successCreateAddress || successUpdateAddress) {
       dispatch(getAddressList());
@@ -230,7 +243,9 @@ export default function Address() {
     };
     getListProvinces();
   };
-
+  const handleCancel = () => {
+    setOpenConfirm(false);
+  };
   const handleSelectDistrict = (e) => {
     setData((data) => ({
       ...data,
@@ -401,6 +416,7 @@ export default function Address() {
     // console.log("author", author);
     dispatch(getDetailAddress(id));
   };
+
   return (
     <div>
       <Typography
@@ -453,12 +469,11 @@ export default function Address() {
                   />
                 </div>
 
-                <div>
-                  <i
-                    className="fa-solid fa-trash-can"
-                    style={{ color: "#3498DB", padding: " 0 10px" }}
-                  ></i>
-                </div>
+                {/* <div>
+                  <DeleteOutlineIcon
+                    onClick={() => handleClickConfirm(item._id)}
+                  />
+                </div> */}
               </div>
               <p className="m-0">{item.phoneNumber}</p>
               <p style={{ color: "#999999", margin: 0 }}>
@@ -730,6 +745,25 @@ export default function Address() {
               </DialogActions>
             </Form>
           </Formik>
+        </Dialog>
+        <Dialog
+          open={openConfirm}
+          // onClose={handleCloseCnfirm}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Xóa người dùng"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Bạn chắc chắn muốn xóa địa chỉ này.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel}>Hủy</Button>
+            <Button onClick={handleCloseConfirm} autoFocus>
+              Đồng ý
+            </Button>
+          </DialogActions>
         </Dialog>
       </div>
     </div>

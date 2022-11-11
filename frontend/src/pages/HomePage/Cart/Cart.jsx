@@ -207,7 +207,7 @@ export default function Cart() {
             <div className={classes["cart__wrapper-content"]}>
               <div className={classes["cart__wrapper-content--main"]}>
                 <div className={classes["cart__wrapper-content--left"]}>
-                  <table style={{width:"100%"}}>
+                  <table style={{ width: "100%" }}>
                     <tr
                       style={{
                         display: "grid ",
@@ -231,7 +231,9 @@ export default function Cart() {
                       <th>Tổng tiền</th>
                     </tr>
                     {cart.length === 0 ? (
-                      <div style={{display:"flex",justifyContent:"center"}}>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
                         <img src="./img/cart1.png" height={200} widtd={200} />
                       </div>
                     ) : (
@@ -260,11 +262,12 @@ export default function Cart() {
                             <td>
                               {" "}
                               <NavLink
-                                className={classes["box__content-name-product"]}
+                                className={`${classes["box__content-name-product"]} `}
                                 to={`/productDetail/${item.id}`}
                               >
                                 {item.name}
                               </NavLink>
+                              <p>Kho: {item?.warehouse}</p>
                             </td>
                             <td>
                               <p style={{ fontWeight: "600" }}>

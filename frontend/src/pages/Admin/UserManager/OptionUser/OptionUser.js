@@ -111,11 +111,12 @@ export default function OptionUser({ id, User }) {
   return (
     <Box>
       <Option
+        activeIconDelete={true}
         // () => {
         //         // onClick = { handleClickOpen };
         //         onClickDelete(id);
         //       }
-        onClickDelete={handleClickConfirm}
+        // onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
       ></Option>
       <Dialog

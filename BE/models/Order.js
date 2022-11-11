@@ -70,6 +70,10 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Shipper',
     },
+    isSeen:{
+       type: Boolean,
+       default: false,
+    },
     // createdAt: {
     //   type: Date,
     //   default: Date.now(),

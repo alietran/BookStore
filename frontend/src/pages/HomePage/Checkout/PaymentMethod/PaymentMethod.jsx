@@ -2,6 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Label from "../../../../components/Label";
 import {
   getPaymentList,
   updatePayment,
@@ -27,7 +28,7 @@ export default function PaymentMethod() {
       dispatch({
         type: "ORDER_PAYMENT",
         payload: {
-          data: payment[0].name,
+          data: payment[0]?.name,
         },
       });
     }
@@ -65,7 +66,7 @@ export default function PaymentMethod() {
       >
         Phương thức thanh toán
       </Typography>
-      <div className={classes.address} style={{ padding: " 0 24px 10px 24px" }}>
+      <div className={classes.address} style={{ padding: " 0 20px 10px 20px" }}>
         {paymentList?.data.map((item, index) => {
           return (
             <div
@@ -76,9 +77,17 @@ export default function PaymentMethod() {
               }
               onClick={(e) => handlePayment(item, index)}
             >
-              <div className="">
+              <div className="flex mt-5">
+                <img src={item.image} alt="" width={40} height={42} className="mr-1"/>
                 <h1 className={`${classes.address__detailName} block`}>
-                  {item.name}
+                  {item.name}{" "}
+                  {item.name === "Thanh toán bằng ví MoMo" ? (
+                    <Label variant="ghost" color="primary" className="ml-3">
+                      Khuyên dùng
+                    </Label>
+                  ) : (
+                    ""
+                  )}
                 </h1>
 
                 {/* <span className="block">

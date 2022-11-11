@@ -43,11 +43,12 @@ export default function ProductItem({ product }) {
     if (product.quantity === 0 || errorAddCart) {
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
+        autoHideDuration: 1000,
       });
     } else {
       enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
         variant: "success",
-        autoHideDuration: 1000,
+        autoHideDuration: 1200,
         action,
       });
       dispatch({
@@ -60,7 +61,7 @@ export default function ProductItem({ product }) {
   };
   return (
     <div
-      className={`group bg-white text-center relative  duration-500 px-3 py-4 mt-6 mx-4 mb-5 ${classes.productItem}`}
+      className={`group bg-white text-center px-1 py-2 mt-2 mx-2 mb-2 w-36 duration-500 lg:px-3 lg:py-4 lg:mt-6 lg:mx-4 lg:mb-5 ${classes.productItem} lg:w-48`}
       style={{
         boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
         borderRadius: "15px",
@@ -77,7 +78,7 @@ export default function ProductItem({ product }) {
             }}
             src={product?.image}
             alt="Front of men&#039;s Basic Tee in black."
-            className=" object-contain w-full h-full top-0 left-0    lg:w-full lg:h-full"
+            className=" object-contain w-32 h-32 top-0 left-0    lg:w-full lg:h-full"
           />
         </div>
         <div className="mt-4 flex  justify-center truncate">
@@ -93,8 +94,8 @@ export default function ProductItem({ product }) {
       </NavLink>
 
       <Button
-        sx={{ width: "150px", cursor: "pointer" }}
-        className="ml-2 mt-3"
+        sx={{ cursor: "pointer" }}
+        className="w-32 ml-2 mt-3 lg:w-36"
         variant="contained"
         onClick={() => {
           handleAddToCart(product);

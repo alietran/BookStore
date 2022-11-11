@@ -62,7 +62,7 @@ export default function UserInfo() {
   }, [successUpdateUserCurrent]);
   return (
     <div>
-      <Container maxWidth="lg" sx={{ margin: "20px auto" }}>
+      <Container maxWidth="lg" sx={{ margin: "0px auto" }}>
         <Box
           sx={{
             borderBottom: 1,

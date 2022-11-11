@@ -18,10 +18,10 @@ const userAPI = {
     return axiosClient.patch(path, formData);
   },
 
-  updateUser: (id, data) => {
-    const path = `/v1/users/${id}`;
-    return axiosClient.put(path, data);
-  },
+  // updateUser: (id, data) => {
+  //   const path = `/v1/users/${id}`;
+  //   return axiosClient.put(path, data);
+  // },
 };
 
 export default userAPI;

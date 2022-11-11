@@ -10,10 +10,17 @@ import BestSellerBook from "./BestSellerBook/BestSellerBook";
 
 export default function HomePage() {
   const { bookList } = useSelector((state) => state.BookReducer);
+  const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBookList());
   }, []);
+  // useEffect(() => {
+  //   if(user !== ""){
+  //       window.location.reload();
+  //   }
+  // // 
+  // }, [user]);
   console.log("booklist", bookList);
   return (
     <div>

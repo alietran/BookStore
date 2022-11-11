@@ -60,9 +60,10 @@ export default function UserAccount() {
       avatar: loginUserSucces?.user.avatar,
       phoneNumber: loginUserSucces?.user.phoneNumber,
       gender: loginUserSucces?.user.gender,
-      dateOfBirth: loginUserSucces?.user.dateOfBirth
-        ? loginUserSucces.user.dateOfBirth
-        : "",
+      dateOfBirth:
+        moment(valueDate).format("YYYY-MM-DD") !== "Invalid date"
+          ? moment(valueDate).format("YYYY-MM-DD")
+          : moment(loginUserSucces?.user?.dateOfBirth).format("YYYY-MM-DD"),
     },
     validationSchema: Createchema,
     onSubmit: (data) => {
@@ -141,7 +142,6 @@ export default function UserAccount() {
                           <img
                             src={srcImage}
                             alt="avatar"
-                          
                             className="w-full h-full object-cover-6"
                           />
                         )}
@@ -239,6 +239,13 @@ export default function UserAccount() {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={
+                    valueDate
+                      ? valueDate
+                      : moment(loginUserSucces?.user?.dateOfBirth).format(
+                          "DD-MM-YYYY"
+                        )
+                  }
                   className="mt-0"
                   {...getFieldProps("dateOfBirth")}
                   error={Boolean(touched.dateOfBirth && errors.dateOfBirth)}

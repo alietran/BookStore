@@ -81,7 +81,8 @@ export default function Search() {
   const [valueCate, setValueCate] = React.useState("all");
   const [bookPrice, setBookPrice] = useState();
   // let bookPrice = "";
-  console.log("valueCate", valueCate);
+  console.log("bookPrice", bookPrice);
+  console.log("name", name);
   const handleChange = (event) => {
     setValueCate(event.target.value);
   };
@@ -90,17 +91,18 @@ export default function Search() {
   }, [bookList]);
 
   useEffect(() => {
-    if (bookSearch?.result > 0) setBookPrice(bookSearch?.data);
+    if (bookSearch?.result !== 0) setBookPrice(bookSearch?.data);
+    else  setBookPrice(bookSearch?.data);
   }, [bookSearch]);
 
   useEffect(() => {
-    if (valueCate === "all" && bookList !== null && bookSearch?.result === 0) {
-      setBookPrice(bookList?.data);
-      setValue1([50, 300]);
-      // setValueMin(formatter.format(50));
-      // setValueMax(formatter.format(300));
-      console.log("first");
-    }
+    // if (valueCate === "all" && bookList !== null && bookSearch?.result === 0) {
+    //   setBookPrice(bookList?.data);
+    //   setValue1([50, 300]);
+    //   // setValueMin(formatter.format(50));
+    //   // setValueMax(formatter.format(300));
+    //   console.log("first");
+    // }
     if (valueCate !== "all" && valueCate ) {
       const bookSearchItem = bookList?.data.filter(
         (item) => item.idCate.id === valueCate
@@ -289,7 +291,7 @@ export default function Search() {
             }}
           >
             <FormLabel id="demo-controlled-radio-buttons-group">
-            Thể loại
+              Thể loại
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-controlled-radio-buttons-group"
@@ -372,14 +374,14 @@ export default function Search() {
             </Box>
           ) : */}
           {bookPrice?.length !== 0 ? (
-            <Box className=" grid grid-cols-4">
+            <Box className="  grid md:grid-cols-4 gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
               {" "}
               {bookPrice?.map((product, index) => (
                 <ProductItem product={product} />
               ))}
             </Box>
           ) : (
-            <Box className="flex flex-col w-full">
+            <Box className="flex flex-col w-full mt-8">
               <div className="my-6 flex  justify-center ">
                 <img
                   src="../../../../img/no-products-found.png"

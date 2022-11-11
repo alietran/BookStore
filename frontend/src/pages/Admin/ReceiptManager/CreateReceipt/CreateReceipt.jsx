@@ -140,7 +140,7 @@ export default function CreateReceipt() {
                 onClick={handleBack}
                 sx={{ mr: 1 }}
               >
-                Back
+                Quay lại
               </Button>
               <Box sx={{ flex: "1 1 auto" }} />
               {activeStep !== steps.length - 1 ? (

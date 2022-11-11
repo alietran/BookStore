@@ -33,6 +33,9 @@ export default function Paypal({ order }) {
 
   useEffect(() => {
     if (successPayPal) {
+      order.paymentMethod.message = "Giao dịch thành công";
+      order.paymentMethod.resultCode = 0;
+      console.log("order",order)
       dispatch(createOrder(order));
 
       setTimeout(

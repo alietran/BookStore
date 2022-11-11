@@ -21,6 +21,10 @@ const addressAPI = {
     const path = `/v1/address/${id}`;
     return axiosClient.patch(path, data);
   },
+  deleteAddress: (id) => {
+    const path = `/v1/address/${id}`;
+    return axiosClient.delete(path);
+  },
 };
 
 export default addressAPI;

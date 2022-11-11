@@ -1,15 +1,15 @@
-import { Container } from '@mui/material';
-import React, { useEffect } from 'react'
+import { Container } from "@mui/material";
+import React, { useEffect } from "react";
 import useStyles from "./style";
 export default function Footer() {
-     const style = useStyles();
-     
+  const style = useStyles();
+
   return (
     <div>
       <footer className={`${style.footer}`}>
         <Container maxWidth="xl">
           {" "}
-          <div className="container flex flex-col justify-end py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
+          <div className="container flex flex-col  justify-end py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
             <div className="lg:w-1/3">
               <a
                 rel="noopener noreferrer"
@@ -18,7 +18,7 @@ export default function Footer() {
               >
                 <span className="self-center text-2xl font-semibold top-0">
                   <img
-                    className="h-52 w-auto sm:h-10"
+                    className="lg:h-10 w-auto hidden lg:block"
                     src="../img/logo_white.png"
                     alt=""
                   />

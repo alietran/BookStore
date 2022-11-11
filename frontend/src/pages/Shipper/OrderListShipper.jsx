@@ -251,7 +251,7 @@ export default function OrderListShipper() {
                 My Shipments
               </Typography>
               <Box sx={{ marginRight: "20px" }}>
-                <Search>
+                {/* <Search>
                   <SearchIconWrapper>
                     <SearchIcon />
                   </SearchIconWrapper>
@@ -260,7 +260,7 @@ export default function OrderListShipper() {
                     placeholder="Search…"
                     inputProps={{ "aria-label": "search" }}
                   />
-                </Search>
+                </Search> */}
               </Box>
             </Box>
             <Box
@@ -326,21 +326,24 @@ export default function OrderListShipper() {
                             <Label
                               variant="ghost"
                               color={
-                                orderDetailShip?.status === "Đang xử lý"
-                                  ? "default"
-                                  : orderDetailShip?.status ===
+                                // orderDetailShip?.status === "Đang xử lý"
+                                //   ? "default"
+                                  // :
+                                   orderDetailShip?.status ===
+
                                     "Đang vận chuyển"
                                   ? "info"
-                                  : orderDetailShip?.status === "Đã giao hàng"
-                                  ? "success"
-                                  : orderDetailShip?.status === "Đã nhận"
-                                  ? "success"
-                                  : orderDetailShip?.status === "Đã đánh giá"
-                                  ? "warning"
-                                  : "error"
+                                  : "success"
+                                  // orderDetailShip?.status === "Đã giao hàng"
+                                  // ? 
+                                  // : orderDetailShip?.status === "Đã nhận"
+                                  // ? "success"
+                                  // : orderDetailShip?.status === "Đã đánh giá"
+                                  // ? "warning"
+                                  // : "error"
                               }
                             >
-                              {orderDetailShip?.status}
+                              {orderDetailShip?.status=== "Đang vận chuyển" ? "Đang vận chuyển" : "Đã giao hàng"}
                             </Label>
                           </div>
                         </Box>

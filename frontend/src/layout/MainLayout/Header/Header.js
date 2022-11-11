@@ -52,7 +52,8 @@ export default function Header() {
   console.log("cateList", cateList);
 
   const { bookList } = useSelector((state) => state.BookReducer);
-  const loginUserSucces  = JSON.parse(localStorage.getItem("user"))
+  const { loginUserSucces } = useSelector((state) => state.UserReducer);
+  // const loginUserSucces = JSON.parse(localStorage.getItem("user"));
   console.log("loginUserSucces", loginUserSucces);
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
@@ -78,6 +79,57 @@ export default function Header() {
   // useEffect(() => {
 
   // }, [userLogin]);
+
+  // let userLogin = JSON.parse(localStorage.getItem("user"));
+  let shipperLogin = JSON.parse(localStorage.getItem("shipper"));
+  // console.log(
+  //   "userLogin?.user?.idRole?.roleName",
+  //   userLogin?.user?.idRole?.roleName
+  // );
+  if (
+    loginUserSucces?.user?.idRole?.roleName !== "Admin" &&
+    loginUserSucces?.user?.idRole?.roleName !== "NV Kho" &&
+    shipperLogin?.user?.role !== "Shipper"
+  ) {
+    // window.location.reload()
+    // console.log("3435345")
+    // Tạo ra token cho user đã login, mỗi user login thì chỉ tồn tại 1 token
+    //  console.log("userLogin34664")
+    const crisp_token_id_user = `token_${loginUserSucces?.user._id}`;
+    console.log("crisp_token_id_user", crisp_token_id_user);
+    // Tạo ra token cho khách vãng lai. Mỗi khách vãng sẽ tồn tại ngẫu nhiên 1 tiken
+    const crisp_token_id_guest = `token_${Math.floor(
+      100000000000 + Math.random() * 900000000000
+    )}`;
+    // $crisp = [];
+    // Mỗi người dùng đăng nhập muốn lưu lại tin nhắn đã chat với admin thì phải có 1 token để lưu lại trạng thái đó. Khi đăng xuất , đăng nhập lại sẽ vãn lưu lại tin nhắn cũ
+    // Nếu khách vãng lai thì không cần lưu lại tin nhắn đó
+    if (loginUserSucces?.user) {
+      // console.log("c34235");
+      window.CRISP_TOKEN_ID = crisp_token_id_user;
+      window.CRISP_WEBSITE_ID = "04ca693d-e6a6-47ed-9472-7bc4076f418e";
+      // (function () {
+      let d = document;
+      let s = d.createElement("script");
+      s.src = "//client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    } else {
+      window.CRISP_TOKEN_ID = crisp_token_id_guest;
+      setTimeout(() => {
+         window.CRISP_WEBSITE_ID = "04ca693d-e6a6-47ed-9472-7bc4076f418e";
+         // (function () {
+         let d = document;
+         let s = d.createElement("script");
+         s.src = "//client.crisp.chat/l.js";
+         s.async = 1;
+         d.getElementsByTagName("head")[0].appendChild(s);
+      }, 1000);
+    }
+    
+  } else {
+    // console.log("userLogin1223", userLogin);
+  }
 
   const hanldeChangePage = () => {
     setFilteredData([]);
@@ -277,16 +329,16 @@ export default function Header() {
       >
         <Popover className=" bg-white  ">
           <div className=" mx-auto text-sm">
-            <div className="flex justify-between py-2 items-center px-4 md:justify-start md:space-x-10">
+            <div className="flex justify-between px-0 lg:justify-between py-2 items-center lg:px-8 md:justify-start md:space-x-10">
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <NavLink to="/">
                   <img
-                    className="h-full w-auto sm:h-10"
+                    className="h-7 w-auto sm:h-8 lg:h-10"
                     src="../img/logo_white.png"
                     alt=""
                   />
                 </NavLink>
-                <Box>
+                <Box className="hidden  lg:block">
                   <Dropdown
                     overlay={menu}
                     trigger={["click"]}
@@ -312,7 +364,7 @@ export default function Header() {
                 </Box>
               </div>
               {/* gửi tên action vào tìm  kiếm ?search phải có form button có submit */}
-              <form autocomplete="off">
+              <form autocomplete="off" className="w-40 lg:w-fit">
                 <Box
                   sx={{
                     position: "relative",
@@ -327,13 +379,14 @@ export default function Header() {
                     <TextField
                       fullWidth
                       // autoComplete="false"
+
                       value={wordEntered}
                       onChange={handleChangeFilter}
                       size="small"
                       name="search" //quan trong
                       type="text"
                       label="Tìm kiếm..."
-                      className="header__navigationBar-text"
+                      className="header__navigationBar-text text-xs lg:text-base"
                       sx={{
                         backgroundColor: "#f8f8f8",
                         outline: "none",
@@ -357,9 +410,10 @@ export default function Header() {
                       <SearchOutlined
                         sx={{
                           display: "inline-block",
-                          width: "26px",
-                          height: "26px",
+                          // width: "26px",
+                          // height: "26px",
                         }}
+                        className="w-2 h-2 lg:w-6 lg:h-6"
                       />
                     </Button>
                   </Box>
@@ -390,7 +444,7 @@ export default function Header() {
                 </Box>
               </form>
 
-              <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+              <div className=" flex md:flex items-center justify-end md:flex-1 lg:w-0">
                 <NavLink
                   to="/cart"
                   className="whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600 "
@@ -403,30 +457,25 @@ export default function Header() {
                     <ShoppingCartOutlinedIcon />
                   </Badge>
                 </NavLink>
-                {loginUserSucces || userLogin ? (
+                {/*    {loginUserSucces  || userLogin ? ( */}
+                {loginUserSucces ? (
                   <div>
                     <Dropdown overlay={menuDashboard} trigger={["click"]}>
                       <div
                         style={{
-                          width: 40,
-                          height: 40,
+                          width: 38,
+                          height: 38,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
                         }}
-                        className="text-2xl ml-5 rounded-full bg-red-200 ant-dropdown-link
+                        className="text-2xl ml-5 rounded-full bg-red-200 mr-4 ant-dropdown-link
                 onClick={(e) => e.preventDefault()}"
                       >
                         {/* {loginUserSucces.userName.substr(0, 1)} */}
-                        {loginUserSucces?.user?.googleId ? (
+                        {loginUserSucces ? (
                           <img
                             src={loginUserSucces?.user.avatar}
-                            alt="avatar"
-                            className="rounded-full"
-                          />
-                        ) : loginUserSucces?.user?.phoneUID ? (
-                          <img
-                            src="http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
                             alt="avatar"
                             className="rounded-full"
                           />

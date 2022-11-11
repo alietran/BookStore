@@ -12,7 +12,10 @@ import DiscountIcon from "@mui/icons-material/Discount";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import GroupsIcon from "@mui/icons-material/Groups";
 import BookIcon from "@mui/icons-material/Book";
-import { Layout, Menu, Breadcrumb, Dropdown } from "antd";
+import { Layout, Menu, Breadcrumb, Dropdown, Badge, Popover } from "antd";
+import { NotificationOutlined } from "@ant-design/icons";
+import moment from "moment";
+
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -29,15 +32,22 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SnackbarProviderCustom from "../../components/Snackbar";
 import HailIcon from "@mui/icons-material/Hail";
+import {
+  getOrderList,
+  resetOrder,
+  updateOrder,
+} from "../../redux/action/orderAction";
 const { Header, Content, Footer, Sider } = Layout;
 
 const { SubMenu } = Menu;
-
 const AdminTemplate = (props) => {
   //path, exact, Component
   const history = useHistory();
   const { userLogin } = useSelector((state) => state.AuthReducer);
   // const { Component, ...restProps } = props;
+  const { orderList } = useSelector((state) => state.OrderReducer);
+  const [countNewOrder, setCountNewOrder] = useState(0);
+  const [newOrder, setNewOrder] = useState();
   console.log("prop.chil", props.children);
   console.log("userLogin", userLogin);
   // const { userLogin } = useSelector((state) => state.UserReducer);
@@ -48,11 +58,38 @@ const AdminTemplate = (props) => {
     // console.log(collapsed);
     setCollapsed(collapsed);
   };
+  useEffect(() => {
+    // get list user lần đầu
+    if (!orderList) {
+      dispatch(getOrderList());
+    }
+    // setLoading(false);
+    return () => dispatch(resetOrder());
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   });
 
+  useEffect(() => {
+    const newOrderItem = orderList?.data?.filter(
+      (item) => item.isSeen === false
+    );
+    console.log("newOrderItem", newOrderItem);
+    setNewOrder(newOrderItem);
+    setCountNewOrder(newOrderItem?.length);
+  }, [orderList]);
+  const handleChangeSeen = (id) => {
+    dispatch(
+      updateOrder(id, {
+        isSeen: true,
+      })
+    );
+  };
+  // console.log("countNewOrder", countNewOrder);
+  // const countNewOrder = orderList?.data?.filter(
+  //   (item) => item.isSeen === false
+  // ).length;
   // if (!localStorage.getItem("user")) {
   //   alert("Bạn không có quyền truy cập vào trang này !");
   //   return <Redirect to="/" />;
@@ -90,12 +127,42 @@ const AdminTemplate = (props) => {
       </Menu.Item>
     </Menu>
   );
+  const content = newOrder?.map((item, index) => {
+    return (
+      <div className="flex w-40">
+        <p>
+          <img src={item?.user?.avatar} alt="" height={80} width={80} />
+        </p>
+        <NavLink
+          to={`/admin/orders/detail/${item.id}`}
+          className="ml-3 text-black "
+          onClick={() => handleChangeSeen(item.id)}
+        >
+          {item?.user.phoneNumber
+            ? item?.user.phoneNumber
+            : item?.user.fullName}{" "}
+          đã đặt đơn hàng mới lúc{" "}
+          {moment(item.createdAt).format("YYYY-MM-DD hh:mm")}
+        </NavLink>
+        <hr />
 
+        {/* <p>Content</p> */}
+      </div>
+    );
+  });
   const operations = (
     <Fragment>
       {/* {!_.isEmpty(userLogin) ? ( */}
       <Fragment>
         <div className="flex justify-end">
+          <div className="mr-4">
+            <Popover content={content}>
+              <Badge count={countNewOrder}>
+                <NotificationOutlined style={{ fontSize: 16 }} />
+              </Badge>
+            </Popover>
+          </div>
+
           <span className="font-bold">{userLogin?.user.idRole.roleName}</span>
           <Dropdown overlay={menu} trigger={["click"]}>
             <div

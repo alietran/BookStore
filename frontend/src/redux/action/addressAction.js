@@ -130,3 +130,29 @@ export const updateAddress = (id, data) => {
     }
   };
 };
+
+
+export const deleteAddress = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "DELETE_ADDRESS_REQUEST",
+      });
+      const result = await addressAPI.deleteBook(id);
+      console.log("result", result);
+      dispatch({
+        type: "DELETE_ADDRESS_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_ADDRESS_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
