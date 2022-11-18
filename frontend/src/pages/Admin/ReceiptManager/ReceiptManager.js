@@ -131,6 +131,7 @@ export default function ReceiptManager() {
     receiptList,
     successUpdateReceipt,
     loadingReceiptList,
+    successDeleteReceipt,
   } = useSelector((state) => state.ReceiptReducer);
 
   const history = useHistory();
@@ -144,10 +145,10 @@ export default function ReceiptManager() {
   }, [receiptList]);
 
   useEffect(() => {
-    if (successCreateReceipt || successUpdateReceipt) {
+    if (successCreateReceipt || successUpdateReceipt || successDeleteReceipt) {
       dispatch(getAllReceipt());
     }
-  }, [successCreateReceipt, successUpdateReceipt]);
+  }, [successCreateReceipt, successUpdateReceipt, successDeleteReceipt]);
 
   useEffect(() => {
     if (successCreateReceipt) {
@@ -159,7 +160,12 @@ export default function ReceiptManager() {
       enqueueSnackbar("Nhập kho thành công!", { variant: "success" });
       return;
     }
-  }, [successCreateReceipt, successUpdateReceipt]);
+    if (successDeleteReceipt) {
+      setAlertSuccessUpdateReceipt(false);
+      enqueueSnackbar("Xóa phiếu nhập kho thành công!", { variant: "success" });
+      return;
+    }
+  }, [successCreateReceipt, successUpdateReceipt, successDeleteReceipt]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

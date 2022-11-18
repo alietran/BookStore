@@ -40,6 +40,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useSnackbar } from "notistack";
+
 import {
   getOrderList,
   resetCreateOrder,
@@ -73,13 +74,14 @@ const breadcrumbs = [
 ];
 
 export default function OrderDetail() {
+    const { enqueueSnackbar } = useSnackbar();
   let { orderDetailList } = useSelector((state) => state.OrderDetailReducer);
   let { successUpdateOrder, orderList } = useSelector(
     (state) => state.OrderReducer
   );
+  console.log("successUpdateOrder", successUpdateOrder);
   let { shipperList } = useSelector((state) => state.ShipperReducer);
 
-  const { enqueueSnackbar } = useSnackbar();
   
   useEffect(() => {
     // get list user lần đầu
@@ -89,6 +91,8 @@ export default function OrderDetail() {
     // setLoading(false);
     return () => dispatch(resetOrder());
   }, [ successUpdateOrder]);
+
+  
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -159,12 +163,14 @@ console.log("orderDetailList3534", orderDetailList);
   // }, [successUpdateOrder]);
 
   const handleCancel = async () => {
+    // console.log(first)
     if (
       orderDetailList[0]?.order?.paymentMethod?.name ===
       "Thanh toán bằng ví MoMo"
     ) {
-      
-
+     
+       
+    console.log("orderDetailList[0].order.promotion",orderDetailList[0].order.promotion);
       const { data } = await paymentAPI.refundMoMoPayment({
         // _id: idShowtime,
         amount: orderDetailList[0].order.totalPrice,
@@ -172,11 +178,15 @@ console.log("orderDetailList3534", orderDetailList);
       });
       console.log("123data", data);
       if (data?.resultCode == 0) {
+        //  dispatch(updateOrder(id, { shipper, status: "Đang vận chuyển" }));
         dispatch(
           updateOrder(params.orderId, {
-            status: "Đang xử lý",
+            status: "Đã hủy",
           })
         );
+         enqueueSnackbar("Cập nhật trạng thái đơn hàng thành công!", {
+           variant: "success",
+         });
         setOpen(false);
       } else {
         console.log("Error:", data?.messages);
@@ -187,6 +197,9 @@ console.log("orderDetailList3534", orderDetailList);
           status: "Đã hủy",
         })
       );
+       enqueueSnackbar("Cập nhật trạng thái đơn hàng thành công!", {
+         variant: "success",
+       });
       setOpen(false);
     }
 
@@ -204,6 +217,7 @@ console.log("orderDetailList3534", orderDetailList);
     const id = params.orderId;
 
     dispatch(updateOrder(id, { shipper, status: "Đang vận chuyển" }));
+    enqueueSnackbar("Cập nhật trạng thái đơn hàng thành công!", { variant: "success" });
   };
 
   console.log("orderDetailList", orderDetailList);
@@ -326,7 +340,7 @@ console.log("orderDetailList3534", orderDetailList);
                 <Button
                 disabled={shipper ? false : true}
                   variant="contained"
-                  sx={{ width: " 34%" }}
+                  sx={{ width: " 40%" }}
                   onClick={() => hanldeSubmit(shipper)}
                 >
                   Giao hàng

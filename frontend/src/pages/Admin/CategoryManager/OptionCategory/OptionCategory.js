@@ -27,10 +27,11 @@ import { LoadingButton } from "@mui/lab";
 import ModalDialog from "../../../../components/ModalDialog/DialogTitle";
 import { useStyles } from "../CreateCategory/style";
 import Option from "../../../../components/OptionEdit&Delete/Option";
+import { useSnackbar } from "notistack";
 
 export default function OptionCategory({ id, theCategory }) {
   console.log("theCategory", theCategory);
- 
+  const { enqueueSnackbar } = useSnackbar();
   const {
     loadingDetailCate,
     successDetailCate,
@@ -114,6 +115,7 @@ export default function OptionCategory({ id, theCategory }) {
 
     const onClickDelete = (id) => {
       dispatch(deleteCate(theCategory._id));
+       enqueueSnackbar("Xóa thể loại thành công!", { variant: "success" });
       console.log("idDelete", theCategory._id);
     };
   return (

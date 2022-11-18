@@ -110,10 +110,10 @@ export default function OptionUser({ id, shipper }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Xóa người dùng"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Xóa shipper"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Bạn chắc chắn muốn xóa người dùng này.
+            Bạn chắc chắn muốn xóa shipper này.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

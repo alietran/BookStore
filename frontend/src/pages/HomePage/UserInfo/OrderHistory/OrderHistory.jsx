@@ -188,6 +188,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
             style={{
               backgroundColor: "white",
               marginTop: "20px",
+              marginBottom:"10px",
               padding: "20px",
               boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
               borderRadius: "15px",
@@ -206,7 +207,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
             <hr />
             {order?.orderDetail?.map((detail, index) => {
               return (
-                <div>
+                <div >
                   {" "}
                   <NavLink
                     to={`/productDetail/${detail.book.id}`}

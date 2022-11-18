@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Option from "../../../../components/OptionDetail&Delete/Option";
+import { deleteReceipt } from "../../../../redux/action/receiptAction";
 
 export default function OptionReceipt({ id, receipt, inventoryStatus }) {
   // const { receiptId, bookId } = receipt;
@@ -27,7 +28,10 @@ export default function OptionReceipt({ id, receipt, inventoryStatus }) {
     onClickDelete(id);
   };
 
-  const onClickDelete = (id) => {};
+  const onClickDelete = (id) => {
+    console.log('id',id);
+    dispatch(deleteReceipt(id));
+  };
 
   const onClickDetail = (receipt) => {
     setOpen(true);

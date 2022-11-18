@@ -36,8 +36,10 @@ import {
   updateAuthor,
   updateAUTHOR,
 } from "../../../../redux/action/authorAction";
+import { useSnackbar } from "notistack";
 
 export default function OptionAuthor({ id, author }) {
+  const { enqueueSnackbar } = useSnackbar();
   console.log("shipper", author);
   const [role, setRole] = useState("Admin");
   const classes = useStyles();
@@ -64,6 +66,9 @@ export default function OptionAuthor({ id, author }) {
 
   const onClickDelete = (id) => {
     dispatch(deleteAuthor(author._id));
+     enqueueSnackbar("Xóa tác giả thành công!", {
+       variant: "success",
+     });
     console.log("idDelete", author._id);
   };
 
@@ -127,10 +132,10 @@ export default function OptionAuthor({ id, author }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Xóa người dùng"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Xóa tác giả"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Bạn chắc chắn muốn xóa người dùng này.
+            Bạn chắc chắn muốn xóa tác giả này.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -177,14 +177,14 @@ export default function ShipperManager() {
 
   useEffect(() => {
     if (successCreateShipper) {
-      enqueueSnackbar("Thêm thể loại thành công!", { variant: "success" });
+      enqueueSnackbar("Thêm shipper thành công!", { variant: "success" });
       return;
     }
   }, [successCreateShipper]);
 
   useEffect(() => {
     if (successUpdateShipper) {
-      enqueueSnackbar("Chỉnh sửa Thể loại thành công!", { variant: "success" });
+      enqueueSnackbar("Chỉnh sửa shipper thành công!", { variant: "success" });
       return;
     }
   }, [successUpdateShipper]);

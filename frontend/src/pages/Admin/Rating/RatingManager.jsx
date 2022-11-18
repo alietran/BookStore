@@ -74,7 +74,9 @@ const TABLE_HEAD = [
   { id: "date", label: "Nôi dung", alignRight: false },
 
   { id: "total", label: "Số sao", alignRight: false },
+  { id: "image", label: "Hình ảnh", alignRight: false },
   { id: "rating", label: "Ngày đánh giá", alignRight: false },
+
   { id: "status", label: "Trạng thái", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
@@ -194,6 +196,7 @@ export default function RatingManager() {
         active: true,
       })
     );
+     enqueueSnackbar("Duyệt đánh giá thành công!", { variant: "success" });
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -351,6 +354,9 @@ export default function RatingManager() {
                             <TableCell align="left">{content}</TableCell>
                             <TableCell align="left">
                               <Rating readOnly value={rating} />
+                            </TableCell>
+                            <TableCell align="left">
+                              <img src={imageRating} alt=""  width={100} height={100} />
                             </TableCell>
                             <TableCell align="left">
                               {" "}

@@ -43,7 +43,7 @@ export default function SnackbarProviderCustom({ children, ...other }) {
           >
             <img
               className="w-6 h-6"
-              src="../../img/icon-success.svg"
+              src="https://res.cloudinary.com/bookstoremern/image/upload/v1668695159/nzvvibpob3xajisqmcyz.svg"
               alt="icon-success"
             />
           </span>

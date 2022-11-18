@@ -328,22 +328,24 @@ export default function OrderListShipper() {
                               color={
                                 // orderDetailShip?.status === "Đang xử lý"
                                 //   ? "default"
-                                  // :
-                                   orderDetailShip?.status ===
-
-                                    "Đang vận chuyển"
+                                // :
+                                orderDetailShip?.status === "Đang vận chuyển"
                                   ? "info"
                                   : "success"
-                                  // orderDetailShip?.status === "Đã giao hàng"
-                                  // ? 
-                                  // : orderDetailShip?.status === "Đã nhận"
-                                  // ? "success"
-                                  // : orderDetailShip?.status === "Đã đánh giá"
-                                  // ? "warning"
-                                  // : "error"
+                                // orderDetailShip?.status === "Đã giao hàng"
+                                // ?
+                                // : orderDetailShip?.status === "Đã nhận"
+                                // ? "success"
+                                // : orderDetailShip?.status === "Đã đánh giá"
+                                // ? "warning"
+                                // : "error"
                               }
                             >
-                              {orderDetailShip?.status=== "Đang vận chuyển" ? "Đang vận chuyển" : "Đã giao hàng"}
+                              <span style={{ fontSize: "0.68rem" }}>
+                                {orderDetailShip?.status === "Đang vận chuyển"
+                                  ? "Đang vận chuyển"
+                                  : "Đã giao hàng"}
+                              </span>
                             </Label>
                           </div>
                         </Box>

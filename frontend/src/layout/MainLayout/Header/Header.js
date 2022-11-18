@@ -321,7 +321,7 @@ export default function Header() {
   );
   console.log("cateList", cateList);
   return (
-    <div className="bg-white">
+    <div className="bg-white ">
       <Container
         maxWidth="xl "
         className="fixed z-20 w-full p-2"
@@ -329,7 +329,10 @@ export default function Header() {
       >
         <Popover className=" bg-white  ">
           <div className=" mx-auto text-sm">
-            <div className="flex justify-between px-0 lg:justify-between py-2 items-center lg:px-8 md:justify-start md:space-x-10">
+            <div
+              className="flex justify-between px-0 lg:justify-between py-2 items-center lg:px-8 md:justify-start md:space-x-10"
+              style={{ boxShadow: "#8080800d 0px 4px 7px 1px" }}
+            >
               <div className="flex justify-start lg:w-0 lg:flex-1">
                 <NavLink to="/">
                   <img

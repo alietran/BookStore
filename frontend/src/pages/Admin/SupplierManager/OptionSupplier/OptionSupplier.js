@@ -30,11 +30,12 @@ import { useStyles } from "../CreateSupplier/style";
 
 import { deleteSupplier, updateSupplier } from "../../../../redux/action/supplierAction";
 import Option from "../../../../components/OptionEdit&Delete/Option";
+import { useSnackbar } from "notistack";
 
 
 export default function OptionSupplier({ id, supplier }) {
   console.log("supplier", supplier);
-
+ const { enqueueSnackbar } = useSnackbar();
   const {
     loadingDetailCate,
     successDetailCate,
@@ -116,6 +117,7 @@ export default function OptionSupplier({ id, supplier }) {
 
   const onClickDelete = (id) => {
     dispatch(deleteSupplier(supplier._id));
+      enqueueSnackbar("Xóa NCC thành công!", { variant: "success" });
     console.log("idDelete", supplier._id);
   };
   return (

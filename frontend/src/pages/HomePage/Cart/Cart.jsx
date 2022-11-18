@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Voucher from "./Voucher/Voucher";
 import { useSnackbar } from "notistack";
 import CustomDialog from "../../../components/CustomDialog/CustomDialog";
+import Label from "../../../components/Label";
 export default function Cart() {
   const classes = useStyles();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -259,7 +260,7 @@ export default function Cart() {
                                 alt=""
                               />
                             </td>
-                            <td>
+                            <td className="flex flex-col items-center">
                               {" "}
                               <NavLink
                                 className={`${classes["box__content-name-product"]} `}
@@ -267,7 +268,12 @@ export default function Cart() {
                               >
                                 {item.name}
                               </NavLink>
-                              <p>Kho: {item?.warehouse}</p>
+                              <Label
+                                color="primary"
+                                className="w-16 text-center "
+                              >
+                                Kho: {item?.warehouse}
+                              </Label>
                             </td>
                             <td>
                               <p style={{ fontWeight: "600" }}>

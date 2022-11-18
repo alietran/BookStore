@@ -6,7 +6,10 @@ export default function Footer() {
 
   return (
     <div>
-      <footer className={`${style.footer}`}>
+      <footer
+        className={`${style.footer}`}
+        style={{ boxShadow: "rgb(128 128 128 / 5%) 0px -7px 7px 1px" }}
+      >
         <Container maxWidth="xl">
           {" "}
           <div className="container flex flex-col  justify-end py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
@@ -65,7 +68,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <a rel="noopener noreferrer" href="#">
-                      Email hỗ trợ: hoidap@starmovie.vn
+                      Email hỗ trợ: hoidap@sambookstore.vn
                     </a>
                   </li>
                 </ul>

@@ -23,6 +23,7 @@ router
 router
   .route('/:id')
   .get(receiptController.getDetailReceipt)
-  .patch(receiptController.updateReceipt);
+  .patch(receiptController.updateReceipt)
+  .delete(receiptController.deleteReceipt)
 
 module.exports = router;

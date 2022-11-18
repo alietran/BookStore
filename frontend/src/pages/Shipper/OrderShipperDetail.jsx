@@ -20,7 +20,6 @@ export default function OrderShipperDetail() {
     (item) => item.id === idOrder.orderId
   );
 
-  console.log("orderDetail[0]", orderDetail[0]);
   const handleChangeStatus = (idOrder) => {
     console.log("idOrder12", idOrder);
     dispatch(
@@ -179,10 +178,26 @@ export default function OrderShipperDetail() {
               ₫
             </p>
           </div>
+          {orderDetail[0].status === "Đã giao hàng" ||
+          orderDetail[0].status === "Đã nhận" ||
+          orderDetail[0].status === "Đã đánh giá" ? (
+            ""
+          ) : (
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ fontSize: "13px", padding: "6px 12px" }}
+              onClick={() => {
+                handleChangeStatus(idOrder.orderId);
+              }}
+            >
+              Trả đơn
+            </Button>
+          )}
           {orderDetail[0].status === "Đang vận chuyển" ? (
             <Button
               variant="contained"
-              sx={{ margin: "20px" }}
+              sx={{ margin: "20px", fontSize: "13px", padding: "6px 12px" }}
               onClick={() => {
                 handleChangeStatus(idOrder.orderId);
               }}
@@ -193,7 +208,7 @@ export default function OrderShipperDetail() {
             <Button
               disabled
               variant="contained"
-              sx={{ margin: "20px" }}
+              sx={{ margin: "20px", fontSize: "13px", padding: "6px 12px" }}
               onClick={() => {
                 handleChangeStatus(idOrder.orderId);
               }}

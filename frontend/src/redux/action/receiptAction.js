@@ -9,7 +9,7 @@ export const getAllReceipt = () => {
     receiptAPI
       .getAllReceipt()
       .then((result) => {
-        console.log("result1234", result);
+        console.log("result123455", result);
         dispatch({
           type: "GET_ALL_RECEIPT_SUCCESS",
           payload: {
@@ -80,6 +80,30 @@ export const updateReceipt = (id, data) => {
   };
 };
 
+export const deleteReceipt = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch({
+        type: "DELETE_RECEIPT_REQUEST",
+      });
+      const result = await receiptAPI.deleteReceipt(id);
+      console.log("resul23535ewtert", result);
+      dispatch({
+        type: "DELETE_RECEIPT_SUCCESS",
+        payload: {
+          data: result.data,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_RECEIPT_FAIL",
+        payload: {
+          error: error.response?.data.message,
+        },
+      });
+    }
+  };
+};
 
 export const getReceiptRSForWeek = () => {
   return (dispatch) => {

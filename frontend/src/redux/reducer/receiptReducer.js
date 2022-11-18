@@ -15,6 +15,10 @@ const stateDefault = {
   successUpdateReceipt: null,
   errorUpdateReceipt: null,
 
+  loadingDeleteReceipt: false,
+  successDeleteReceipt: null,
+  errorDeleteReceipt: null,
+
   receiptRSForWeek: null,
   loadingReceiptRSForWeek: false,
   errorReceiptRSForWeek: null,
@@ -102,6 +106,23 @@ export const ReceiptReducer = (state = stateDefault, action) => {
         loadingUpdateReceipt: false,
       };
     }
+    case "DELETE_RECEIPT_REQUEST": {
+      return { ...state, loadingDeleteReceipt: true, errorDeleteReceipt: null };
+    }
+    case "DELETE_RECEIPT_SUCCESS": {
+      return {
+        ...state,
+        successDeleteReceipt: action.payload.data,
+        loadingDeleteReceipt: false,
+      };
+    }
+    case "DELETE_RECEIPT_FAIL": {
+      return {
+        ...state,
+        errorDeleteReceipt: action.payload.error,
+        loadingDeleteReceipt: false,
+      };
+    }
     case "GET_RECEIPT_RS_FOR_WEEK_REQUEST": {
       return {
         ...state,
@@ -177,6 +198,10 @@ export const ReceiptReducer = (state = stateDefault, action) => {
         loadingUpdateReceipt: false,
         successUpdateReceipt: "",
         errorUpdateReceipt: null,
+
+        loadingDeleteReceipt: false,
+        successDeleteReceipt: "",
+        errorDeleteReceipt: null,
       };
     }
     default:

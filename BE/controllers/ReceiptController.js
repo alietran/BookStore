@@ -17,6 +17,7 @@ const filterObj = (obj, ...allowedField) => {
 
 exports.getAllReceipt = factory.getAll(Receipt, { path: 'receiptdetail' });
 exports.getDetailReceipt = factory.getOne(Receipt);
+exports.deleteReceipt = factory.deleteOne(Receipt);
 
 exports.createReceipt = catchAsync(async (req, res, next) => {
   let totalPriceReceipt = 0;
