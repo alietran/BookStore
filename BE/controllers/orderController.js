@@ -56,22 +56,22 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
       }
     });
 
-        const {
-          user: { fullName, phoneUID, phoneNumber },
-          totalPrice,
-          address,
-        } = doc;
-        await transporter.sendMail({
-          from: `"Đơn hàng #${_id} đã huỷ hàng thành công" <alietran0211@gmail.com>`, // sender address
-          to: `${address.email}`, // list of receivers
-          subject: 'EMAIL XÁC NHẬN HUỶ ĐẶT HÀNG', // Subject line
-          // text: "Hello world?", // plain text body
-          html: `
+    const {
+      user: { fullName, phoneUID, phoneNumber },
+      totalPrice,
+      address,
+    } = doc;
+    await transporter.sendMail({
+      from: `"Đơn hàng #${_id} đã huỷ hàng thành công" <alietran0211@gmail.com>`, // sender address
+      to: `${address.email}`, // list of receivers
+      subject: 'EMAIL XÁC NHẬN HUỶ ĐẶT HÀNG', // Subject line
+      // text: "Hello world?", // plain text body
+      html: `
        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="margin:0 auto;width:600px!important;min-width:600px!important"><tbody><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px;border-bottom:1px solid #ff3333" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td align="left" valign="middle" style="width:500px;height:60px"><a style="border:0" href="https://www.sendo.vn/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.sendo.vn/&amp;source=gmail&amp;ust=1667581755494000&amp;usg=AOvVaw3tvZya6OYQv46dAenVrr2U"><img style="display:block;border:0px;width:130px;height:35px" src="https://res.cloudinary.com/bookstoremern/image/upload/v1665027528/zypbndetwpvlawbbegz3.png" class="CToWUd" data-bit="iit"> </a></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:24px;color:rgb(255,51,51);text-transform:uppercase;font-weight:bold;padding:25px 10px 15px;text-align:center">Thông báo hủy đơn hàng</td></tr><tr><td align="left" valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;padding:0 10px 20px 10px;line-height:17px"><p>Chào bạn <strong>${
          phoneUID ? phoneNumber : ''
        }</strong><strong>${fullName}</strong>,&nbsp;</p><p>Rất tiếc, đơn hàng <b>#</b> <a style="color:#ed2324;font-weight:bold;text-decoration:none" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">${_id}</a>&nbsp;của bạn đã&nbsp;<strong>bị hủy</strong>&nbsp;vì:&nbsp;<strong>Thay đổi chi tiết đơn hàng</strong>.&nbsp;</p><span class="im"><p>Nếu bạn đã thanh toán, vui lòng chờ nhà cung cấp xử lý.</p><p><a href="http://localhost:3000" target="_blank" data-saferedirecturl="http://localhost:3000">Bookstore</a> rất xin lỗi vì trải nghiệm không mong muốn này. Mong được phục vụ bạn trong lần mua sắm tiếp theo.&nbsp;</p></span></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px;border:1px solid #ff3333;border-top:3px solid #ff3333" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#666666;padding:10px 10px 20px 15px;line-height:17px"><b>Đơn hàng của bạn #</b> <a style="color:#ed2324;font-weight:bold;text-decoration:none" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">${_id}</a></td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tổng thanh toán</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">${totalPrice.toLocaleString(
-            'vi-VI'
-          )}đ</td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tình trạng</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">Đã hủy</td></tr><tr><td colspan="3" align="center" valign="top" style="padding-top:20px;padding-bottom:20px;border-bottom:1px solid #ebebeb"><a style="border:0px" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}"><img height="29" width="191" alt="Chi tiết đơn hàng" style="border:0px" src="https://ci6.googleusercontent.com/proxy/nFW6md3bBSTjJfQBWlQveee6eY3SGMsVjLDBR3oILDY_cYT1QP6SgXgt6Y0iAsOCjAqyv7-8kmmkyLAiQ7mplPTU=s0-d-e1-ft#http://media3.scdn.vn/img2/2017/4_19/ZxRyKS.jpg" class="CToWUd" data-bit="iit"> </a></td></tr><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:17px;padding:20px 0 20px 15px">Thông tin sản phẩm</td></tr><tr><td colspan="3" align="center" valign="top"><table id="m_-3634225509215781968ListProductHtml" style="width:100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+        'vi-VI'
+      )}đ</td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tình trạng</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">Đã hủy</td></tr><tr><td colspan="3" align="center" valign="top" style="padding-top:20px;padding-bottom:20px;border-bottom:1px solid #ebebeb"><a style="border:0px" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}"><img height="29" width="191" alt="Chi tiết đơn hàng" style="border:0px" src="https://ci6.googleusercontent.com/proxy/nFW6md3bBSTjJfQBWlQveee6eY3SGMsVjLDBR3oILDY_cYT1QP6SgXgt6Y0iAsOCjAqyv7-8kmmkyLAiQ7mplPTU=s0-d-e1-ft#http://media3.scdn.vn/img2/2017/4_19/ZxRyKS.jpg" class="CToWUd" data-bit="iit"> </a></td></tr><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:17px;padding:20px 0 20px 15px">Thông tin sản phẩm</td></tr><tr><td colspan="3" align="center" valign="top"><table id="m_-3634225509215781968ListProductHtml" style="width:100%" cellpadding="0" cellspacing="0" border="0"><tbody>
         ${orderDetailList.map(
           (item, index) => `
         <tr key=${index}>
@@ -93,7 +93,7 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
         )}
         </tbody></table></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff;padding-top:20px"><table style="width:500px" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td align="center" valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">Nếu bạn có bất cứ câu hỏi nào, đừng ngần ngại liên lạc với chúng tôi tại&nbsp;<a href="mailto:ngocdiep710@gmail.com" style="font-size:14px;text-decoration:none;color:#1666a2" target="_blank">ngocdiep710@gmail.com</a>&nbsp;của Bookstore.</td></tr></tbody></table></td></tr></tbody></table>
              `,
-        });
+    });
 
     res.status(200).json({
       status: 'success',
@@ -110,12 +110,12 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
     }
-
+    const { address, createdAt } = doc;
     console.log('Doc', doc);
     await transporter.sendMail({
       from: `"Đơn hàng #${_id} đã giao hàng thành công" <alietran0211@gmail.com>`, // sender address
-      to: 'ngocdiep710@gmail.com', // list of receivers
-      subject: 'EMAIL XÁC NHẬN ĐẶT HÀNG THÀNH CÔNG', // Subject line
+      to: `${address.email}`, // list of receivers
+      subject: 'EMAIL XÁC NHẬN GIAO HÀNG THÀNH CÔNG', // Subject line
       // text: "Hello world?", // plain text body
       html: `
           <div>
@@ -175,7 +175,7 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
                             
                             <tr>
                                 <td>
-                                    <table width="560" align="center" cellpadding="0" cellspacing="0" border="0">
+                                    <table width="600" align="center" cellpadding="0" cellspacing="0" border="0">
                                         <tbody>
                                         
 
@@ -195,8 +195,8 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
     <td style="font-family:Helvetica,arial,sans-serif;font-size:13px;color:#000000;text-align:left;line-height:18px">
 
         Đơn hàng <a href="http://localhost:3000/orderDetail/${_id}" style="text-decoration:none;color:#ff5722" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">#${_id}</a> của bạn đã được giao thành
-        công ngày. <br><br>
-        Vui lòng đăng nhập BookStore để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong
+        công ngày <b>${moment(createdAt).format('DD-MM-YYYY hh:mm a')}</b>. <br><br>
+        Vui lòng đăng nhập <b><a href="http://localhost:3000" style="text-decoration:none;" target="_blank" data-saferedirecturl="http://localhost:3000">BookStore</a></b> để xác nhận bạn đã nhận hàng và hài lòng với sản phẩm trong
         vòng 3 ngày.
         <br>
     </td>
