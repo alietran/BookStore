@@ -37,70 +37,59 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
 
     if (!doc) {
       return next(new AppError('No document found with that ID', 404));
-    }
+    } else {
+      let orderDetail = await OrderDetail.find();
+      console.log('req.params.id', req.params.id);
+      orderDetailList = orderDetail.filter(
+        (item) => item.order.id === req.params.id
+      );
 
-    let orderDetail = await OrderDetail.find();
-    console.log('req.params.id', req.params.id);
-    orderDetailList = orderDetail.filter(
-      (item) => item.order.id === req.params.id
-    );
-
-    await orderDetailList.map(async (item, index) => {
-      let book = await Book.findById(item.book._id);
-      if (book) {
-        book.quantity = book.quantity + item.quantity;
-        book.quantitySold = book.quantitySold - item.quantity;
-        await book.save();
-      } else {
-        return next(new AppError('Không tồn tại quyển sách nào!', 404));
-      }
-    });
-
-        const {
-          user: { fullName, phoneUID, phoneNumber },
-          totalPrice,
-          address,
-        } = doc;
-        await transporter.sendMail({
-          from: `"Đơn hàng #${_id} đã huỷ hàng thành công" <alietran0211@gmail.com>`, // sender address
-          to: `${address.email}`, // list of receivers
-          subject: 'EMAIL XÁC NHẬN HUỶ ĐẶT HÀNG', // Subject line
-          // text: "Hello world?", // plain text body
-          html: `
+      await orderDetailList.map(async (item, index) => {
+        let book = await Book.findById(item.book._id);
+        if (book) {
+          book.quantity = book.quantity + item.quantity;
+          book.quantitySold = book.quantitySold - item.quantity;
+          await book.save();
+        } else {
+          return next(new AppError('Không tồn tại quyển sách nào!', 404));
+        }
+      });
+      console.log('doc123', doc);
+      const {
+        user: { fullName, phoneUID, phoneNumber },
+        totalPrice,
+      } = doc;
+      await transporter.sendMail({
+        from: `"Đơn hàng #${_id} đã huỷ hàng thành công" <alietran0211@gmail.com>`, // sender address
+        to: 'thanhledatomon@gmail.com', // list of receivers
+        subject: 'EMAIL XÁC NHẬN HUỶ ĐẶT HÀNG', // Subject line
+        // text: "Hello world?", // plain text body
+        html: `
        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="margin:0 auto;width:600px!important;min-width:600px!important"><tbody><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px;border-bottom:1px solid #ff3333" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td align="left" valign="middle" style="width:500px;height:60px"><a style="border:0" href="https://www.sendo.vn/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.sendo.vn/&amp;source=gmail&amp;ust=1667581755494000&amp;usg=AOvVaw3tvZya6OYQv46dAenVrr2U"><img style="display:block;border:0px;width:130px;height:35px" src="https://res.cloudinary.com/bookstoremern/image/upload/v1665027528/zypbndetwpvlawbbegz3.png" class="CToWUd" data-bit="iit"> </a></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:24px;color:rgb(255,51,51);text-transform:uppercase;font-weight:bold;padding:25px 10px 15px;text-align:center">Thông báo hủy đơn hàng</td></tr><tr><td align="left" valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;padding:0 10px 20px 10px;line-height:17px"><p>Chào bạn <strong>${
          phoneUID ? phoneNumber : ''
        }</strong><strong>${fullName}</strong>,&nbsp;</p><p>Rất tiếc, đơn hàng <b>#</b> <a style="color:#ed2324;font-weight:bold;text-decoration:none" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">${_id}</a>&nbsp;của bạn đã&nbsp;<strong>bị hủy</strong>&nbsp;vì:&nbsp;<strong>Thay đổi chi tiết đơn hàng</strong>.&nbsp;</p><span class="im"><p>Nếu bạn đã thanh toán, vui lòng chờ nhà cung cấp xử lý.</p><p><a href="http://localhost:3000" target="_blank" data-saferedirecturl="http://localhost:3000">Bookstore</a> rất xin lỗi vì trải nghiệm không mong muốn này. Mong được phục vụ bạn trong lần mua sắm tiếp theo.&nbsp;</p></span></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff"><table style="width:580px;border:1px solid #ff3333;border-top:3px solid #ff3333" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#666666;padding:10px 10px 20px 15px;line-height:17px"><b>Đơn hàng của bạn #</b> <a style="color:#ed2324;font-weight:bold;text-decoration:none" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}">${_id}</a></td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tổng thanh toán</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">${totalPrice.toLocaleString(
-            'vi-VI'
-          )}đ</td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tình trạng</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">Đã hủy</td></tr><tr><td colspan="3" align="center" valign="top" style="padding-top:20px;padding-bottom:20px;border-bottom:1px solid #ebebeb"><a style="border:0px" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}"><img height="29" width="191" alt="Chi tiết đơn hàng" style="border:0px" src="https://ci6.googleusercontent.com/proxy/nFW6md3bBSTjJfQBWlQveee6eY3SGMsVjLDBR3oILDY_cYT1QP6SgXgt6Y0iAsOCjAqyv7-8kmmkyLAiQ7mplPTU=s0-d-e1-ft#http://media3.scdn.vn/img2/2017/4_19/ZxRyKS.jpg" class="CToWUd" data-bit="iit"> </a></td></tr><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:17px;padding:20px 0 20px 15px">Thông tin sản phẩm</td></tr><tr><td colspan="3" align="center" valign="top"><table id="m_-3634225509215781968ListProductHtml" style="width:100%" cellpadding="0" cellspacing="0" border="0"><tbody>
+          'vi-VI'
+        )}đ</td></tr><tr><td align="left" valign="top" style="width:110px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:15px;padding-right:10px;padding-bottom:5px"><b>Tình trạng</b></td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">:</td><td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-left:10px;padding-bottom:5px">Đã hủy</td></tr><tr><td colspan="3" align="center" valign="top" style="padding-top:20px;padding-bottom:20px;border-bottom:1px solid #ebebeb"><a style="border:0px" href="http://localhost:3000/orderDetail/${_id}" target="_blank" data-saferedirecturl="http://localhost:3000/orderDetail/${_id}"><img height="29" width="191" alt="Chi tiết đơn hàng" style="border:0px" src="https://ci6.googleusercontent.com/proxy/nFW6md3bBSTjJfQBWlQveee6eY3SGMsVjLDBR3oILDY_cYT1QP6SgXgt6Y0iAsOCjAqyv7-8kmmkyLAiQ7mplPTU=s0-d-e1-ft#http://media3.scdn.vn/img2/2017/4_19/ZxRyKS.jpg" class="CToWUd" data-bit="iit"> </a></td></tr><tr><td colspan="3" align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:17px;padding:20px 0 20px 15px">Thông tin sản phẩm</td></tr><tr><td colspan="3" align="center" valign="top"><table id="m_-3634225509215781968ListProductHtml" style="width:100%" cellpadding="0" cellspacing="0" border="0"><tbody>
         ${orderDetailList.map(
           (item, index) => `
         <tr key=${index}>
-        <td align="left" valign="top" style="width:84px;padding-left:15px;padding-bottom:20px"><a href="http://localhost:3000/productDetail/${
-          item.book._id
-        }" style="border:0" target="_blank" data-saferedirecturl="http://localhost:3000/productDetail/${
-            item.book._id
-          }"><img src="${
-            item.book.image
-          }" height="74" width="74" alt="Product" class="CToWUd" data-bit="iit"></a></td>
-        <td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding:0 30px 20px 10px"><b>Tên sản phẩm: </b><a href="http://localhost:3000/productDetail/${
-          item.book._id
-        }" style="text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666" target="_blank" data-saferedirecturl="http://localhost:3000/productDetail/${
-            item.book._id
-          }">${item.book.name}</a><br><b>Đơn giá:</b> ${(
-            item.price * 1
-          ).toLocaleString('vi-VI')}đ<br><b>Số lượng:</b> ${item.quantity}</td>
+        <td align="left" valign="top" style="width:84px;padding-left:15px;padding-bottom:20px"><a href="http://localhost:3000/productDetail/${item.book._id}" style="border:0" target="_blank" data-saferedirecturl="http://localhost:3000/productDetail/${item.book._id}"><img src="${item.book.image}" height="74" width="74" alt="Product" class="CToWUd" data-bit="iit"></a></td>
+        <td align="left" valign="top" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding:0 30px 20px 10px"><b>Tên sản phẩm: </b><a href="http://localhost:3000/productDetail/${item.book._id}" style="text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666" target="_blank" data-saferedirecturl="http://localhost:3000/productDetail/${item.book._id}">${item.book.name}</a><br><b>Đơn giá:</b> ${(item.price*1).toLocaleString(
+          'vi-VI'
+        )}đ<br><b>Số lượng:</b> ${item.quantity}</td>
         </tr>`
         )}
         </tbody></table></td></tr></tbody></table></td></tr><tr><td align="center" valign="middle" style="background:#ffffff;padding-top:20px"><table style="width:500px" cellpadding="0" cellspacing="0" border="0"><tbody><tr><td align="center" valign="middle" style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#666666;line-height:20px;padding-bottom:5px">Nếu bạn có bất cứ câu hỏi nào, đừng ngần ngại liên lạc với chúng tôi tại&nbsp;<a href="mailto:ngocdiep710@gmail.com" style="font-size:14px;text-decoration:none;color:#1666a2" target="_blank">ngocdiep710@gmail.com</a>&nbsp;của Bookstore.</td></tr></tbody></table></td></tr></tbody></table>
              `,
-        });
+      });
 
-    res.status(200).json({
-      status: 'success',
-      result: doc.length,
-      data: doc,
-    });
-    console.log('orderDetailList', orderDetailList);
+      res.status(200).json({
+        status: 'success',
+        result: doc.length,
+        data: doc,
+      });
+      console.log('orderDetailList', orderDetailList);
+    }
   } else if (req.body.status === 'Đã giao hàng') {
     const doc = await Order.findByIdAndUpdate(_id, req.body, {
       new: true,
@@ -349,7 +338,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
               // text: "Hello world?", // plain text body
               html: `
             <div marginwidth="0" marginheight="0" style="padding:0">
-    	<div id="m_-2654664080331285438wrapper" dir="ltr" style="background-color:#f7f7f7;margin:0;padding:70px 0;width:100%" bgcolor="#f7f7f7" width="100%">
+		<div id="m_-2654664080331285438wrapper" dir="ltr" style="background-color:#f7f7f7;margin:0;padding:70px 0;width:100%" bgcolor="#f7f7f7" width="100%">
 			<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
 <tbody><tr>
 <td align="center" valign="top">
@@ -572,6 +561,9 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   }
 });
 exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
+  let today = new Date();
+  let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   // moment(firstDay).format('MM-YYYY');
   // console.log('firstDay', moment(firstDay).format('MM-YYYY'));
   // var date = new Date();
@@ -645,127 +637,4 @@ exports.orderRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: err });
   }
-});
-
-exports.orderByBookForYear = catchAsync(async (req, res, next) => {
-  let idBook = req.params.id;
-  let array = await OrderDetail.find({
-    // $or: [{ status: 'Đã nhận' }, { status: 'Đã đánh giá' }],
-    book: idBook,
-  });
-  array = array.filter(
-    (item) =>
-      item.order.status === 'Đã nhận' || item.order.status === 'Đã đánh giá'
-  );
-  let result1 = _(array)
-    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
-    .map((value, key) => ({ nameYear: key, orderRevenueDay: value }))
-    .value();
-
-  let result = _(result1)
-    .groupBy((x) => moment(x.orderRevenueDay[0].createdAt).format('MM-YYYY'))
-    .map((value, key) => ({
-      // name: moment(new Date(key)).format('MM'),
-      name: key,
-      orderRevenueMonth: value,
-    }))
-    .value();
-
-  // b1: lấy tất cả đơn hàng có book ID bằng bookId dc chọn từ user
-  // b2: groupby Theo id đơn hàng
-  // b3:
-  const arrayMonth = [];
-  result.map((item) => arrayMonth.push(item.name));
-  let totalQuatily = result.map((item) =>
-    item.orderRevenueMonth.map((item1) =>
-      item1.orderRevenueDay.reduce((total, item2) => {
-        return (total += item2.quantity);
-      }, 0)
-    )
-  );
-  totalQuatily = totalQuatily.map((item) =>
-    item.reduce((total, item2) => {
-      return (total += item2);
-    }, 0)
-  );
-  let totalPrice = result.map((item) =>
-    item.orderRevenueMonth.map((item1) =>
-      item1.orderRevenueDay.reduce((total, item2) => {
-        return (total += item2.totalPrice);
-      }, 0)
-    )
-  );
-  totalPrice = totalPrice.map((item) =>
-    item.reduce((total, item2) => {
-      return (total += item2);
-    }, 0)
-  );
-  res.status(200).json({
-    status: 'success',
-    result: result.length,
-    arrayMonth: arrayMonth.sort(),
-    totalQuatily: totalQuatily.reverse(),
-    totalPrice: totalPrice.reverse(),
-    data: result,
-  });
-});
-
-exports.orderByBookForMonth = catchAsync(async (req, res, next) => {
-  // let a = { status: 'Đã nhận' };
-  let idBook = req.params.id;
-  let array = await OrderDetail.find({
-    book: idBook,
-  });
-  array = array.filter(
-    (item) =>
-      item.order.status === 'Đã nhận' || item.order.status === 'Đã đánh giá'
-  );
-  let result1 = _(array)
-    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
-    .map((value, key) => ({ nameYear: key, orderRevenueDay: value }))
-    .value();
-
-  let result = _(result1)
-    .groupBy((x) => moment(x.orderRevenueDay[0].createdAt).format('MM-YYYY'))
-    .map((value, key) => ({
-      // name: moment(new Date(key)).format('MM'),
-      name: key,
-      orderRevenueMonth: value,
-    }))
-    .value();
-
-  result = result.filter((item) => item.name === '11-2022');
-  // b1: lấy tất cả đơn hàng có book ID bằng bookId dc chọn từ user
-  // b2: groupby Theo id đơn hàng
-  // b3:
-  const arrayMonth = [];
-
-  result.map((item) =>
-    item.orderRevenueMonth.map((item2) => arrayMonth.push(item2.nameYear))
-  );
-
-  let totalQuatily = result.map((item) =>
-    item.orderRevenueMonth.map((item1) =>
-      item1.orderRevenueDay.reduce((total, item2) => {
-        return (total += item2.quantity);
-      }, 0)
-    )
-  );
-
-  let totalPrice = result.map((item) =>
-    item.orderRevenueMonth.map((item1) =>
-      item1.orderRevenueDay.reduce((total, item2) => {
-        return (total += item2.totalPrice);
-      }, 0)
-    )
-  );
-
-  res.status(200).json({
-    status: 'success',
-    result: result.length,
-    arrayMonth: arrayMonth.sort(),
-    totalQuatily: totalQuatily[0],
-    totalPrice: totalPrice[0],
-    data: result,
-  });
 });
