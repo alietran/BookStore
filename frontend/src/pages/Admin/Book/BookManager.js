@@ -49,7 +49,9 @@ const TABLE_HEAD = [
   { id: "name", label: "Tên sách", alignRight: false },
   { id: "price", label: "Giá", alignRight: false },
   { id: "desc", label: "Mô tả", alignRight: false },
-  { id: "quantity", label: "Số lượng", alignRight: false },
+  { id: "quantity", label: "Kho", alignRight: false },
+
+
   { id: "totalPage", label: "Số trang", alignRight: false },
   { id: "publisher,", label: "Nhà xuất bản", alignRight: false },
   { id: "issuer,", label: "Nhà phát hành", alignRight: false },
@@ -109,7 +111,7 @@ export default function BookManager() {
     successUpdateBook,
     loadingBookList,
   } = useSelector((state) => state.BookReducer);
-  // console.log("successDeleteCate", successDeleteCate);
+  console.log("bookList", bookList);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
@@ -346,7 +348,7 @@ export default function BookManager() {
                           </TableCell>
 
                           <TableCell align="left">{quantity}</TableCell>
-
+                          
                           <TableCell align="left">{totalPage}</TableCell>
                           <TableCell align="left">{publisher}</TableCell>
                           <TableCell align="left">{issuer.name}</TableCell>

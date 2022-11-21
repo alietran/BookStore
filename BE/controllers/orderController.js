@@ -533,9 +533,6 @@ exports.orderRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
   }
 });
 exports.orderRevenueStatisticsForMonth = catchAsync(async (req, res, next) => {
-  let today = new Date();
-  let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-  let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   // moment(firstDay).format('MM-YYYY');
   // console.log('firstDay', moment(firstDay).format('MM-YYYY'));
   // var date = new Date();
@@ -609,4 +606,127 @@ exports.orderRevenueStatisticsForYear = catchAsync(async (req, res, next) => {
   } catch (err) {
     res.status(400).json({ message: err });
   }
+});
+
+exports.orderByBookForYear = catchAsync(async (req, res, next) => {
+  let idBook = req.params.id;
+  let array = await OrderDetail.find({
+    // $or: [{ status: 'Đã nhận' }, { status: 'Đã đánh giá' }],
+    book: idBook,
+  });
+  array = array.filter(
+    (item) =>
+      item.order.status === 'Đã nhận' || item.order.status === 'Đã đánh giá'
+  );
+  let result1 = _(array)
+    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+    .map((value, key) => ({ nameYear: key, orderRevenueDay: value }))
+    .value();
+
+  let result = _(result1)
+    .groupBy((x) => moment(x.orderRevenueDay[0].createdAt).format('MM-YYYY'))
+    .map((value, key) => ({
+      // name: moment(new Date(key)).format('MM'),
+      name: key,
+      orderRevenueMonth: value,
+    }))
+    .value();
+
+  // b1: lấy tất cả đơn hàng có book ID bằng bookId dc chọn từ user
+  // b2: groupby Theo id đơn hàng
+  // b3:
+  const arrayMonth = [];
+  result.map((item) => arrayMonth.push(item.name));
+  let totalQuatily = result.map((item) =>
+    item.orderRevenueMonth.map((item1) =>
+      item1.orderRevenueDay.reduce((total, item2) => {
+        return (total += item2.quantity);
+      }, 0)
+    )
+  );
+  totalQuatily = totalQuatily.map((item) =>
+    item.reduce((total, item2) => {
+      return (total += item2);
+    }, 0)
+  );
+  let totalPrice = result.map((item) =>
+    item.orderRevenueMonth.map((item1) =>
+      item1.orderRevenueDay.reduce((total, item2) => {
+        return (total += item2.totalPrice);
+      }, 0)
+    )
+  );
+  totalPrice = totalPrice.map((item) =>
+    item.reduce((total, item2) => {
+      return (total += item2);
+    }, 0)
+  );
+  res.status(200).json({
+    status: 'success',
+    result: result.length,
+    arrayMonth: arrayMonth.sort(),
+    totalQuatily: totalQuatily.reverse(),
+    totalPrice: totalPrice.reverse(),
+    data: result,
+  });
+});
+
+exports.orderByBookForMonth = catchAsync(async (req, res, next) => {
+  // let a = { status: 'Đã nhận' };
+  let idBook = req.params.id;
+  let array = await OrderDetail.find({
+    book: idBook,
+  });
+  array = array.filter(
+    (item) =>
+      item.order.status === 'Đã nhận' || item.order.status === 'Đã đánh giá'
+  );
+  let result1 = _(array)
+    .groupBy((x) => moment(x.createdAt).format('DD-MM-YYYY'))
+    .map((value, key) => ({ nameYear: key, orderRevenueDay: value }))
+    .value();
+
+  let result = _(result1)
+    .groupBy((x) => moment(x.orderRevenueDay[0].createdAt).format('MM-YYYY'))
+    .map((value, key) => ({
+      // name: moment(new Date(key)).format('MM'),
+      name: key,
+      orderRevenueMonth: value,
+    }))
+    .value();
+
+  result = result.filter((item) => item.name === '11-2022');
+  // b1: lấy tất cả đơn hàng có book ID bằng bookId dc chọn từ user
+  // b2: groupby Theo id đơn hàng
+  // b3:
+  const arrayMonth = [];
+
+  result.map((item) =>
+    item.orderRevenueMonth.map((item2) => arrayMonth.push(item2.nameYear))
+  );
+
+  let totalQuatily = result.map((item) =>
+    item.orderRevenueMonth.map((item1) =>
+      item1.orderRevenueDay.reduce((total, item2) => {
+        return (total += item2.quantity);
+      }, 0)
+    )
+  );
+
+  let totalPrice = result.map((item) =>
+    item.orderRevenueMonth.map((item1) =>
+      item1.orderRevenueDay.reduce((total, item2) => {
+        return (total += item2.totalPrice);
+      }, 0)
+    )
+  );
+
+  res.status(200).json({
+    status: 'success',
+    result: result.length,
+    arrayMonth: arrayMonth.sort(),
+    totalQuatily: totalQuatily[0],
+    totalPrice: totalPrice[0],
+    data: result,
+  });
 });

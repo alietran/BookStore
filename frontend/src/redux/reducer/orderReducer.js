@@ -26,7 +26,6 @@ const stateDefault = {
   loadingOrderRSForMonth: false,
   errorOrderRSForMonth: null,
 
-
   orderRSForYear: null,
   loadingOrderRSForYear: false,
   errorOrderRSForYear: null,
@@ -34,6 +33,14 @@ const stateDefault = {
   orderByUser: null,
   loadingOrderByUser: false,
   errorOrderByUser: null,
+
+  orderByBookYear: null,
+  loadingOrderByBookYear: false,
+  errorOrderByBookYear: null,
+
+  orderByBookMonth: null,
+  loadingOrderByBookMonth: false,
+  errorOrderByBookMonth: null,
 };
 
 export const OrderReducer = (state = stateDefault, action) => {
@@ -209,12 +216,55 @@ export const OrderReducer = (state = stateDefault, action) => {
         loadingOrderByUser: false,
       };
     }
+    case "GET_ORDER_BY_BOOK_YEAR_REQUEST": {
+      return {
+        ...state,
+
+        loadingOrderByBookYear: true,
+        errorOrderByBookYear: null,
+      };
+    }
+    case "GET_ORDER_BY_BOOK_YEAR_SUCCESS": {
+      return {
+        ...state,
+        orderByBookYear: action.payload.data,
+        loadingOrderByBookYear: false,
+      };
+    }
+    case "GET_ORDER_BOOK_YEAR_FAIL": {
+      return {
+        ...state,
+        errorOrderByBookYear: action.payload.error,
+        loadingOrderByBookYear: false,
+      };
+    }
+    case "GET_ORDER_BY_BOOK_MONTH_REQUEST": {
+      return {
+        ...state,
+
+        loadingOrderByBookMonth: true,
+        errorOrderByBookMonth: null,
+      };
+    }
+    case "GET_ORDER_BY_BOOK_MONTH_SUCCESS": {
+      return {
+        ...state,
+        orderByBookMonth: action.payload.data,
+        loadingOrderByBookMonth: false,
+      };
+    }
+    case "GET_ORDER_BOOK_MONTH_FAIL": {
+      return {
+        ...state,
+        errorOrderByBookMonth: action.payload.error,
+        loadingOrderByBookMonth: false,
+      };
+    }
 
     case "RESET_ORDER": {
       return {
         ...state,
 
-        orderList: "",
         loadingOrderList: false,
         errorOrderList: null,
 

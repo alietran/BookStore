@@ -105,9 +105,6 @@ exports.receiptRevenueStatisticsForWeek = catchAsync(async (req, res, next) => {
 });
 exports.receiptRevenueStatisticsForMonth = catchAsync(
   async (req, res, next) => {
-    let today = new Date();
-    let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
     let array = await Receipt.find({
       inventoryStatus: true,

@@ -18,7 +18,9 @@ const stateDefault = {
   successUpdateUserCurrent: null,
   errorUpdateUserCurrent: null,
 
-  loginUserSucces: null
+  loginUserSucces: localStorage.getItem("user")
+  ? JSON.parse(localStorage.getItem("user"))
+  : null
 };
 
 export const UserReducer = (state = stateDefault, action) => {

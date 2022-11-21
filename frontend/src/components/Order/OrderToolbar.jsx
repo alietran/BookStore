@@ -4,7 +4,11 @@ import searchFill from "@iconify/icons-eva/search-fill";
 import trash2Fill from "@iconify/icons-eva/trash-2-outline";
 import roundFilterList from "@iconify/icons-ic/round-filter-list";
 // material
+import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   Box,
   Toolbar,
@@ -65,8 +69,11 @@ export default function OrderToolbar({
   filterList,
   selectTag,
   onSelectTag,
-}) {
+}) 
+{
   console.log("selectTag", selectTag);
+ const [value, setValue] = useState(null);
+
   return (
     <RootStyle>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
@@ -79,7 +86,7 @@ export default function OrderToolbar({
               label="    "
             >
               <MenuItem value={`infoUser`}>Thông tin khách hàng</MenuItem>
-           
+
               <MenuItem value={`createdDate`}>Ngày đặt</MenuItem>
             </Select>
           </FormControl>
@@ -105,22 +112,16 @@ export default function OrderToolbar({
           </Grid>
         ) : (
           <Grid item xs={9}>
-            <SearchStyle
-              cusTomSearch={true}
-              value={filterName}
-              onChange={onFilterName}
-              label="    "
-              placeholder={"Nhập ngày đặt"}
-              startAdornment={
-                <InputAdornment position="start">
-                  <Box
-                    component={Icon}
-                    icon={searchFill}
-                    sx={{ color: "text.disabled" }}
-                  />
-                </InputAdornment>
-              }
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Ngày đặt"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Grid>
         )}
       </Grid>

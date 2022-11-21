@@ -15,7 +15,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderList } from "../../redux/action/orderAction";
+import { getOrderList, resetOrder } from "../../redux/action/orderAction";
 import { NavLink, useHistory } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import OrderShipperDetail from "./OrderShipperDetail";
@@ -205,6 +205,7 @@ export default function OrderListShipper() {
   console.log("shipper", shipper);
   useEffect(() => {
     if (orderList === null) dispatch(getOrderList());
+    return () => dispatch(resetOrder());
   }, [orderList]);
 
   useEffect(() => {
@@ -212,7 +213,7 @@ export default function OrderListShipper() {
       dispatch(getOrderList());
     }
   }, [successUpdateOrder]);
-  const order = orderList?.data.filter(
+  const order = orderList?.data?.filter(
     (item) => item.shipper?.id === shipper.user.id
   );
   console.log("order", order);

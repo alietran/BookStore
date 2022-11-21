@@ -36,6 +36,16 @@ export default function OrderShipperDetail() {
     history.push("/orderListShipper");
   };
 
+  const handleChangeOrder = (id) => {
+    dispatch(
+      updateOrder(id, {
+        status: "Đang xử lý",
+        shipper: null,
+      })
+    );
+     history.push("/orderListShipper");
+  };
+
   console.log("orderDetail", orderDetail);
   console.log("idOrder", idOrder);
   return (
@@ -170,7 +180,7 @@ export default function OrderShipperDetail() {
           <div
             style={{ marginRight: "10px", padding: "20px 0", lineHeight: 0.5 }}
           >
-            <p style={{ fontSize: "16px" }}>Thu hộ: </p>
+            <p style={{ fontSize: "16px",marginTop:"30px" }}>Thu hộ: </p>
             <p style={{ fontSize: "18px", color: "green" }}>
               {orderDetail[0]?.paymentMethod.name === "Thanh toán bằng ví MoMo"
                 ? 0
@@ -188,7 +198,7 @@ export default function OrderShipperDetail() {
               variant="contained"
               sx={{ fontSize: "13px", padding: "6px 12px" }}
               onClick={() => {
-                handleChangeStatus(idOrder.orderId);
+                handleChangeOrder(idOrder.orderId);
               }}
             >
               Trả đơn

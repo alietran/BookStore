@@ -476,20 +476,14 @@ export default function Header() {
                 onClick={(e) => e.preventDefault()}"
                       >
                         {/* {loginUserSucces.userName.substr(0, 1)} */}
-                        {loginUserSucces ? (
+                      
+                          
                           <img
                             src={loginUserSucces?.user.avatar}
                             alt="avatar"
                             className="rounded-full"
                           />
-                        ) : (
-                          <NavLink
-                            to="/login"
-                            className=" px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500 hover:text-red-600"
-                          >
-                            Đăng nhập
-                          </NavLink>
-                        )}
+                       
                       </div>
                     </Dropdown>
                   </div>

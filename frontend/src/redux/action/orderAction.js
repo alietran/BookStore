@@ -68,7 +68,6 @@ export const updateOrder = (id, data) => {
         },
       });
     } catch (error) {
-  
       dispatch({
         type: "UPDATE_ORDER_FAIL",
         payload: {
@@ -182,7 +181,6 @@ export const getOrderRSForYear = () => {
   };
 };
 
-
 export const resetOrder = () => {
   return (dispatch) => {
     dispatch({
@@ -192,29 +190,85 @@ export const resetOrder = () => {
 };
 
 export const getOrderByUser = () => {
-   return (dispatch) => {
-     dispatch({
-       type: "GET_ORDER_BY_USER_REQUEST",
-     });
-     orderAPI
-       .getOrderByUser()
-       .then((result) => {
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_BY_USER_REQUEST",
+    });
+    orderAPI
+      .getOrderByUser()
+      .then((result) => {
         console.log("resultOrder", result);
-         dispatch({
-           type: "GET_ORDER_BY_USER_SUCCESS",
-           payload: {
-             data: result.data.data,
-           },
-         });
-       })
-       .catch((error) => {
+        dispatch({
+          type: "GET_ORDER_BY_USER_SUCCESS",
+          payload: {
+            data: result.data.data,
+          },
+        });
+      })
+      .catch((error) => {
         console.log("error", error);
-         dispatch({
-           type: "GET_ORDER_BY_USER_FAIL",
-           payload: {
-             error: error,
-           },
-         });
-       });
-   };
+        dispatch({
+          type: "GET_ORDER_BY_USER_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+export const getOrderByBookForYear = (id) => {
+  console.log("343")
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_BY_BOOK_YEAR_REQUEST",
+    });
+    orderAPI
+      .getOrderByBookForYear(id)
+      .then((result) => {
+        console.log("resultOr3443r", result);
+        dispatch({
+          type: "GET_ORDER_BY_BOOK_YEAR_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch({
+          type: "GET_ORDER_BY_BOOK_YEAR_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
+};
+export const getOrderByBookForMonth = (id) => {
+  console.log("343")
+  return (dispatch) => {
+    dispatch({
+      type: "GET_ORDER_BY_BOOK_MONTH_REQUEST",
+    });
+    orderAPI
+      .getorderByBookForMonth(id)
+      .then((result) => {
+        console.log("rte", result);
+        dispatch({
+          type: "GET_ORDER_BY_BOOK_MONTH_SUCCESS",
+          payload: {
+            data: result.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch({
+          type: "GET_ORDER_BY_BOOK_MONTH_FAIL",
+          payload: {
+            error: error,
+          },
+        });
+      });
+  };
 };

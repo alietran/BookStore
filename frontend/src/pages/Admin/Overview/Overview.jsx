@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getOrderByBookForMonth,
+  getOrderByBookForYear,
   getOrderList,
   getOrderRSForMonth,
   getOrderRSForWeek,
@@ -28,7 +30,69 @@ import { getBookList } from "../../../redux/action/bookAction";
 import { getPromotionList } from "../../../redux/action/promotionAction";
 import { getAllAccount } from "../../../redux/action/adminAction";
 import Loading from "../../../components/Loading/Loading";
+import { useTheme } from "@mui/material/styles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+
+import merge from "lodash/merge";
+
+// @mui
+import { Card, CardHeader, TextField } from "@mui/material";
+// components
+import { BaseOptionChart } from "../../../components/chart";
+
+// ----------------------------------------------------------------------
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 export default function Overview() {
+  const theme = useTheme();
+  const [year, setYear] = useState("2022");
+  const [book, setBook] = React.useState("634460f1b4fcf94bb0e307f4");
+  const handleChangeYear = (e) => {
+    console.log("year523525", e.target.value);
+    // setYear(e.target.value);
+    
+  };
+  const [personName, setPersonName] = React.useState([]);
+
+  const [seriesData, setSeriesData] = useState(2022);
+
+  const handleChangeSeriesData = (event) => {
+    console.log("event.target.value",event.target.value);
+    // setSeriesData(Number(event.target.value));
+    setSeriesData(Number(event.target.value));
+  };
+
+
+  console.log("book", book);
+  
+  const handleChangeBook = (event) => {
+    setBook(event.target.value);
+  };
+  
+  useEffect(() => {
+    if (seriesData === 2022) dispatch(getOrderByBookForYear(book));
+    else dispatch(getOrderByBookForMonth(book));
+  }, [book, seriesData]);
+
   const dispatch = useDispatch();
   const {
     orderRSForWeek,
@@ -37,6 +101,7 @@ export default function Overview() {
     loadingOrderRSForYear,
     loadingOrderRSForMonth,
     loadingOrderRSForWeek,
+    
   } = useSelector((state) => state.OrderReducer);
   const { promotionList } = useSelector((state) => state.PromotionReducer);
 
@@ -65,8 +130,16 @@ export default function Overview() {
   const [listChartItemMonth, setListChartItemMonth] = useState([]);
   const [listReceiptItemMonth, setListReceiptItemMonth] = useState([]);
   const { bookList } = useSelector((state) => state.BookReducer);
+  
+  const names = [];
+
+  bookList?.data.map((item, index) => {
+    return names.push(item.name);
+  });
+  console.log("names", names);
   var weeknumber = moment().weekday(-6).format("DD-MM-YYYY");
   const [option, setOption] = React.useState(30);
+
   const { receiptList } = useSelector((state) => state.ReceiptReducer);
   console.log("receiptList", receiptList);
   useEffect(() => {
@@ -131,7 +204,11 @@ export default function Overview() {
   }, [listReceiptItemMonth, listChartItemMonth]);
   // console.log("revenueMonth", revenueMonth);
 
-  const { orderList } = useSelector((state) => state.OrderReducer);
+  const { orderList, orderByBookYear, orderByBookMonth } = useSelector(
+    (state) => state.OrderReducer
+  );
+
+
   useEffect(() => {
     // get list user lần đầu
     if (!orderList) {
@@ -139,10 +216,64 @@ export default function Overview() {
     }
     //  return () => dispatch(resetOrder());
   }, []);
+
+  // Thong ke san pham
+  const chartOptions = merge(BaseOptionChart(), {
+    xaxis: {
+      categories:
+        seriesData === 2022
+          ? orderByBookYear?.arrayMonth
+          : orderByBookMonth?.arrayMonth,
+    },
+    colors: ["#2065D1", "#FF6C40"],
+  });
+   console.log("orderByBookYear", orderByBookYear);
+   console.log("orderByBookMonth", orderByBookMonth);
+   console.log("seriesData", seriesData);
+   console.log("seriesData typeof", typeof seriesData);
+
+  const CHART_DATA = [
+    // data year
+    {
+      // year: 2022,
+      data: [
+        {
+          name: "Doanh thu bán ra",
+          data:
+            seriesData === 2022
+              ? orderByBookYear?.totalPrice
+              : orderByBookMonth?.totalPrice,
+        },
+        {
+          name: "Số lượng bán ra",
+          data:
+            seriesData === 2022
+              ? orderByBookYear?.totalQuatily
+              : orderByBookMonth?.totalQuatily,
+        },
+      ],
+    },
+    // data month
+    // {
+    //   year: 11,
+    //   data: [
+    //     {
+    //       name: "Doanh thu bán ra",
+    //       data: seriesData === 11 && orderByBookMonth?.totalPrice,
+    //     },
+    //     {
+    //       name: "Số lượng bán ra",
+    //       data: seriesData === 11 && orderByBookMonth?.totalQuatily,
+    //     },
+    //   ],
+    // },
+  ];
+
   // console.log("orderList", orderList);
   const handleChange = (event) => {
     setOption(event.target.value);
   };
+
   // console.log("option", option);
   const dayLabel = [];
   const dayItem = [];
@@ -240,47 +371,6 @@ export default function Overview() {
     getItemReceiptMonth();
   }, [receiptRSForMonth]);
 
-  // monthLabel.map((label, item) => labelMonth.push(label.name));
-
-  // receiptRSForMonth !== null &&
-  //   receiptRSForMonth[0]?.receiptRevenue?.map(
-  //     (item, index) => {
-  //       console.log("item3534", item);
-  //       monthStatic.push(item);
-  //     }
-  //     // labelMonth = monthLabel.name
-  //   );
-
-  // orderRSForMonth !== null &&
-  //   orderRSForMonth[0]?.orderRevenue?.map(
-  //     (item, index) => {
-  //       console.log("item", item);
-  //       const Index = monthStatic.findIndex(
-  //         (item1) => item1.name === item.name
-  //       );
-  //       console.log("Index", Index);
-  //       // if (Index !== -1) {
-  //         // monthStatic.push(item);
-  //       // }
-  //       monthStatic[item] = {...item.orderRevenueDay};
-  //       // console.log("itemMonth", item);
-  //       //  monthStatic.push(item.orderRevenueDay);
-  //     } // labelMonth = monthStatic.name
-  //   );
-
-  // // labelMonth;
-
-  // monthStatic.filter((day)=>day !==  ).map((item, index) =>
-  //     // if()
-  // labelMonth.push(item.name));
-  // labelMonth.sort((a, b) =>
-  //   moment(a, "DD-MM-YYYY").diff(moment(b, "DD-MM-YYYY"))
-  // );
-  //  console.log("labelMonth", labelMonth);
-  // // console.log("orderRevenue", orderRSForMonth[0]?.orderRevenue);
-  // console.log("monthStaticReceipt", monthStaticReceipt);
-  // console.log("monthStatictet", monthStatic);
-
   receiptRSForMonth !== null &&
     receiptRSForMonth[0]?.receiptRevenue?.map(
       (item, index) => {
@@ -295,7 +385,6 @@ export default function Overview() {
       monthStatic.push(item);
       monthStaticOrder.push(item);
     });
-
 
   console.log("monthStaticReceipt", monthStaticReceipt);
   console.log("monthStaticOrder", monthStaticOrder);
@@ -566,267 +655,404 @@ export default function Overview() {
   console.log("listChartItemMonth", listChartItemMonth);
   return (
     <div>
-      <div style={{ width: "100%", marginBottom: "20px" }}>
-        <Box>
-          <Grid container spacing={4}>
-            <Grid item xs={3}>
-              {" "}
-              <Box
-                sx={{
-                  background: "white",
-                  height: "auto",
-                  width: "100%",
-                  borderRadius: "10px",
-                  padding: "20px",
+      <div>
+        <div style={{ width: "100%", marginBottom: "20px" }}>
+          <Box>
+            <Grid container spacing={4}>
+              <Grid item xs={3}>
+                {" "}
+                <Box
+                  sx={{
+                    background: "white",
+                    height: "auto",
+                    width: "100%",
+                    borderRadius: "10px",
+                    padding: "20px",
 
-                  marginBottom: "10px",
-                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <div className="text-left leading-5">
-                      {" "}
-                      <Typography className="m-0">Sản phẩm</Typography>
-                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                        {bookList?.result}
-                      </Typography>
-                    </div>
+                    marginBottom: "10px",
+                    boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <div className="text-left leading-5">
+                        {" "}
+                        <Typography className="m-0">Sản phẩm</Typography>
+                        <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                          {bookList?.result}
+                        </Typography>
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <img
+                        src="../../../../img/static.jpg"
+                        alt=""
+                        height={400}
+                        width={400}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={4}>
-                    <img
-                      src="../../../../img/static.jpg"
-                      alt=""
-                      height={400}
-                      width={400}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              {" "}
-              <Box
-                sx={{
-                  background: "white",
-                  height: "auto",
-                  width: "280px",
-                  borderRadius: "10px",
-                  padding: "20px",
-
-                  marginBottom: "10px",
-                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <div className="text-left leading-5">
-                      {" "}
-                      <Typography className="m-0">Người Dùng</Typography>
-                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                        {accountList?.result}
-                      </Typography>
-                    </div>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <img
-                      src="../../../../img/images.png"
-                      alt=""
-                      height={400}
-                      width={400}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              {" "}
-              <Box
-                sx={{
-                  background: "white",
-                  height: "auto",
-                  width: "280px",
-                  borderRadius: "10px",
-                  padding: "20px",
-
-                  marginBottom: "10px",
-                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <div className="text-left leading-5">
-                      {" "}
-                      <Typography className="m-0">Đơn hàng</Typography>
-                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                        {orderList?.result}
-                      </Typography>
-                    </div>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <img
-                      src="../../../../img/cart.png"
-                      alt=""
-                      height={800}
-                      width={800}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-            <Grid item xs={3}>
-              {" "}
-              <Box
-                sx={{
-                  background: "white",
-                  height: "auto",
-                  width: "280px",
-                  borderRadius: "10px",
-                  padding: "20px",
-
-                  marginBottom: "10px",
-                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-                }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={8}>
-                    <div className="text-left leading-5">
-                      {" "}
-                      <Typography className="m-0">Khuyến mãi</Typography>
-                      <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                        {promotionList?.result}
-                      </Typography>
-                    </div>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <img
-                      src="../../../../img/static.jpg"
-                      alt=""
-                      height={400}
-                      width={400}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-      </div>
-      {loadingOrderRSForYear ||
-      loadingOrderRSForMonth ||
-      loadingReceiptRSForWeek ||
-      loadingReceiptRSForMonth ||
-      loadingReceiptRSForYear ||
-      loadingOrderRSForWeek ? (
-        <Loading />
-      ) : (
-        <Box
-          sx={{
-            minWidth: 120,
-            boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px",
-            padding: "20px",
-            display: "flex",
-          }}
-        >
-          <div className="w-3/4">
-            <h2 className="text-center text-2xl">Thống kê doanh thu</h2>
-            <FormControl>
-              <InputLabel id="demo-simple-select-label">Thống kê</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={option}
-                label="Thống kê"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Tuần trước</MenuItem>
-                <MenuItem value={20}>Tháng</MenuItem>
-                <MenuItem value={30}>Năm</MenuItem>
-              </Select>
-            </FormControl>
-            <div id="chart" style={{ width: "100%" }}>
-              <ReactApexChart
-                options={state.options}
-                series={state.series}
-                type="bar"
-                height={430}
-              />
-            </div>
-          </div>
-          <div className="w-1/4 flex flex-col justify-center items-center text-center">
-            <Box
-              sx={{
-                background: "white",
-                height: "auto",
-                width: "220px",
-                borderRadius: "10px",
-                padding: "5px",
-                boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-              }}
-            >
-              <Grid item xs={8}>
-                <div className="leading-5 text-center ">
-                  {" "}
-                  <Typography
-                    variant="h4"
-                    className="m-0"
-                    sx={{ fontWeight: "normal" }}
-                  >
-                    Doanh thu
-                  </Typography>
-                  <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                    {option === 30
-                      ? revenueYear?.toLocaleString("vi-VI")
-                      : option === 20
-                      ? revenueMonth?.toLocaleString("vi-VI")
-                      : revenueWeek.toLocaleString("vi-VI")}
-                    đ
-                  </Typography>
-                </div>
+                </Box>
               </Grid>
-            </Box>
-            <Box
-              sx={{
-                background: "white",
-                height: "auto",
-                width: "220px",
-                borderRadius: "10px",
-                padding: "5px",
-                marginTop: "30px",
-                // marginBottom: "10px",
-                boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
-              }}
-            >
-              <Grid item xs={8}>
-                <div className=" leading-5 text-center">
-                  {" "}
-                  {/* <div>
+              <Grid item xs={3}>
+                {" "}
+                <Box
+                  sx={{
+                    background: "white",
+                    height: "auto",
+                    width: "280px",
+                    borderRadius: "10px",
+                    padding: "20px",
+
+                    marginBottom: "10px",
+                    boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <div className="text-left leading-5">
+                        {" "}
+                        <Typography className="m-0">Người Dùng</Typography>
+                        <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                          {accountList?.result}
+                        </Typography>
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <img
+                        src="../../../../img/images.png"
+                        alt=""
+                        height={400}
+                        width={400}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                {" "}
+                <Box
+                  sx={{
+                    background: "white",
+                    height: "auto",
+                    width: "280px",
+                    borderRadius: "10px",
+                    padding: "20px",
+
+                    marginBottom: "10px",
+                    boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <div className="text-left leading-5">
+                        {" "}
+                        <Typography className="m-0">Đơn hàng</Typography>
+                        <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                          {orderList?.result}
+                        </Typography>
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <img
+                        src="../../../../img/cart.png"
+                        alt=""
+                        height={800}
+                        width={800}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+              <Grid item xs={3}>
+                {" "}
+                <Box
+                  sx={{
+                    background: "white",
+                    height: "auto",
+                    width: "280px",
+                    borderRadius: "10px",
+                    padding: "20px",
+
+                    marginBottom: "10px",
+                    boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <div className="text-left leading-5">
+                        {" "}
+                        <Typography className="m-0">Khuyến mãi</Typography>
+                        <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                          {promotionList?.result}
+                        </Typography>
+                      </div>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <img
+                        src="../../../../img/static.jpg"
+                        alt=""
+                        height={400}
+                        width={400}
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </div>
+        {loadingOrderRSForYear ||
+        loadingOrderRSForMonth ||
+        loadingReceiptRSForWeek ||
+        loadingReceiptRSForMonth ||
+        loadingReceiptRSForYear ||
+        loadingOrderRSForWeek ? (
+          <Loading />
+        ) : (
+          <Box
+            sx={{
+              minWidth: 120,
+              boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px",
+              padding: "20px",
+              display: "flex",
+              borderRadius: "15px",
+              marginBottom: "35px",
+            }}
+          >
+            <div className="w-3/4">
+              <h2 className="text-center text-2xl">Thống kê doanh thu</h2>
+              <FormControl>
+                <InputLabel id="demo-simple-select-label">Thống kê</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={option}
+                  label="Thống kê"
+                  onChange={handleChange}
+                >
+                  <MenuItem value={10}>Tuần trước</MenuItem>
+                  <MenuItem value={20}>Tháng</MenuItem>
+                  <MenuItem value={30}>Năm</MenuItem>
+                </Select>
+              </FormControl>
+              <div id="chart" style={{ width: "100%" }}>
+                <ReactApexChart
+                  options={state.options}
+                  series={state.series}
+                  type="bar"
+                  height={430}
+                />
+              </div>
+            </div>
+            <div className="w-1/4 flex flex-col justify-center items-center text-center">
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "220px",
+                  borderRadius: "10px",
+                  padding: "5px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid item xs={8}>
+                  <div className="leading-5 text-center ">
+                    {" "}
+                    <Typography
+                      variant="h4"
+                      className="m-0"
+                      sx={{ fontWeight: "normal" }}
+                    >
+                      Doanh thu
+                    </Typography>
+                    <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                      {option === 30
+                        ? revenueYear?.toLocaleString("vi-VI")
+                        : option === 20
+                        ? revenueMonth?.toLocaleString("vi-VI")
+                        : revenueWeek.toLocaleString("vi-VI")}
+                      đ
+                    </Typography>
+                  </div>
+                </Grid>
+              </Box>
+              <Box
+                sx={{
+                  background: "white",
+                  height: "auto",
+                  width: "220px",
+                  borderRadius: "10px",
+                  padding: "5px",
+                  marginTop: "30px",
+                  // marginBottom: "10px",
+                  boxShadow: "rgb(100 100 111 / 13%) 0px 1px 5px 2px;",
+                }}
+              >
+                <Grid item xs={8}>
+                  <div className=" leading-5 text-center">
+                    {" "}
+                    {/* <div>
                   <img
                     src="./img/cost.png"
                     alt=""
                   />
                 </div> */}
-                  <Typography
-                    variant="h4"
-                    className="m-0"
-                    sx={{ fontWeight: "normal" }}
+                    <Typography
+                      variant="h4"
+                      className="m-0"
+                      sx={{ fontWeight: "normal" }}
+                    >
+                      Chi phí
+                    </Typography>
+                    <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+                      {option === 30
+                        ? costYear?.toLocaleString("vi-VI")
+                        : option === 20
+                        ? costMonth?.toLocaleString("vi-VI")
+                        : costWeek.toLocaleString("vi-VI")}
+                      đ
+                    </Typography>
+                  </div>
+                </Grid>
+              </Box>
+            </div>
+          </Box>
+        )}
+      </div>
+      <Card>
+        <CardHeader
+          title="Thống kê sản phẩm"
+          // subheader="(+43%) than last year"
+          action={
+            <div className="flex ">
+              {/* <FormControl sx={{ m: 1, width: 300, marginTop: "10px" }}>
+                <InputLabel
+                  id="demo-multiple-name-label"
+                  sx={{ marginTop: "10px" }}
+                >
+                  Sản phẩm
+                </InputLabel>
+                <Select
+                  labelId="demo-multiple-name-label"
+                  id="demo-multiple-name"
+                  multiple
+                  onChange={() => {
+                    handleChangeBook();
+                  }}
+                  sx={{ marginTop: "10px" }}
+                  value={personName}
+                  input={<OutlinedInput label="Sản phẩm" />}
+                  MenuProps={MenuProps}
+                >
+                  {names.map((name) => (
+                    <MenuItem
+                      key={name}
+                      value={name}
+                      className="p-1 m-3"
+                      style={getStyles(name, personName, theme)}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl> */}
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Sản phẩm
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={book}
+                    label="Sản phẩm"
+                    onChange={handleChangeBook}
                   >
-                    Chi phí
-                  </Typography>
-                  <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-                    {option === 30
-                      ? costYear?.toLocaleString("vi-VI")
-                      : option === 20
-                      ? costMonth?.toLocaleString("vi-VI")
-                      : costWeek.toLocaleString("vi-VI")}
-                    đ
-                  </Typography>
-                </div>
-              </Grid>
-            </Box>
-          </div>
-        </Box>
-      )}
+                    {bookList?.data.map((item, index) => {
+                      return <MenuItem value={item.id}>{item.name}</MenuItem>;
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              <TextField
+                select
+                fullWidth
+                value={seriesData}
+                SelectProps={{ native: true }}
+                onChange={handleChangeSeriesData}
+                sx={{
+                  "& fieldset": { border: "0 !important" },
+                  "& select": {
+                    typography: "subtitle2",
+                    padding: "18px",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 0.75,
+                    width: "50%",
+                    marginLeft: "10px",
+                    bgcolor: "background.neutral",
+                  },
+                  "& .MuiNativeSelect-icon": {
+                    top: 4,
+                    right: 0,
+                    width: 20,
+                    height: 20,
+                  },
+                  "& .MuiFormControl-fullWidth ": {
+                    marginTop: "10px !important",
+                  },
+                  "& .MuiFormControl-root": {
+                    alignItems: "end !important",
+                  },
+                  "& .MuiTextField-root": {
+                    alignItems: "end !important",
+                    marginTop: "10px !important",
+                  },
+
+                  "MuiTextField-root css-37zg1r-MuiFormControl-root-MuiTextField-root":
+                    {
+                      marginTop: "10px !important",
+                    },
+                }}
+              >
+                {/* {CHART_DATA.map((option) => ( */}
+                <option
+                  className="mt-60 p-2"
+                  // key={option.year}
+                  // onChange={handleChangeYear}
+                  value="2022"
+                >
+                  Năm
+                </option>
+                <option
+                  className="mt-60 p-2"
+                  // key={option.year}
+                  // onChange={handleChangeYear}
+                  value="11"
+                >
+                 Tháng
+                </option>
+                {/* ))} */}
+              </TextField>
+            </div>
+          }
+        />
+
+        {CHART_DATA.map((item) => (
+          //  key={item.year}
+          <Box sx={{ mt: 3, mx: 3 }} dir="ltr">
+            {/* {item.year === seriesData && ( */}
+            <ReactApexChart
+              type="line"
+              series={item.data}
+              options={chartOptions}
+              height={364}
+            />
+            {/* )} */}
+          </Box>
+        ))}
+      </Card>
     </div>
   );
 }

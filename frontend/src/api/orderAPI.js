@@ -32,7 +32,14 @@ const orderAPI = {
   getOrderByUser: () => {
     return axiosClient.get("v1/orders/orderList");
   },
- 
+
+  getOrderByBookForYear: (id)=>{
+    return axiosClient.post(`v1/orders/orderByBookForYear/${id}`,id);
+  },
+  
+  getorderByBookForMonth : (id) =>{
+      return axiosClient.post(`v1/orders/orderByBookForMonth/${id}`,id);
+  }
 };
 
 export default orderAPI;

@@ -126,7 +126,7 @@ export default function OrderManager() {
   const { orderList, loadingOrderList, successUpdateOrder } = useSelector(
     (state) => state.OrderReducer
   );
-  console.log("orderList", orderList);
+  console.log("successUpdateOrder", successUpdateOrder);
   // const { successUpdateUserCurrent } = useSelector(
   //   (state) => state.AuthReducer
   // );
@@ -150,11 +150,12 @@ export default function OrderManager() {
   
   useEffect(() => {
     // get list user lần đầu
-    if (successUpdateOrder === null) {
+    if (successUpdateOrder || successUpdateOrder === "") {
+      // console.log("successUpdateOrder3253", successUpdateOrder);
       dispatch(getOrderList());
     }
     // setLoading(false);
-    return () => dispatch(resetOrder());
+    // return () => dispatch(resetOrder());
   }, [successUpdateOrder]);
   //  useEffect(() => {
   //    if (orderList?.result !== 0) setLoading(false);

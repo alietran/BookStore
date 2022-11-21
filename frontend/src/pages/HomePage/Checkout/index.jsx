@@ -104,7 +104,7 @@ export default function Checkout() {
 
       // riderect to momo website
       setLinkMoMo(data.qrCodeUrl);
-      checkoutLinkRef.current.click();
+      checkoutLinkRef.current.click(); //tự đong chuyen link
     } else {
       dispatch(createOrder(order));
 
