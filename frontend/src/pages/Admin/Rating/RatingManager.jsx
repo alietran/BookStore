@@ -18,13 +18,13 @@ import {
   Chip,
   Rating,
   Box,
-  Tooltip,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContentText,
   DialogActions,
   DialogContent,
+  Tooltip,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
@@ -49,6 +49,7 @@ import {
 } from "../../../redux/action/shipperAction";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { styled } from "@mui/material/styles";
+
 import {
   getAuthorList,
   resetAuthorList,
@@ -64,6 +65,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useStyles } from "./style";
 import CustomDialog from "../../../components/CustomDialog/CustomDialog";
 import Loading from "../../../components/Loading/Loading";
+import Fancybox from "../../HomePage/ProductDetail/FancyBox";
+
 
 // ----------------------------------------------------------------------
 
@@ -80,7 +83,6 @@ const TABLE_HEAD = [
   { id: "status", label: "Trạng thái", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
-  { id: "" },
 ];
 
 // ----------------------------------------------------------------------
@@ -116,7 +118,11 @@ function applySortFilter(array, comparator, query) {
   });
   console.log("array42343", array);
   if (query) {
-    return filter(array, (_user) => _user.book.name.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+    return filter(
+      array,
+      (_user) =>
+        _user.book.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -153,7 +159,7 @@ export default function RatingManager() {
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [itemImg, seItemImage] = useState(0);
   const classes = useStyles();
 
   useEffect(() => {
@@ -182,6 +188,13 @@ export default function RatingManager() {
     setOrderBy(property);
   };
 
+    const handleChangeImage = (item, index) => {
+      // console.log("item", item);
+      // setImageURL(item);
+      seItemImage(index);
+      console.log("item", item);
+    };
+
   const handleClick = (id) => {
     console.log("idas", id);
     setIdConfirm(id);
@@ -196,7 +209,7 @@ export default function RatingManager() {
         active: true,
       })
     );
-     enqueueSnackbar("Duyệt đánh giá thành công!", { variant: "success" });
+    enqueueSnackbar("Duyệt đánh giá thành công!", { variant: "success" });
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -325,9 +338,9 @@ export default function RatingManager() {
                         imageRating,
                         hidden,
                       } = row;
-                      console.log("hidden", "dat_" + hidden);
-                      console.log("row", row);
-                      console.log("id12", id);
+
+                      console.log("imageRating", imageRating);
+
                       // const isItemSelected =
                       //   selected.indexOf(address.fullName) !== -1;
 
@@ -346,17 +359,54 @@ export default function RatingManager() {
                             }
                             // className={hidden ? classes.backgroundCellShow : ""}
                           >
-                            <TableCell padding="checkbox"></TableCell>
-                            <TableCell align="left">{book?.name}</TableCell>
+                            {/* <TableCell padding="checkbox"></TableCell> */}
+                            <TableCell align="left" style={{width:"250px"}}>{book?.name}</TableCell>
                             <TableCell align="left">
                               {order?.user.fullName}
                             </TableCell>
-                            <TableCell align="left">{content}</TableCell>
                             <TableCell align="left">
-                              <Rating readOnly value={rating} />
+                              <Tooltip title={content}>
+                                <Box
+                                  className="line-clamp-2"
+                                  // style={{ display: "-webkit-box" }}
+                                >
+                                  {content}
+                                </Box>
+                              </Tooltip>
                             </TableCell>
                             <TableCell align="left">
-                              <img src={imageRating} alt=""  width={100} height={100} />
+                              <Rating readOnly value={rating} sx={{fontSize:"16px"}}/>
+                            </TableCell>
+                            <TableCell
+                              align="left"
+                              style={{ display: "flex", width: "200px" }}
+                            >
+                              {imageRating.map((image, index) => {
+                                return (
+                                  <div>
+                                    {/* {image?.map((item,index)=>{ */}
+                                       <Fancybox options={{ infinite: false }}>
+                                         <img
+                                           data-fancybox="gallery"
+                                           src={image}
+                                           style={{
+                                             widht: "80px",
+                                             height: "80px",
+                                           }}
+                                           key={index}
+                                           onMouseOut={() =>
+                                             handleChangeImage(image, index)
+                                           }
+                                           alt=""
+                                           width={80}
+                                           height={80}
+                                         />
+                                       </Fancybox>
+                                    {/* })} */}
+                                   
+                                  </div>
+                                );
+                              })}
                             </TableCell>
                             <TableCell align="left">
                               {" "}
@@ -451,7 +501,7 @@ export default function RatingManager() {
                               </Box>
                             </TableCell>
 
-                            <TableCell align="left"> </TableCell>
+                           
                           </TableRow>
                         </>
                       );

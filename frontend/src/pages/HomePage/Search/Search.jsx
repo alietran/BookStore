@@ -135,6 +135,7 @@ export default function Search() {
       // setValueMin(formatter.format(50));
       // setValueMax(formatter.format(300));
     } else if (valueCate === "all") {
+      console.log("3423",bookList)
       const bookPriceItem = bookList?.data.filter(
         (item) =>
           Number(value1[0] * 1000) <= item.price &&
@@ -150,7 +151,7 @@ export default function Search() {
     // console.log(" Number(value1[0] * 1000)", Number(value1[0] * 1000));
     // // console.log("item.price ", item.price );
     // console.log("Number(value1[1] * 1000", Number(value1[1] * 1000));
-  }, [value1]);
+  }, [value1,valueCate]);
 
   console.log("bookPrice", bookPrice);
   console.log("bookList", bookList);

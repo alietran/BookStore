@@ -15,6 +15,7 @@ import {
   TablePagination,
   Breadcrumbs,
   Link,
+  Tooltip,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
@@ -320,13 +321,7 @@ export default function BookManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
-
+                      
                           <TableCell align="left">
                             <img src={image} alt="hinh anh" />
                           </TableCell>
@@ -336,19 +331,38 @@ export default function BookManager() {
                           <TableCell align="left">{price}</TableCell>
                           <TableCell
                             align="left"
-                            // className="line-clamp-1  "
+                            className="line-clamp-2 "
+                            style={{ width: "250px" }}
                             // dangerouslySetInnerHTML={{ __html: desc }}
                           >
-                            <Truncate
-                              lines={3}
-                              dangerouslySetInnerHTML={{
-                                __html: desc,
-                              }}
-                            />
+                            <Tooltip
+                              title={
+                                <div  dangerouslySetInnerHTML={{ __html: desc }}></div>
+                                 
+                               
+                              }
+                            >
+                              <p
+                                className="line-clamp-3 "
+                                dangerouslySetInnerHTML={{
+                                  __html: desc,
+                                }}
+                              ></p>
+                            </Tooltip>
+                            {/* <Truncate lines={3} className="line-clamp-3 " /> */}
+                            {/* <Tooltip title="Del">
+                              {" "}
+                              <p
+                                className="line-clamp-3 "
+                                dangerouslySetInnerHTML={{
+                                  __html: desc,
+                                }}
+                              ></p>
+                            </Tooltip> */}
                           </TableCell>
 
                           <TableCell align="left">{quantity}</TableCell>
-                          
+
                           <TableCell align="left">{totalPage}</TableCell>
                           <TableCell align="left">{publisher}</TableCell>
                           <TableCell align="left">{issuer.name}</TableCell>

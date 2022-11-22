@@ -305,12 +305,7 @@ export default function PromotionManager() {
                       const isItemSelected = selected.indexOf(title) !== -1;
                       return (
                         <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, title)}
-                            />
-                          </TableCell>
+                         
 
                           <TableCell align="left">{title}</TableCell>
 

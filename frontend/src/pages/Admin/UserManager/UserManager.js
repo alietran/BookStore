@@ -363,12 +363,7 @@ export default function UserManager() {
                               selected={isItemSelected}
                               aria-checked={isItemSelected}
                             >
-                              <TableCell padding="checkbox">
-                                <Checkbox
-                                  checked={isItemSelected}
-                                  onChange={(event) => handleClick(event, _id)}
-                                />
-                              </TableCell>
+                             
                               <TableCell
                                 component="th"
                                 scope="row"

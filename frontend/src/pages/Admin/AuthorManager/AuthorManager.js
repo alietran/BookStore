@@ -289,12 +289,7 @@ export default function AuthorManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
+                       
 
                           <TableCell align="left">{_id}</TableCell>
                           <TableCell align="left">{name}</TableCell>

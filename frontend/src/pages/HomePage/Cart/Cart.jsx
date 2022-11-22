@@ -278,7 +278,7 @@ export default function Cart() {
                             <td>
                               <p style={{ fontWeight: "600" }}>
                                 {" "}
-                                {item.price.toLocaleString()}{" "}
+                                {item.price.toLocaleString()} ₫
                               </p>{" "}
                             </td>
                             <td
@@ -372,7 +372,10 @@ export default function Cart() {
                                 }}
                               >
                                 {" "}
-                                {(item.price * item.quantity).toLocaleString()}
+                                {(
+                                  item.price * item.quantity
+                                ).toLocaleString()}{" "}
+                                ₫
                               </p>
                             </td>
                           </tr>
@@ -608,7 +611,7 @@ export default function Cart() {
                         <tr>
                           <td>Tạm tính </td>
                           <td>
-                            <span>{totalCart.toLocaleString()}</span>
+                            <span>{totalCart.toLocaleString()} ₫</span>
                             {/* {(1 * total)?.toLocaleString()} */}
                           </td>
                         </tr>
@@ -616,7 +619,7 @@ export default function Cart() {
                           <td>Khuyến mãi </td>
                           <td>
                             <span>
-                              {discount ? discount.toLocaleString() : 0}{" "}
+                              {discount ? discount.toLocaleString() : 0} ₫{" "}
                             </span>
                             {/* {(1 * total)?.toLocaleString()} */}
                           </td>

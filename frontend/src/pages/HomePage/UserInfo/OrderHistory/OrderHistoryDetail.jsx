@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Label from "../../../../components/Label";
 import UserListHead from "../../../../components/user/UserListHead";
-import { getOrderByUser } from "../../../../redux/action/orderAction";
+import { getOrderByUser, updateOrder } from "../../../../redux/action/orderAction";
 import CustomizedSteppers from "../../CustomStep/CustomizedSteppers";
 import useStyles from "./style";
 import HomeIcon from "@mui/icons-material/Home";
@@ -34,13 +34,32 @@ export default function OrderHistoryDetail() {
   const classes = useStyles();
   const id = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
+    const [doneConfirm, setDoneConfirm] = useState("");
   const dispatch = useDispatch();
   let { orderByUser } = useSelector((state) => state.OrderReducer);
   let { ratinglist } = useSelector((state) => state.RatingReducer);
   let userLogin = JSON.parse(localStorage.getItem("user"));
   console.log("userLogin3545", userLogin);
   console.log("id", id);
-
+ const handleDoneOrder = (id) => {
+   console.log("54645", id);
+   setOpenConfirm(true);
+   setDoneConfirm(id);
+   // dispatch(
+   //   updateOrder(order.id, {
+   //     status: "Đã nhận",
+   //   })
+   // );
+ };
+   const handleConfirm = (order) => {
+     dispatch(
+       updateOrder(doneConfirm, {
+         status: "Đã nhận",
+         receiveDay: moment().format(),
+       })
+     );
+     setOpenConfirm(false);
+   };
   const TABLE_HEAD = [
     { id: "product", label: "Sản phẩm", alignRight: false },
     { id: "price", label: "Giá", alignRight: false },
@@ -169,18 +188,14 @@ export default function OrderHistoryDetail() {
                           </p>
                         </div>
                       ) : (
-                        orderByUser &&
-                        (orderByUser[0]?.order?.status !== "Đã nhận" ||
-                          orderByUser[0]?.order?.status !== "Đã đánh giá") && (
-                          <div>
-                            <p className=" text-sm mt-4">
-                              Ngày đặt:{" "}
-                              {moment(orderByUser[0]?.order?.createdAt).format(
-                                "h:mm a DD/MM/YYYY"
-                              )}
-                            </p>
-                          </div>
-                        )
+                        <div>
+                          <p className=" text-sm mt-4">
+                            Ngày đặt:{" "}
+                            {moment(
+                              orderByUser[0]?.orderDetail[0]?.createdAt
+                            ).format("h:mm a DD/MM/YYYY")}
+                          </p>
+                        </div>
                       )}
                       {/* {orderByUser &&
                       (orderByUser[0]?.status === "Đã nhận" ||
@@ -336,7 +351,6 @@ export default function OrderHistoryDetail() {
                                 tabIndex={-1}
                                 _id="checkbox"
                               >
-                                <TableCell padding="checkbox"></TableCell>
                                 <TableCell align="flex">
                                   <div className="flex">
                                     <img
@@ -370,7 +384,7 @@ export default function OrderHistoryDetail() {
                           })}{" "}
                           <TableRow>
                             <TableCell rowSpan={2} />
-                            <TableCell></TableCell>
+
                             <TableCell></TableCell>
                             <TableCell>Tổng cộng </TableCell>
                             <TableCell>
@@ -395,6 +409,40 @@ export default function OrderHistoryDetail() {
           })}
           {orderByUser && orderByUser[0]?.status === "Đã đánh giá" ? (
             <div className="flex justify-end mr-8 mb-4">
+              {(orderByUser[0]?.status === "Đã giao hàng" )
+              ? (<>
+              <Button
+                variant="contained"
+                onClick={() => handleDoneOrder(orderByUser[0].id)}
+                sx={{ marginRight: "10px" }}
+              >
+                Đã nhận
+              </Button>
+              <CustomDialog
+                open={openConfirm}
+                handleClose={handleCancel}
+                dialogSize="xs"
+                overlayStyle={{ backgroundColor: "transparent" }}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Xác nhận đơn hàng"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Bạn chắc chắn đã nhận đơn hàng này.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCancel}>Hủy</Button>
+                  <Button
+                    onClick={() => handleConfirm(orderByUser[0].id)}
+                    autoFocus
+                  >
+                    Đồng ý
+                  </Button>
+                </DialogActions>
+              </CustomDialog></>  ) : ""}
+            
               <Button variant="outlined" onClick={() => setOpenConfirm(true)}>
                 Xem đánh giá
               </Button>
@@ -429,17 +477,26 @@ export default function OrderHistoryDetail() {
                           />
                           <p>{rating.book.name}</p>
                         </div>
-                        <hr/>
+                        <hr />
                         <div className="flex mb-3 mt-2">
-                          <div className="mr-3 ">
+                          <div className="">
                             <img
                               src={userLogin?.user?.avatar}
                               alt="avatar"
-                              style={{ width: "50px", height: "50px" }}
+                              style={{ width: "70px", height: "40px" }}
                             />
                           </div>
-                          <div className="leading-6">
-                            <p className="mb-2">{userLogin?.user?.fullName}</p>
+                          <div className="leading-6 ml-2">
+                            <p className="mb-2">
+                              {userLogin?.user?.phoneNumber
+                                ? userLogin?.user?.phoneNumber.substring(0, 3) +
+                                  (userLogin?.user?.phoneNumber.substring(
+                                    3,
+                                    6
+                                  ) +
+                                    "xxxx")
+                                : userLogin?.user?.fullName}
+                            </p>
                             <Rating
                               readOnly
                               value={rating.rating}
@@ -458,7 +515,7 @@ export default function OrderHistoryDetail() {
                                 {rating?.imageRating?.map((img, index) => {
                                   return (
                                     <img
-                                    className="mb-3"
+                                      className="mb-3"
                                       src={img}
                                       alt=""
                                       style={{
@@ -475,7 +532,6 @@ export default function OrderHistoryDetail() {
                         </div>
                       </div>
                     );
-                  
                   })}
                 </DialogContentText>
               </DialogContent>

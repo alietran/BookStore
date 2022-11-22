@@ -320,7 +320,7 @@ export default function ReceiptManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox"></TableCell>
+                       
 
                           <TableCell align="left">{_id}</TableCell>
                           <TableCell align="center">{name}</TableCell>

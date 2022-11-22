@@ -65,7 +65,7 @@ const TABLE_HEAD = [
 
   { id: "option", label: "Thao tác", alignRight: false },
 
-  { id: "" },
+
 ];
 
 // ----------------------------------------------------------------------
@@ -337,7 +337,7 @@ export default function OrderManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell></TableCell>
+                       
                           <TableCell align="left">{_id}</TableCell>
                           <TableCell align="left">{address.fullName}</TableCell>
                           <TableCell align="left">

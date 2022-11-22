@@ -360,12 +360,7 @@ export default function ShipperManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
+                         
 
                           <TableCell align="left">{name}</TableCell>
                           <TableCell align="left">{email}</TableCell>
@@ -515,6 +510,8 @@ export default function ShipperManager() {
 
                                                   <TableCell align="center">
                                                     <OptionOrder
+                                                      hidden={true}
+                                                    
                                                       id={_id}
                                                       order={row}
                                                     />

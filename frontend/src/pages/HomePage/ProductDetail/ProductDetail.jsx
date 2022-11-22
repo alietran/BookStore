@@ -118,7 +118,7 @@ export default function ProductDetail(props) {
     // console.log("item", item);
     setImageURL(item);
     seItemImage(index);
-    console.log("itemImg", itemImg);
+    // console.log("itemImg", itemImg);
   };
   const handleBuy = () => {
     handleAddToCart();
@@ -241,6 +241,7 @@ export default function ProductDetail(props) {
                                     onMouseOut={() =>
                                       handleChangeImage(item, index)
                                     }
+                                    alt=""
                                   />
                                 </Fancybox>
                               );
@@ -453,17 +454,17 @@ export default function ProductDetail(props) {
                                   </div>
                                   <div className="leading-6">
                                     <p className="mb-2">
-                                      {item?.order
-                                        ? item?.order?.user?.fullName
-                                        :  item?.order?.user?.phoneNumber.substring(
+                                      {item?.order?.user?.phoneNumber
+                                        ? (item?.order?.user?.phoneNumber.substring(
                                             0,
                                             3
                                           ) +
-                                           item?.order?.user?.phoneNumber.substring(
+                                          item?.order?.user?.phoneNumber.substring(
                                             3,
                                             6
                                           ) +
-                                          "xxxx"}
+                                          "xxxx")
+                                        : item?.order?.user?.fullName}
                                     </p>
                                     <Rating
                                       readOnly

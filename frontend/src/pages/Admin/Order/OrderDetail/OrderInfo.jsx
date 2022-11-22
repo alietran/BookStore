@@ -193,7 +193,7 @@ export default function OrderInfo({ orderDetailList }) {
                   const { book, _id, quantity, price } = row;
                   return (
                     <TableRow hover key={_id} tabIndex={-1} _id="checkbox">
-                      <TableCell padding="checkbox"></TableCell>
+                     
                       <TableCell align="flex">
                         <div className="flex">
                           <img
@@ -217,12 +217,13 @@ export default function OrderInfo({ orderDetailList }) {
                           currency: "VND",
                         })}
                       </TableCell>
+                      
                     </TableRow>
                   );
                 })}{" "}
               <TableRow>
                 <TableCell rowSpan={1} />
-                <TableCell></TableCell>
+               
                 <TableCell></TableCell>
                 <TableCell>Tổng cộng </TableCell>
                 <TableCell>
