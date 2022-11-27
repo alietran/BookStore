@@ -54,18 +54,18 @@ export default function NewProduct() {
         </Button>
       </>
     );
-
+    console.log("product.quantity", product.quantity);
     if (product.quantity === 0 || errorAddCart) {
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
         autoHideDuration: 1000,
       });
     } else {
-     enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
-       variant: "success",
-       autoHideDuration: 1200,
-       action,
-     });
+      enqueueSnackbar("Thêm vào giỏ hàng thành công!", {
+        variant: "success",
+        autoHideDuration: 1200,
+        action,
+      });
       dispatch({
         type: "ADD_TO_CART",
         payload: {
@@ -141,7 +141,11 @@ export default function NewProduct() {
                 className="truncate"
               >
                 <div className="absolute -top-3 -right-1 z-10 ">
-                  <img src="./img/new.svg" alt="" className="h-14 w-14 lg:h-20 lg:w-20" />
+                  <img
+                    src="./img/new.svg"
+                    alt=""
+                    className="h-14 w-14 lg:h-20 lg:w-20"
+                  />
                 </div>
                 <div className="  w-full relative">
                   <img

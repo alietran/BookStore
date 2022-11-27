@@ -145,7 +145,7 @@ export default function Login() {
     }
   };
   return (
-    <div>
+    <div style={{ backgroundColor: "#f8f8f8", padding: "80px 0" }}>
       <div className="text-center p-20 rounded-lg max-w-4xl bg-white my-4 mx-auto">
         <div className="w-3/5 my-0 mx-auto">
           <div>
@@ -297,7 +297,11 @@ export default function Login() {
                       // error={Boolean(touched.password && errors.password)}
                       // helperText={touched.password && errors.password}
                     />
-                    {errorLoginOTP ? <span className="text-red-600">OTP không đúng</span> : "" }
+                    {errorLoginOTP ? (
+                      <span className="text-red-600">OTP không đúng</span>
+                    ) : (
+                      ""
+                    )}
                     <div className="text-red-600 mt-16">Đã gửi OTP</div>
                   </>
                 )}

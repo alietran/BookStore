@@ -217,7 +217,7 @@ export default function BookInfo() {
                       selected={isItemSelected}
                       aria-checked={isItemSelected}
                     >
-                      <TableCell align="left"></TableCell>
+                     
                       <TableCell>
                         <img
                           src={image}
@@ -250,7 +250,7 @@ export default function BookInfo() {
                 })}
               <TableRow>
                 <TableCell rowSpan={1} />
-                <TableCell></TableCell>
+             
                 <TableCell></TableCell>
                 <TableCell sx={{ fontWeight: 600 }}>Tổng cộng </TableCell>
                 <TableCell>

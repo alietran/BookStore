@@ -66,7 +66,9 @@ export default function Voucher({ totalPrice }) {
     });
   };
   const hanldeSubmitCode = () => {
-    const item = promotionList?.data.map((itemChoose, index) => {
+    console.log("useCode", useCode);
+    // const item = promotionList?.data.filter((item)=>item.code === )
+    const item = promotionList?.data.filter((itemChoose, index) => {
       if (itemChoose.code === useCode) {
         // buttonIsChoose = index;
         setButtonIsChoose(index);
@@ -79,11 +81,15 @@ export default function Voucher({ totalPrice }) {
             }
           );
         }, 100);
+         setOpen(false);
         return itemChoose;
       }
-      setOpen(false);
+      
+        // return itemChoose;
+     
     });
-
+      // console.log("itemChoose", itemChoose);
+ console.log("item", item);
     dispatch({
       type: "TONG_TIEN",
       payload: {
@@ -95,6 +101,8 @@ export default function Voucher({ totalPrice }) {
       },
     });
   };
+
+
   const codeApply = (e) => {
     setUseCode(e.target.value);
   };

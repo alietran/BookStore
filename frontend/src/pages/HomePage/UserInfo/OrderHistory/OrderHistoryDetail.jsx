@@ -20,7 +20,7 @@ import {
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import Label from "../../../../components/Label";
 import UserListHead from "../../../../components/user/UserListHead";
 import { getOrderByUser, updateOrder } from "../../../../redux/action/orderAction";
@@ -34,16 +34,25 @@ export default function OrderHistoryDetail() {
   const classes = useStyles();
   const id = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openConfirmReceive, setOpenConfirmReceive] = useState(false);
     const [doneConfirm, setDoneConfirm] = useState("");
   const dispatch = useDispatch();
-  let { orderByUser } = useSelector((state) => state.OrderReducer);
+  let { orderByUser, successUpdateOrder } = useSelector(
+    (state) => state.OrderReducer
+  );
+  
   let { ratinglist } = useSelector((state) => state.RatingReducer);
   let userLogin = JSON.parse(localStorage.getItem("user"));
   console.log("userLogin3545", userLogin);
-  console.log("id", id);
+  console.log("orderByUserwete", orderByUser);
+
+    useEffect(() => {
+      if (successUpdateOrder !== null) dispatch(getOrderByUser());
+    }, [successUpdateOrder]);
+    
  const handleDoneOrder = (id) => {
    console.log("54645", id);
-   setOpenConfirm(true);
+   setOpenConfirmReceive(true);
    setDoneConfirm(id);
    // dispatch(
    //   updateOrder(order.id, {
@@ -58,7 +67,7 @@ export default function OrderHistoryDetail() {
          receiveDay: moment().format(),
        })
      );
-     setOpenConfirm(false);
+     setOpenConfirmReceive(false);
    };
   const TABLE_HEAD = [
     { id: "product", label: "Sản phẩm", alignRight: false },
@@ -211,7 +220,10 @@ export default function OrderHistoryDetail() {
                       )} */}
                     </div>
                   </Stack>
-                  <CustomizedSteppers orderDetail={orderDetail} />
+                  <CustomizedSteppers
+                    orderDetail={orderDetail}
+                    successUpdateOrder={successUpdateOrder}
+                  />
                   <Grid
                     container
                     rowSpacing={1}
@@ -359,7 +371,13 @@ export default function OrderHistoryDetail() {
                                       alt={book.image}
                                     />
                                     <div className="items-center flex">
-                                      {book.name}
+                                      <NavLink
+                                        to={`/productDetail/${book?._id}`}
+                                        className="text-black hover:text-black"
+                                      >
+                                        {" "}
+                                        {book.name}
+                                      </NavLink>
                                     </div>
                                   </div>
                                 </TableCell>
@@ -407,11 +425,9 @@ export default function OrderHistoryDetail() {
               );
             }
           })}
-          {orderByUser && orderByUser[0]?.status === "Đã đánh giá" ? (
+          {orderByUser && orderByUser[0]?.status === "Đã giao hàng" ? (
             <div className="flex justify-end mr-8 mb-4">
-              {(orderByUser[0]?.status === "Đã giao hàng" )
-              ? (<>
-              <Button
+               <Button
                 variant="contained"
                 onClick={() => handleDoneOrder(orderByUser[0].id)}
                 sx={{ marginRight: "10px" }}
@@ -419,7 +435,7 @@ export default function OrderHistoryDetail() {
                 Đã nhận
               </Button>
               <CustomDialog
-                open={openConfirm}
+                open={openConfirmReceive}
                 handleClose={handleCancel}
                 dialogSize="xs"
                 overlayStyle={{ backgroundColor: "transparent" }}
@@ -435,14 +451,22 @@ export default function OrderHistoryDetail() {
                 <DialogActions>
                   <Button onClick={handleCancel}>Hủy</Button>
                   <Button
-                    onClick={() => handleConfirm(orderByUser[0].id)}
+                    onClick={() => handleConfirm(orderByUser[0])}
                     autoFocus
                   >
                     Đồng ý
                   </Button>
                 </DialogActions>
-              </CustomDialog></>  ) : ""}
-            
+              </CustomDialog>
+            </div>
+             
+          ) : (
+            ""
+          )}
+
+          {orderByUser &&
+          (orderByUser[0]?.status === "Đã đánh giá" ) ? (
+            <div className="flex justify-end mr-8 mb-4">
               <Button variant="outlined" onClick={() => setOpenConfirm(true)}>
                 Xem đánh giá
               </Button>
@@ -475,7 +499,7 @@ export default function OrderHistoryDetail() {
                             width={50}
                             height={20}
                           />
-                          <p>{rating.book.name}</p>
+                          <p className="ml-2">{rating.book.name}</p>
                         </div>
                         <hr />
                         <div className="flex mb-3 mt-2">
@@ -483,7 +507,7 @@ export default function OrderHistoryDetail() {
                             <img
                               src={userLogin?.user?.avatar}
                               alt="avatar"
-                              style={{ width: "70px", height: "40px" }}
+                              style={{ width: "50px", height: "40px" }}
                             />
                           </div>
                           <div className="leading-6 ml-2">

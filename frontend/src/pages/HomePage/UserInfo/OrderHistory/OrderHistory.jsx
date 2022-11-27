@@ -188,7 +188,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
             style={{
               backgroundColor: "white",
               marginTop: "20px",
-              marginBottom: "10px",
+              marginBottom:"10px",
               padding: "20px",
               boxShadow: "rgb(0 0 0 / 10%) 0px 0px 5px 2px",
               borderRadius: "15px",
@@ -207,11 +207,10 @@ const [openDelete, setOpenDelete] = React.useState(false);
             <hr />
             {order?.orderDetail?.map((detail, index) => {
               return (
-                <div>
+                <div >
                   {" "}
                   <NavLink
-                    // /orderDetail/${id}
-                    to={`/orderDetail/${detail.order.id}`}
+                    to={`/productDetail/${detail.book.id}`}
                     className="truncate"
                   >
                     {" "}
@@ -226,25 +225,18 @@ const [openDelete, setOpenDelete] = React.useState(false);
                               height: "80px",
                               marginRight: "5px",
                             }}
-                            alt=""
                           />
                         </div>
-                        <div className="ml-2">
-                          <NavLink
-                            // /orderDetail/${id}
-                            to={`/orderDetail/${detail.order.id}`}
-                            className="truncate text-black hover:text-black"
-                          >
-                            {detail.book.name}
-                          </NavLink>
-                          <p className="text-black  mt-3">
+                        <div>
+                          <p className="text-black">{detail.book.name}</p>
+                          <p className="text-black">
                             Số lượng: {detail.quantity}
                           </p>
                         </div>
                       </div>
                       <p className="text-red-500">
                         {" "}
-                        {detail.book.price.toLocaleString()} ₫
+                        {detail.book.price.toLocaleString()}
                       </p>
                     </div>
                   </NavLink>
@@ -258,7 +250,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
                 Tổng tiền:{" "}
                 <span className="text-red-500 text-lg font-bold">
                   {" "}
-                  {order?.totalPrice.toLocaleString()} ₫
+                  {order?.totalPrice.toLocaleString()}
                 </span>
               </p>
             </div>
@@ -281,7 +273,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
                   {" "}
                   <Button
                     variant="contained"
-                    onClick={() => handleDoneOrder(order.id)}
+                    onClick={()=>handleDoneOrder(order.id)}
                     sx={{ marginRight: "10px" }}
                   >
                     Đã nhận
@@ -355,7 +347,9 @@ const [openDelete, setOpenDelete] = React.useState(false);
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={handleClickCancel}
+                        onClick={
+                          handleClickCancel
+                        }
                         sx={{ textTransform: "none !important" }}
                         autoFocus
                       >

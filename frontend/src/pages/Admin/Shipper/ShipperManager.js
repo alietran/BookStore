@@ -72,7 +72,6 @@ const TABLE_HEAD_SHIPPER = [
   { id: "payment", label: "Thanh toán", alignRight: false },
   { id: "option", label: "Thao tác", alignRight: false },
 
-  { id: "" },
 ];
 
 // ----------------------------------------------------------------------
@@ -443,17 +442,6 @@ export default function ShipperManager() {
                                                   selected={isItemSelected}
                                                   aria-checked={isItemSelected}
                                                 >
-                                                  <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                      checked={isItemSelected}
-                                                      onChange={(event) =>
-                                                        handleClick(
-                                                          event,
-                                                          address?.fullName
-                                                        )
-                                                      }
-                                                    />
-                                                  </TableCell>
                                                   <TableCell align="left">
                                                     {_id}
                                                   </TableCell>
@@ -476,7 +464,10 @@ export default function ShipperManager() {
                                                             "Đang vận chuyển"
                                                           ? "info"
                                                           : status ===
-                                                            "Đã giao hàng"
+                                                              "Đã giao hàng" ||
+                                                            status ===
+                                                              "Đã nhận" || status ===
+                                                            "Đã đánh giá"
                                                           ? "success"
                                                           : "error"
                                                       }
@@ -511,7 +502,6 @@ export default function ShipperManager() {
                                                   <TableCell align="center">
                                                     <OptionOrder
                                                       hidden={true}
-                                                    
                                                       id={_id}
                                                       order={row}
                                                     />

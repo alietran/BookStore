@@ -83,6 +83,7 @@ export default function ProductDetail(props) {
   const { errorAddCart } = useSelector((state) => state.CartReducer);
   const [phoneNumberFormat, setFormatPhone] = useState();
   console.log("errorAddCart", errorAddCart);
+  console.log("successDetailBook", successDetailBook);
 
   useEffect(() => {
     if (id) {
@@ -108,9 +109,11 @@ export default function ProductDetail(props) {
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
   const userLogin = JSON.parse(localStorage.getItem("user"));
+  const cart = JSON.parse(localStorage.getItem("cart"));
   console.log("userLogin", userLogin);
+  console.log("cart", cart);
 
-  console.log("successDetailBook", successDetailBook?.data.image);
+  // console.log("successDetailBook", successDetailBook?.data.image);
   const bookDetail = successDetailBook?.data;
 
   console.log("bookDetail", bookDetail);
@@ -156,9 +159,12 @@ export default function ProductDetail(props) {
 
     console.log("bookDetail.quantity", bookDetail.quantity);
     console.log("cart", cart);
-    console.log("errorAddCart", errorAddCart);
+    console.log("errorAddCartwere", errorAddCart);
 
-    if (bookDetail.quantity === 0 || errorAddCart) {
+
+
+    if ( errorAddCart) {
+      //bookDetail.quantity: sl sp thêm vào giỏ hàng
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
       });
@@ -176,6 +182,12 @@ export default function ProductDetail(props) {
       });
     }
   };
+  useEffect(()=>{
+    dispatch({
+      type: "RESET_CART",
+
+    });
+  },[])
 
   const changeNumber = (phone) => {
     let formated_phone =

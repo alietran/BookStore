@@ -360,7 +360,9 @@ export default function RatingManager() {
                             // className={hidden ? classes.backgroundCellShow : ""}
                           >
                             {/* <TableCell padding="checkbox"></TableCell> */}
-                            <TableCell align="left" style={{width:"250px"}}>{book?.name}</TableCell>
+                            <TableCell align="left" style={{ width: "250px" }}>
+                              {book?.name}
+                            </TableCell>
                             <TableCell align="left">
                               {order?.user.fullName}
                             </TableCell>
@@ -375,38 +377,67 @@ export default function RatingManager() {
                               </Tooltip>
                             </TableCell>
                             <TableCell align="left">
-                              <Rating readOnly value={rating} sx={{fontSize:"16px"}}/>
+                              <Rating
+                                readOnly
+                                value={rating}
+                                sx={{ fontSize: "16px" }}
+                              />
                             </TableCell>
                             <TableCell
                               align="left"
                               style={{ display: "flex", width: "200px" }}
                             >
-                              {imageRating.map((image, index) => {
+                              {/* {imageRating
+                               ? imageRating.map((image, index) => {
                                 return (
                                   <div>
-                                    {/* {image?.map((item,index)=>{ */}
-                                       <Fancybox options={{ infinite: false }}>
-                                         <img
-                                           data-fancybox="gallery"
-                                           src={image}
-                                           style={{
-                                             widht: "80px",
-                                             height: "80px",
-                                           }}
-                                           key={index}
-                                           onMouseOut={() =>
-                                             handleChangeImage(image, index)
-                                           }
-                                           alt=""
-                                           width={80}
-                                           height={80}
-                                         />
-                                       </Fancybox>
-                                    {/* })} */}
-                                   
+                                  
+                                    <Fancybox options={{ infinite: false }}>
+                                      <img
+                                        data-fancybox="gallery"
+                                        src={image}
+                                        style={{
+                                          widht: "80px",
+                                          height: "80px",
+                                        }}
+                                        key={index}
+                                        onMouseOut={() =>
+                                          handleChangeImage(image, index)
+                                        }
+                                        alt=""
+                                        width={80}
+                                        height={80}
+                                      />
+                                    </Fancybox>
+                               
                                   </div>
                                 );
-                              })}
+                              }) : ""} */}
+                              {imageRating[0] !== ""
+                                ? imageRating.map((image, index) => {
+                                    return (
+                                      <div>
+                                        <Fancybox options={{ infinite: false }}>
+                                          <img
+                                            data-fancybox="gallery"
+                                            src={image}
+                                            style={{
+                                              widht: "80px",
+                                              height: "80px",
+                                            }}
+                                            key={index}
+                                            onMouseOut={() =>
+                                              handleChangeImage(image, index)
+                                            }
+                                            alt=""
+                                            width={80}
+                                            height={80}
+                                          />
+                                        </Fancybox>
+                                      </div>
+                                    );
+                                  })
+                                : ""}
                             </TableCell>
                             <TableCell align="left">
                               {" "}
@@ -500,8 +531,6 @@ export default function RatingManager() {
                                 )}
                               </Box>
                             </TableCell>
-
-                           
                           </TableRow>
                         </>
                       );

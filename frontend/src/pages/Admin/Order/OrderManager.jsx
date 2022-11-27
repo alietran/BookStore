@@ -92,13 +92,16 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function applySortFilter(array, comparator, query, selectTag) {
+function applySortFilter(array, comparator, query, date, selectTag) {
+  console.log("array", array);
   const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("stabilizedThis", stabilizedThis);
+  console.log("query423", query);
   // console.log("array", array);
   if (query && selectTag === "infoUser") {
     console.log("query", query);
@@ -108,8 +111,9 @@ function applySortFilter(array, comparator, query, selectTag) {
         item.address.fullName.indexOf(query) !== -1 ||
         item.address.phoneNumber.indexOf(query) !== -1
     );
-  } else if (query && selectTag === "createdDate") {
-    return filter(array, (item) => item.createdAt.indexOf(query) !== -1);
+  } else if (date && selectTag === "createdDate") {
+    console.log("query34", query);
+    return filter(array, (item) => item.createdAt.indexOf(date) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
@@ -136,8 +140,11 @@ export default function OrderManager() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
+  const [valueDate, setValueDate] = useState(null);
+  // const [onFilterDate, setOnFilterDate] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [selectTag, setSelectTag] = useState("infoUser");
+  const [newDate, setNewDate] = useState(null);
   // const [loading, setLoading] = useState(true);
   useEffect(() => {
     // get list user lần đầu
@@ -227,7 +234,14 @@ export default function OrderManager() {
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
-
+  const handleChangeDate = (event) => {
+    const dateNew = new Date(event);
+    setNewDate(moment(dateNew).format("YYYY-MM-DD"));  
+    setValueDate(event);
+  };
+console.log("newDate", newDate);
+console.log("valueDate", valueDate);
+console.log("orderList", orderList);
   const handleSelectTag = (event) => {
     setSelectTag(event.target.value);
   };
@@ -238,8 +252,11 @@ export default function OrderManager() {
     orderList?.data,
     getComparator(order, orderBy),
     filterName,
+    newDate,
     selectTag
+
   );
+  console.log("filteredUsers", filteredUsers);
 
   const isUserNotFound = orderList?.result === 0;
 
@@ -293,6 +310,9 @@ export default function OrderManager() {
           onFilterName={handleFilterByName}
           onSelectTag={handleSelectTag}
           selectTag={selectTag}
+          valueDate={valueDate}
+          onFilterDate={handleChangeDate}
+          haveInput={true}
         />
         {loadingOrderList ? (
           <Loading />
@@ -337,7 +357,6 @@ export default function OrderManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                       
                           <TableCell align="left">{_id}</TableCell>
                           <TableCell align="left">{address.fullName}</TableCell>
                           <TableCell align="left">

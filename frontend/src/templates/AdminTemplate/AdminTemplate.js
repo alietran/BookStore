@@ -142,7 +142,7 @@ const AdminTemplate = (props) => {
             ? item?.user.phoneNumber
             : item?.user.fullName}{" "}
           đã đặt đơn hàng mới lúc{" "}
-          {moment(item.createdAt).format("YYYY-MM-DD hh:mm")}
+          {moment(item.createdAt).format("DD-MM-YYYY hh:mm a")}
         </NavLink>
         <hr />
 

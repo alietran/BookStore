@@ -63,6 +63,7 @@ export default function BestSellerBook() {
     );
 
     if (bookDetail.quantity === 0 || errorAddCart) {
+      //bookDetail.quantity === 0  khi ở trang chủ sp hết hàng sẽ kh  dc thêm nữa
       enqueueSnackbar("Số lượng đã vượt quá giới hạn trong kho!", {
         variant: "error",
       });

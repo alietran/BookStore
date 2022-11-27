@@ -252,7 +252,6 @@ export default function BookList() {
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
-                        <TableCell align="left"></TableCell>
                         <TableCell>
                           <img
                             src={image}
@@ -281,7 +280,8 @@ export default function BookList() {
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={
-              bookList?.data?.filter((item) => item.issuer.id === supplier).length
+              bookList?.data?.filter((item) => item.issuer.id === supplier)
+                .length
             }
             rowsPerPage={rowsPerPage}
             page={page}

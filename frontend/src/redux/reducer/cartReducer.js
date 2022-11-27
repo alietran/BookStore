@@ -57,7 +57,9 @@ export const CartReducer = (state = stateDefault, action) => {
         }
       } else {
         // cartItem.quantity = 1;
+        state.errorAddCart = false;
         state.cart.push(data);
+
         // localStorage.setItem("cart", JSON.stringify(cartItem));
       }
       localStorage.setItem("cart", JSON.stringify(state.cart));
@@ -109,8 +111,8 @@ export const CartReducer = (state = stateDefault, action) => {
       console.log("tangiam", action.payload.tangGiam);
       if (index !== -1) {
         // if (state.cart[index].quantity < state.cart[index].warehouse) {
-          cartList[index].quantity = action.payload.quanty;
-          localStorage.setItem("cart", JSON.stringify(cartList));
+        cartList[index].quantity = action.payload.quanty;
+        localStorage.setItem("cart", JSON.stringify(cartList));
         // }
       }
 
@@ -131,9 +133,11 @@ export const CartReducer = (state = stateDefault, action) => {
     }
 
     case "RESET_CART": {
+
       return {
         ...state,
-        cart: [],
+        // cart: [],
+        errorAddCart:""
       };
     }
     default:

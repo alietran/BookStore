@@ -59,6 +59,9 @@ export default function Checkout() {
   let cart = localStorage.getItem("cart")
     ? JSON.parse(localStorage.getItem("cart"))
     : [];
+  let userLogin = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : [];
   let totalPrice = cart?.reduce(
     (total, item) =>
       // console.log("item", item)
@@ -118,6 +121,12 @@ export default function Checkout() {
     }
   };
 
+  // useEffect(() => {
+  //   if (userLogin === null) {
+  //    alert("Vui lòng đăng nhập")
+  //   } 
+  // },[]);
+ 
   useEffect(() => {
     if (successCreateOrder !== null) {
       localStorage.removeItem("order");
@@ -381,7 +390,7 @@ export default function Checkout() {
                     ) : (
                       <Button
                         onClick={handleSubmit}
-                        disabled={!address ? true : false}
+                        disabled={!address || !userLogin ? true : false}
                         variant="contained"
                         sx={{
                           marginTop: "15px",

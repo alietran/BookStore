@@ -4,11 +4,13 @@ import searchFill from "@iconify/icons-eva/search-fill";
 import trash2Fill from "@iconify/icons-eva/trash-2-outline";
 import roundFilterList from "@iconify/icons-ic/round-filter-list";
 // material
+
 import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { styled } from "@mui/material/styles";
+
 import {
   Box,
   Toolbar,
@@ -61,6 +63,9 @@ OrderToolbar.propTypes = {
   onFilterName: PropTypes.func,
   selectTag: PropTypes.string,
   onSelectTag: PropTypes.func,
+  valueDate: PropTypes.string,
+  onFilterDate: PropTypes.func,
+  haveInput: PropTypes.bool,
 };
 
 export default function OrderToolbar({
@@ -69,10 +74,12 @@ export default function OrderToolbar({
   filterList,
   selectTag,
   onSelectTag,
-}) 
-{
+  valueDate,
+  onFilterDate,
+  haveInput,
+}) {
   console.log("selectTag", selectTag);
- const [value, setValue] = useState(null);
+  // const [value, setValue] = useState(null);
 
   return (
     <RootStyle>
@@ -91,39 +98,52 @@ export default function OrderToolbar({
             </Select>
           </FormControl>
         </Grid>
-        {selectTag === "infoUser" ? (
-          <Grid item xs={9}>
-            <SearchStyle
-              cusTomSearch={true}
-              value={filterName}
-              onChange={onFilterName}
-              label="    "
-              placeholder={"Nhập tên hoặc số điện thoại khách hàng"}
-              startAdornment={
-                <InputAdornment position="start">
-                  <Box
-                    component={Icon}
-                    icon={searchFill}
-                    sx={{ color: "text.disabled" }}
-                  />
-                </InputAdornment>
-              }
-            />
-          </Grid>
-        ) : (
-          <Grid item xs={9}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Ngày đặt"
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
+        {
+          selectTag === "infoUser" ? (
+            <Grid item xs={9}>
+              <SearchStyle
+                cusTomSearch={true}
+                value={filterName}
+                onChange={onFilterName}
+                label="    "
+                placeholder={"Nhập tên hoặc số điện thoại khách hàng"}
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Box
+                      component={Icon}
+                      icon={searchFill}
+                      sx={{ color: "text.disabled" }}
+                    />
+                  </InputAdornment>
+                }
               />
-            </LocalizationProvider>
-          </Grid>
-        )}
+            </Grid>
+          ) : haveInput ? (
+            <Grid item xs={9}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Ngày đặt"
+                  value={valueDate}
+                  onChange={onFilterDate}
+                  inputFormat="DD/MM/YYYY"
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </Grid>
+          ) : (
+            ""
+          )
+          // <Grid item xs={9}>
+          //   <LocalizationProvider dateAdapter={AdapterDayjs}>
+          //     <DatePicker
+          //       label="Ngày đặt"
+          //       value={valueDate}
+          //       onChange={onFilterDate}
+          //       renderInput={(params) => <TextField {...params} />}
+          //     />
+          //   </LocalizationProvider>
+          // </Grid>
+        }
       </Grid>
     </RootStyle>
   );
