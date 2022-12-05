@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Icon,
@@ -21,8 +22,9 @@ import { useHistory } from "react-router-dom";
 export default function LoginShipper() {
   const dispatch = useDispatch();
   const history = useHistory()
-  const { loginSuccess } = useSelector((state) => state.ShipperReducer);
+  const { loginSuccess,errorLogin } = useSelector((state) => state.ShipperReducer);
   const [showPassword, setShowPassword] = useState(false);
+  console.log("errorLogin", errorLogin);
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
@@ -67,8 +69,8 @@ export default function LoginShipper() {
           maxWidth: 580,
           // margin: "auto",
           display: "flex",
-          minHeight: "20vh",
-          height:"100%",
+          marginTop: "120px",
+          padding: "40px",
           flexDirection: "column",
           justifyContent: "center",
           // padding: theme.spacing(12, 0),
@@ -84,9 +86,21 @@ export default function LoginShipper() {
             style={{ width: "80px", height: "80px" }}
           />
         </Box>
-        <Typography variant="h4" gutterBottom className="text-center mb-12" sx={{marginBottom: "20px"}}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          className="text-center mb-12"
+          sx={{ marginBottom: "20px" }}
+        >
           Đăng nhập
         </Typography>
+
+        {/* {errorLogin === undefined ? (
+          <Alert severity="error ">Email hoặc mật khẩu không chính xác</Alert>
+        ) : (
+          ""
+        )} */}
+
         <FormikProvider value={formik}>
           <Form className="px-4">
             <Stack spacing={3} sx={{ marginBottom: "20px" }}>

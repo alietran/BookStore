@@ -396,6 +396,7 @@ export default function OrderListShipper() {
                                 {orderDetailShip?.totalPrice.toLocaleString()} ₫
                               </p>
                               <Label
+                             sx={{fontSize:"11px"}}
                                 variant="ghost"
                                 color={
                                   orderDetailShip?.status === "Đang xử lý"
@@ -442,6 +443,7 @@ export default function OrderListShipper() {
                               margin: "8px",
                               display: "flex",
                               borderRadius: "10px",
+                              fontSize:"13px",
                               backgroundColor: "#f3f3f3",
                               justifyContent: "space-between",
                               "&:last-child": {

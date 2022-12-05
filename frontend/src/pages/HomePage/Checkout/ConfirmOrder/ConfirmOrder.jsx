@@ -79,7 +79,7 @@ export default function ConfirmOrder() {
   useEffect(() => {
     if (resultCode && createPaymentMoMo && successMoMo) {
       let item = JSON.parse(localStorage.getItem("order"));
-      
+      //1000 : đang xử lý, 1006: đã hủy , 0: thành công
       let order = {
         totalPrice: totalPrice - item.discount,
         items: item.items,

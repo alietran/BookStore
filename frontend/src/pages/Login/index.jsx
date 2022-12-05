@@ -33,6 +33,8 @@ export default function Login() {
 
   const [OTP, setOTP] = useState("");
 
+
+
   const generateCaptcha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
       "captcha",

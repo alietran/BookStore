@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
     verticalAlign: "center",
     position: "absolute",
     top: "40px",
-    right: "160px",
+    right: "120px",
   },
 }));
 
