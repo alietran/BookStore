@@ -88,12 +88,20 @@ function applySortFilter(array, comparator, queryName, queryRole) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
+  console.log("queryRole", queryRole);
   if (queryName) {
     return filter(array, (_user) => _user.fullName.indexOf(queryName) !== -1);
   }
-  if (queryRole !== "all") {
-    return filter(array, (_user) => _user.idRole.roleName === queryRole);
+
+  if (queryRole === "admin") {
+    return filter(array, (_user) => _user.idRole.roleName !== "Khách Hàng");
   }
+  if (queryRole === "guest") {
+    return filter(array, (_user) => _user.idRole.roleName === "Khách Hàng");
+  }
+    if (queryRole !== "all") {
+      return filter(array, (_user) => _user.idRole.roleName === queryRole);
+    }
   return stabilizedThis?.map((el) => el[0]);
 }
 
@@ -363,7 +371,6 @@ export default function UserManager() {
                               selected={isItemSelected}
                               aria-checked={isItemSelected}
                             >
-                             
                               <TableCell
                                 component="th"
                                 scope="row"
@@ -411,7 +418,7 @@ export default function UserManager() {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25]}
                   component="div"
-                  count={accountList?.result}
+                  count={filteredUsers?.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
@@ -477,7 +484,6 @@ export default function UserManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                         
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
                               direction="row"
@@ -567,12 +573,13 @@ export default function UserManager() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers?.filter((row) => !row.active)
+                  {filteredUsers
+                    ?.filter((row) => !row.active)
                     ?.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  
+
                     .map((row) => {
                       const {
                         _id,
@@ -594,7 +601,6 @@ export default function UserManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                        
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
                               direction="row"
@@ -622,7 +628,7 @@ export default function UserManager() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <OptionUser id={_id} User={row} />
+                             <OptionUser id={_id} User={row} />
                           </TableCell>
                         </TableRow>
                       );

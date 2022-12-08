@@ -457,7 +457,7 @@ export default function RatingManager() {
 
                             <TableCell align="center">
                               <Box className="flex">
-                                <Tooltip
+                                {/* <Tooltip
                                   // TransitionComponent={Zoom}
                                   title={!hidden ? "Ẩn" : "Hiện"}
                                   arrow
@@ -495,7 +495,7 @@ export default function RatingManager() {
                                       />
                                     )}
                                   </IconButton>
-                                </Tooltip>
+                                </Tooltip> */}
                                 {active ? (
                                   ""
                                 ) : (

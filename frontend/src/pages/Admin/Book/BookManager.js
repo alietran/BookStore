@@ -321,7 +321,6 @@ export default function BookManager() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                      
                           <TableCell align="left">
                             <img src={image} alt="hinh anh" />
                           </TableCell>
@@ -337,9 +336,9 @@ export default function BookManager() {
                           >
                             <Tooltip
                               title={
-                                <div  dangerouslySetInnerHTML={{ __html: desc }}></div>
-                                 
-                               
+                                <div
+                                  dangerouslySetInnerHTML={{ __html: desc }}
+                                ></div>
                               }
                             >
                               <p
@@ -369,7 +368,7 @@ export default function BookManager() {
                           <TableCell align="left">{size}</TableCell>
 
                           <TableCell align="center">
-                            <OptionBook id={_id} book={row} />
+                            <OptionBook id={_id} book={row} hidden={true} />
                           </TableCell>
                         </TableRow>
                       );

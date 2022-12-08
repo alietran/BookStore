@@ -42,6 +42,7 @@ export default function Paypal({ order }) {
         history.push("/"),
         enqueueSnackbar("Đặt hàng thành công!", {
           variant: "success",
+          autoHideDuration: 1000,
         }),
         100
       );

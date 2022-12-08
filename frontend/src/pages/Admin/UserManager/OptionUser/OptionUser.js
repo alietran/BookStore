@@ -117,6 +117,7 @@ export default function OptionUser({ id, User }) {
         //         onClickDelete(id);
         //       }
         // onClickDelete={handleClickConfirm}
+        hiddenEditAdmin={User?.idRole.roleName === "Admin"  ? true : false}
         onClickEdit={onClickEdit}
       ></Option>
       <Dialog
@@ -169,7 +170,7 @@ export default function OptionUser({ id, User }) {
                       onChange={handleChangeRole}
                       {...getFieldProps("idRole")}
                     >
-                      {userRoleList?.data.map((role, index) => {
+                      {userRoleList?.data.filter((item)=>item.roleName !== "Admin" && item.roleName !== "Khách Hàng").map((role, index) => {
                         return (
                           <MenuItem
                             value={`${role._id}`}

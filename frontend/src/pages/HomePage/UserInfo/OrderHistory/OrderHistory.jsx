@@ -383,6 +383,7 @@ const [openDelete, setOpenDelete] = React.useState(false);
                             height: "80px",
                             marginRight: "5px",
                           }}
+                          alt=""
                         />
                       </div>
                       <div>

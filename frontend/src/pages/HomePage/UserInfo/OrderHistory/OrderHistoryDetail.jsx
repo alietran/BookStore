@@ -491,8 +491,8 @@ export default function OrderHistoryDetail() {
                 <DialogContentText id="alert-dialog-description">
                   {ratingItem?.map((rating, index) => {
                     return (
-                      <div>
-                        <div className="flex mb-3 mt-2">
+                      <div className="">
+                        <div className="flex mb-3 mt-2 ">
                           <img
                             src={rating.book.image}
                             alt=""
@@ -502,15 +502,15 @@ export default function OrderHistoryDetail() {
                           <p className="ml-2">{rating.book.name}</p>
                         </div>
                         <hr />
-                        <div className="flex mb-3 mt-2">
-                          <div className="">
+                        <div className=" grid grid-cols-5">
+                          <div className="col-span-1">
                             <img
                               src={userLogin?.user?.avatar}
                               alt="avatar"
                               style={{ width: "50px", height: "40px" }}
                             />
                           </div>
-                          <div className="leading-6 ml-2">
+                          <div className="col-span-4">
                             <p className="mb-2">
                               {userLogin?.user?.phoneNumber
                                 ? userLogin?.user?.phoneNumber.substring(0, 3) +

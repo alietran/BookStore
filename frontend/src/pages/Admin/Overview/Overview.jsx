@@ -864,7 +864,7 @@ export default function Overview() {
                       className="m-0"
                       sx={{ fontWeight: "normal" }}
                     >
-                      Doanh thu
+                      Lợi nhuận
                     </Typography>
                     <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
                       {option === 30

@@ -5,30 +5,39 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PropTypes from "prop-types";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 export default function Option(props) {
-  const { onClickDelete, onClickEdit, activeIconDelete } = props;
-
+  const {
+    onClickDelete,
+    onClickEdit,
+    activeIconDelete,
+    hidden,
+    hiddenEditAdmin,
+  } = props;
+  console.log("hiddenEditAdmin", hiddenEditAdmin);
   return (
     <Box className="flex">
-      <Tooltip TransitionComponent={Zoom} title="Chỉnh sửa" arrow>
-        <IconButton
-          onClick={onClickEdit}
-          sx={{
-            "&:hover": {
-              backgroundColor: "rgba(255, 72, 66, 0.08)",
-              padding: "8px",
-              borderRadius: "50%",
-            },
-          }}
-        >
-          <ModeEditIcon
-            className="text-blue-500"
+      {!hiddenEditAdmin && (
+        <Tooltip TransitionComponent={Zoom} title="Chỉnh sửa" arrow>
+          <IconButton
+            onClick={onClickEdit}
             sx={{
-              fontSize: 32,
+              "&:hover": {
+                backgroundColor: "rgba(255, 72, 66, 0.08)",
+                padding: "8px",
+                borderRadius: "50%",
+              },
             }}
-          />
-        </IconButton>
-      </Tooltip>
-      {!activeIconDelete && (
+          >
+            <ModeEditIcon
+              className="text-blue-500"
+              sx={{
+                fontSize: 32,
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+      )}
+
+      {!activeIconDelete && !hidden && (
         <Tooltip TransitionComponent={Zoom} title="Xoá" arrow>
           <IconButton
             onClick={onClickDelete}
@@ -57,4 +66,5 @@ Option.propTypes = {
   onClickDelete: PropTypes.func.isRequired,
   onClickEdit: PropTypes.func.isRequired,
   activeIconDelete: PropTypes.bool,
+  hiddenEditAdmin: PropTypes.bool
 };

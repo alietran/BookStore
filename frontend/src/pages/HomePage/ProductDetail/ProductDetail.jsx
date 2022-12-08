@@ -109,7 +109,7 @@ export default function ProductDetail(props) {
   const [itemImg, seItemImage] = useState(0);
   //  const [sliderImg, setSliderImg] = useState(successDetailBook?.data.gallery[0]);
   const userLogin = JSON.parse(localStorage.getItem("user"));
-  const cart = JSON.parse(localStorage.getItem("cart"));
+  const cart =localStorage.getItem("cart") ?  JSON.parse(localStorage.getItem("cart")) : null;
   console.log("userLogin", userLogin);
   console.log("cart", cart);
 
@@ -453,7 +453,7 @@ export default function ProductDetail(props) {
                               console.log("item", item);
                               return (
                                 <div className="flex mb-3">
-                                  <div className="mr-3 ">
+                                  <div className="mr-3 w-16">
                                     <img
                                       src={
                                         item?.order
@@ -461,7 +461,7 @@ export default function ProductDetail(props) {
                                           : "http://www.gravatar.com/avatar/3008476a9614994b2538c9faa1b7e808?s=100"
                                       }
                                       alt="avatar"
-                                      style={{ width: "50px", height: "50px" }}
+                                      style={{  height: "40px" }}
                                     />
                                   </div>
                                   <div className="leading-6">

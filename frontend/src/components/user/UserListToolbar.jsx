@@ -99,8 +99,10 @@ export default function UserListToolbar({
                 label="Quyền"
               >
                 <MenuItem value={`all`}>Tất cả</MenuItem>
-
-                {filterList?.map((item) =>
+                <MenuItem value={`admin`}>Nhân viên quản trị</MenuItem>
+                <MenuItem value={`guest`}>Khách hàng</MenuItem>
+        
+                {/* {filterList?.map((item) =>
                   item.roleName ? (
                     <MenuItem value={`${item.roleName}`}>
                       {item.roleName}
@@ -108,7 +110,7 @@ export default function UserListToolbar({
                   ) : (
                     ""
                   )
-                )}
+                )} */}
               </Select>
             </FormControl>
           </Grid>

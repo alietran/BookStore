@@ -28,7 +28,7 @@ import {
 } from "../../../../redux/action/bookAction";
 import { Editor } from "@tinymce/tinymce-react";
 
-export default function OptionBook({ id, book }) {
+export default function OptionBook({ id, book, hidden }) {
   console.log("book", book);
   const { authorList } = useSelector((state) => state.AuthorReducer);
   const { loadingUpdateBook } = useSelector((state) => state.BookReducer);
@@ -150,7 +150,7 @@ export default function OptionBook({ id, book }) {
         return;
       }
       dispatch(updateBook(book._id, data));
-      console.log("data",data);
+      console.log("data", data);
       // resetForm();
     },
   });
@@ -191,7 +191,6 @@ export default function OptionBook({ id, book }) {
   };
 
   const onClickDelete = (id) => {
-    
     dispatch(deleteBook(id));
   };
   return (
@@ -202,6 +201,7 @@ export default function OptionBook({ id, book }) {
         // }}
         onClickDelete={handleClickConfirm}
         onClickEdit={onClickEdit}
+        hidden={hidden}
       ></Option>
 
       <Dialog
